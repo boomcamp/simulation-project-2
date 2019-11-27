@@ -1,0 +1,143 @@
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* BRANDING COLOR START */
+
+:root {
+  --main-red: #F20C1F;
+  --main-maroon: #730710;
+  --main-blue: #143D73;
+  --main-blue-dark: #143959;
+  --main-green: #C4F21D;
+}
+
+.stocks-red{ color: #F20C1F; }
+.stocks-maroon{ color: #730710; }
+.stocks-blue{ color: #143D73; }
+.stocks-blue-dark{ color: #143959; }
+.stocks-green{ color: #C4F21D; }
+
+/* BRANDING COLOR END */
+
+/* DASHBOARD CSS START */
+
+.dashboard-container{
+  position: fixed;
+  width: 50px;
+  height: 100vh;
+  background: var(--main-blue-dark);
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex-direction: column;
+  z-index: 100;
+  top: 0;
+}
+
+.dashboard-container .account-icon{
+  margin: 20px;
+  color: white;
+}
+
+.dashboard-cab-container{
+  width: 350px;
+  position: fixed;
+  background: rgb(255, 255, 255);
+  height: 100vh;
+  z-index: 100;
+  left: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-direction: column;
+  padding-bottom: 6px;
+  top: 0;
+}
+
+.profile-picture-container{
+  background: var(--main-blue-dark);
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 6px solid rgb(255, 255, 255);
+}
+
+.upper-block-container{
+  width: 100%;
+}
+
+.add-profile-icon{
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 50px;
+  background: white;
+}
+
+.name-desc-container{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.name-desc-container h3{
+  /* padding: 10px; */
+}
+
+.name-desc-full{
+  font-weight: 200;
+  margin-top: 20px;
+}
+
+.email-desc-full{
+  font-weight: 200;
+  color: rgb(0, 131, 202);
+  text-decoration: underline;
+  margin-top: 10px;
+}
+
+.logout-btn{
+  font-weight: 100;
+  color: white;
+  width: 97%;
+  background: var(--main-blue-dark);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.5em;
+  height: 60px;
+  cursor: pointer;
+}
+
+.logout-btn:hover{
+  background: rgb(5, 67, 138);
+}
+
+.black-overlay{
+  width: 100%;
+  height: 100vh;
+  background: black;
+  opacity: 0.7;
+  z-index: 99;
+  position: fixed;
+  top: 0;
+}
+
+/* DASHBOARD CSS END */
+
+/* COIN WATCH TAB START */
+  .coin-watch-container{
+    margin-left: 50px;
+    width: 445px;
+    border: red solid 1px;
+    
+  }
+/* COIN WATCH TAB END */
