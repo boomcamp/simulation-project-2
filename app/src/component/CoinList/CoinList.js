@@ -10,18 +10,42 @@ import TableRow from "@material-ui/core/TableRow"
 import Paper from "@material-ui/core/Paper"
 import "semantic-ui-css/semantic.min.css"
 import { Pagination } from "semantic-ui-react"
-
+import styled from "styled-components"
+import background from "../../img/background.jpg"
+ 
 const useStyles = makeStyles({
   root: {
     width: "100%",
-    overflowX: "auto"
+    backgroundImage: `url(${background})`,
+    backgroundRepeat: "no-repeat",
+    backgroundSize: "cover"
   },
   table: {
-    minWidth: 650
+    maxWidth: '95%',
+    background: "white",
+    opacity: '0.9'
   }
 })
+const Header = styled.div`
+  background: blue;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 70px;
+  margin-bottom: 20px;
+  text-Transform: uppercase;
+  color: white; 
+  font-size: 60px;
+`
 
-export default function SimpleTable() {
+const HeadTable = styled(TableHead)`
+  background: skyblue; 
+`
+const TableContainer = styled.div`
+  display: flex;
+  justify-content: center;
+`
+export default function SimpleTable(props) {
   const classes = useStyles()
   const [rows, setRows] = useState([])
   const [cpage, setPage] = useState(1)
@@ -31,37 +55,26 @@ export default function SimpleTable() {
   useEffect(() => {
     axios
       .get(
-        `${url}coins/markets?vs_currency=usd&order=market_cap_desc&per_page=15&page=${cpage}&sparkline=false`
+        `${url}coins/markets?vs_currency=usd&order=market_cap_desc&per_page=14&page=${cpage}&sparkline=false`
       )
       .then(res => {
         setRows([...res.data])
       })
       .catch(err => console.log(err))
-    axios
-      .get(`${url}coins/list`)  
-      .then(res => 
-        {
-          // console.log(res.data.length)
-          // console.log(15 * 414)
-          setNum(Math.ceil((res.data.length + 1) / 15))
-          // var pages = [Math.ceil((res.data.length + 1) / 15)] 
-          // console.log(pages);
-          // for (var index = 0; index < pages; index += 4) {
-          //   setNum(pages.slice(index, index + 4))
-          // }
-        })
+    axios.get(`${url}coins/list`).then(res => {
+      setNum(Math.ceil((res.data.length + 1) / 14))
+    })
   }, [cpage])
   const changePage = (e, pageInfo) => {
     setPage(pageInfo.activePage)
   }
-  // const cDetails = () => {
-     
-  // }
-
   return (
+    
     <Paper className={classes.root}>
+      <Header>Cryptocurrencies</Header>
+      <TableContainer>
       <Table className={classes.table} aria-label="simple table">
-        <TableHead>
+        <HeadTable>
           <TableRow>
             <TableCell>#</TableCell>
             <TableCell>Coin</TableCell>
@@ -71,12 +84,15 @@ export default function SimpleTable() {
             <TableCell>Circulating Supply</TableCell>
             <TableCell>Mkt Cap</TableCell>
           </TableRow>
-        </TableHead>
+        </HeadTable>
         <TableBody>
           {rows.map(row => (
             <TableRow key={row.name}>
               <TableCell>{row.market_cap_rank}</TableCell>
-              <TableCell style={{ display: "flex", alignItems: "center" }}>
+              <TableCell
+                style={{ display: "flex", alignItems: "center", cursor: "pointer"}}
+                onClick={() => props.history.push(`/coindetails/${row.id}`)}
+              >
                 <img
                   style={{ width: 20, height: 20, marginRight: 20 }}
                   src={`${row.image}`}
@@ -88,19 +104,30 @@ export default function SimpleTable() {
                 {row.symbol}
               </TableCell>
               <TableCell>{row.current_price}</TableCell>
-              <TableCell>{row.total_volume ? `$${row.total_volume.toLocaleString()}` : " "}</TableCell>
-              <TableCell>{row.circulating_supply ? row.circulating_supply.toLocaleString() : " "}</TableCell>
-              <TableCell>{row.market_cap ? `$${row.market_cap.toLocaleString()}` : " "}</TableCell>
+              <TableCell>
+                {row.total_volume
+                  ? `$${row.total_volume.toLocaleString()}`
+                  : " "}
+              </TableCell>
+              <TableCell>
+                {row.circulating_supply
+                  ? row.circulating_supply.toLocaleString()
+                  : " "}
+              </TableCell>
+              <TableCell>
+                {row.market_cap ? `$${row.market_cap.toLocaleString()}` : " "}
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>
       </Table>
-      <Grid container justify="center" style={{margin: "10px auto"}}>
+      </TableContainer>
+      <Grid container justify="center" style={{ marginTop: 10, paddingBottom: 10, maxWidth: "95%"}}>
         <Pagination
           onPageChange={changePage}
           activePage={cpage}
           totalPages={num}
-          ellipsisItem={null} 
+          ellipsisItem={null}
         />
       </Grid>
     </Paper>

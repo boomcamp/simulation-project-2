@@ -6,8 +6,8 @@ import CoinDetails from "./component/CoinDetails/CoinDetails"
 export default function Routes(){
 return(
     <Switch>
-        <Route exact component={CoinList} path="/coinlist" />
-        <Route component={CoinDetails} path="/coindetails"/>
+        <Route exact component={CoinList} path="/" />
+        <Route component={CoinDetails} path="/coindetails/:id"/>
         {/* <Route /> */}
     </Switch>
 )

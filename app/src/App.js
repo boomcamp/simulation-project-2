@@ -1,10 +1,13 @@
 import React from 'react';
 import './App.css';
 
-import CoinList from "./component/CoinList/CoinList"
+import {BrowserRouter} from "react-router-dom"
+import Routes from "./routes"
 function App() {
   return (
-    <CoinList />
+    <BrowserRouter>
+    <Routes />
+    </BrowserRouter>
   );
 }
 
