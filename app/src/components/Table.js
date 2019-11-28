@@ -12,9 +12,12 @@ import KeyboardTabIcon from "@material-ui/icons/KeyboardTab";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import Grid from "@material-ui/core/Grid";
+import CircularProgress from "@material-ui/core/CircularProgress";
 import "semantic-ui-css/semantic.min.css";
-
 import { Pagination } from "semantic-ui-react";
+import { NavLink } from "react-router-dom";
+import Typography from "@material-ui/core/Typography";
+import Fade from "@material-ui/core/Fade";
 
 function createData(logo, name, symbol, market_cap, circulating, rank, current) {
 	return { logo, name, symbol, market_cap, circulating, rank, current };
@@ -98,7 +101,7 @@ function EnhancedTableHead(props) {
 const useStyles = makeStyles(theme => ({
 	root: {
 		width: "100%",
-		marginTop: theme.spacing(3)
+		marginTop: theme.spacing(10)
 	},
 	paper: {
 		width: "100%",
@@ -146,6 +149,7 @@ export default function CryptoList() {
 
 	const [data, setData] = useState([]);
 	const [cPage, setCPage] = useState(1);
+	const [loader, setLoader] = useState(false);
 
 	useEffect(() => {
 		Axios.get(`https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&per_page=10&page=${cPage}`).then(response => {
@@ -164,11 +168,16 @@ export default function CryptoList() {
 	};
 	const onChange = (e, pageInfo) => {
 		setCPage(pageInfo.activePage);
+
+		setLoader(true);
+		setTimeout(() => {
+			setLoader(false);
+		}, 1000);
 	};
 
 	return (
 		<React.Fragment>
-			<Container fixed>
+			<Container>
 				<div className={classes.root}>
 					<Paper className={classes.paper}>
 						<Grid container direction="row" justify="space-between" alignItems="flex-start">
@@ -184,56 +193,75 @@ export default function CryptoList() {
 							</Grid>
 						</Grid>
 						<div className={classes.tableWrapper}>
-							<Table className={classes.table} aria-labelledby="tableTitle" aria-label="enhanced table">
-								<EnhancedTableHead
-									classes={classes}
-									order={order}
-									orderBy={orderBy}
-									onRequestSort={handleRequestSort}
-									rowCount={rows.length}
-								/>
-								<TableBody>
-									{stableSort(data, getSorting(order, orderBy))
-										.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-										.map((row, index) => {
-											const labelId = index;
+							{loader ? (
+								<Fade in>
+									<Grid container direction="row" justify="center" alignItems="flex-start" style={{ height: "78vh" }}>
+										<Grid container direction="row" justify="center" alignItems="center" style={{ height: "90%" }}>
+											<CircularProgress disableShrink />
+										</Grid>
+									</Grid>
+								</Fade>
+							) : (
+								<Fade in>
+									<Table className={classes.table} aria-labelledby="tableTitle" aria-label="enhanced table">
+										<EnhancedTableHead
+											classes={classes}
+											order={order}
+											orderBy={orderBy}
+											onRequestSort={handleRequestSort}
+											rowCount={rows.length}
+										/>
+										<TableBody>
+											{stableSort(data, getSorting(order, orderBy))
+												.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+												.map((row, index) => {
+													const labelId = index;
 
-											return (
-												<TableRow hover tabIndex={-1} key={index}>
-													<TableCell
-														component="th"
-														style={{ width: "10%" }}
-														id={labelId}
-														scope="row"
-														padding="default"
-													>
-														<img src={row.image} alt={row.name} style={{ width: "30px" }} />
-													</TableCell>
-													<TableCell>{row.name}</TableCell>
-													<TableCell align="right">{row.symbol}</TableCell>
-													<TableCell align="right">{formatter.format(row.market_cap).split(".")[0]}</TableCell>
-													<TableCell align="right">
-														{circulatingFormat(Math.round(row.circulating_supply))}
-													</TableCell>
-													<TableCell align="right">{row.market_cap_rank}</TableCell>
-													<TableCell align="right">{formatter.format(row.current_price)}</TableCell>
-													<TableCell align="right">
-														<Button color="secondary">
-															<KeyboardTabIcon />
-														</Button>
-													</TableCell>
+													return (
+														<TableRow hover tabIndex={-1} key={index}>
+															<TableCell
+																component="th"
+																style={{ width: "10%" }}
+																id={labelId}
+																scope="row"
+																padding="default"
+															>
+																<img src={row.image} alt={row.name} style={{ width: "30px" }} />
+															</TableCell>
+															<TableCell>{row.name}</TableCell>
+															<TableCell align="right">{row.symbol}</TableCell>
+															<TableCell align="right">{formatter.format(row.market_cap).split(".")[0]}</TableCell>
+															<TableCell align="right">
+																{circulatingFormat(Math.round(row.circulating_supply))}
+															</TableCell>
+															<TableCell align="right">{row.market_cap_rank}</TableCell>
+															<TableCell align="right">
+																<Typography variant="subtitle2" gutterBottom>
+																	{formatter.format(row.current_price)}
+																</Typography>
+															</TableCell>
+															<TableCell align="right">
+																<NavLink to={`/${row.id}`} color="secondary">
+																	<Button color="secondary">
+																		<KeyboardTabIcon />
+																	</Button>
+																</NavLink>
+															</TableCell>
+														</TableRow>
+													);
+												})}
+											{emptyRows > 0 && (
+												<TableRow>
+													<TableCell colSpan={6} />
 												</TableRow>
-											);
-										})}
-									{emptyRows > 0 && (
-										<TableRow>
-											<TableCell colSpan={6} />
-										</TableRow>
-									)}
-								</TableBody>
-							</Table>
+											)}
+										</TableBody>
+									</Table>
+								</Fade>
+							)}
+
 							<Grid container direction="row" justify="center" alignItems="center" style={{ marginTop: "10px" }}>
-								<Pagination activePage={cPage} onPageChange={onChange} totalPages={619} ellipsisItem={null} />
+								<Pagination activePage={cPage} onPageChange={onChange} totalPages={620} ellipsisItem={null} />
 							</Grid>
 						</div>
 					</Paper>
