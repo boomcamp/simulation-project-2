@@ -1,0 +1,12 @@
+.head {
+  height: 10vh;
+  width: 100%;
+  display: flex;
+  padding-top: 20px;
+  background-color: #000000;
+  position: fixed;
+  z-index: 2;
+}
+.head1 {
+  color:white;
+}
