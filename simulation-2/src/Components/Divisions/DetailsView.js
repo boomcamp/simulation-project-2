@@ -2,10 +2,22 @@ import React, { PureComponent, useEffect, useState } from 'react';
 import {GetDetailsView} from '../API/API';
 import DVHeader from './DVHeader';
 
+import ToggleButton from '@material-ui/lab/ToggleButton';
+import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
+
 import {
     LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend,
   } from 'recharts';
 
+function chartTime(e){
+
+    console.log(e)
+    let ref = e.target.getAttribute('data-time');
+
+    // e.target.classList.contains('selected')? e.target.classList.remove('selected') : e.target.classList.add('selected')
+
+    // e.target.classList.add('selected')
+}
 
 export default function DetailsView(props) {
 
@@ -52,57 +64,19 @@ export default function DetailsView(props) {
             default:
                 break;
         }
-
         return dateObj;
     }
 
-    const chartTime = (e) => {
-        let ref = e.target.getAttribute('data-time');
+    const [alignment, setAlignment] = React.useState('left');
+    const [formats, setFormats] = React.useState(() => ['bold']);
 
-        let newbtn = [];
-        
-        buttongrp.map(btn=>{
-            let nbtn = Object.assign({}, btn);
+    const handleAlignment = (event, time) => {
+        GetDetailsView(props.DataRef.id,time)
+            .then(data=>{priceDataProcess(data.data.prices)})
+            .catch(e=>console.log(e));
+    };
 
-            nbtn = {
-                ...nbtn, 
-                props:{
-                    ...props,
-                    className: btn.props.className.replace(' selected', '')
-                }
-            }
-            // let data = btn.props.className.replace(' selected', '');
-            newbtn.push(nbtn)
-        })
-
-        setButtonGrp(newbtn);
-        
-        e.target.classList.contains('selected')? e.target.classList.remove('selected') : e.target.classList.add('selected')
-
-        // e.target.classList.add('selected')
-    }
-
-    const [buttongrp, setButtonGrp] = useState([   
-        <button className='chart-control selected' data-time='hour' data-time='hour' onClick={chartTime}>
-                1 Hour
-        </button>,
-        <button className='chart-control day' data-time='day' data-time='day' onClick={chartTime}>
-                24 Hours
-        </button>,
-        <button className='chart-control week' data-time='week' data-time='week' onClick={chartTime}>
-                1 Week
-        </button>,
-        <button className='chart-control month' data-time='month' onClick={chartTime} data-time='month' onClick={chartTime}>
-                1 Month
-        </button>,
-        <button className='chart-control smonth' data-time='smonth' data-time='smonth' onClick={chartTime}>
-                6 Month
-        </button>,
-        <button className='chart-control year' data-time='year' data-time='year' onClick={chartTime}>
-                1 Year
-        </button>
-    ])
-        
+    console.log(alignment)
 
     return (
         
@@ -123,12 +97,32 @@ export default function DetailsView(props) {
                     {/* <Line type="monotone" dataKey="aa" stroke="#82ca9d" /> */}
                 </LineChart>
             </div>
-
-            <div className='chart-control-container'>
-                {
-                    buttongrp
-                }
-            </div>
+            
+            <ToggleButtonGroup
+                 value={alignment}
+                 exclusive
+                 onChange={handleAlignment}
+                 aria-label="text alignment"
+            >
+                <ToggleButton value="1h" aria-label="left aligned">
+                    1 Hour
+                </ToggleButton>
+                <ToggleButton value="24h" aria-label="centered">
+                    24 Hours
+                </ToggleButton>
+                <ToggleButton value="7d" aria-label="right aligned">
+                    1 Week  
+                </ToggleButton>
+                <ToggleButton value="30d" aria-label="justified">
+                    1 Month
+                </ToggleButton>
+                <ToggleButton value="200d" aria-label="justified">
+                    6 Months
+                </ToggleButton>
+                <ToggleButton value="1y" aria-label="justified">
+                    1 Year
+                </ToggleButton>
+            </ToggleButtonGroup>
         </div>
 
        
