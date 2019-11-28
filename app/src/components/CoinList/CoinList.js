@@ -111,7 +111,9 @@ class CoinList extends Component {
                 </div>
                 {this.state.isLoading ?
                     <div className={classes.loader}>
-                        <Loader size="md" content="loading..." />
+                        <Loader size="md" />
+                        Loading... <br />
+                        Please wait.
                     </div>
                     :
                     <MaterialTable
@@ -121,7 +123,7 @@ class CoinList extends Component {
                         options={{
                             filtering: true,
                             pageSize: 10,
-                            pageSizeOptions: [10, 25, 50],
+                            pageSizeOptions: [10, 25],
                             draggable: false,
                             rowStyle: {
                                 backgroundColor: '#EEE',
@@ -139,6 +141,7 @@ class CoinList extends Component {
                                 rank={rowData.market_cap_rank}
                             />
                         }}
+                        onRowClick={(event, rowData, togglePanel) => togglePanel()}
                     />
                 }
             </div >

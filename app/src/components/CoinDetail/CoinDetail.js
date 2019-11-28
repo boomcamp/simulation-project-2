@@ -3,7 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Table, TableCell, TableRow, Paper, TableHead, TableBody, Typography } from '@material-ui/core'
 import axios from 'axios';
 
-import DataTable from './DataTable';
+import DataChart from './DataChart';
 
 const useStyles = makeStyles(theme => ({
     background: {
@@ -13,28 +13,23 @@ const useStyles = makeStyles(theme => ({
         background: 'rgb(82, 86, 89)',
         color: ' #fff',
         width: "100",
-        height: "100vh",
+        height: "100%",
         margin: 0
     },
     description: {
         width: "100%",
-        background: "blue",
         marginTop: 10,
         marginBottom: 10
     },
     secondbox: {
         display: "flex",
+        width: "100%"
     },
     rootTable: {
-        width: '30%',
-        float: "left",
-        margin: "auto",
-    },
-    table: {
-        width: "100%",
+        width: "100%"
     },
     graph: {
-        float: "right"
+        width: "100%"
     }
 }));
 
@@ -69,11 +64,11 @@ export default function CoinDetail(props) {
         <div className={classes.background}>
             <h5>Details</h5>
             <div className={classes.description}>
-                <Typography>
+                <p>
                     {desc}
-                </Typography>
+                </p>
             </div>
-            <div>
+            <div className={classes.secondbox}>
                 <div className={classes.stat}>
                     <Paper className={classes.rootTable}>
                         <Table className={classes.table} aria-label="simple table">
@@ -81,7 +76,7 @@ export default function CoinDetail(props) {
                                 <TableRow>
                                     <TableCell align="center" colSpan={2}>
                                         QUICK STATS
-                        </TableCell>
+                                    </TableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody>
@@ -95,11 +90,11 @@ export default function CoinDetail(props) {
                                 </TableRow>
                                 <TableRow>
                                     <TableCell>Market Cap:</TableCell>
-                                    <TableCell>{marketCap}</TableCell>
+                                    <TableCell>${marketCap}</TableCell>
                                 </TableRow>
                                 <TableRow>
                                     <TableCell>24h Low / 24h High:</TableCell>
-                                    <TableCell>{low24h} / {high24h}</TableCell>
+                                    <TableCell>${low24h} / ${high24h}</TableCell>
                                 </TableRow>
                                 <TableRow>
                                     <TableCell>Market Rank: </TableCell>
@@ -110,7 +105,7 @@ export default function CoinDetail(props) {
                     </Paper>
                 </div>
                 <div className={classes.graph}>
-                    <DataTable />
+                    <DataChart />
                 </div>
             </div>
         </div >
