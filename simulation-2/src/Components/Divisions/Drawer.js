@@ -21,12 +21,15 @@ import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import CoinWatch from './CoinWatch';
 import {BrowserRouter as Router} from 'react-router-dom';
+import DetailView from './DetailsView'
 
 
 export default function MiniDrawer() {
   const classes = useStyles();
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
+  const [drawerChange, setdrawerChange] = React.useState(true);
+  const [dataRef, setDataRef] = React.useState();
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -35,6 +38,11 @@ export default function MiniDrawer() {
   const handleDrawerClose = () => {
     setOpen(false);
   };
+
+  const ChangeDashBoard =(data)=>{
+      setdrawerChange(!drawerChange);
+      setDataRef(data);
+  }
 
   return (
     <div className={classes.root}>
@@ -59,7 +67,7 @@ export default function MiniDrawer() {
             <MenuIcon />
             </IconButton>
             <Typography variant="h6" noWrap>
-                Nodus Tollens
+                BitStx
             </Typography>
         </Toolbar>
     </AppBar>
@@ -108,9 +116,11 @@ export default function MiniDrawer() {
       {/* Body Starts Here */}
       <main className={classes.content}>
         <div className={classes.toolbar} />
-          
-            <CoinWatch/>
-        
+
+            {
+                drawerChange ? <CoinWatch ChangeDashBoard={ChangeDashBoard}/> : <DetailView ChangeDashBoard={ChangeDashBoard} DataRef={dataRef}/>
+            }
+
       </main>
       {/* Body Ends Here */}
     </div>

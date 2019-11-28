@@ -8,8 +8,8 @@ export default function Route() {
     return (
         <Switch>
 
-            {/* <Route path='/detailedview' exact component={DetailsView} />
-            <Route path='/' exact component={MiniDrawer} /> */}
+            {/* <Route path='/detailedview' exact component={DetailsView} /> */}
+            <Route path='/sample' exact component={MiniDrawer} />
 
         </Switch>
     )

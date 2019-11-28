@@ -18,12 +18,10 @@ export default function Dashboard() {
             <div className='dashboard-container'>
                 <AccountCircleIcon className='account-icon' onClick={showOther}/>
                 {/* <VisibilityIcon className='account-icon' onClick={showOther}/> */}
-
             </div>
             {
                 isActive ? <ProfileBar name={localStorage.getItem('Name')} email={localStorage.getItem('Email')} showOther={showOther}/> : ''
-
-            }            
+            }
         </Fragment>
     )
 }

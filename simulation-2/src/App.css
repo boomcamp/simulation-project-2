@@ -141,3 +141,131 @@
     
   }
 /* COIN WATCH TAB END */
+
+
+/* CHART HEADER START */
+
+.dv-header-container{
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.header-name-container{
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.dv-coin-image{
+  width: 100px;
+}
+
+.dv-coin-name{
+  font-size: 2em;
+  font-weight: 600;
+  /* padding: 10px; */
+  margin-left: 10px;
+}
+
+.dv-coin-index{
+  font-size: 2em;
+  font-weight: 100;
+  /* padding: 10px; */
+  margin-right: 10px;
+  color: #838383;
+}
+
+.current-coin-status-container{
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  font-size: 1.5em;
+}
+
+.coin-status{
+  /* padding: 20px; */
+  height: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: column;
+  padding: 20px;
+}
+
+.coin-context{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #143959;
+}
+
+.coin-time-ref{
+  font-size: 0.6em;
+  color: #b1b1b1;
+  font-weight: 100;
+  /* margin: px; */
+
+}
+
+.up{
+  width: 0; 
+  height: 0; 
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  
+  border-bottom: 10px solid black;
+  margin-right: 10px;
+}
+
+.down{
+  width: 0; 
+  height: 0; 
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  
+  border-top: 10px solid #f00;
+  margin-right: 10px;
+}
+
+/* CHART HEADER END */
+
+/* CHART TIME SELECTOR START*/
+
+.chart-control-container{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.chart-control{
+  padding: 10px 20px;
+  color: #143959;
+  background: #f7f7f7;
+  border: 1px rgb(235, 235, 235) solid;
+  cursor: pointer;
+}
+
+.chart-control:hover{
+  color: white;
+  background: #143D73;
+}
+
+.selected{
+  color: white;
+  background: #143D73;
+}
+
+
+/* CHART TIME SELECTOR END*/
+
+/* CHART START */
+
+.chart-container{
+  width: 100%;
+  margin: 0 auto;
+  margin-top: 50px;
+}
+
+/* CHART END */

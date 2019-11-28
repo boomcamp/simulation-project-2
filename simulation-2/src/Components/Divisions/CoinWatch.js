@@ -59,6 +59,10 @@ export default function CoinWatch(props) {
                     onehour: data.price_change_percentage_1h_in_currency,
                     oneday: data.price_change_percentage_24h_in_currency,
                     sevendays: data.price_change_percentage_7d_in_currency,
+                    month: data.price_change_percentage_30d_in_currency,
+                    smonth: data.price_change_percentage_200d_in_currency,
+                    oneyear: data.price_change_percentage_1y_in_currency
+
                 })
             });
 
@@ -85,7 +89,7 @@ export default function CoinWatch(props) {
         data={state.data}
         actions= {[{
             tooltip: 'Watch List',
-            onClick: (event, rowData) => {return rowData.id}
+            onClick: (event, rowData) => props.ChangeDashBoard(rowData)
         }]}
 
         options={{
@@ -96,7 +100,7 @@ export default function CoinWatch(props) {
 
         components={{
             Action: props => (
-            <button onClick={(event) => props.action.onClick(event, props.data)}/>
+            <VisibilityIcon onClick={(event) => props.action.onClick(event, props.data)}/>
             ),
         }}
         />
