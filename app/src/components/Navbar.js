@@ -28,12 +28,11 @@ export default function Navbar(props) {
                                 Coin Lists
                             </Nav.Item>
                         </Link>
-
-                        <Link to="/coindetail">
+                        {/* <Link to="/coindetail">
                             <Nav.Item eventKey="3" icon={<Icon icon="info-circle" />}>
                                 Coin Details
                             </Nav.Item>
-                        </Link>
+                        </Link> */}
                         <Link to="/tracking">
                             <Nav.Item eventKey="4" icon={<Icon icon="money" />}>Investment Tracking</Nav.Item>
                         </Link>
