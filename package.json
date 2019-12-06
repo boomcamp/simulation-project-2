@@ -4,6 +4,9 @@
   "description": "## Project Overview",
   "main": "index.js",
   "dependencies": {
+    "@material-ui/core": "^4.7.0",
+    "@material-ui/icons": "^4.5.1",
+    "axios": "^0.19.0",
     "json-server": "^0.15.1"
   },
   "devDependencies": {},
