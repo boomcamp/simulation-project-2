@@ -4,7 +4,8 @@
   "description": "## Project Overview",
   "main": "index.js",
   "dependencies": {
-    "json-server": "^0.15.1"
+    "json-server": "^0.15.1",
+    "react-html-parser": "^2.0.2"
   },
   "devDependencies": {},
   "scripts": {

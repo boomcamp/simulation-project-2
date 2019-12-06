@@ -23,16 +23,16 @@ export default function Stats(props) {
 	const classes = useStyles();
 	return (
 		<div>
-			<Grid className={classes.paper} container spacing={3}>
+			<Grid className={classes.paper} container direction="row" justify="flex-start" alignItems="flex-start" spacing={3}>
 				<Grid container direction="row" justify="space-between" alignItems="flex-start" item xs={3}>
-					<Typography variant="h4" display="block" gutterBottom>
+					<Typography variant="subtitle2" display="block" gutterBottom>
 						Quick Stats
 					</Typography>
 					<Grid container direction="row" justify="space-between" alignItems="flex-end" item xs={12}>
 						<Typography variant="button" display="block" gutterBottom>
 							Price
 						</Typography>{" "}
-						<Typography variant="button" display="block" style={{ fontSize: "50px" }} gutterBottom>
+						<Typography variant="button" display="block" style={{ fontSize: "50px", marginBottom: "-15px" }} gutterBottom>
 							{formatter.format(props.priceData.usd)}
 						</Typography>
 					</Grid>
@@ -61,7 +61,11 @@ export default function Stats(props) {
 						</Typography>
 					</Grid>
 				</Grid>
+
 				<Grid container item xs={9}>
+					<Typography variant="subtitle2" display="block" gutterBottom>
+						Pricing Data
+					</Typography>
 					<Seven />
 				</Grid>
 			</Grid>

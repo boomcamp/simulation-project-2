@@ -15,9 +15,10 @@ import Grid from "@material-ui/core/Grid";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import "semantic-ui-css/semantic.min.css";
 import { Pagination } from "semantic-ui-react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useHistory } from "react-router-dom";
 import Typography from "@material-ui/core/Typography";
 import Fade from "@material-ui/core/Fade";
+import { useParams } from "react-router-dom";
 
 function createData(logo, name, symbol, market_cap, circulating, rank, current) {
 	return { logo, name, symbol, market_cap, circulating, rank, current };
@@ -38,30 +39,6 @@ const rows = [
 	createData("Nougat", 360, 19.0, 9, 3.7, 67, 37.0),
 	createData("Oreo", 437, 18.0, 63, 3.7, 67, 4.0)
 ];
-
-function desc(a, b, orderBy) {
-	if (b[orderBy] < a[orderBy]) {
-		return -1;
-	}
-	if (b[orderBy] > a[orderBy]) {
-		return 1;
-	}
-	return 0;
-}
-
-function stableSort(array, cmp) {
-	const stabilizedThis = array.map((el, index) => [el, index]);
-	stabilizedThis.sort((a, b) => {
-		const order = cmp(a[0], b[0]);
-		if (order !== 0) return order;
-		return a[1] - b[1];
-	});
-	return stabilizedThis.map(el => el[0]);
-}
-
-function getSorting(order, orderBy) {
-	return order === "desc" ? (a, b) => desc(a, b, orderBy) : (a, b) => -desc(a, b, orderBy);
-}
 
 const headCells = [
 	{
@@ -132,7 +109,9 @@ const useStyles = makeStyles(theme => ({
 	}
 }));
 
-export default function CryptoList() {
+export default function CryptoList(props) {
+	let { id } = useParams();
+	let history = useHistory();
 	const classes = useStyles();
 	const [order, setOrder] = React.useState("asc");
 	const [orderBy, setOrderBy] = React.useState("rank");
@@ -148,14 +127,15 @@ export default function CryptoList() {
 	const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
 
 	const [data, setData] = useState([]);
-	const [cPage, setCPage] = useState(1);
 	const [loader, setLoader] = useState(false);
 
 	useEffect(() => {
-		Axios.get(`https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&per_page=10&page=${cPage}`).then(response => {
+		setLoader(true);
+		Axios.get(`https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&per_page=10&page=${id}`).then(response => {
 			setData(response.data);
+			setLoader(false);
 		});
-	}, [cPage]);
+	}, [id]);
 
 	const formatter = new Intl.NumberFormat("en-US", {
 		style: "currency",
@@ -165,14 +145,6 @@ export default function CryptoList() {
 
 	const circulatingFormat = num => {
 		return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
-	};
-	const onChange = (e, pageInfo) => {
-		setCPage(pageInfo.activePage);
-
-		setLoader(true);
-		setTimeout(() => {
-			setLoader(false);
-		}, 1000);
 	};
 
 	return (
@@ -212,44 +184,42 @@ export default function CryptoList() {
 											rowCount={rows.length}
 										/>
 										<TableBody>
-											{stableSort(data, getSorting(order, orderBy))
-												.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-												.map((row, index) => {
-													const labelId = index;
+											{data.map((row, index) => {
+												const labelId = index;
 
-													return (
-														<TableRow hover tabIndex={-1} key={index}>
-															<TableCell
-																component="th"
-																style={{ width: "10%" }}
-																id={labelId}
-																scope="row"
-																padding="default"
-															>
-																<img src={row.image} alt={row.name} style={{ width: "30px" }} />
-															</TableCell>
-															<TableCell>{row.name}</TableCell>
-															<TableCell align="right">{row.symbol}</TableCell>
-															<TableCell align="right">{formatter.format(row.market_cap).split(".")[0]}</TableCell>
-															<TableCell align="right">
-																{circulatingFormat(Math.round(row.circulating_supply))}
-															</TableCell>
-															<TableCell align="right">{row.market_cap_rank}</TableCell>
-															<TableCell align="right">
-																<Typography variant="subtitle2" gutterBottom>
-																	{formatter.format(row.current_price)}
-																</Typography>
-															</TableCell>
-															<TableCell align="right">
-																<NavLink to={`/${row.id}`} color="secondary">
-																	<Button color="secondary">
-																		<KeyboardTabIcon />
-																	</Button>
-																</NavLink>
-															</TableCell>
-														</TableRow>
-													);
-												})}
+												return (
+													<TableRow hover tabIndex={-1} key={index}>
+														<TableCell
+															component="th"
+															style={{ width: "10%" }}
+															id={labelId}
+															scope="row"
+															padding="default"
+														>
+															<img src={row.image} alt={row.name} style={{ width: "30px" }} />
+														</TableCell>
+														<TableCell>{row.name}</TableCell>
+														<TableCell align="right">{row.symbol}</TableCell>
+														<TableCell align="right">{formatter.format(row.market_cap).split(".")[0]}</TableCell>
+														<TableCell align="right">
+															{circulatingFormat(Math.round(row.circulating_supply))}
+														</TableCell>
+														<TableCell align="right">{row.market_cap_rank}</TableCell>
+														<TableCell align="right">
+															<Typography variant="subtitle2" gutterBottom>
+																{formatter.format(row.current_price)}
+															</Typography>
+														</TableCell>
+														<TableCell align="right">
+															<NavLink to={`/${row.id}`} color="secondary">
+																<Button color="secondary">
+																	<KeyboardTabIcon />
+																</Button>
+															</NavLink>
+														</TableCell>
+													</TableRow>
+												);
+											})}
 											{emptyRows > 0 && (
 												<TableRow>
 													<TableCell colSpan={6} />
@@ -261,7 +231,13 @@ export default function CryptoList() {
 							)}
 
 							<Grid container direction="row" justify="center" alignItems="center" style={{ marginTop: "10px" }}>
-								<Pagination activePage={cPage} onPageChange={onChange} totalPages={620} ellipsisItem={null} />
+								<Pagination
+									activePage={id}
+									onPageChange={(event, data) => {
+										history.push(`/page/${data.activePage}`);
+									}}
+									totalPages={620}
+								/>
 							</Grid>
 						</div>
 					</Paper>

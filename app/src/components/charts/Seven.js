@@ -1,58 +1,79 @@
-import React, { PureComponent } from "react";
+import React, { useState } from "react";
+import Axios from "axios";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
+import { makeStyles } from "@material-ui/core/styles";
+import BottomNavigation from "@material-ui/core/BottomNavigation";
+import BottomNavigationAction from "@material-ui/core/BottomNavigationAction";
+import RestoreIcon from "@material-ui/icons/Restore";
 
-const data = [
-	{
-		name: "Page A",
-		uv: 4000,
-		pv: 2400,
-		amt: 2400
-	},
-	{
-		name: "Page B",
-		uv: 3000,
-		pv: 1398,
-		amt: 2210
-	},
-	{
-		name: "Page C",
-		uv: 2000,
-		pv: 9800,
-		amt: 2290
-	},
-	{
-		name: "Page D",
-		uv: 2780,
-		pv: 3908,
-		amt: 2000
-	},
-	{
-		name: "Page E",
-		uv: 1890,
-		pv: 4800,
-		amt: 2181
-	},
-	{
-		name: "Page F",
-		uv: 2390,
-		pv: 3800,
-		amt: 2500
-	},
-	{
-		name: "Page G",
-		uv: 3490,
-		pv: 4300,
-		amt: 2100
+const useStyles = makeStyles(theme => ({
+	root: {
+		width: "100%"
 	}
-];
+}));
+export default function SevenChart(props) {
+	const classes = useStyles();
+	const [value, setValue] = useState(0);
+	const [chart, setChart] = useState([]);
+	const data = [
+		{
+			name: "Page A",
+			uv: 4000
+		},
+		{
+			name: "Page B",
+			uv: 3000
+		},
+		{
+			name: "Page C",
+			uv: 2000
+		},
+		{
+			name: "Page D",
+			uv: 2780
+		},
+		{
+			name: "Page E",
+			uv: 1890
+		},
+		{
+			name: "Page F",
+			uv: 2390
+		},
+		{
+			name: "Page G",
+			uv: 3490
+		}
+	];
 
-export default class Example extends PureComponent {
-	render() {
-		return (
-			<ResponsiveContainer width="100%">
+	return (
+		<div style={{ width: "100%	" }}>
+			<BottomNavigation
+				value={value}
+				onChange={(event, newValue) => {
+					setValue(newValue);
+					if (newValue === 0) {
+						Axios.get(`https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=usd&days=1`).then(
+							response => {
+								console.log(response.data.prices);
+							}
+						);
+					}
+					console.log(newValue);
+				}}
+				showLabels
+				className={classes.root}
+			>
+				<BottomNavigationAction label="24 Hours" icon={<RestoreIcon />} />
+				<BottomNavigationAction label="1 Week" icon={<RestoreIcon />} />
+				<BottomNavigationAction label="1 Month" icon={<RestoreIcon />} />
+				<BottomNavigationAction label="6 Months" icon={<RestoreIcon />} />
+				<BottomNavigationAction label="1 Year" icon={<RestoreIcon />} />
+				<BottomNavigationAction label="Alltime	" icon={<RestoreIcon />} />
+			</BottomNavigation>
+
+			<ResponsiveContainer width="100%" height={300}>
 				<LineChart
-					width={500}
-					height={300}
 					data={data}
 					margin={{
 						top: 5,
@@ -66,10 +87,9 @@ export default class Example extends PureComponent {
 					<YAxis />
 					<Tooltip />
 					<Legend />
-					<Line type="monotone" dataKey="pv" stroke="#8884d8" activeDot={{ r: 8 }} />
-					<Line type="monotone" dataKey="uv" stroke="#82ca9d" />
+					<Line type="monotone" dataKey="uv" stroke="#8884d8" activeDot={{ r: 8 }} />
 				</LineChart>
 			</ResponsiveContainer>
-		);
-	}
+		</div>
+	);
 }
