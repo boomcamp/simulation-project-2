@@ -24,6 +24,23 @@ body {
   margin-bottom: 20px;
 }
 
+.detail-cont {
+  display: flex;
+  flex-wrap: wrap;
+  box-sizing: border-box;
+  width: 50%;
+  margin: auto;
+  margin-top: 70px;
+  margin-bottom: 20px;
+}
+
+.logo-box {
+  box-sizing: border-box;
+  background-color: lightgreen;
+  height: 150px;
+  width: 150px;
+}
+
 .upcase {
   text-transform: uppercase;
 }

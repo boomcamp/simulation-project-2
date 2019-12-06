@@ -13,19 +13,21 @@ export default class Routes extends React.Component {
         <Route
           exact
           render={() => (
-            <div className="table-cont">
-              <Pagination
-                activePage={activePage}
-                onPageChange={handleChange}
-                totalPages={125}
-                ellipsisItem={null}
-              />
-              <Table coinData={coinData} />
+            <div>
+              <div className="table-cont">
+                <Pagination
+                  activePage={activePage}
+                  onPageChange={handleChange}
+                  totalPages={125}
+                  ellipsisItem={null}
+                />
+                <Table coinData={coinData} />
+              </div>
             </div>
           )}
           path="/"
         />
-        <Route render={() => <Coindetail />} path="/coindetail" />
+        <Route component={Coindetail} path="/coindetails" />
       </Switch>
     );
   }

@@ -19,7 +19,6 @@ export default class App extends React.Component {
   componentDidMount = () => {
     axios.get(this.state.url).then(response => {
       this.setState({ data: response.data });
-      console.log(response.data);
     });
   };
   componentDidUpdate = () => {

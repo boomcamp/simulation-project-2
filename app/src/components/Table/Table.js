@@ -15,7 +15,9 @@ export default class Table extends React.Component {
           render: rowData => (
             <div className="weight">
               <img src={rowData.image} alt="" />
-              <Link to="/coindetail">{rowData.name}</Link>
+              <Link key={rowData.id} to={`/coindetail/${rowData.id}`}>
+                {rowData.name}
+              </Link>
               <Switch>
                 <Route />
               </Switch>

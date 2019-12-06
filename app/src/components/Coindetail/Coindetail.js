@@ -1,18 +1,27 @@
 import React from "react";
+import axios from "axios";
 import "../../App.css";
-import { Link, Switch, Route } from "react-router-dom";
 
 export default class Coindetail extends React.Component {
+  componentDidMount = () => {
+    axios
+      .get(
+        `https://api.coingecko.com/api/v3/coins/${this.props.match.params.id}`
+      )
+      .then(result => {
+        console.log(result);
+        this.setState({ data: result.data });
+      });
+  };
+
   render() {
     return (
       <div>
-        <Link to="/">
-          <button>back</button>
-        </Link>
-        <Switch>
-          <Route />
-        </Switch>
-        <div className="table-cont"></div>
+        <div className="detail-cont">
+          <div className="logo-box">
+            {/* <img src={data.image} alt="" /> */}
+          </div>
+        </div>
       </div>
     );
   }
