@@ -8,23 +8,6 @@
     import {
         AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip,
       } from 'recharts';
-      
-
-    // import {
-    //     LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend,
-    // } from 'recharts';
-
-    // const CustomizedAxisTick = React.createClass({
-    //     render () {
-    //       const {x, y, stroke, payload} = this.props;
-              
-    //          return (
-    //           <g transform={`translate(${x},${y})`}>
-    //           <text x={0} y={0} dy={16} textAnchor="end" fill="#666" transform="rotate(-35)">{payload.value}</text>
-    //         </g>
-    //       );
-    //     }
-    //   });
 
    function CustomizedAxisTick({x, y, stroke, payload}){
         return (
@@ -66,11 +49,16 @@
                     var seconds = addZero(Math.round((new Date(unix)).getSeconds()));
                     dateObj = hours + ':' + minutes + ':' + seconds +' '+ format;
                     break;
+                case null:
+                    var hours =  addZero(formattime(Math.round((new Date(unix)).getHours())));
+                    var minutes = addZero(Math.round((new Date(unix)).getMinutes()));
+                    var seconds = addZero(Math.round((new Date(unix)).getSeconds()));
+                    dateObj = hours + ':' + minutes + ':' + seconds +' '+ format;
+                    break;
                 default:
                     var month = addZero(new Date(unix).getMonth() + 1)
                     var date = addZero(Math.round(new Date(unix).getDate())) 
                     var year = addZero(Math.round(new Date(unix).getFullYear())) 
-
                     dateObj = month + '/' + date + '/' + year;
                     break;
             }
@@ -84,6 +72,9 @@
             GetDetailsView(props.DataRef.id,time)
                 .then(data=>{priceDataProcess(data.data.prices, time)})
                 .catch(e=>console.log(e));
+
+            if(!time)
+                return 1
         };
 
         const priceDataProcess = (data, time) => {
@@ -97,20 +88,6 @@
             })
             setCoinData(pdata);
         }
-
-        // const CustomizedAxisTick = React.createClass({
-        //     render () {
-        //       const {x, y, stroke, payload} = this.props;
-                  
-        //          return (
-        //           <g transform={`translate(${x},${y})`}>
-        //           <text x={0} y={0} dy={16} textAnchor="end" fill="#666" transform="rotate(-35)">{payload.value}</text>
-        //         </g>
-        //       );
-        //     }
-        //   });
-
-        
 
         return (
             
@@ -155,7 +132,7 @@
                     onChange={handleDuration}
                     aria-label="text duration"
                 >
-                    <ToggleButton value="1" aria-label="centered" >
+                    <ToggleButton value="1" aria-label="centered" selected={(duration == null || duration == 1) ? true : false}>
                         24 Hours
                     </ToggleButton>
                     <ToggleButton value="7" aria-label="right aligned">

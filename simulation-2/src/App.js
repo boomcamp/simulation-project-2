@@ -6,11 +6,16 @@ import Route from './Components/Routing/Route';
 
 // import Dashboard from './Components/Divisions/Dashboard';
 import MiniDrawer from './Components/Divisions/Drawer';
+import Sidebar from './Components/DrawerSecond/Sidebar';
+
 
 function App() {
   return (
     <div className="App">
-      <MiniDrawer/>
+      {/* <MiniDrawer/> */}
+
+      <Sidebar/>
+
     </div>
   );
 }
