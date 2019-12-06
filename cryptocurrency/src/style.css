@@ -1,0 +1,10 @@
+@import "../node_modules/react-vis/dist/style.css";
+@import url('https://fonts.googleapis.com/css?family=Open+Sans&display=swap');
+*{
+  box-sizing: border-box;
+  font-family: 'Open Sans', sans-serif;
+}
+
+body{
+  background: #ffffff;
+}
