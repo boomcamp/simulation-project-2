@@ -1,0 +1,58 @@
+.App {
+  text-align: center;
+}
+
+li{
+  list-style: none;
+}
+
+nav{
+  display:flex;
+  justify-content: space-between;
+  width:100%;
+  height:100px;
+  background-color: #4B32C3;
+  color:white;
+  /* box-shadow: 5px 10px 8px #888888; */
+}
+
+ul{
+  display:flex;
+  padding:10px;
+  justify-content: space-between;
+  width:250px;
+  font-weight: bold;
+  margin-top:30px;
+  padding-right:20px;
+  text-decoration:none;
+}
+
+h3{
+  padding-left:20px;
+  font-size:20px;
+}
+.router-links{
+  text-decoration:none;
+}
+.doremon{
+  width:1000px;
+  height:1000px;
+  border:1px solid black;
+}
+.coins{
+border:1px solid grey;
+width:35%;
+margin:0 auto;
+margin-top:100px;
+padding:30px;
+border-radius:.5em;
+box-shadow: 5px 10px 8px grey;
+text-align:left;
+}
+p{
+  font-size:30px;
+  font-weight:bold;
+}
+.picture{
+  margin:0 auto;
+}
