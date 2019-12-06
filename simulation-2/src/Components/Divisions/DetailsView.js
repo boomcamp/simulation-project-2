@@ -1,130 +1,180 @@
-import React, { PureComponent, useEffect, useState } from 'react';
-import {GetDetailsView} from '../API/API';
-import DVHeader from './DVHeader';
+    import React, { PureComponent, useEffect, useState } from 'react';
+    import {GetDetailsView} from '../API/API';
+    import DVHeader from './DVHeader';
 
-import ToggleButton from '@material-ui/lab/ToggleButton';
-import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
+    import ToggleButton from '@material-ui/lab/ToggleButton';
+    import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
 
-import {
-    LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend,
-  } from 'recharts';
+    import {
+        AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip,
+      } from 'recharts';
+      
 
-function chartTime(e){
+    // import {
+    //     LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend,
+    // } from 'recharts';
 
-    console.log(e)
-    let ref = e.target.getAttribute('data-time');
+    // const CustomizedAxisTick = React.createClass({
+    //     render () {
+    //       const {x, y, stroke, payload} = this.props;
+              
+    //          return (
+    //           <g transform={`translate(${x},${y})`}>
+    //           <text x={0} y={0} dy={16} textAnchor="end" fill="#666" transform="rotate(-35)">{payload.value}</text>
+    //         </g>
+    //       );
+    //     }
+    //   });
 
-    // e.target.classList.contains('selected')? e.target.classList.remove('selected') : e.target.classList.add('selected')
-
-    // e.target.classList.add('selected')
-}
-
-export default function DetailsView(props) {
-
-    const [coinData, setCoinData] = useState();
-
-    useEffect(() => {
-        GetDetailsView(props.DataRef.id, '24h')
-            .then(data=>{priceDataProcess(data.data.prices)})
-            .catch(e=>console.log(e));
-    }, [])
-
-    const priceDataProcess = (data) => {
-        let pdata = [];
-        data.map(val=>{
-            
-            pdata.push({
-                name : convertUnix(val[0], 'day').toString(),
-                value: val[1].toFixed(5)
-            })
-        })
-
-        setCoinData(pdata);
+   function CustomizedAxisTick({x, y, stroke, payload}){
+        return (
+            <g transform={`translate(${x},${y})`}>
+            <text x={0} y={0} dy={16} textAnchor="end" fill="#666" transform="rotate(-35)">{payload.value}</text>
+          </g>)
     }
 
-    const convertUnix = (unix, type) => {
-        let dateObj = new Date(unix * 1000); 
-        // let utcString = dateObj.toUTCString(); 
-        switch(type){
-            case 'day':
-                let mins = dateObj.getMinutes().toString().length === 1? '0'+ dateObj.getMinutes(): dateObj.getMinutes();
-                dateObj = dateObj.getHours() + ':' + mins
-                break;
+    export default function DetailsView(props) {
 
-            case 'week':
+        const [coinData, setCoinData] = useState();
+        const [duration, setDuration] = useState(1);
+        const [timeformat, setTformat] = useState('');
 
-                break;
+        useEffect(() => {
+            GetDetailsView(props.DataRef.id, '1')
+                .then(data=>{priceDataProcess(data.data.prices, '1')})
+                .catch(e=>console.log(e));
+        }, [])
 
-            case 'month':
-
-                break;
-
-            case 'year':
-                    break
-            default:
-                break;
+        const addZero = (time) => {
+            return time < 10 ? '0'+time:time
         }
-        return dateObj;
-    }
 
-    const [alignment, setAlignment] = React.useState('left');
-    const [formats, setFormats] = React.useState(() => ['bold']);
+        let format = '';
+        function formattime(time){
+            format = time > 12 ? 'am' : 'pm';
+            // setTformat(format);
+            return time % 12
+        }
 
-    const handleAlignment = (event, time) => {
-        GetDetailsView(props.DataRef.id,time)
-            .then(data=>{priceDataProcess(data.data.prices)})
-            .catch(e=>console.log(e));
-    };
+        const convertUnix = (unix, type) => {
+            let dateObj = '';
 
-    console.log(alignment)
+            switch(type){
+                case '1':
+                    var hours =  addZero(formattime(Math.round((new Date(unix)).getHours())));
+                    var minutes = addZero(Math.round((new Date(unix)).getMinutes()));
+                    var seconds = addZero(Math.round((new Date(unix)).getSeconds()));
+                    dateObj = hours + ':' + minutes + ':' + seconds +' '+ format;
+                    break;
+                default:
+                    var month = addZero(new Date(unix).getMonth() + 1)
+                    var date = addZero(Math.round(new Date(unix).getDate())) 
+                    var year = addZero(Math.round(new Date(unix).getFullYear())) 
 
-    return (
+                    dateObj = month + '/' + date + '/' + year;
+                    break;
+            }
+            return dateObj;
+        }
+
+        const handleDuration = (event, time) => {
+
+            setDuration(time);
+
+            GetDetailsView(props.DataRef.id,time)
+                .then(data=>{priceDataProcess(data.data.prices, time)})
+                .catch(e=>console.log(e));
+        };
+
+        const priceDataProcess = (data, time) => {
+            let pdata = [];
+
+            data.map(val=>{
+                pdata.push({
+                    time : convertUnix(val[0], time).toString(),
+                    value: val[1]
+                })
+            })
+            setCoinData(pdata);
+        }
+
+        // const CustomizedAxisTick = React.createClass({
+        //     render () {
+        //       const {x, y, stroke, payload} = this.props;
+                  
+        //          return (
+        //           <g transform={`translate(${x},${y})`}>
+        //           <text x={0} y={0} dy={16} textAnchor="end" fill="#666" transform="rotate(-35)">{payload.value}</text>
+        //         </g>
+        //       );
+        //     }
+        //   });
+
         
-        <div className='details-view-container'>
 
-            <DVHeader DataRef={props.DataRef}/>
+        return (
             
-            <div className='chart-container'>
-                <LineChart width={window.innerWidth} height={300} data={coinData}
-                margin={{ top: 20, right: 90, left: 20, bottom: 5 }} >
-                    <CartesianGrid vertical={false} y={[0]} x={[0]}  
-                    strokeDasharray="10 3" />
-                    <XAxis minTickGap={30} padding={{ left: 10 }} dataKey="name" />
-                    <YAxis  domain={['auto', 'auto']}  />
+            <div className='details-view-container' 
+                style={{display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                flexDirection: 'column'}}>
+
+                <DVHeader DataRef={props.DataRef}/>
+                
+                {/* <div className='chart-container'>
+                    <LineChart width={1200} height={300} data={coinData}>
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <XAxis dataKey="time" />
+                        <YAxis domain={['auto', 'auto']}  />
+                        <Tooltip />
+                        <Line isAnimationActive={true} dot={false} type="monotone" dataKey="value" stroke="#143D73" />
+                    </LineChart>
+                </div> */}
+
+                <div className='chart-2-container' style={{margin: '0 auto'}}>
+                    <AreaChart width={1500} height={400} data={coinData}
+                    margin={{ top: 10, right: 30, left: 0, bottom: 60 }}>
+                    <defs>
+                        <linearGradient id="colorUv" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="5%" stopColor="#8884d8" stopOpacity={0.8}/>
+                        <stop offset="95%" stopColor="#8884d8" stopOpacity={0}/>
+                        </linearGradient>
+                    </defs>
+                    <XAxis tick={<CustomizedAxisTick/>} dataKey="time" />
+                    <YAxis  domain={['auto', 'auto']} />
+                    <CartesianGrid strokeDasharray="3 3" />
                     <Tooltip />
-                    {/* <Legend /> */}
-                    <Line isAnimationActive={true} dot={false} type="monotone" dataKey="value" stroke="#143D73" />
-                    {/* <Line type="monotone" dataKey="aa" stroke="#82ca9d" /> */}
-                </LineChart>
-            </div>
-            
-            <ToggleButtonGroup
-                 value={alignment}
-                 exclusive
-                 onChange={handleAlignment}
-                 aria-label="text alignment"
-            >
-                <ToggleButton value="1h" aria-label="left aligned">
-                    1 Hour
-                </ToggleButton>
-                <ToggleButton value="24h" aria-label="centered">
-                    24 Hours
-                </ToggleButton>
-                <ToggleButton value="7d" aria-label="right aligned">
-                    1 Week  
-                </ToggleButton>
-                <ToggleButton value="30d" aria-label="justified">
-                    1 Month
-                </ToggleButton>
-                <ToggleButton value="200d" aria-label="justified">
-                    6 Months
-                </ToggleButton>
-                <ToggleButton value="1y" aria-label="justified">
-                    1 Year
-                </ToggleButton>
-            </ToggleButtonGroup>
-        </div>
+                    <Area type="monotone" dataKey="value" stroke="#8884d8" fillOpacity={1} fill="url(#colorUv)" />
+                    </AreaChart>
+                </div>
 
-       
-    )
-}
+                <ToggleButtonGroup
+                    value={duration}
+                    exclusive
+                    onChange={handleDuration}
+                    aria-label="text duration"
+                >
+                    <ToggleButton value="1" aria-label="centered" >
+                        24 Hours
+                    </ToggleButton>
+                    <ToggleButton value="7" aria-label="right aligned">
+                        1 Week  
+                    </ToggleButton>
+                    <ToggleButton value="30" aria-label="justified">
+                        1 Month
+                    </ToggleButton>
+                    <ToggleButton value="180" aria-label="justified">
+                        6 Months
+                    </ToggleButton>
+                    <ToggleButton value="365" aria-label="justified">
+                        1 Year
+                    </ToggleButton>
+                    <ToggleButton value="max" aria-label="justified">
+                        All Time
+                    </ToggleButton>
+                </ToggleButtonGroup>
+
+            </div>
+        )
+    }
