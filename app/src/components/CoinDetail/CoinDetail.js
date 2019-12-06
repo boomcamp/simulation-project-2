@@ -19,6 +19,16 @@ const useStyles = makeStyles(theme => ({
     description: {
         width: "100%",
         marginTop: 10,
+        marginBottom: 10,
+        color: '#000',
+
+    },
+    descbox: {
+        background: '#fff',
+        border: "1px solid #e7e7e7",
+        borderRadius: 10,
+        color: '#000',
+        padding: 10,
         marginBottom: 10
     },
     secondbox: {
@@ -62,11 +72,12 @@ export default function CoinDetail(props) {
 
     return (
         <div className={classes.background}>
-            <h5>Details</h5>
-            <div className={classes.description}>
-                <p>
-                    {desc}
-                </p>
+            <div className={classes.descbox}>
+                <h5>Details</h5>
+                <div
+                    className={classes.description}
+                    dangerouslySetInnerHTML={{ __html: desc }}>
+                </div>
             </div>
             <div className={classes.secondbox}>
                 <div className={classes.stat}>

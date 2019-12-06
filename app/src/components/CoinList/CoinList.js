@@ -1,7 +1,18 @@
 import React, { Component } from 'react';
 import { withStyles } from '@material-ui/core/styles';
-import { Button, Menu, MenuItem } from '@material-ui/core';
-import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
+
+import Grid from '@material-ui/core/Grid';
+import Button from '@material-ui/core/Button';
+import ButtonGroup from '@material-ui/core/ButtonGroup';
+// import { ArrowDropDownIcon } from '@material-ui/icons/ArrowDropDown';
+import ClickAwayListener from '@material-ui/core/ClickAwayListener';
+import Grow from '@material-ui/core/Grow';
+import Paper from '@material-ui/core/Paper';
+import Popper from '@material-ui/core/Popper';
+import MenuItem from '@material-ui/core/MenuItem';
+import MenuList from '@material-ui/core/MenuList';
+// import { Button, Menu, MenuItem } from '@material-ui/core';
+// import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
 import MaterialTable from 'material-table';
 import axios from 'axios';
 import { Loader } from 'rsuite';
@@ -48,7 +59,10 @@ class CoinList extends Component {
                 { title: 'Symbol', field: 'symbol' },
                 { title: 'Current Price', field: 'current_price' },
             ],
-            currency: []
+            currency: [],
+            open: false,
+            anchorRef: null,
+            selectedIndex: 1,
         }
     }
 
@@ -67,6 +81,7 @@ class CoinList extends Component {
                     })
                 }
             })
+            .catch(e => console.log(e))
 
         axios({
             method: 'get',
@@ -85,29 +100,106 @@ class CoinList extends Component {
                 }
             })
             .catch(e => console.log(e))
+
     }
+
+    handleClick = () => {
+        console.info(`You clicked ${this.state.currency[this.state.selectedIndex]}`);
+    };
+
+    handleMenuItemClick = (event, index) => {
+        // axios({
+        //     method: 'get',
+        //     url: `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=100&page=1&sparkline=false`,
+        // })
+        //     .then(data => {
+        //         if (data.status !== 200) {
+        //             alert("Unable to fetch data!");
+        //             return;
+        //         } else {
+        //             this.setState({
+        //                 ...this.state,
+        //                 coinList: { coins: data.data },
+        //                 isLoading: false
+        //             })
+        //         }
+        //     })
+        //     .catch(e => console.log(e))
+        this.setState({
+            ...this.state,
+            selectedIndex: index,
+            open: false
+        })
+    };
+
+    handleToggle = () => {
+        this.setState({
+            ...this.state,
+            open: prevOpen => !prevOpen
+        })
+    };
+
+    handleClose = event => {
+        if (this.state.anchorRef.current && this.state.anchorRef.current.contains(event.target)) {
+            return;
+        }
+        this.setState({
+            ...this.state,
+            open: false
+        })
+    };
 
     render() {
         const { classes } = this.props;
+        const { open, anchorRef, selectedIndex, currency } = this.state
         return (
             <div className={classes.background}>
                 <h1>Coin Lists</h1>
                 <div className={classes.currency}>
-                    <PopupState variant="popover" popupId="demo-popup-menu">
-                        {popupState => (
-                            <React.Fragment>
-                                <Button variant="contained" color="primary" {...bindTrigger(popupState)}>
-                                    Currencies
+                    <Grid container direction="column" alignItems="flex-end">
+                        <Grid item xs={12}>
+                            <ButtonGroup variant="contained" color="primary" ref={anchorRef} aria-label="split button">
+                                <Button onClick={this.handleClick}>{currency[selectedIndex]}</Button>
+                                <Button
+                                    color="primary"
+                                    size="small"
+                                    aria-controls={open ? 'split-button-menu' : undefined}
+                                    aria-expanded={open ? 'true' : undefined}
+                                    aria-label="select merge strategy"
+                                    aria-haspopup="menu"
+                                    onClick={this.handleToggle}
+                                >
+                                    {/* <ArrowDropDownIcon /> */}
                                 </Button>
-                                <Menu {...bindMenu(popupState)}>
-                                    {this.state.currency.map(value => {
-                                        const val = value.data;
-                                        // < MenuItem> {val}</MenuItem>
-                                    })}
-                                </Menu>
-                            </React.Fragment>
-                        )}
-                    </PopupState>
+                            </ButtonGroup>
+                            <Popper open={open} role={undefined} transition disablePortal>
+                                {({ TransitionProps, placement }) => (
+                                    <Grow
+                                        {...TransitionProps}
+                                        style={{
+                                            transformOrigin: placement === 'bottom' ? 'center top' : 'center bottom',
+                                        }}
+                                    >
+                                        <Paper>
+                                            <ClickAwayListener onClickAway={this.handleClose}>
+                                                <MenuList id="split-button-menu">
+                                                    {currency.map((option, index) => (
+                                                        <MenuItem
+                                                            key={option}
+                                                            selected={index === selectedIndex}
+                                                            onClick={event => this.handleMenuItemClick(event, index)}
+                                                        >
+                                                            {option}
+                                                        </MenuItem>
+                                                    ))}
+                                                </MenuList>
+                                            </ClickAwayListener>
+                                        </Paper>
+                                    </Grow>
+                                )}
+                            </Popper>
+                        </Grid>
+                    </Grid>
                 </div>
                 {this.state.isLoading ?
                     <div className={classes.loader}>
