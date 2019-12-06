@@ -1,26 +1,13 @@
 import React from "react";
-import styled from "styled-components";
 import axios from "axios";
-import { Pagination } from "semantic-ui-react";
-import Currency from "./components/Currency/Currency";
+import Routes from "./routes";
+import styled from "styled-components";
+import { HashRouter } from "react-router-dom";
+
 import Header from "./components/Header/Header";
-import Table from "./components/Table/Table";
-import "semantic-ui-css/semantic.min.css";
 
 const MainDiv = styled.div``;
-const TableDiv = styled.div`
-  margin-top: 2%;
-  margin-right: 10%;
-  margin-left: 10%;
-`;
-const Container = styled.div`
-  display: flex;
-  justify-content: space-between;
-  padding-bottom: 20px;
-`;
-const Select = styled.div`
-  width: 200px;
-`;
+
 export default class App extends React.Component {
   constructor() {
     super();
@@ -104,31 +91,21 @@ export default class App extends React.Component {
   };
   render() {
     return (
-      <MainDiv>
-        <Header />
-        <TableDiv>
-          <Container>
-            <Select>
-              <Currency
-                currencies={this.state.currencies}
-                handleChange={this.handleChange}
-                currency={this.state.currency}
-              />
-            </Select>
-            <Pagination
-              activePage={this.state.activePage}
-              onPageChange={this.handleOnChange}
-              totalPages={62}
-              ellipsisItem={null}
-            />
-          </Container>
-          <Table
+      <HashRouter>
+        <MainDiv>
+          <Header />
+          <Routes
+            currencies={this.state.currencies}
+            handleChange={this.handleChange}
+            handleOnChange={this.handleOnChange}
+            currency={this.state.currency}
+            activePage={this.state.activePage}
             getData={this.state.data}
             isLoading={this.state.isLoading}
             unit={this.state.currency.unit}
           />
-        </TableDiv>
-      </MainDiv>
+        </MainDiv>
+      </HashRouter>
     );
   }
 }

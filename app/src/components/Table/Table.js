@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import MaterialTable from "material-table";
+import { Link } from "react-router-dom";
 import { Sparklines, SparklinesLine } from "react-sparklines";
 import "./Table.css";
 
@@ -31,8 +32,10 @@ export default class Table extends React.Component {
           field: "name",
           render: rowData => (
             <React.Fragment>
-              <Img src={rowData.image} alt="" />
-              {rowData.name}
+              <Link to={`details/${rowData.id}`}>
+                <Img src={rowData.image} alt="" />
+                {rowData.name}
+              </Link>
             </React.Fragment>
           )
         },
@@ -95,11 +98,11 @@ export default class Table extends React.Component {
           field: "price_change_percentage_24h_in_currency",
           render: rowData => (
             <React.Fragment>
-              {rowData.price_change_percentage_1h_in_currency < 0 ? (
+              {rowData.price_change_percentage_24h_in_currency < 0 ? (
                 <Red>
                   {Number(
                     Math.round(
-                      rowData.price_change_percentage_1h_in_currency + "e2"
+                      rowData.price_change_percentage_24h_in_currency + "e2"
                     ) + "e-2"
                   )}
                   %
@@ -108,7 +111,7 @@ export default class Table extends React.Component {
                 <Green>
                   {Number(
                     Math.round(
-                      rowData.price_change_percentage_1h_in_currency + "e2"
+                      rowData.price_change_percentage_24h_in_currency + "e2"
                     ) + "e-2"
                   )}
                   %
@@ -122,11 +125,11 @@ export default class Table extends React.Component {
           field: "price_change_percentage_7d_in_currency",
           render: rowData => (
             <React.Fragment>
-              {rowData.price_change_percentage_1h_in_currency < 0 ? (
+              {rowData.price_change_percentage_7d_in_currency < 0 ? (
                 <Red>
                   {Number(
                     Math.round(
-                      rowData.price_change_percentage_1h_in_currency + "e2"
+                      rowData.price_change_percentage_7d_in_currency + "e2"
                     ) + "e-2"
                   )}
                   %
@@ -135,7 +138,7 @@ export default class Table extends React.Component {
                 <Green>
                   {Number(
                     Math.round(
-                      rowData.price_change_percentage_1h_in_currency + "e2"
+                      rowData.price_change_percentage_7d_in_currency + "e2"
                     ) + "e-2"
                   )}
                   %
@@ -194,7 +197,7 @@ export default class Table extends React.Component {
           field: "name",
           render: rowData => (
             <React.Fragment>
-              {rowData.price_change_percentage_1h_in_currency < 0 ? (
+              {rowData.price_change_percentage_7d_in_currency < 0 ? (
                 <Sparklines data={rowData.sparkline_in_7d.price}>
                   <SparklinesLine color="red" style={{ fill: "none" }} />
                 </Sparklines>
@@ -215,7 +218,6 @@ export default class Table extends React.Component {
     return (
       <MaterialTable
         title="Top 100 Coins by Market Capitalization"
-        // title="Noelle Marie Angelica O. Quimson"
         columns={this.state.columns}
         data={this.props.getData}
         isLoading={this.props.isLoading}
