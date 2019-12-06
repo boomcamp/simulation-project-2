@@ -10,6 +10,7 @@ import Paper from "@material-ui/core/Paper";
 import "semantic-ui-css/semantic.min.css";
 import { Pagination } from "semantic-ui-react";
 import Fade from "@material-ui/core/Fade";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 const useStyles = makeStyles(theme => ({
    root: {
@@ -51,6 +52,15 @@ const useStyles = makeStyles(theme => ({
       "&:hover": {
          color: "purple"
       }
+   },
+   load: {
+      height: "50vh",
+      width: "60vw",
+      margin: "0 auto",
+      background: "white"
+   },
+   circle: {
+      marginTop: "23vh"
    }
 }));
 
@@ -58,10 +68,13 @@ export default function List() {
    const classes = useStyles();
    const [data, setData] = React.useState([]);
    const [pagi, setPagi] = React.useState(1);
+   const [load, setLoad] = React.useState(false);
 
    useEffect(() => {
+      setLoad(true);
       Axios.get(`https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&per_page=10&page=${pagi}`).then(response => {
          setData(response.data);
+         setLoad(false);
       });
    }, [pagi]);
 
@@ -93,54 +106,63 @@ export default function List() {
             Investment Tracking
          </Button>
          <Fade in>
-            <MaterialTable
-               style={{
-                  height: "50vh",
-                  overflowY: "auto",
-                  width: "60vw",
-                  margin: "0 auto"
-               }}
-               title="Coin List"
-               columns={[
-                  {
-                     title: "Rank",
-                     field: "market_cap_rank"
-                  },
-                  {
-                     title: "Cryptocurrencies",
-                     render: rowData => (
-                        <NavLink to={`/coin-details/${rowData.id}`} style={{ textDecoration: "none", color: "black" }}>
-                           <span className={classes.name}>{rowData.name}</span>
-                        </NavLink>
-                     )
-                  },
-                  {
-                     title: "Logo",
-                     render: rowData => (
-                        <NavLink to={`/coin-details/${rowData.id}`} style={{ textDecoration: "none", color: "black" }}>
-                           <img className={classes.logo} src={rowData.image} alt="Img" />
-                        </NavLink>
-                     )
-                  },
-                  {
-                     title: "Ticker",
-                     render: rowData => <span className={classes.symbol}> {rowData.symbol}</span>
-                  },
-                  { title: "Current Price", render: rowData => <span> ${rowData.current_price}</span> },
-                  {
-                     title: "Circulating Supply",
-                     render: rowData => <span> {circulatingFormat(Math.round(rowData.circulating_supply))}</span>
-                  },
-                  { title: "Mkt Cap", render: rowData => <span> {formatter.format(rowData.market_cap)} </span> }
-               ]}
-               data={data}
-               options={{
-                  paging: false
-               }}
-            />
+            {load ? (
+               <div className={classes.load}>
+                  <CircularProgress className={classes.circle} disableShrink />
+               </div>
+            ) : (
+               <MaterialTable
+                  style={{
+                     height: "50vh",
+                     overflowY: "auto",
+                     width: "60vw",
+                     margin: "0 auto"
+                  }}
+                  title="Coin List"
+                  columns={[
+                     {
+                        title: "Rank",
+                        field: "market_cap_rank"
+                     },
+                     {
+                        title: "Cryptocurrencies",
+                        render: rowData => (
+                           <NavLink to={`/coin-details/${rowData.id}`} style={{ textDecoration: "none", color: "black" }}>
+                              <span className={classes.name}>{rowData.name}</span>
+                           </NavLink>
+                        )
+                     },
+                     {
+                        title: "Logo",
+                        render: rowData => (
+                           <NavLink to={`/coin-details/${rowData.id}`} style={{ textDecoration: "none", color: "black" }}>
+                              <img className={classes.logo} src={rowData.image} alt="Img" />
+                           </NavLink>
+                        )
+                     },
+                     {
+                        title: "Ticker",
+                        render: rowData => <span className={classes.symbol}> {rowData.symbol}</span>
+                     },
+                     {
+                        title: "Current Price",
+                        render: rowData => <span> ${!rowData.current_price ? "0" : rowData.current_price}</span>
+                     },
+                     {
+                        title: "Circulating Supply",
+                        render: rowData => <span> {circulatingFormat(Math.round(rowData.circulating_supply))}</span>
+                     },
+                     { title: "Mkt Cap", render: rowData => <span> {formatter.format(rowData.market_cap)} </span> }
+                  ]}
+                  data={data}
+                  options={{
+                     paging: false
+                  }}
+               />
+            )}
          </Fade>
          <Paper className={classes.page}>
-            <Pagination style={{ width: "0vw" }} activePage={pagi} onPageChange={onChange} totalPages={620} />
+            <Pagination style={{ width: "0vw" }} activePage={pagi} onPageChange={onChange} totalPages={625} />
          </Paper>
       </div>
    );

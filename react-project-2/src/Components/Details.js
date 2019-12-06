@@ -12,8 +12,9 @@ import { Typography } from "@material-ui/core";
 import ReactHtmlParser from "react-html-parser";
 import Breadcrumbs from "@material-ui/core/Breadcrumbs";
 import NavigateNextIcon from "@material-ui/icons/NavigateNext";
-import Year from "./Year";
+import Charts from "./Charts";
 import Fade from "@material-ui/core/Fade";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 const useStyles = makeStyles(theme => ({
    root: {
@@ -27,7 +28,7 @@ const useStyles = makeStyles(theme => ({
    },
    paper: {
       width: "40%",
-      marginTop: "10vh",
+      marginTop: "7vh",
       height: "5vh",
       overflow: "auto",
       marginLeft: "5vw",
@@ -84,6 +85,9 @@ const useStyles = makeStyles(theme => ({
       top: "35vh",
       right: "10vw",
       background: "#162c64e8"
+   },
+   lineChart: {
+      position: "absolute"
    }
 }));
 
@@ -95,10 +99,12 @@ export default function AcccessibleTable() {
    const [price, setPrice] = React.useState([]);
    const [mCap, setMCap] = React.useState([]);
    const [description, setDescription] = React.useState([]);
+   const [load, setLoad] = React.useState(false);
 
    let { id } = useParams();
 
    useEffect(() => {
+      setLoad(true);
       Axios.get(`https://api.coingecko.com/api/v3/coins/${id}`).then(response => {
          setData(response.data);
          setImage(response.data.image);
@@ -106,6 +112,7 @@ export default function AcccessibleTable() {
          setPrice(response.data.market_data.current_price);
          setMCap(response.data.market_data.market_cap);
          setDescription(response.data.description);
+         setLoad(false);
          console.log(response.data);
       });
    }, [id]);
@@ -122,13 +129,19 @@ export default function AcccessibleTable() {
 
    return (
       <div>
-         <Year className={classes.lineChart} />
+         <Charts className={classes.lineChart} />
 
          <Paper className={classes.papel}>
-            <Typography className={classes.coinName}>
-               <img className={classes.img} src={image.large} />
-               <span style={{ marginLeft: "10px" }}>{data.name}</span>
-            </Typography>
+            {load ? (
+               <Typography className={classes.coinName}>
+                  <CircularProgress color="secondary" />
+               </Typography>
+            ) : (
+               <Typography className={classes.coinName}>
+                  <img className={classes.img} src={image.large} />
+                  <span style={{ marginLeft: "10px" }}>{data.name}</span>
+               </Typography>
+            )}
          </Paper>
 
          <Paper className={classes.paper}>
@@ -164,7 +177,7 @@ export default function AcccessibleTable() {
                </TableHead>
                <TableBody>
                   <TableRow>
-                     <TableCell> {market.market_cap_rank}</TableCell>
+                     <TableCell> {!market.market_cap_rank ? "None" : market.market_cap_rank} </TableCell>
                      <TableCell component="th" scope="row">
                         <b>{data.name}</b>
                      </TableCell>
@@ -172,7 +185,7 @@ export default function AcccessibleTable() {
                         <img style={{ width: "2vw" }} src={image.large} alt="coin-logo" />
                      </TableCell>
                      <TableCell style={{ textTransform: "uppercase" }}>{data.symbol}</TableCell>
-                     <TableCell>{formatter.format(price.usd)}</TableCell>
+                     <TableCell>{!price.usd ? "0" : formatter.format(price.usd)} </TableCell>
                      <TableCell>{circulatingFormat(Math.round(market.circulating_supply))}</TableCell>
                   </TableRow>
                </TableBody>
@@ -193,9 +206,11 @@ export default function AcccessibleTable() {
                <TableBody>
                   <TableRow>
                      <TableCell>{data.last_updated}</TableCell>
-                     <TableCell>{formatter.format(mCap.usd)}</TableCell>
+                     <TableCell>{!mCap.usd ? "0" : formatter.format(mCap.usd)}</TableCell>
                      <TableCell>{formatter.format(market.market_cap_change_24h)}</TableCell>
-                     <TableCell>{market.market_cap_change_percentage_24h}%</TableCell>
+                     <TableCell>
+                        {!market.market_cap_change_percentage_24h ? "0" : market.market_cap_change_percentage_24h}%
+                     </TableCell>
                      <TableCell> {formatter.format(market.price_change_24h)}</TableCell>
                   </TableRow>
                </TableBody>

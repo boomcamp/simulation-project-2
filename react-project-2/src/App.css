@@ -44,3 +44,15 @@ hr {
    top: 4vh;
    color: white !important;
 }
+
+@media (min-width: 600px) {
+   .MuiTab-root {
+      min-width: 123.5px !important;
+   }
+}
+
+.recharts-wrapper {
+   position: absolute !important;
+   right: -40vw !important;
+   top: 1vh !important;
+}
