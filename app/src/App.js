@@ -6,7 +6,7 @@ import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
 import NavDropdown from "react-bootstrap/NavDropdown";
 import { FaUserCircle } from "react-icons/fa";
-import { HashRouter } from "react-router-dom";
+import { HashRouter, Link } from "react-router-dom";
 import Routes from "./components/Routes/Routes";
 import axios from "axios";
 
@@ -14,7 +14,7 @@ const Div = styled.div`
   display: flex;
   width: 100%;
   box-sizing: border-box;
-  flex-direction: column;
+  justify-content: center;
 `;
 const Icon = styled.span`
   font-size: 30px;
@@ -28,9 +28,7 @@ export default class App extends React.Component {
   constructor() {
     super();
     this.state = {
-      details: false,
       data: [],
-      chartData: [],
       currency: {
         value: "usd",
         label: "US Dollar",
@@ -81,15 +79,6 @@ export default class App extends React.Component {
         }, 500);
       });
   };
-  handleDetails = (e, data) => {
-    e.preventDefault();
-    // this.setState({
-    //   details: true,
-    //   data: data,
-    //   chartData: data.sparkline_in_7d.price
-    // });
-    console.log(data);
-  };
   handleSelect = val => {
     this.setState({
       currency: val,
@@ -111,38 +100,38 @@ export default class App extends React.Component {
   render() {
     return (
       <HashRouter>
-        <Div>
-          <Navbar bg="primary" variant="dark" expand="lg">
-            <Navbar.Brand>
-              <Img src="https://assets.coingecko.com/coins/images/1/large/bitcoin.png?1547033579" />
+        <Navbar bg="primary" variant="dark" expand="lg">
+          <Navbar.Brand>
+            <Img src="https://assets.coingecko.com/coins/images/1/large/bitcoin.png?1547033579" />
+            <Link to="/" style={{ color: "white" }}>
               CRYPTOCURRENCY
-            </Navbar.Brand>
-            <Navbar.Toggle aria-controls="basic-navbar-nav" />
-            <Navbar.Collapse id="basic-navbar-nav">
-              <Nav className="mr-auto"></Nav>
-              <Nav>
-                <NavDropdown
-                  title={
-                    <React.Fragment>
-                      <Icon>
-                        <FaUserCircle />
-                      </Icon>
-                      <span>User</span>
-                    </React.Fragment>
-                  }
-                  id="basic-nav-dropdown"
-                  alignRight
-                >
-                  <NavDropdown.Item>Investment Tracker</NavDropdown.Item>
-                </NavDropdown>
-              </Nav>
-            </Navbar.Collapse>
-          </Navbar>
+            </Link>
+          </Navbar.Brand>
+          <Navbar.Toggle aria-controls="basic-navbar-nav" />
+          <Navbar.Collapse id="basic-navbar-nav">
+            <Nav className="mr-auto"></Nav>
+            <Nav>
+              <NavDropdown
+                title={
+                  <React.Fragment>
+                    <Icon>
+                      <FaUserCircle />
+                    </Icon>
+                    <span>User</span>
+                  </React.Fragment>
+                }
+                id="basic-nav-dropdown"
+                alignRight
+              >
+                <NavDropdown.Item>Investment Tracker</NavDropdown.Item>
+              </NavDropdown>
+            </Nav>
+          </Navbar.Collapse>
+        </Navbar>
+        <Div>
           <Routes
-            handleDetails={this.handleDetails}
             data={this.state.data}
             loading={this.state.loading}
-            details={this.state.details}
             currency={this.state.currency}
             handleSelect={this.handleSelect}
             handlePagination={this.handlePagination}

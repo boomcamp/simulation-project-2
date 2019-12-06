@@ -22,7 +22,7 @@ export default class Home extends React.Component {
           title: "Coin",
           field: "name",
           render: rowData => (
-            <Link to={`/details/${rowData.id}`}>
+            <Link to={`/coins/${rowData.id}`}>
               <Img src={rowData.image} />
               {rowData.name}
             </Link>
@@ -30,7 +30,11 @@ export default class Home extends React.Component {
         },
         {
           field: "symbol",
-          render: rowData => <Span>{rowData.symbol}</Span>
+          render: rowData => (
+            <Link to={`/coins/${rowData.id}`}>
+              <Span>{rowData.symbol}</Span>
+            </Link>
+          )
         },
         {
           title: "Price",
@@ -173,7 +177,6 @@ export default class Home extends React.Component {
 
   render() {
     const {
-      handleDetails,
       handleSelect,
       currency,
       data,
@@ -218,7 +221,6 @@ export default class Home extends React.Component {
             columns={this.state.columns}
             data={data}
             isLoading={loading}
-            onRowClick={handleDetails}
           />
         </Cont>
       </Div>

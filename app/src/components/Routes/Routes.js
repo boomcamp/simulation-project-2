@@ -1,12 +1,11 @@
 import React from "react";
 import { Route, Switch } from "react-router-dom";
 import Home from "../Home/Home";
-import Details from "../Details/Details";
+import Coins from "../Coins/Coins";
 
 export default class Routes extends React.Component {
   render() {
     const {
-      handleDetails,
       data,
       currentPage,
       currency,
@@ -22,7 +21,6 @@ export default class Routes extends React.Component {
           path="/"
           render={() => (
             <Home
-              handleDetails={handleDetails}
               currency={currency}
               handleSelect={handleSelect}
               handlePagination={handlePagination}
@@ -33,7 +31,10 @@ export default class Routes extends React.Component {
             />
           )}
         />
-        <Route path="/details/:id" render={props => <Details {...props} />} />
+        <Route
+          path="/coins/:id"
+          render={props => <Coins {...props} currency={currency} />}
+        />
       </Switch>
     );
   }
