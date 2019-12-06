@@ -31,3 +31,24 @@
 .profilePic{
   border-radius: 50%;
 }
+
+.profileBuySell{
+  margin: 10px 0; 
+}
+
+.price_change_percentage{
+  border-collapse: collapse;
+  padding: 10px;
+  width: 50%;
+  color: #6a6d6b; 
+  margin: 20px auto;
+  text-align: center;
+  border: 1px solid #e0e0e0
+}
+
+.day, .percent {
+  width: 100px;
+  padding: 8px;
+  border-bottom: 1px solid #e0e0e0;
+  border-left: 1px solid #e0e0e0;
+}

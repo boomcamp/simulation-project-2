@@ -19,7 +19,7 @@ import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 
 import { mainListItems } from './listItems';
 import User from './User'
-import CoinLogo from './CoinLogo';
+// import CoinLogo from './CoinLogo';
 import Coins from './Coins';
 
 function Copyright() {
@@ -174,7 +174,7 @@ export default function Dashboard() {
             </Grid>
             <Grid item xs={12} md={4} lg={3}>
               <Paper className={fixedHeightPaper}>
-                <CoinLogo />
+                {/* <CoinLogo /> */}
               </Paper>
             </Grid>
             <Grid item xs={12}>

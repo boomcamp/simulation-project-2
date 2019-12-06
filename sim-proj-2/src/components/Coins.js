@@ -39,6 +39,7 @@ export default function Coins() {
       { title: 'Total Volume', field: 'total_volume', cellStyle: {color: `#428bca`}},
       { title: 'Circulating Supply', field: 'circulating_supply' },
       { title: 'Market Cap', field: 'market_cap' },
+      // { title: 'Last 7 Days', field: 'sparkline' },
     ],
     data: [],
   });
@@ -51,11 +52,11 @@ export default function Coins() {
 
   useEffect(() => {
     axios
-      .get(`https://api.coingecko.com/api/v3/coins/markets?vs_currency=USD&per_page=600&page=1&sparkline=false&price_change_percentage=1h%2C24h%2C7d`)
+      .get(`https://api.coingecko.com/api/v3/coins/markets?vs_currency=USD&per_page=600&page=1&sparkline=true&price_change_percentage=1h%2C24h%2C7d`)
       .then(res => {
         let temp=[]
           res.data.map(coin => { 
-            return temp.push({  id: coin.id,
+            return    temp.push({  id: coin.id,
                                 market_cap_rank: coin.market_cap_rank,
                                 coin: {
                                         name: coin.name,
@@ -69,11 +70,9 @@ export default function Coins() {
                                 total_volume: `$${addComma(coin.total_volume)}`, 
                                 circulating_supply: addComma(coin.circulating_supply), 
                                 market_cap: `$${addComma(coin.market_cap) }`,})
-        })
+          })
           setState(prevState => { return {...prevState, data: temp} })
       })
-    
-      
     return () => { };
   }, [])
 
