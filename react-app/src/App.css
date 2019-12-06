@@ -1,0 +1,14 @@
+.App {
+  text-align: center;
+  background-image: url(../src/images/Bg2.jpg);
+  background-size: cover;
+  background-position: -90px;
+  min-height: 100vh;
+}
+.logo {
+  width: 25px;
+  height: 25px;
+}
+.symbol {
+  text-transform: uppercase;
+}
