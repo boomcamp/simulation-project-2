@@ -1,3 +1,33 @@
-.ant-table-thead{
+.ant-table-thead {
   color: red !important;
+}
+.coinsInfo {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  background-color: rgb(242, 247, 247);
+  width: 100%;
+}
+.descriptionContainer {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}
+.logoNameContainer {
+  display: flex;
+  align-items: flex-start;
+}
+/* .logoContainer {
+  display: flex;
+  align-items: flex-start;
+} */
+.price {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: flex-end;
+}
+.logoImage {
+  width: 45px;
+  height: 5vh;
 }
