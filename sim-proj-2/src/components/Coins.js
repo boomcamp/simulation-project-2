@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import MaterialTable from 'material-table';
+import { LineChart, Line, XAxis, YAxis,} from 'recharts';
 import axios from 'axios'
 import Chart from './Chart.js';
 
@@ -37,9 +38,21 @@ export default function Coins() {
           </div>)
       },
       { title: 'Total Volume', field: 'total_volume', cellStyle: {color: `#428bca`}},
-      { title: 'Circulating Supply', field: 'circulating_supply' },
-      { title: 'Market Cap', field: 'market_cap' },
-      // { title: 'Last 7 Days', field: 'sparkline' },
+      // { title: 'Circulating Supply', field: 'circulating_supply' },
+      { title: 'Market Cap', field: 'market_cap', },
+      { title: 'Last 7 Days', field: 'sparkline', cellStyle:{padding:`0`}, sorting:false,
+        render: rowData => (
+          <LineChart style={{marginLeft: `-75px`, padding:`0`}} width={200} height={70} data={rowData.sparkline} >
+            <YAxis type="number"  tick={false} axisLine={false} domain={['auto', 'auto']} />
+            <XAxis dataKey="date" tick={false} axisLine={false}/>
+            <Line type="monotone" 
+                  dataKey="oneWeek" 
+                  stroke={( parseFloat(rowData.price_change_percentage_7d_in_currency) < 0 ) ? `red` : `green`} 
+                  dot={false} 
+                  strokeWidth={1} />
+          </LineChart>
+        )
+      },
     ],
     data: [],
   });
@@ -56,7 +69,8 @@ export default function Coins() {
       .then(res => {
         let temp=[]
           res.data.map(coin => { 
-            return    temp.push({  id: coin.id,
+            let count=0;
+            return temp.push({  id: coin.id,
                                 market_cap_rank: coin.market_cap_rank,
                                 coin: {
                                         name: coin.name,
@@ -69,13 +83,14 @@ export default function Coins() {
                                 price_change_percentage_7d_in_currency: `${Math.round(coin.price_change_percentage_7d_in_currency * 100) / 100}%`, 
                                 total_volume: `$${addComma(coin.total_volume)}`, 
                                 circulating_supply: addComma(coin.circulating_supply), 
-                                market_cap: `$${addComma(coin.market_cap) }`,})
+                                market_cap: `$${addComma(coin.market_cap) }`,
+                                sparkline: coin.sparkline_in_7d.price.map(price => {return {oneWeek: price, date: count ++} }) 
+                               })
           })
           setState(prevState => { return {...prevState, data: temp} })
       })
     return () => { };
   }, [])
-
   return (
     <MaterialTable
       components={{
@@ -84,6 +99,7 @@ export default function Coins() {
       columns={state.columns}
       data={state.data}
       options={{
+        pageSize: 20,
         headerStyle: {
           fontWeight: `bold`,
         }

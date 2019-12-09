@@ -18,8 +18,9 @@ import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 
 import { mainListItems } from './listItems';
-import User from './User'
-// import CoinLogo from './CoinLogo';
+import Title from './Title'
+import Buy from './Buy'
+import InvesmentTracker from './InvesmentTracker';
 import Coins from './Coins';
 
 function Copyright() {
@@ -169,12 +170,14 @@ export default function Dashboard() {
           <Grid container spacing={3}>
             <Grid item xs={12} md={8} lg={9}>
               <Paper className={fixedHeightPaper}>
-                <User />
+                <Title>Invested Coins</Title>
+                <InvesmentTracker />
               </Paper>
             </Grid>
             <Grid item xs={12} md={4} lg={3}>
               <Paper className={fixedHeightPaper}>
-                {/* <CoinLogo /> */}
+                <Title>Cryptocurrency Invesment</Title>
+                <Buy />
               </Paper>
             </Grid>
             <Grid item xs={12}>
