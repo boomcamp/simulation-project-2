@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { Link } from "react-router-dom";
 import {
   MDBNavbar,
   MDBNavbarBrand,
@@ -7,7 +8,12 @@ import {
   MDBNavItem,
   MDBNavbarToggler,
   MDBCollapse,
-  MDBFormInline
+  MDBFormInline,
+  MDBDropdown,
+  MDBDropdownToggle,
+  MDBDropdownMenu,
+  MDBDropdownItem,
+  MDBIcon
 } from "mdbreact";
 
 import Logo from "../../images/logo.webp";
@@ -59,6 +65,18 @@ export default class Header extends React.Component {
                     />
                   </div>
                 </MDBFormInline>
+              </MDBNavItem>
+              <MDBNavItem>
+                <MDBDropdown>
+                  <MDBDropdownToggle nav caret>
+                    <MDBIcon icon="user" />
+                  </MDBDropdownToggle>
+                  <MDBDropdownMenu className="dropdown-default">
+                    <MDBDropdownItem>
+                      <Link to={"/investment"}>Investment Tracker</Link>
+                    </MDBDropdownItem>
+                  </MDBDropdownMenu>
+                </MDBDropdown>
               </MDBNavItem>
             </MDBNavbarNav>
           </MDBCollapse>

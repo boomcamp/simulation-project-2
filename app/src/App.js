@@ -3,7 +3,7 @@ import axios from "axios";
 import Routes from "./routes";
 import styled from "styled-components";
 import { HashRouter } from "react-router-dom";
-
+import "./App.css";
 import Header from "./components/Header/Header";
 
 const MainDiv = styled.div``;
@@ -80,7 +80,7 @@ export default class App extends React.Component {
     axios
       .get(
         `https://api.coingecko.com/api/v3/coins/markets?vs_currency=${val.value}&order=market_cap_desc&price_change_percentage=1h%2C24h%2C7d&sparkline=true&per_page=100
-    }&page=1`
+    }&page=${this.state.activePage}`
       )
       .then(response =>
         setTimeout(
@@ -89,6 +89,11 @@ export default class App extends React.Component {
         )
       );
   };
+
+  handleEntries = val => {
+    console.log(val);
+  };
+
   render() {
     return (
       <HashRouter>
@@ -103,6 +108,7 @@ export default class App extends React.Component {
             getData={this.state.data}
             isLoading={this.state.isLoading}
             unit={this.state.currency.unit}
+            handleEntries={this.handleEntries}
           />
         </MainDiv>
       </HashRouter>

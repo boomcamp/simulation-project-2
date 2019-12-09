@@ -7,6 +7,8 @@ import "semantic-ui-css/semantic.min.css";
 import Currency from "./components/Currency/Currency";
 import Table from "./components/Table/Table";
 import Details from "./components/Details/Details";
+import Investment from "./components/Investment/Investment";
+import Entries from "./components/Entries/Entries";
 
 const TableDiv = styled.div`
   margin-top: 2%;
@@ -32,7 +34,8 @@ export default class Routes extends React.Component {
       getData,
       isLoading,
       unit,
-      handleOnChange
+      handleOnChange,
+      handleEntries
     } = this.props;
     return (
       <Switch>
@@ -48,19 +51,26 @@ export default class Routes extends React.Component {
                     currency={currency}
                   />
                 </Select>
-                <Pagination
-                  activePage={activePage}
-                  onPageChange={handleOnChange}
-                  totalPages={62}
-                  ellipsisItem={null}
-                />
+                <div>
+                  <Entries handleEntries={handleEntries} />
+                  <Pagination
+                    activePage={activePage}
+                    onPageChange={handleOnChange}
+                    totalPages={62}
+                    ellipsisItem={null}
+                  />
+                </div>
               </Container>
               <Table getData={getData} isLoading={isLoading} unit={unit} />
             </TableDiv>
           )}
           path="/"
         />
-        <Route component={Details} path="/details/:id" />
+        <Route
+          render={props => <Details {...props} currency={currency} />}
+          path="/details/:id"
+        />
+        <Route render={() => <Investment />} path="/investment" />
       </Switch>
     );
   }

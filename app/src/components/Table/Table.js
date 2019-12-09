@@ -3,7 +3,6 @@ import styled from "styled-components";
 import MaterialTable from "material-table";
 import { Link } from "react-router-dom";
 import { Sparklines, SparklinesLine } from "react-sparklines";
-import "./Table.css";
 
 const Img = styled.img`
   height: 30px;
