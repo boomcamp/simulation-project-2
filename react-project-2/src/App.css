@@ -54,5 +54,29 @@ hr {
 .recharts-wrapper {
    position: absolute !important;
    right: -40vw !important;
-   top: 1vh !important;
+   top: -2vh !important;
+}
+
+.hover-custom-tooltip {
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   flex-direction: column;
+   background-color: white;
+   border: 1px #b3bac1 solid;
+   padding: 10px;
+}
+.price-hover {
+   color: #532cdd;
+}
+.volume-hover {
+   color: #413ea0;
+}
+
+.recharts-legend-item-text {
+   color: black !important;
+}
+
+.recharts-legend-wrapper {
+   bottom: -5px !important;
 }

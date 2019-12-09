@@ -4,6 +4,7 @@ import { BrowserRouter, Route, Switch } from "react-router-dom";
 
 import List from "./Components/List";
 import Details from "./Components/Details";
+import Transaction from "./Components/Transaction";
 
 function App() {
    return (
@@ -13,6 +14,7 @@ function App() {
                <Route exact path="/" component={List} />
                <Route path="/coinlist" component={List} />
                <Route path="/coin-details/:id" component={Details} />
+               <Route path="/transaction/:id" component={Transaction} />
             </Switch>
          </BrowserRouter>
       </div>

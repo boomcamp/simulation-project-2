@@ -121,7 +121,7 @@ export default function List() {
                   title="Coin List"
                   columns={[
                      {
-                        title: "Rank",
+                        title: "#",
                         field: "market_cap_rank"
                      },
                      {
@@ -162,7 +162,7 @@ export default function List() {
             )}
          </Fade>
          <Paper className={classes.page}>
-            <Pagination style={{ width: "0vw" }} activePage={pagi} onPageChange={onChange} totalPages={625} />
+            <Pagination style={{ width: "0vw" }} activePage={pagi} onPageChange={onChange} totalPages={626} />
          </Paper>
       </div>
    );

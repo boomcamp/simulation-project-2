@@ -12,7 +12,7 @@ import { Typography } from "@material-ui/core";
 import ReactHtmlParser from "react-html-parser";
 import Breadcrumbs from "@material-ui/core/Breadcrumbs";
 import NavigateNextIcon from "@material-ui/icons/NavigateNext";
-import Charts from "./Charts";
+import TabsC from "./Tabs";
 import Fade from "@material-ui/core/Fade";
 import CircularProgress from "@material-ui/core/CircularProgress";
 
@@ -129,12 +129,12 @@ export default function AcccessibleTable() {
 
    return (
       <div>
-         <Charts className={classes.lineChart} />
+         <TabsC className={classes.lineChart} />
 
          <Paper className={classes.papel}>
             {load ? (
                <Typography className={classes.coinName}>
-                  <CircularProgress color="secondary" />
+                  <CircularProgress disableShrink color="secondary" />
                </Typography>
             ) : (
                <Typography className={classes.coinName}>
@@ -179,13 +179,15 @@ export default function AcccessibleTable() {
                   <TableRow>
                      <TableCell> {!market.market_cap_rank ? "None" : market.market_cap_rank} </TableCell>
                      <TableCell component="th" scope="row">
-                        <b>{data.name}</b>
+                        {data.name}
                      </TableCell>
                      <TableCell>
                         <img style={{ width: "2vw" }} src={image.large} alt="coin-logo" />
                      </TableCell>
                      <TableCell style={{ textTransform: "uppercase" }}>{data.symbol}</TableCell>
-                     <TableCell>{!price.usd ? "0" : formatter.format(price.usd)} </TableCell>
+                     <TableCell>
+                        <b>{!price.usd ? "0" : formatter.format(price.usd)}</b>
+                     </TableCell>
                      <TableCell>{circulatingFormat(Math.round(market.circulating_supply))}</TableCell>
                   </TableRow>
                </TableBody>
@@ -207,11 +209,33 @@ export default function AcccessibleTable() {
                   <TableRow>
                      <TableCell>{data.last_updated}</TableCell>
                      <TableCell>{!mCap.usd ? "0" : formatter.format(mCap.usd)}</TableCell>
-                     <TableCell>{formatter.format(market.market_cap_change_24h)}</TableCell>
-                     <TableCell>
-                        {!market.market_cap_change_percentage_24h ? "0" : market.market_cap_change_percentage_24h}%
-                     </TableCell>
-                     <TableCell> {formatter.format(market.price_change_24h)}</TableCell>
+                     {market.market_cap_change_24h < 0 ? (
+                        <TableCell style={{ color: "red" }}>{formatter.format(market.market_cap_change_24h)}</TableCell>
+                     ) : (
+                        <TableCell>{formatter.format(market.market_cap_change_24h)}</TableCell>
+                     )}
+
+                     {market.market_cap_change_percentage_24h < 0 ? (
+                        <TableCell style={{ color: "red" }}>
+                           {!market.market_cap_change_percentage_24h
+                              ? "0"
+                              : Math.round(market.market_cap_change_percentage_24h * 100) / 100}
+                           %
+                        </TableCell>
+                     ) : (
+                        <TableCell>
+                           {!market.market_cap_change_percentage_24h
+                              ? "0"
+                              : Math.round(market.market_cap_change_percentage_24h * 100) / 100}
+                           %
+                        </TableCell>
+                     )}
+
+                     {market.price_change_24h < 0 ? (
+                        <TableCell style={{ color: "red" }}> {formatter.format(market.price_change_24h)}</TableCell>
+                     ) : (
+                        <TableCell> {formatter.format(market.price_change_24h)}}</TableCell>
+                     )}
                   </TableRow>
                </TableBody>
             </Table>
