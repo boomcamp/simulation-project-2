@@ -4,7 +4,10 @@ import "./Homepage.css";
 import { Modal } from "antd";
 import { Table } from "antd";
 import { Collapse } from "antd";
-import CoinCharts from "../Charts/CoinChart"
+import CoinCharts from "../Charts/CoinChart";
+import Details from "../Details/Details";
+
+// import { FormattedNumber} from 'react-intl';
 // import EllipsisText from "react-ellipsis-text";
 var commaNumber = require("comma-number");
 const { Panel } = Collapse;
@@ -13,6 +16,7 @@ export default class Homepage extends Component {
     super();
     this.state = {
       data: [],
+      id: [],
       currency: [],
       dexcription: [],
       name: "",
@@ -73,7 +77,8 @@ export default class Homepage extends Component {
   componentDidMount() {
     axios
       .get(
-        `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&per_page=250&page=1`)
+        `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&per_page=250&page=1`
+      )
       .then(result => {
         let dataArr = result.data.map(elem => {
           return elem;
@@ -81,13 +86,13 @@ export default class Homepage extends Component {
         let arrId = result.data.map(ids => {
           return ids.id;
         });
-        console.log(dataArr);
+        //  console.log(dataArr);
         this.setState({
           data: dataArr,
           id: arrId
         });
 
-        // result.data.map(res=>{
+        // result.data.map(res=>{ 
         //   console.log(res.id)
         // })
       });
@@ -108,8 +113,12 @@ export default class Homepage extends Component {
       // res.data.map(element=>{
       //   console.log(element.id)
       // })
-     // console.log(res.data);
+      // console.log(res.data);
+      // let id = res.data.id;
+      // console.log(res.data.id)
+      // this.props.id(id)
       this.setState({
+        id: e,
         img: res.data.image,
         visible: true,
         dexcription: res.data.description,
@@ -123,7 +132,6 @@ export default class Homepage extends Component {
         circulating_supply: res.data.market_data.circulating_supply
       });
     });
-    
   };
   handleCancel = e => {
     //console.log(e);
@@ -155,16 +163,15 @@ export default class Homepage extends Component {
           title="Currency"
           visible={this.state.visible}
           onCancel={this.handleCancel}
-          width="1000px"
+          width="800px"
           footer={null}
         >
-        
           <div className="logoNameContainer">
-            <img className="logoImage"  src={this.state.img.small} alt="coin" />
-            <h1>{this.state.name}</h1>
-            <h1>({this.state.symbol})</h1>
+            <img className="logoImage" src={this.state.img.small} alt="coin" />
+            <h1 className="coinsName">{this.state.name}</h1>
+            <b className="symbol">({this.state.symbol})</b>
           </div>
-          <div className="prIice">
+          <div className="price">
             <h2>{"$" + commaNumber(this.state.cPrice.usd)}</h2>
           </div>
 
@@ -187,30 +194,26 @@ export default class Homepage extends Component {
                     commaNumber(this.state.market_cap.usd)}
                 </p>
                 <p>
-                  {" 24h Low / 24h High :   " +
+                  {" 24h Low / 24h High :   " + 
                     "$" +
-                    commaNumber(this.state.marketHigh.usd) + "/$" +
-                    commaNumber(this.state.marketHigh.usd)
-                  }
+                    commaNumber(this.state.marketHigh.usd) +
+                    "/$" +
+                    commaNumber(this.state.marketLow.usd)}
                 </p>
                 <p>
                   {" 24 Hour Trading Vol :   " +
                     "$" +
-                    commaNumber(this.state.totalVolume.usd)
-                  }
+                    commaNumber(this.state.totalVolume.usd)}
                 </p>
                 <p>
                   {" Circulating Supply :   " +
-
-                    commaNumber(this.state.circulating_supply)
-                  }
+                    commaNumber(this.state.circulating_supply)}
                 </p>
-
-
               </Panel>
             </Collapse>
           </div>
-          <CoinCharts/>
+          <Details id={this.state.id} />
+          <CoinCharts id={this.state.id} />
         </Modal>
       </div>
     );

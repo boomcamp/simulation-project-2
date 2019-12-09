@@ -2,11 +2,11 @@
   color: red !important;
 }
 .coinsInfo {
-  display: flex;
+  /* display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  background-color: rgb(242, 247, 247);
-  width: 100%;
+  background-color: rgb(242, 247, 247); */
+  text-align: justify;
 }
 .descriptionContainer {
   display: flex;
@@ -22,12 +22,20 @@
   align-items: flex-start;
 } */
 .price {
+  margin-top: -50px;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
   align-items: flex-end;
 }
 .logoImage {
-  width: 45px;
-  height: 5vh;
+  width: 35px;
+  height: 4vh;
+}
+.symbol{
+  margin-top: 10px;
+  margin-left: 5px;
+}
+.coinsName{
+  margin-left: 5px;
 }
