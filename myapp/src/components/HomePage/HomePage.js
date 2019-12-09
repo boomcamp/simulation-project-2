@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import axios from "axios";
 import CoinsList from "../CoinsList/CoinsList";
+import { Link } from "react-router-dom";
 
 // import CoinTable from "../CoinTable/CoinTable";
 import {
@@ -41,10 +42,6 @@ export default class HomePage extends Component {
     const bgPink = { backgroundColor: "#8dc647" };
     return (
       <div>
-        {/* {this.state.coins.map(res => {
-          // return console.log(res.id)
-          return console.log(res.id);
-        })} */}
         <Router>
           <header>
             <MDBNavbar style={bgPink} dark expand="md" scrolling fixed="top">
@@ -53,7 +50,9 @@ export default class HomePage extends Component {
               </MDBNavbarBrand>
               <MDBNavbarToggler onClick={this.onClick} />
               <MDBCollapse isOpen={this.state.collapse} navbar>
-                <MDBNavbarNav left></MDBNavbarNav>
+                <Link to="/">
+                  <MDBNavbarNav left>Home</MDBNavbarNav>
+                </Link>
                 <MDBNavbarNav right></MDBNavbarNav>
               </MDBCollapse>
             </MDBNavbar>

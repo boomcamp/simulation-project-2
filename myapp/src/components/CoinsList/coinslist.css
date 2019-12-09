@@ -20,3 +20,28 @@
   background-color: #4CAF50;
   color: white;
 }
+.name{
+  text-transform: uppercase;
+  font-size:30px;
+  margin-left:20px;
+}
+.symbol{
+  font-weight: bold;
+  margin-left:5px;
+  font-size:15px;
+}
+.price{
+  font-size: 30px;
+  color:green;
+}
+.info{
+  font-weight:bold
+}
+.names{
+  text-transform: uppercase;
+  font-weight: normal;
+  font-size:25px;
+}
+em{
+  font-style:normal;
+}
