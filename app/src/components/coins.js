@@ -4,21 +4,32 @@ import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
 import axios from "axios";
 import Card from "@material-ui/core/Card";
-import { textAlign, display, flexbox } from "@material-ui/system";
-
+import { Link } from "react-router-dom";
+import Chart from "./chart";
 const useStyles = theme => ({
   root: {
-    padding: theme.spacing(3, 2)
+    padding: theme.spacing(3, 2),
+    marginLeft: theme.spacing(18),
+    // background: "#304050",
+    // color: "white"
+    maxWidth: 1450
   },
   name: {
     fontSize: "30px"
   },
+  descripName: {
+    fontSize: "25px"
+  },
   logo: {
-    maxHeight: 70,
-    minWidth: 50
+    maxHeight: 180
+  },
+  rank: {
+    fontSize: "20px"
   },
   price: {
-    fontSize: "20px"
+    fontSize: "35px",
+    padding: "10px",
+    justifyContent: "space-between"
   },
   details: {
     fontSize: "13px",
@@ -31,12 +42,31 @@ const useStyles = theme => ({
   card1: {
     maxWidth: 75
   },
-  container: {
+  main: {
     display: "flex",
-    flexDirection: "column"
+    // flexDirection: "row",
+    flexFlow: "row wrap",
+    padding: theme.spacing(2)
   },
-  links: {
-    fontSize: "15px"
+  container: {
+    flex: 1,
+    flexDirection: "row",
+    marginLeft: theme.spacing(15)
+  },
+  container1: {
+    flex: 1
+  },
+  container2: {
+    marginLeft: theme.spacing(2),
+    fontSize: "20px",
+    margin: "30px",
+    display: "flex"
+  },
+  supply: {
+    fontSize: "18px"
+  },
+  vol: {
+    fontSize: "18px"
   }
 });
 
@@ -46,7 +76,8 @@ class coins extends Component {
 
     this.state = {
       id: {},
-      details: {}
+      details: {},
+      circulating_supply: ""
     };
   }
 
@@ -68,52 +99,159 @@ class coins extends Component {
       currency: "USD",
       minimumFractionDigits: 2
     });
+
     return (
       <React.Fragment>
         {this.state.details.description ? (
           <Paper className={classes.root}>
-            <Card className={classes.card1}>
-              <img
-                className={classes.logo}
-                src={this.state.details.image.large}
-              />
-            </Card>
+            <div className={classes.main}>
+              <div className={classes.container}>
+                {/* <Card className={classes.logo}> */}
+                <img
+                  className={classes.logo}
+                  src={this.state.details.image.large}
+                />
+                {/* </Card> */}
 
-            <Typography className={classes.name}>
-              {this.state.details.name}({this.state.details.symbol})
-            </Typography>
-            <div className={classes.container}>
-              <Typography className={classes.price}>
-                Market Cap: Rank#
-                {this.state.details.market_cap_rank}
-              </Typography>
-              <Typography className={classes.links}>
-                Market Price:
-                {formatter.format(
-                  this.state.details.market_data.current_price.usd
-                )}
-              </Typography>
-              <Typography className={classes.links}>
-                24 Hour Trading Vol:
-                {formatter.format(
-                  this.state.details.market_data.total_volume.usd
-                )}
-              </Typography>
-              <Typography className={classes.links}>
-                24h Low / 24h High:
-                {formatter.format(this.state.details.market_data.high_24h.usd)}
-              </Typography>
-              <Typography className={classes.links}>
-                24h High:
-                {formatter.format(this.state.details.market_data.high_24h.usd)}
-              </Typography>
+                <Typography className={classes.name}>
+                  {this.state.details.name}({this.state.details.symbol})
+                </Typography>
+                <Typography className={classes.rank}>
+                  Market Cap: Rank#
+                  <span>{this.state.details.market_cap_rank}</span>
+                </Typography>
+                <Typography>
+                  Websites:{" "}
+                  <Link
+                    to="`${this.state.details.links.homepage}`"
+                    path="http://www.bitcoin.org"
+                  >
+                    {this.state.details.links.homepage}
+                  </Link>
+                </Typography>
+              </div>
+              <div className={classes.container1}>
+                <Typography className={classes.price}>
+                  <span>
+                    {" "}
+                    {formatter.format(
+                      this.state.details.market_data.current_price.usd
+                    )}
+                  </span>
+                </Typography>
+                <div className={classes.container2}>
+                  <Typography className={classes.vol}>
+                    <b> Market Cap:</b>
+                    <span>
+                      {" "}
+                      {formatter.format(
+                        this.state.details.market_data.market_cap.usd
+                      )}
+                    </span>
+                  </Typography>
+                  <Typography className={classes.vol}>
+                    <b>24 Hour Trading Vol:</b>
+                    <span>
+                      {" "}
+                      {formatter.format(
+                        this.state.details.market_data.total_volume.usd
+                      )}
+                    </span>
+                  </Typography>
+                </div>
+                <div className={classes.container2}>
+                  <Typography className={classes.vol}>
+                    <b>Circulating supply:</b>
+                    <span>
+                      {"  "}
+                      {formatter.format(
+                        this.state.details.market_data.low_24h.usd
+                      )}
+                    </span>
+                  </Typography>
+                  <Typography className={classes.vol} noWrap>
+                    <b>24h Low/24h High:</b>
+                    <span>
+                      {"  "}
+                      {formatter.format(
+                        this.state.details.market_data.high_24h.usd
+                      )}{" "}
+                      /{" "}
+                      {formatter.format(
+                        this.state.details.market_data.low_24h.usd
+                      )}
+                    </span>
+                  </Typography>
+                  {/* <Typography className={classes.vol}>
+                    <b>24h High:</b>
+                    <span>
+                      {"  "}
+                      {formatter.format(
+                        this.state.details.market_data.low_24h.usd
+                      )}
+                    </span>
+                  </Typography> */}
+                </div>
+              </div>
+            </div>
+            <div class="ui clearing divider"></div>
+            <div class="ui one item menu">
+              <a class="item active">Overview</a>
+              {/* <a class="item">Chart</a> */}
             </div>
             <Card className={classes.card}>
-              <Typography className={classes.details}>
-                {this.state.details.description.en}
+              <Typography className={classes.descripName}>
+                {this.state.details.name}({this.state.details.symbol})
               </Typography>
+              <Typography className={classes.details}>
+                <p
+                  dangerouslySetInnerHTML={{
+                    __html: this.state.details.description.en
+                  }}
+                ></p>
+              </Typography>
+              <table class="ui celled padded table">
+                <thead>
+                  <tr>
+                    <th class="single line">24h</th>
+                    <th>1 week</th>
+                    <th>1 Month</th>
+                    <th>6 Months</th>
+                    <th>1 Year</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <td>
+                    {this.state.details.market_data.price_change_percentage_24h}
+                  </td>
+                  <td>
+                    {this.state.details.market_data.price_change_percentage_7d}
+                  </td>
+                  <td>
+                    {this.state.details.market_data.price_change_percentage_30d}
+                  </td>
+                  /
+                  <td>
+                    {
+                      this.state.details.market_data
+                        .price_change_percentage_200d
+                    }
+                  </td>
+                  <td>
+                    {this.state.details.market_data.price_change_percentage_1y}
+                  </td>
+                </tbody>
+              </table>
+              <div class="ui clearing divider"></div>
+              <div class="ui five item menu">
+                <a class="item active">24h</a>
+                <a class="item ">7d</a>
+                <a class="item ">30d</a>
+                <a class="item ">200d</a>
+                <a class="item ">1y</a>
+              </div>
+              <Chart />
             </Card>
-            <Typography></Typography>
           </Paper>
         ) : null}
       </React.Fragment>

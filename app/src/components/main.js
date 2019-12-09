@@ -6,12 +6,19 @@ import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
-// import TablePagination from "@material-ui/core/TablePagination";
+import { Pagination } from "semantic-ui-react";
+import Grid from "@material-ui/core/Grid";
+import "semantic-ui-css/semantic.min.css";
 import axios from "axios";
 import { Redirect } from "react-router-dom";
 const useStyles = theme => ({
   root: {
-    width: "100%"
+    width: "100%",
+    // backgroundColor: "#304850",
+  },
+  head:{
+    backgroundColor:"#304050",
+    color: "white"
   },
   tableWrapper: {
     maxHeight: 649,
@@ -20,6 +27,9 @@ const useStyles = theme => ({
   image: {
     maxHeight: 30,
     maxWidth: 30
+  },
+  row:{
+    color: "white"
   }
 });
 class main extends Component {
@@ -28,8 +38,10 @@ class main extends Component {
 
     this.state = {
       redirect: true,
-      id: "",
+      id: [],
+      activePage: 1,
       coinsList: [],
+      page:[],
       columns: [
         { id: "market_cap_rank", label: "Rank", minWidth: 10 },
         { id: "image", label: "Logo", minWidth: 50, align: "center" },
@@ -49,8 +61,7 @@ class main extends Component {
   componentDidMount() {
     axios
       .get(
-        `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=100&page=1&sparkline=false`
-      )
+        `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&page=1&per_page=25`)
       .then(res =>
         this.setState({
           coinsList: res.data
@@ -65,7 +76,14 @@ class main extends Component {
     });
     this.props.history.push(`/coins/${id}`);
   };
-
+  handleOnChange = (e, pageInfo) => {
+    console.log ()
+    this.setState({
+      activePage: pageInfo.activePage,
+      url:
+        `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&per_page=20&page=${pageInfo.activePage.toString()}`
+    });
+  };
   render() {
     const { classes } = this.props;
 
@@ -73,7 +91,7 @@ class main extends Component {
       return (
         <div className={classes.card}>
           <Paper className={classes.root}>
-            <Table stickyHeader aria-label="sticky table">
+            <Table stickyHeader aria-label="sticky table" >
               <TableHead>
                 <TableRow>
                   {this.state.columns.map(column => (
@@ -82,18 +100,20 @@ class main extends Component {
                       align={column.align}
                       style={{ minWidth: column.minWidth }}
                       className={classes.head}
+                      color="inherit"
                     >
                       {column.label}
                     </TableCell>
                   ))}
                 </TableRow>
               </TableHead>
-              <TableBody>
+              <TableBody className={classes.table}>
                 {this.state.coinsList.map(column => {
                   return (
                     <TableRow
                       key={column.id}
                       onClick={() => this.handleClick(column.id)}
+                      className={classes.row}
                     >
                       <TableCell>{column.market_cap_rank}</TableCell>
                       <TableCell align="center">
@@ -114,6 +134,18 @@ class main extends Component {
                 })}
               </TableBody>
             </Table>
+            <Grid container justify="flex-end">
+          <Pagination
+            style={{
+              position: "fixed",
+              bottom: 0
+            }}
+            activePage={this.state.activePage}
+            onPageChange={this.handleOnChange}
+            totalPages={248}
+            ellipsisItem={null}
+          />
+        </Grid>
           </Paper>
         </div>
       );

@@ -13,10 +13,13 @@ import Coins from "./coins";
 
 const useStyles = theme => ({
   root: {
-    flexGrow: 1
+    flexGrow: 1,
+  },
+  nav:{
+   background: "#304850"
   },
   menuButton: {
-    marginRight: theme.spacing(2)
+    marginRight: theme.spacing(2),
   },
   title: {
     flexGrow: 1,
@@ -69,12 +72,11 @@ class header extends Component {
     return (
       <div>
         <React.Fragment>
-          <AppBar position="relative">
+          <AppBar position="relative"  className={classes.nav}>
             <Toolbar>
               <IconButton
                 edge="start"
                 className={classes.menuButton}
-                color="inherit"
                 aria-label="open drawer"
               >
                 <MenuIcon />
