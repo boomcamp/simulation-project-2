@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { Table, TableCell, TableRow, Paper, TableHead, TableBody, Typography } from '@material-ui/core'
+import { Table, TableCell, TableRow, Paper, TableHead, TableBody } from '@material-ui/core'
 import axios from 'axios';
 
 import DataChart from './DataChart';
@@ -116,7 +116,9 @@ export default function CoinDetail(props) {
                     </Paper>
                 </div>
                 <div className={classes.graph}>
-                    <DataChart />
+                    <DataChart
+                        id={props.id}
+                    />
                 </div>
             </div>
         </div >
