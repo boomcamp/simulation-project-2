@@ -12,9 +12,9 @@ import Sidebar from './Components/DrawerSecond/Sidebar';
 function App() {
   return (
     <div className="App">
-      <MiniDrawer/>
+      {/* <MiniDrawer/> */}
 
-      {/* <Sidebar/> */}
+      <Sidebar/>
 
     </div>
   );

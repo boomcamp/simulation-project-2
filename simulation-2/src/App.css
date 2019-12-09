@@ -150,6 +150,7 @@
   display: flex;
   justify-content: space-around;
   align-items: center;
+  background: #143959;
 }
 
 .header-name-container{
@@ -167,14 +168,15 @@
   font-weight: 600;
   /* padding: 10px; */
   margin-left: 10px;
+  color: white;
 }
 
 .dv-coin-index{
-  font-size: 2em;
+  font-size: 1em;
   font-weight: 100;
   /* padding: 10px; */
   margin-right: 10px;
-  color: #838383;
+  color: #ffffff;
 }
 
 .current-coin-status-container{
@@ -192,19 +194,21 @@
   align-items: center;
   flex-direction: column;
   padding: 20px;
+  color: white;
 }
 
 .coin-context{
   display: flex;
   justify-content: space-between;
   align-items: center;
-  color: #143959;
+  color: white;
 }
 
 .coin-time-ref{
-  font-size: 0.6em;
-  color: #b1b1b1;
-  font-weight: 100;
+  font-size: 0.5em;
+  color: #ffffff;
+  font-weight: 300;
+  margin-bottom: 5px;
   /* margin: px; */
 
 }
@@ -268,4 +272,9 @@
   margin-top: 50px;
 }
 
+.recharts-wrapper{
+  /* width: none!important; */
+}
+
 /* CHART END */
+

@@ -12,7 +12,7 @@
    function CustomizedAxisTick({x, y, stroke, payload}){
         return (
             <g transform={`translate(${x},${y})`}>
-            <text x={0} y={0} dy={16} textAnchor="end" fill="#666" transform="rotate(-35)">{payload.value}</text>
+            <text x={0} y={0} dy={16} style={{fontSize:'0.7em'}} textAnchor="end" fill="#666" transform="rotate(-35)">{payload.value}</text>
           </g>)
     }
 
@@ -23,6 +23,7 @@
         const [timeformat, setTformat] = useState('');
 
         useEffect(() => {
+            console.log(props.DataRef)
             GetDetailsView(props.DataRef.id, '1')
                 .then(data=>{priceDataProcess(data.data.prices, '1')})
                 .catch(e=>console.log(e));
@@ -110,19 +111,19 @@
                 </div> */}
 
                 <div className='chart-2-container' style={{margin: '0 auto'}}>
-                    <AreaChart width={1500} height={400} data={coinData}
-                    margin={{ top: 10, right: 30, left: 0, bottom: 60 }}>
+                    <AreaChart width={1500} height={500} data={coinData}
+                    margin={{ top: 100, right: 40, left: 40, bottom: 100 }}>
                     <defs>
                         <linearGradient id="colorUv" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="5%" stopColor="#8884d8" stopOpacity={0.8}/>
-                        <stop offset="95%" stopColor="#8884d8" stopOpacity={0}/>
+                        <stop offset="5%" stopColor="#143D73" stopOpacity={0.9}/>
+                        <stop offset="95%" stopColor="#143D73" stopOpacity={0.68}/>
                         </linearGradient>
                     </defs>
                     <XAxis tick={<CustomizedAxisTick/>} dataKey="time" />
-                    <YAxis  domain={['auto', 'auto']} />
+                    <YAxis tick={(payload)=>{return payload}} domain={['auto', 'auto']} />
                     <CartesianGrid strokeDasharray="3 3" />
                     <Tooltip />
-                    <Area type="monotone" dataKey="value" stroke="#8884d8" fillOpacity={1} fill="url(#colorUv)" />
+                    <Area type="monotone" dataKey="value" stroke="#143959" fillOpacity={1} fill="url(#colorUv)" />
                     </AreaChart>
                 </div>
 

@@ -20,7 +20,7 @@ export default function DVHeader(props) {
             <div className='header-name-container'>
                 <img className="dv-coin-image" src={props.DataRef.coin.image} alt=''/>
                 <p className="dv-coin-name">{props.DataRef.coin.name}</p>
-                <p className="dv-coin-index">({props.DataRef.index})</p>
+                <p className="dv-coin-index"> ({props.DataRef.index})</p>
             </div>
             <div className='current-coin-status-container'>
                 <div className='coin-status hour'>
@@ -72,15 +72,15 @@ export default function DVHeader(props) {
                         {props.DataRef.smonth.toFixed(2)}
                     </div>
                 </div>
-                <div className='coin-status year'>
+                {props.DataRef.oneyear?<div className='coin-status year'>
                     <div className='coin-time-ref'>
                         1 Year
                     </div>
                     <div className='coin-context'>
-                        {arrowcolor(props.DataRef.oneyear.toFixed(2))}
-                        {props.DataRef.oneyear.toFixed(2)}
+                        {props.DataRef.oneyear?arrowcolor(props.DataRef.oneyear.toFixed(2)):''}
+                        {props.DataRef.oneyear?props.DataRef.oneyear.toFixed(2):''}
                     </div>
-                </div>
+                </div>:''}
             </div>
         </div>
     )

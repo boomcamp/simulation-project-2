@@ -109,7 +109,6 @@ export default function MiniDrawer() {
                 <ListItemText primary={'Watch'} />
             </ListItem>
         </List>
-        
       </Drawer>
 
       {/* Drawer Ends Here */}
