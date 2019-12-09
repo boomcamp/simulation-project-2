@@ -52,7 +52,7 @@ export default function Coinslist(props) {
     data = {state.data}
     actions = {[
       {
-      icon:'folder',
+      icon:'visibility',
       onClick : (event,rowData) =>
       handleClick(rowData.id)
       }

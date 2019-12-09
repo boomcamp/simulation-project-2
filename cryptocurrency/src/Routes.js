@@ -23,7 +23,8 @@ function Routes() {
             </Link>
     
         </ul>
+        
     </nav>        
-  );
+  ); 
 }
 export default Routes;
