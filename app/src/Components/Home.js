@@ -9,16 +9,17 @@ import { Typography } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import { makeStyles } from "@material-ui/core/styles";
 import Avatar from "@material-ui/core/Avatar";
-import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 import ButtonGroup from "@material-ui/core/ButtonGroup";
+import ToggleButton from '@material-ui/lab/ToggleButton';
+import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
 import {
   XYPlot,
   XAxis,
   YAxis,
-  VerticalGridLines,
   HorizontalGridLines,
-  AreaSeries
+  Crosshair,
+  LineSeries
 } from "react-vis";
 
 const useStyles = makeStyles({
@@ -36,13 +37,18 @@ function Home() {
   const classes = useStyles();
   const [selected, setSelected] = useState([]);
   const [hidden, setHidden] = useState(false);
-  const [time24h, setTime24h] = useState({
-    data: [
-      {}
-    ],
-  })
+  const [time24h, setTime24h] = useState([]);
+  const [value, setValue] = useState(false);
+
+  const [alignment, setAlignment] = React.useState('24h');
+
+  const handleAlignment = (event, newAlignment) => {
+    setAlignment(newAlignment);
+  };
 
   const [state, setState] = React.useState({
+    
+    
     columns: [
       { title: "#", field: "market_cap_rank" },
       {
@@ -211,24 +217,40 @@ function Home() {
       .catch(err => console.log(err));
   };
 
-  const render24hours = e =>{
+  const render24hours = e => {
     axios({
       method: "get",
       url: `https://api.coingecko.com/api/v3/coins/${e.target.id}/market_chart?vs_currency=usd&days=1`
     })
       .then(response => {
-        // setTime24h(response.data.prices)
-
-        
         // var ts = new Date(response.data.prices[0][0]);
         // console.log(ts.toLocaleTimeString())
-        response.data.prices.forEach(element => {
-          setTime24h({
-            ...time24h,
-            data: {x: element[0], y: element[1]}
-          })
-        })
-        // console.log(response.data.prices)
+        var data = [];
+
+        response.data.prices.map(elem => {
+          var ts = new Date(elem[0]);
+          data.push({ x: ts, y: elem[1] });
+        });
+        setTime24h(data);
+      })
+      .catch(err => console.log(err));
+  };
+
+  const handleChangeDate = (e) =>{
+    axios({
+      method: "get",
+      url: `https://api.coingecko.com/api/v3/coins/${selected.id}/market_chart?vs_currency=usd&days=${e}`
+    })
+      .then(response => {
+        // var ts = new Date(response.data.prices[0][0]);
+        // console.log(ts.toLocaleTimeString())
+        var data = [];
+
+        response.data.prices.map(elem => {
+          var ts = new Date(elem[0]);
+          data.push({ x: ts, y: elem[1] });
+        });
+        setTime24h(data);
       })
       .catch(err => console.log(err));
   }
@@ -237,6 +259,7 @@ function Home() {
     setHidden(false);
     setSelected([]);
     renderData();
+    setTime24h([]);
   };
 
   return (
@@ -510,17 +533,31 @@ function Home() {
               </Grid>
 
               <Grid item>
-                <ButtonGroup
-                  size="small"
-                  aria-label="small outlined button group"
-                >
-                  <Button>24h</Button>
-                  <Button>7d</Button>
-                  <Button>30d</Button>
-                  <Button>180d</Button>
-                  <Button>1y</Button>
-                  <Button>Max</Button>
-                </ButtonGroup>
+                <ToggleButtonGroup
+            value={alignment}
+            exclusive
+            onChange={handleAlignment}
+            
+          >
+            <ToggleButton style={{color: "black"}} value="24h" onClick={() => handleChangeDate(1)}>
+              24h
+            </ToggleButton>
+            <ToggleButton style={{color: "black"}} value="7d" onClick={() => handleChangeDate(7)}>
+             7d
+            </ToggleButton>
+            <ToggleButton style={{color: "black"}} value="30d" onClick={() => handleChangeDate(30)}>
+              30d
+            </ToggleButton>
+            <ToggleButton style={{color: "black"}} value="180d" onClick={() => handleChangeDate(180)}>
+              180d
+            </ToggleButton>
+            <ToggleButton style={{color: "black"}} value="1y" onClick={() => handleChangeDate(365)}>
+              1y
+            </ToggleButton>
+            <ToggleButton style={{color: "black"}} value="max" onClick={() => handleChangeDate('max')}>
+              max
+            </ToggleButton>
+          </ToggleButtonGroup>
               </Grid>
             </Grid>
             <Grid
@@ -530,18 +567,23 @@ function Home() {
                 marginTop: "1%"
               }}
             >
-              <XYPlot width={1000} height={500}>
-                <VerticalGridLines />
+              <XYPlot
+                onMouseLeave={() => setValue(false)}
+                width={1150}
+                height={500}
+              >
                 <HorizontalGridLines />
-                <XAxis />
-                <YAxis />
-                <AreaSeries
-                  className="area-series-example"
-                  curve="curveNatural"
-                  data={[
-                    {  x: 1, y: 10 },{ x: 2, y: 9 },
-                  ]}
+                <XAxis title="Date" xType="time" />
+                <YAxis title="Price in USD" left={5}/>
+                <LineSeries
+                  data={time24h}
+                  animation={true}
+                  onNearestX={d => {
+                    console.log(d)
+                    setValue(d)
+                  }}
                 />
+                {value && <Crosshair values={[value]} />}
               </XYPlot>
             </Grid>
             {/* END CHART */}
