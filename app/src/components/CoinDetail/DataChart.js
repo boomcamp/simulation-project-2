@@ -46,7 +46,7 @@ class DataChart extends Component {
                 yaxis: {
                     forceNiceScale: false,
                     labels: {
-                        formatter: (value) => "$" + value.toFixed(2),
+                        formatter: (value) => "$ " + value.toFixed(2),
                     },
                 },
                 plotOptions: {
@@ -56,6 +56,10 @@ class DataChart extends Component {
                 },
                 dataLabels: {
                     enabled: false
+                },
+                tooltip: {
+                    theme: "dark",
+                    shared: true
                 }
             },
             series: [
@@ -63,18 +67,17 @@ class DataChart extends Component {
                     name: 'Price',
                     data: [],
                 },
-
-            ]
+            ],
+            days: "1"
         }
     }
 
-    componentDidMount = () => {
+    componentDidMount() {
         axios({
             method: 'get',
-            url: `https://api.coingecko.com/api/v3/coins/${this.props.id}/market_chart?vs_currency=usd&days=1`
+            url: `https://api.coingecko.com/api/v3/coins/${this.props.id}/market_chart?vs_currency=usd&days=${this.state.days}`
         })
             .then(response => {
-                console.log(response.data)
                 this.setState({
                     series: [{
                         data: response.data.prices
@@ -84,36 +87,75 @@ class DataChart extends Component {
             .catch(e => console.log(e))
     }
 
-    handleDays = () => {
+    // componentDidUpdate() {
+    //     axios({
+    //         method: 'get',
+    //         url: `https://api.coingecko.com/api/v3/coins/${this.props.id}/market_chart?vs_currency=usd&days=${this.state.days}`
+    //     })
+    //         .then(response => {
+    //             this.setState({
+    //                 series: [{
+    //                     data: response.data.prices
+    //                 }]
+    //             })
+    //         })
+    //         .catch(e => console.log(e))
+    // }
 
+    handleTopic1 = () => {
+        axios({
+            method: 'get',
+            url: `https://api.coingecko.com/api/v3/coins/${this.props.id}/market_chart?vs_currency=usd&days=${this.state.days}`
+        })
+            .then(response => {
+                this.setState({
+                    series: [{
+                        data: response.data.prices
+                    }]
+                })
+            })
+            .catch(e => console.log(e))
     }
 
-    handleTopic = () => {
-
+    handleTopic2 = () => {
+        axios({
+            method: 'get',
+            url: `https://api.coingecko.com/api/v3/coins/${this.props.id}/market_chart?vs_currency=usd&days=${this.state.days}`
+        })
+            .then(response => {
+                this.setState({
+                    series: [{
+                        data: response.data.market_caps
+                    }]
+                })
+            })
+            .catch(e => console.log(e))
     }
 
     render() {
         const { classes } = this.props;
+        console.log(this.state.days)
+        console.log(this.state.series)
         return (
             <div className={classes.descbox} >
                 <div className={classes.grid}>
                     <Grid container spacing={1} alignItems="flex-end" className={classes.topic}>
                         <Grid item>
-                            <ButtonGroup color="primary" size="small" aria-label="small outlined button group" >
-                                <Button onClick={this.handleTopic}>Prices Chart</Button>
-                                <Button onClick={this.handleTopic}>Market Cap</Button>
+                            <ButtonGroup color="primary" size="small" aria-label="small outlined button group">
+                                <Button onClick={this.handleTopic1}>Prices Chart</Button>
+                                <Button onClick={this.handleTopic2}>Market Cap</Button>
                             </ButtonGroup>
                         </Grid>
                     </Grid>
                     <Grid container spacing={1} alignItems="flex-start" className={classes.days}>
                         <Grid item>
-                            <ButtonGroup color="primary" size="small" aria-label="small outlined button group" >
-                                <Button onClick={this.handleDays}>1D</Button>
-                                <Button onClick={this.handleDays}>7D</Button>
-                                <Button onClick={this.handleDays}>30D</Button>
-                                <Button onClick={this.handleDays}>90D</Button>
-                                <Button onClick={this.handleDays}>365D</Button>
-                                <Button onClick={this.handleDays}>All Time</Button>
+                            <ButtonGroup color="primary" size="small" aria-label="small outlined button group">
+                                <Button onClick={() => this.setState({ days: "1" })}>1D</Button>
+                                <Button onClick={() => this.setState({ days: "7" })}>7D</Button>
+                                <Button onClick={() => this.setState({ days: "30" })}>30D</Button>
+                                <Button onClick={() => this.setState({ days: "90" })}>90D</Button>
+                                <Button onClick={() => this.setState({ days: "365" })}>365D</Button>
+                                <Button onClick={() => this.setState({ days: "max" })}>All Time</Button>
                             </ButtonGroup>
                         </Grid>
                     </Grid>
