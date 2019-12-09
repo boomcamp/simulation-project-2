@@ -120,7 +120,7 @@
                         </linearGradient>
                     </defs>
                     <XAxis tick={<CustomizedAxisTick/>} dataKey="time" />
-                    <YAxis tick={(payload)=>{return payload}} domain={['auto', 'auto']} />
+                    <YAxis domain={['auto', 'auto']} />
                     <CartesianGrid strokeDasharray="3 3" />
                     <Tooltip />
                     <Area type="monotone" dataKey="value" stroke="#143959" fillOpacity={1} fill="url(#colorUv)" />
