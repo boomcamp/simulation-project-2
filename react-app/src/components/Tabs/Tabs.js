@@ -1,11 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { makeStyles } from "@material-ui/core/styles";
-import AppBar from "@material-ui/core/AppBar";
-import Tabs from "@material-ui/core/Tabs";
-import Tab from "@material-ui/core/Tab";
-import Typography from "@material-ui/core/Typography";
-import Box from "@material-ui/core/Box";
+import { AppBar, Tabs, Tab, Typography, Box } from "@material-ui/core/";
 import Chart from "../Chart/Chart";
 
 function TabPanel(props) {
@@ -69,12 +65,13 @@ export default function SimpleTabs() {
           value={value}
           onChange={handleChange}
           aria-label="simple tabs example"
+          indicatorColor="primary"
           style={{ backgroundColor: "white", color: "black" }}
         >
           <Tab label="24 Hrs" {...a11yProps(0)} />
           <Tab label="1 Week" {...a11yProps(1)} />
           <Tab label="1 Month" {...a11yProps(2)} />
-          <Tab label="6 Month" {...a11yProps(3)} />
+          <Tab label="6 Months" {...a11yProps(3)} />
           <Tab label="1 Year" {...a11yProps(4)} />
           <Tab label="All Time" {...a11yProps(5)} />
         </Tabs>

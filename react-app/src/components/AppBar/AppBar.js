@@ -1,8 +1,7 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
-import { NavLink, Router } from "react-router-dom";
+import { AppBar, Toolbar } from "@material-ui/core/";
+import { NavLink } from "react-router-dom";
 import MonetizationOnOutlinedIcon from "@material-ui/icons/MonetizationOnOutlined";
 import TrendingUpOutlinedIcon from "@material-ui/icons/TrendingUpOutlined";
 import Button from "@material-ui/core/Button";

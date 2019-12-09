@@ -1,8 +1,7 @@
 .App {
   text-align: center;
-  background-image: url(../src/images/Bg2.jpg);
+  background-image: url(../src/images/bg2.jpg);
   background-size: cover;
-  background-position: -90px;
   min-height: 100vh;
 }
 .logo {
@@ -11,4 +10,19 @@
 }
 .symbol {
   text-transform: uppercase;
+}
+.hover-custom-tooltip {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  background-color: white;
+  border: 1px #b3bac1 solid;
+  padding: 10px;
+}
+.price-hover {
+  color: #6fc5d5;
+}
+.volume-hover {
+  color: #2aa1a7;
 }

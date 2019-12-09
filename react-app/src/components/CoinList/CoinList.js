@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import MaterialTable from "material-table";
-import { Container } from "@material-ui/core";
+import { Container, CircularProgress, Box } from "@material-ui/core";
 import CoinListAppBar from "../AppBar/CoinListAppBar";
 import "semantic-ui-css/semantic.min.css";
 import { Pagination } from "semantic-ui-react";
-import { NavLink, Router } from "react-router-dom";
-import CircularProgress from "@material-ui/core/CircularProgress";
+import { NavLink } from "react-router-dom";
 
 export default function MaterialTableDemo() {
   const [loader, setLoader] = useState(false);
@@ -31,14 +30,27 @@ export default function MaterialTableDemo() {
       )
       .then(response => {
         setLoader(false);
-        console.log(response.data);
         setData(response.data);
       });
   }, [Page]);
-
   return (
     <div>
       <CoinListAppBar />
+      <Box style={{ marginLeft: "35%" }}>
+        <p
+          style={{
+            fontFamily: "Saira Semi Condensed, sans-serif",
+            fontSize: 40,
+            width: "100%",
+            color: "white",
+            textAlign: "left",
+            borderLeft: "10px solid white",
+            padding: "0px 20px"
+          }}
+        >
+          Cryptocurrency Price Explorer
+        </p>
+      </Box>
       <Container>
         {loader ? (
           <div
@@ -49,19 +61,22 @@ export default function MaterialTableDemo() {
               borderRadius: "0px",
               backgroundColor: "white",
               paddingTop: 400,
-              paddingBottom: 300
+              paddingBottom: 304,
+              borderLeft: "30px solid #6fc5d5"
             }}
           >
             <CircularProgress />
           </div>
         ) : (
           <MaterialTable
-            title="Coin List"
+            title="Cryptocurrency Coin List"
             style={{
               paddingLeft: "25px",
               height: "70%",
               marginTop: 40,
-              borderRadius: "0px"
+              borderRadius: "0px",
+              borderLeft: "30px solid #6fc5d5",
+              boxShadow: "none"
             }}
             columns={[
               {
@@ -151,7 +166,12 @@ export default function MaterialTableDemo() {
           />
         )}
         <Pagination
-          style={{ width: "100%", display: "flex", justifyContent: "center" }}
+          style={{
+            width: "100%",
+            display: "flex",
+            justifyContent: "center",
+            borderLeft: "30px solid #6fc5d5"
+          }}
           activePage={Page}
           onPageChange={onChange}
           totalPages={620}

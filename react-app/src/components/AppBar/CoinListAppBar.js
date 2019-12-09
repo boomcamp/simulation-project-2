@@ -1,12 +1,7 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
-import { NavLink, Router } from "react-router-dom";
+import { AppBar, Toolbar, Button } from "@material-ui/core";
 import TrendingUpOutlinedIcon from "@material-ui/icons/TrendingUpOutlined";
-import Typography from "@material-ui/core/Typography";
-import Button from "@material-ui/core/Button";
-import HomeOutlinedIcon from "@material-ui/icons/HomeOutlined";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -36,15 +31,6 @@ export default function ButtonAppBar() {
     <div className={classes.root}>
       <AppBar position="static" className={classes.appBar}>
         <Toolbar className={classes.toolbar}>
-          {/* <NavLink
-            to="/homepage"
-            style={{ textDecoration: "none", color: "white" }}
-          >
-            <Button className={classes.white}>
-              <HomeOutlinedIcon />
-              Home
-            </Button>
-          </NavLink> */}
           <Button className={classes.white}>
             <TrendingUpOutlinedIcon />
             Investment Tracking
