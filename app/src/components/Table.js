@@ -117,6 +117,7 @@ export default function CryptoList(props) {
 	const [orderBy, setOrderBy] = React.useState("rank");
 	const [page] = React.useState(0);
 	const [rowsPerPage] = React.useState(10);
+	const [search, setSearch] = useState(null);
 
 	const handleRequestSort = (event, property) => {
 		const isDesc = orderBy === property && order === "desc";
@@ -156,12 +157,23 @@ export default function CryptoList(props) {
 							<Grid container direction="row" justify="flex-end" alignItems="flex-end">
 								<TextField
 									id="standard-search"
-									label="Search coin here"
+									label="Coin id here"
+									autoComplete="off"
 									type="search"
 									className={classes.textField}
 									margin="normal"
+									onChange={e => {
+										setSearch(e.target.value);
+									}}
 								/>
-								<Button color="primary">Search</Button>
+								<Button
+									color="primary"
+									onClick={() => {
+										history.push(`/${search}`);
+									}}
+								>
+									Search
+								</Button>
 							</Grid>
 						</Grid>
 						<div className={classes.tableWrapper}>

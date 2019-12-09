@@ -2,6 +2,7 @@ import React from "react";
 import Table from "./components/Table";
 import Navigation from "./components/includes/Navigation";
 import View from "./components/View";
+import PageNotFound from "./components/includes/PageNotFound";
 import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
 
 function App() {
@@ -16,7 +17,8 @@ function App() {
 					<Route exact path="/">
 						<Redirect to="/page/1" />
 					</Route>
-					<Route path="/:id" component={View} />
+					<Route exact path="/:id" component={View} />
+					<Route component={PageNotFound} />
 				</Switch>
 			</BrowserRouter>
 		</div>

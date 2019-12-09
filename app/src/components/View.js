@@ -36,17 +36,34 @@ export default function View() {
 	const [priceData, setPriceData] = useState([]);
 	const [marketData, setMarketData] = useState([]);
 	const [cMarketData, setSetMarketData] = useState([]);
+	const [checker, setChecker] = useState(false);
 
 	useEffect(() => {
-		Axios.get(`https://api.coingecko.com/api/v3/coins/${id}`).then(response => {
-			setData(response.data);
-			setImg(response.data.image);
-			setDesc(response.data.description);
-			setPriceData(response.data.market_data.current_price);
-			setMarketData(response.data.market_data.market_cap);
-			setSetMarketData(response.data.market_data);
-		});
+		Axios.get(`https://api.coingecko.com/api/v3/coins/${id}`)
+			.then(response => {
+				setData(response.data);
+				setImg(response.data.image);
+				setDesc(response.data.description);
+				setPriceData(response.data.market_data.current_price);
+				setMarketData(response.data.market_data.market_cap);
+				setSetMarketData(response.data.market_data);
+			})
+			.catch(error => {
+				setChecker(true);
+
+				console.log(error.response.data);
+			});
 	}, [id]);
+
+	if (checker) {
+		return (
+			<div>
+				<h1 style={{ textAlign: "center", fontSize: "5rem", paddingTop: "20%" }}>
+					Coin <span style={{ textAlign: "center", fontSize: "20px" }}>not found!</span>
+				</h1>
+			</div>
+		);
+	}
 
 	return (
 		<Container className={classes.root} fixed>
@@ -66,17 +83,10 @@ export default function View() {
 						<Typography variant="subtitle1" gutterBottom>
 							{ReactHtmlParser(desc.en)}
 						</Typography>
-						{!desc.en ? (
-							<Typography variant="h3" gutterBottom>
-								No Description
-							</Typography>
-						) : (
-							false
-						)}
 					</Grid>
 				</Grid>
 			</Paper>
-			<List priceData={priceData} marketData={marketData} cMarketData={cMarketData} />
+			<List priceData={priceData} marketData={marketData} cMarketData={cMarketData} id={id} name={data.name} />
 		</Container>
 	);
 }
