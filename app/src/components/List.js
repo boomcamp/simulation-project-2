@@ -1,7 +1,12 @@
 import React, { useState, useEffect } from "react";
 import Axios from "axios";
-import Paper from "@material-ui/core/Paper";
-import { makeStyles } from "@material-ui/core/styles";
+import Transaction from "./Transaction";
+import Table from "@material-ui/core/Table";
+import TableBody from "@material-ui/core/TableBody";
+import TableCell from "@material-ui/core/TableCell";
+import TableHead from "@material-ui/core/TableHead";
+import TableRow from "@material-ui/core/TableRow";
+import { makeStyles, MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import Seven from "./charts/Seven";
@@ -13,8 +18,17 @@ const useStyles = makeStyles(theme => ({
 	},
 	paper: {
 		padding: theme.spacing(2)
+	},
+	table: {
+		minWidth: 650
 	}
 }));
+
+const theme = createMuiTheme({
+	palette: {
+		primary: { main: "#4caf50" }
+	}
+});
 
 const formatter = new Intl.NumberFormat("en-US", {
 	style: "currency",
@@ -49,17 +63,25 @@ export default function Stats(props) {
 		});
 	};
 
-	if (transaction) {
-		return (
-			<div>
-				<Typography variant="h5" component="h3">
-					This is a sheet of paper.
-				</Typography>
-				<Typography component="p">Paper can be used to build surface or other elements for your application.</Typography>
-			</div>
-		);
+	function createData(onehour, oneday, sevendays, fourteendays, thirtydays, oneyear) {
+		return { onehour, oneday, sevendays, fourteendays, thirtydays, oneyear };
 	}
 
+	const rows = [
+		createData(
+			props.priceHourPChange,
+			props.cMarketData.price_change_percentage_24h,
+			props.cMarketData.price_change_percentage_7d,
+			props.cMarketData.price_change_percentage_14d,
+			props.cMarketData.price_change_percentage_30d,
+			props.cMarketData.price_change_percentage_1y
+		)
+	];
+
+	if (transaction) {
+		return <Transaction />;
+	}
+	console.log();
 	return (
 		<div>
 			<Grid className={classes.paper} container direction="row" justify="flex-start" alignItems="flex-start" spacing={3}>
@@ -114,9 +136,55 @@ export default function Stats(props) {
 				</Grid>
 
 				<Grid container item xs={9}>
-					<Typography variant="subtitle2" display="block" gutterBottom>
+					<Grid item xs={12}>
+						<Typography variant="subtitle2" display="block" gutterBottom>
+							Price Change Percentage
+						</Typography>
+						<Table className={classes.table} aria-label="simple table">
+							<TableHead>
+								<TableRow>
+									<TableCell align="center">1h</TableCell>
+									<TableCell align="center">24h</TableCell>
+									<TableCell align="center">7d</TableCell>
+									<TableCell align="center">14d</TableCell>
+									<TableCell align="center">30d</TableCell>
+									<TableCell align="center">1y</TableCell>
+								</TableRow>
+							</TableHead>
+							<TableBody>
+								{rows.map((row, i) => (
+									<TableRow key={i}>
+										<MuiThemeProvider theme={theme}>
+											<TableCell align="center">
+												<Typography color={row.onehour >= 0 ? "primary" : "error"}>{row.onehour}%</Typography>
+											</TableCell>
+											<TableCell align="center">
+												<Typography color={row.oneday >= 0 ? "primary" : "error"}>{row.oneday}%</Typography>
+											</TableCell>
+											<TableCell align="center">
+												<Typography color={row.sevendays >= 0 ? "primary" : "error"}>{row.sevendays}%</Typography>
+											</TableCell>
+											<TableCell align="center">
+												<Typography color={row.fourteendays >= 0 ? "primary" : "error"}>
+													{row.fourteendays}%
+												</Typography>
+											</TableCell>
+											<TableCell align="center">
+												<Typography color={row.thirtydays >= 0 ? "primary" : "error"}>{row.thirtydays}%</Typography>
+											</TableCell>
+											<TableCell align="center">
+												<Typography color={row.oneyear >= 0 ? "primary" : "error"}>{row.oneyear}%</Typography>
+											</TableCell>
+										</MuiThemeProvider>
+									</TableRow>
+								))}
+							</TableBody>
+						</Table>
+					</Grid>
+					<Typography variant="subtitle2" display="block" style={{ marginTop: 20 }} gutterBottom>
 						Pricing Data
 					</Typography>
+
 					<Seven id={props.id} />
 				</Grid>
 			</Grid>

@@ -36,6 +36,7 @@ export default function View() {
 	const [priceData, setPriceData] = useState([]);
 	const [marketData, setMarketData] = useState([]);
 	const [cMarketData, setSetMarketData] = useState([]);
+	const [priceHourPChange, setPriceHourPChange] = useState(null);
 	const [checker, setChecker] = useState(false);
 
 	useEffect(() => {
@@ -47,6 +48,7 @@ export default function View() {
 				setPriceData(response.data.market_data.current_price);
 				setMarketData(response.data.market_data.market_cap);
 				setSetMarketData(response.data.market_data);
+				setPriceHourPChange(response.data.market_data.price_change_percentage_1h_in_currency.usd);
 			})
 			.catch(error => {
 				setChecker(true);
@@ -86,7 +88,14 @@ export default function View() {
 					</Grid>
 				</Grid>
 			</Paper>
-			<List priceData={priceData} marketData={marketData} cMarketData={cMarketData} id={id} name={data.name} />
+			<List
+				priceData={priceData}
+				marketData={marketData}
+				cMarketData={cMarketData}
+				id={id}
+				name={data.name}
+				priceHourPChange={priceHourPChange}
+			/>
 		</Container>
 	);
 }
