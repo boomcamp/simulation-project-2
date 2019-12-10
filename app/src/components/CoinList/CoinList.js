@@ -16,6 +16,7 @@ import MenuList from '@material-ui/core/MenuList';
 import MaterialTable from 'material-table';
 import axios from 'axios';
 import { Loader } from 'rsuite';
+import Tooltip from '@material-ui/core/Tooltip';
 
 import CoinDetail from '../CoinDetail/CoinDetail';
 
@@ -63,6 +64,13 @@ class CoinList extends Component {
             open: false,
             anchorRef: null,
             selectedIndex: 1,
+            percentage: {
+                changePrice1: 0,
+                changePrice7: 0,
+                changePrice14: 0,
+                changePrice30: 0,
+                changePrice1y: 0
+            }
         }
     }
 
@@ -100,7 +108,6 @@ class CoinList extends Component {
                 }
             })
             .catch(e => console.log(e))
-
     }
 
     handleClick = () => {
@@ -158,20 +165,22 @@ class CoinList extends Component {
                 <div className={classes.currency}>
                     <Grid container direction="column" alignItems="flex-end">
                         <Grid item xs={12}>
-                            <ButtonGroup disabled variant="contained" color="primary" ref={anchorRef} aria-label="split button">
-                                <Button onClick={this.handleClick}>{currency[selectedIndex]}</Button>
-                                <Button
-                                    color="primary"
-                                    size="small"
-                                    aria-controls={open ? 'split-button-menu' : undefined}
-                                    aria-expanded={open ? 'true' : undefined}
-                                    aria-label="select merge strategy"
-                                    aria-haspopup="menu"
-                                    onClick={this.handleToggle}
-                                >
-                                    {/* <ArrowDropDownIcon /> */}
-                                </Button>
-                            </ButtonGroup>
+                            <Tooltip title="Disabled(BETA)" arrow>
+                                <ButtonGroup disabled variant="contained" color="secondary" ref={anchorRef} aria-label="split button">
+                                    <Button onClick={this.handleClick}>{currency[selectedIndex]}</Button>
+                                    <Button
+                                        color="primary"
+                                        size="small"
+                                        aria-controls={open ? 'split-button-menu' : undefined}
+                                        aria-expanded={open ? 'true' : undefined}
+                                        aria-label="select merge strategy"
+                                        aria-haspopup="menu"
+                                        onClick={this.handleToggle}
+                                    >
+                                        {/* <ArrowDropDownIcon /> */}
+                                    </Button>
+                                </ButtonGroup>
+                            </Tooltip>
                             <Popper open={open} role={undefined} transition disablePortal>
                                 {({ TransitionProps, placement }) => (
                                     <Grow
@@ -222,7 +231,6 @@ class CoinList extends Component {
                             }
                         }}
                         detailPanel={rowData => {
-                            // console.log(rowData)
                             return <CoinDetail
                                 id={rowData.id}
                                 high24h={rowData.high_24h}
@@ -231,6 +239,11 @@ class CoinList extends Component {
                                 marketCap={rowData.market_cap}
                                 name={rowData.name}
                                 rank={rowData.market_cap_rank}
+                                oneDay={this.state.percentage.changePrice1}
+                                sevenDay={this.state.percentage.changePrice7}
+                                fourteenDay={this.state.percentage.changePric14}
+                                thirtyDay={this.state.percentage.changePrice30}
+                                oneYear={this.state.percentage.changePrice1y}
                             />
                         }}
                         onRowClick={(event, rowData, togglePanel) => togglePanel()}

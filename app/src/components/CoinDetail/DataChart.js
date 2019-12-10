@@ -5,6 +5,7 @@ import Chart from "react-apexcharts";
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
+import { Loader } from 'rsuite';
 
 const useStyles = {
     descbox: {
@@ -24,6 +25,11 @@ const useStyles = {
     },
     days: {
         justifyContent: "flex-end"
+    },
+    loader: {
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center"
     }
 };
 
@@ -89,6 +95,9 @@ class DataChart extends Component {
                                 opacity: 1
                             }
                         ]
+                    },
+                    pattern: {
+                        style: "verticalLines",
                     }
                 },
                 grid: {
@@ -113,11 +122,12 @@ class DataChart extends Component {
         })
             .then(response => {
                 this.setState({
+                    ...this.state,
                     series: [{
                         data: response.data.prices
-                    }]
+                    }],
+                    isLoading: false
                 })
-                console.log(this.state.days)
             })
             .catch(e => console.log(e))
     }
@@ -130,9 +140,11 @@ class DataChart extends Component {
         })
             .then(response => {
                 this.setState({
+                    ...this.state,
                     series: [{
                         data: response.data.prices
-                    }]
+                    }],
+                    isLoading: false
                 })
             })
             .catch(e => console.log(e))
@@ -145,16 +157,22 @@ class DataChart extends Component {
         })
             .then(response => {
                 this.setState({
+                    ...this.state,
                     series: [{
                         data: response.data.market_caps
-                    }]
+                    }],
+                    isLoading: false
                 })
             })
             .catch(e => console.log(e))
     }
     // Days Toggle
     handleDays = (day) => {
-        this.setState({ ...this.state, days: day })
+        this.setState({
+            ...this.state,
+            days: day
+        })
+
         axios({
             method: 'get',
             url: `https://api.coingecko.com/api/v3/coins/${this.props.id}/market_chart?vs_currency=usd&days=${day}`
@@ -164,7 +182,8 @@ class DataChart extends Component {
                     ...this.state,
                     series: [{
                         data: response.data.prices
-                    }]
+                    }],
+                    isLoading: false
                 })
             })
             .catch(e => console.log(e))
@@ -196,13 +215,19 @@ class DataChart extends Component {
                         </Grid>
                     </Grid>
                 </div>
-                <Chart
-                    options={this.state.options}
-                    series={this.state.series}
-                    type="line"
-                    width="100%"
-                    height="700"
-                />
+                {this.state.isLoading ?
+                    <div className={classes.loader}>
+                        <Loader size="md" />
+                        Loading... <br />
+                        Please wait.
+                    </div> : <Chart
+                        options={this.state.options}
+                        series={this.state.series}
+                        type="line"
+                        width="100%"
+                        height="700"
+                    />
+                }
             </div>
         );
     }
