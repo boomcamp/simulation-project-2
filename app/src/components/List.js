@@ -11,6 +11,7 @@ import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import Seven from "./charts/Seven";
 import Button from "@material-ui/core/Button";
+import Slide from "@material-ui/core/Slide";
 
 const useStyles = makeStyles(theme => ({
 	root: {
@@ -47,14 +48,14 @@ export default function Stats(props) {
 		setPrice(props.priceData.usd);
 	}, [props.priceData.usd, props.name]);
 
-	const buy = () => {
+	const buy = val => {
 		// Axios.post("http://localhost:4000/transactions", {
 		// 	coin: coin,
 		// 	price: price
 		// }).catch(error => {
 		// 	console.log(error.response.data);
 		// });
-		setTransaction(true);
+		setTransaction(val);
 	};
 
 	const sell = () => {
@@ -79,11 +80,10 @@ export default function Stats(props) {
 	];
 
 	if (transaction) {
-		return <Transaction />;
+		return <Transaction symbol={props.symbol} price={props.priceData.usd} buy={buy} />;
 	}
-	console.log();
 	return (
-		<div>
+		<Slide direction="right" in={true}>
 			<Grid className={classes.paper} container direction="row" justify="flex-start" alignItems="flex-start" spacing={3}>
 				<Grid container direction="row" justify="space-between" alignItems="flex-start" item xs={3}>
 					<Typography variant="subtitle2" display="block" gutterBottom>
@@ -123,7 +123,14 @@ export default function Stats(props) {
 					</Grid>
 					<Grid container spacing={1}>
 						<Grid item xs={12}>
-							<Button variant="contained" color="secondary" fullWidth={true} onClick={buy}>
+							<Button
+								variant="contained"
+								color="secondary"
+								fullWidth={true}
+								onClick={() => {
+									buy(true);
+								}}
+							>
 								Buy
 							</Button>
 						</Grid>
@@ -188,6 +195,6 @@ export default function Stats(props) {
 					<Seven id={props.id} />
 				</Grid>
 			</Grid>
-		</div>
+		</Slide>
 	);
 }

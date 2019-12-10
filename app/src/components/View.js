@@ -33,6 +33,7 @@ export default function View() {
 	const [data, setData] = useState([]);
 	const [img, setImg] = useState([]);
 	const [desc, setDesc] = useState([]);
+	const [symbol, setSymbol] = useState([]);
 	const [priceData, setPriceData] = useState([]);
 	const [marketData, setMarketData] = useState([]);
 	const [cMarketData, setSetMarketData] = useState([]);
@@ -49,6 +50,7 @@ export default function View() {
 				setMarketData(response.data.market_data.market_cap);
 				setSetMarketData(response.data.market_data);
 				setPriceHourPChange(response.data.market_data.price_change_percentage_1h_in_currency.usd);
+				setSymbol(response.data.symbol);
 			})
 			.catch(error => {
 				setChecker(true);
@@ -95,6 +97,7 @@ export default function View() {
 				id={id}
 				name={data.name}
 				priceHourPChange={priceHourPChange}
+				symbol={symbol}
 			/>
 		</Container>
 	);
