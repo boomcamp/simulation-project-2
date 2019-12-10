@@ -2,6 +2,7 @@ import React from "react";
 import { Route, Switch } from "react-router-dom";
 import Home from "../Home/Home";
 import Coins from "../Coins/Coins";
+import Investment from "../Investment/Investment";
 
 export default class Routes extends React.Component {
   render() {
@@ -34,6 +35,10 @@ export default class Routes extends React.Component {
         <Route
           path="/coins/:id"
           render={props => <Coins {...props} currency={currency} />}
+        />
+        <Route
+          path="/investment/tracking"
+          render={props => <Investment {...props} />}
         />
       </Switch>
     );

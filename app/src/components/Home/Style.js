@@ -1,5 +1,6 @@
 import styled from "styled-components";
 const Div = styled.div`
+  padding-top: 50px;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
