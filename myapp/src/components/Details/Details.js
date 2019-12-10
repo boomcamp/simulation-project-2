@@ -1,47 +1,23 @@
 import React, { Component } from "react";
 import { Descriptions } from "antd";
-import axios from "axios";
+// import axios from "axios";
 export default class Details extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      percentagePerhour: [],
-      percentagePeryear: [],
-      percentagePersevendays: [],
-      percentagePerforten: [],
-      percentagePer24h: [],
-      percentagePer30days: [],
-      img: []
+     
+     
     };
   }
 
- UNSAFE_componentWillReceiveProps() {
-    axios
-      .get(`https://api.coingecko.com/api/v3/coins/${this.props.id.id}`)
-      .then(percentage => {
-        console.log(percentage.data.market_data);
-        this.setState({
-          percentagePerhour:
-            percentage.data.market_data.price_change_percentage_1h_in_currency,
-          percentagePeryear:
-            percentage.data.market_data.price_change_percentage_1y_in_currency,
-          percentagePersevendays: percentage.data.market_data,
-          percentagePerforten: percentage.data.market_data,
-          percentagePer24h: percentage.data.market_data,
-          percentagePer30days: percentage.data.market_data,
-          img: percentage.data.image
-        });
-      });
-  }
-
   render() {
+    console.log(this.props)
     return (
-      <div>
-        {/* <Link to='/details'/> */}
-        <div>
+        <div className='details'> 
+      
           <Descriptions
-            style={{ textAlign: "center" }}
+            style={{ textAlign: "center" ,fontWeight:'bold'}}
             bordered
             layout="vertical"
             column={{ xxl: 2, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }}
@@ -52,44 +28,44 @@ export default class Details extends Component {
        
         minimumFractionDigits={3}
       /></Descriptions.Item> */}
-            <Descriptions.Item label="1h">
+            <Descriptions.Item label="1Hour">
               <p
                 style={{
                   color:
-                    Math.round(10 * this.state.percentagePerhour.usd) < 0
+                    Math.round(10 * this.props.percentagePerhour) < 0
                       ? "red"
                       : "green"
                 }}
               >
                 {" "}
-                {Math.round(10 * this.state.percentagePerhour.usd) / 10}%
+                {Math.round(10 * this.props.percentagePerhour) / 10}%
               </p>
             </Descriptions.Item>
-            <Descriptions.Item label="24h">
+            <Descriptions.Item label="24Hours">
               <p
                 style={{
                   color:
                     Math.round(
                       10 *
-                        this.state.percentagePer24h.price_change_percentage_24h
+                        this.props.percentagePer24h.price_change_percentage_24h
                     ) < 0
                       ? "red"
                       : "green"
                 }}
               >
                 {Math.round(
-                  10 * this.state.percentagePer24h.price_change_percentage_24h
+                  10 * this.props.percentagePer24h.price_change_percentage_24h
                 ) / 10}
                 %
               </p>
             </Descriptions.Item>
-            <Descriptions.Item label="7d">
+            <Descriptions.Item label="7Days">
               <p
                 style={{
                   color:
                     Math.round(
                       10 *
-                        this.state.percentagePersevendays
+                        this.props.percentagePersevendays
                           .price_change_percentage_7d
                     ) < 0
                       ? "red"
@@ -98,18 +74,18 @@ export default class Details extends Component {
               >
                 {Math.round(
                   10 *
-                    this.state.percentagePersevendays.price_change_percentage_7d
+                    this.props.percentagePersevendays.price_change_percentage_7d
                 ) / 10}
                 %
               </p>
             </Descriptions.Item>
-            <Descriptions.Item label="14d">
+            <Descriptions.Item label="14Days">
               <p
                 style={{
                   color:
                     Math.round(
                       10 *
-                        this.state.percentagePerforten
+                        this.props.percentagePerforten
                           .price_change_percentage_14d
                     ) < 0
                       ? "red"
@@ -118,18 +94,18 @@ export default class Details extends Component {
               >
                 {Math.round(
                   10 *
-                    this.state.percentagePerforten.price_change_percentage_14d
+                    this.props.percentagePerforten.price_change_percentage_14d
                 ) / 10}
                 %
               </p>
             </Descriptions.Item>
-            <Descriptions.Item label="30d">
+            <Descriptions.Item label="30Days">
               <p
                 style={{
                   color:
                     Math.round(
                       10 *
-                        this.state.percentagePer30days
+                        this.props.percentagePer30days
                           .price_change_percentage_30d
                     ) < 0
                       ? "red"
@@ -138,26 +114,25 @@ export default class Details extends Component {
               >
                 {Math.round(
                   10 *
-                    this.state.percentagePer30days.price_change_percentage_30d
+                    this.props.percentagePer30days.price_change_percentage_30d
                 ) / 10}
                 %
               </p>
             </Descriptions.Item>
-            <Descriptions.Item label="1y">
+            <Descriptions.Item label="1Year">
               <p
                 style={{
                   color:
-                    Math.round(10 * this.state.percentagePeryear.usd) < 0
+                    Math.round(10 * this.props.percentagePeryear.usd) < 0
                       ? "red"
                       : "green"
                 }}
               >
-                {Math.round(10 * this.state.percentagePeryear.usd) / 10}%{" "}
+                {Math.round(10 * this.props.percentagePeryear.usd) / 10}%{" "}
               </p>
             </Descriptions.Item>
           </Descriptions>
         </div>
-      </div>
     );
   }
 }

@@ -6,7 +6,8 @@ import { Table } from "antd";
 import { Collapse } from "antd";
 import CoinCharts from "../Charts/CoinChart";
 import Details from "../Details/Details";
-
+import Foot from "../Foot/Foot";
+import Transactions from "../Transaction/Transactions"
 // import { FormattedNumber} from 'react-intl';
 // import EllipsisText from "react-ellipsis-text";
 var commaNumber = require("comma-number");
@@ -29,6 +30,12 @@ export default class Homepage extends Component {
       marketLow: [],
       totalVolume: [],
       circulating_supply: [],
+      percentagePerhour: [],
+      percentagePeryear: [],
+      percentagePersevendays: [],
+      percentagePerforten: [],
+      percentagePer24h: [],
+      percentagePer30days: [],
       columns: [
         {
           title: "Logo",
@@ -92,7 +99,7 @@ export default class Homepage extends Component {
           id: arrId
         });
 
-        // result.data.map(res=>{ 
+        // result.data.map(res=>{
         //   console.log(res.id)
         // })
       });
@@ -104,12 +111,13 @@ export default class Homepage extends Component {
         //console.log(res.data)
         this.setState({ currency: res.data });
       });
+    this.clickThis();
   }
-
   handleClick = e => {
     // console.log(e)
 
     axios.get(`https://api.coingecko.com/api/v3/coins/${e.id}`).then(res => {
+      console.log(res.data);
       // res.data.map(element=>{
       //   console.log(element.id)
       // })
@@ -129,7 +137,16 @@ export default class Homepage extends Component {
         marketHigh: res.data.market_data.high_24h,
         marketLow: res.data.market_data.low_24h,
         totalVolume: res.data.market_data.total_volume,
-        circulating_supply: res.data.market_data.circulating_supply
+        circulating_supply: res.data.market_data.circulating_supply,
+
+        percentagePerhour:
+          res.data.market_data.price_change_percentage_1h_in_currency,
+        percentagePeryear:
+          res.data.market_data.price_change_percentage_1y_in_currency,
+        percentagePersevendays: res.data.market_data,
+        percentagePerforten: res.data.market_data,
+        percentagePer24h: res.data.market_data,
+        percentagePer30days: res.data.market_data
       });
     });
   };
@@ -139,6 +156,10 @@ export default class Homepage extends Component {
       visible: false
     });
   };
+
+  clickThis() {
+    console.log("CLicked");
+  }
 
   render() {
     //    console.log(this.state.cPrice);
@@ -160,16 +181,17 @@ export default class Homepage extends Component {
         />
 
         <Modal
-          title="Currency"
+          title='CURRENCY'
           visible={this.state.visible}
           onCancel={this.handleCancel}
           width="800px"
           footer={null}
         >
           <div className="logoNameContainer">
-            <img className="logoImage" src={this.state.img.small} alt="coin" />
+            
             <h1 className="coinsName">{this.state.name}</h1>
             <b className="symbol">({this.state.symbol})</b>
+            <img className="logoImage" src={this.state.img.thumb} alt="coin" />
           </div>
           <div className="price">
             <h2>{"$" + commaNumber(this.state.cPrice.usd)}</h2>
@@ -177,16 +199,21 @@ export default class Homepage extends Component {
 
           <div className="descriptionContainer">
             {/* <p style={{ whiteSpace: ' nowrap',textOverflow: 'ellipsis',overflow: 'hidden'}}>{this.state.dexcription.de}</p> */}
+           
             <div
               className="coinsInfo"
               dangerouslySetInnerHTML={{ __html: this.state.dexcription.de }}
+              style={{ backgroundImage: this.state.img.small }}
             />
-            <Collapse accordion>
+             
+          <div className="collapse">
+            <Collapse defaultActiveKey={["1"]} accordion>
               <Panel header="Quick Stats" key="1">
                 <p>
                   {"Bitcoin Price  :   " +
                     "$" +
-                    commaNumber(this.state.cPrice.usd)}
+                    commaNumber(this.state.cPrice.usd)
+                    }
                 </p>
                 <p>
                   {"Market Cap  :   " +
@@ -194,13 +221,13 @@ export default class Homepage extends Component {
                     commaNumber(this.state.market_cap.usd)}
                 </p>
                 <p>
-                  {" 24h Low / 24h High :   " + 
+                  {" 24h Low / 24h High :   " +
                     "$" +
                     commaNumber(this.state.marketHigh.usd) +
                     "/$" +
                     commaNumber(this.state.marketLow.usd)}
                 </p>
-                <p>
+                <p >
                   {" 24 Hour Trading Vol :   " +
                     "$" +
                     commaNumber(this.state.totalVolume.usd)}
@@ -209,12 +236,28 @@ export default class Homepage extends Component {
                   {" Circulating Supply :   " +
                     commaNumber(this.state.circulating_supply)}
                 </p>
+                <Transactions/>
               </Panel>
             </Collapse>
+            </div>
           </div>
-          <Details id={this.state.id} />
-          <CoinCharts id={this.state.id} />
+          <div className="details">
+          <Details
+            id={this.state.id}
+            percentagePerhour={this.state.percentagePerhour.usd}
+            percentagePeryear={this.state.percentagePeryear}
+            percentagePersevendays={this.state.percentagePersevendays}
+            percentagePerforten={this.state.percentagePerforten}
+            percentagePer24h={this.state.percentagePer24h}
+            percentagePer30days={this.state.percentagePer30days}
+          />
+          </div>
+          <div className="coinsChart">
+            <CoinCharts id={this.state.id} />
+          </div>
+        
         </Modal>
+        <Foot/>
       </div>
     );
   }

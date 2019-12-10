@@ -3,15 +3,18 @@ import Axios from "axios";
 import { Radio } from "antd";
 
 import {
-  LineChart,
-  Line,
+  // LineChart,
+  // Line,
+  Bar,
+  BarChart,
   CartesianGrid,
   XAxis,
   YAxis,
-  Tooltip,
-  Legend
+  Tooltip
+  // Legend
 } from "recharts";
 import "./coinChart.css";
+var commaNumber = require("comma-number");
 export default class CoinChart extends Component {
   constructor(props) {
     super(props);
@@ -22,16 +25,26 @@ export default class CoinChart extends Component {
       cap: []
     };
   }
-  UNSAFE_componentWillReceiveProps() {
+  componentDidMount() {
     //  console.log(this.state.id)
+    var options = {
+      weekday: "short",
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+      hour12: true,
+      hour: "numeric",
+      minute: "numeric",
+      seconds: "numeric"
+    };
     Axios.get(
-      `https://api.coingecko.com/api/v3/coins/${this.props.id.id}/market_chart?vs_currency=btc&days=1
+      `https://api.coingecko.com/api/v3/coins/${this.props.id.id}/market_chart?vs_currency=usd&days=1
         `
     ).then(res => {
       console.log(res);
       let results = res.data.prices.map(el => {
         return {
-          name: new Date(el[0]).toLocaleDateString("en-US"),
+          date: new Date(el[0]).toLocaleDateString("en-US", options),
           price: el[1]
         };
       });
@@ -39,40 +52,94 @@ export default class CoinChart extends Component {
     });
   }
 
+  handleClick = e => {
+    console.log(e);
+    var options = {
+      weekday: "short",
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+      hour12: true,
+      hour: "numeric",
+      minute: "numeric",
+      seconds: "numeric"
+    };
+    Axios.get(
+      `https://api.coingecko.com/api/v3/coins/${this.props.id.id}/market_chart?vs_currency=usd&days=${e}
+      `
+    ).then(res => {
+      console.log(res);
+      let results = res.data.prices.map(el => {
+        return {
+          date: new Date(el[0]).toLocaleDateString("en-US", options),
+          price: el[1]
+        };
+      });
+      this.setState({ data: results });
+    });
+  };
+
   render() {
- 
+    console.log(this.state.data);
     return (
       <div className="mainContainer">
-        <div>
-          {/* <Homepage/> */}
-        
-        </div>
+        <div>{/* <Homepage/> */}</div>
 
         <div className="radioGroup">
-          <Radio.Group>
-            <Radio.Button value="1">24h</Radio.Button>
-            <Radio.Button value="7">7d</Radio.Button>
-            <Radio.Button value="30">1m</Radio.Button>
-            <Radio.Button value="180">6m</Radio.Button>
-            <Radio.Button value="365">1yr</Radio.Button>
-            <Radio.Button value="f">MAX</Radio.Button>
+          <Radio.Group defaultValue="1" buttonStyle="solid">
+            <Radio.Button
+              value="1"
+              onClick={e => this.handleClick(e.target.value)}
+            >
+              24Hours
+            </Radio.Button>
+            <Radio.Button
+              value="7"
+              onClick={e => this.handleClick(e.target.value)}
+            >
+              7Days
+            </Radio.Button>
+            <Radio.Button
+              value="30"
+              onClick={e => this.handleClick(e.target.value)}
+            >
+              1Month
+            </Radio.Button>
+            <Radio.Button
+              value="180"
+              onClick={e => this.handleClick(e.target.value)}
+            >
+              6Months
+            </Radio.Button>
+            <Radio.Button
+              value="365"
+              onClick={e => this.handleClick(e.target.value)}
+            >
+              1Year
+            </Radio.Button>
+            <Radio.Button
+              value="max"
+              onClick={e => this.handleClick(e.target.value)}
+            >
+              MAX
+            </Radio.Button>
           </Radio.Group>
         </div>
 
-        <LineChart
-          width={730}
+        <BarChart
+          width={700}
           height={250}
           data={this.state.data}
           margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
         >
           <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="name" />
-          <YAxis />
+          <XAxis dataKey="date" />
+          <YAxis dataKey="price" />
           <Tooltip />
-          <Legend />
+          {/* <Legend /> */}
           {/* <Line type="monotone" dataKey="pv" stroke="#8884d8" /> */}
-          <Line type="monotone" dataKey="price" stroke="#82ca9d" />
-        </LineChart>
+          <Bar type="monotone" dataKey="price" stroke="#ff9900" />
+        </BarChart>
       </div>
     );
   }

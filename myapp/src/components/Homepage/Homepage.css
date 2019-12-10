@@ -6,16 +6,21 @@
   flex-wrap: wrap;
   justify-content: center;
   background-color: rgb(242, 247, 247); */
+  font-weight: bold;
   text-align: justify;
+  /* background-color: rgb(230, 236, 221); */
 }
 .descriptionContainer {
   display: flex;
   justify-content: center;
   flex-direction: column;
+  padding-top:15px
+  /* background-color: rgb(21, 37, 4); */
 }
 .logoNameContainer {
   display: flex;
   align-items: flex-start;
+  background-color:whitesmoke;
 }
 /* .logoContainer {
   display: flex;
@@ -29,8 +34,9 @@
   align-items: flex-end;
 }
 .logoImage {
-  width: 35px;
-  height: 4vh;
+  width: 20px;
+  margin-top: 10px;
+  margin-left: 5px;
 }
 .symbol{
   margin-top: 10px;
@@ -38,4 +44,14 @@
 }
 .coinsName{
   margin-left: 5px;
+  margin-top:5px
+}
+.coinsChart{
+  padding-top: 10px;
+}
+.collapse {
+  font-weight: bold;
+}
+.details{
+  font-weight: bold;
 }
