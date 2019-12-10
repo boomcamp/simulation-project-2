@@ -7,6 +7,8 @@ import { Typography } from "@material-ui/core";
 import Breadcrumbs from "@material-ui/core/Breadcrumbs";
 import NavigateNextIcon from "@material-ui/icons/NavigateNext";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import shop from "../assets/images/shop.png";
+import Button from "@material-ui/core/Button";
 
 const useStyles = makeStyles(theme => ({
    root: {
@@ -37,6 +39,7 @@ const useStyles = makeStyles(theme => ({
          color: "black"
       }
    },
+
    coinName: {
       fontSize: "50px",
       marginTop: "5vh",
@@ -50,25 +53,61 @@ const useStyles = makeStyles(theme => ({
    img: {
       width: "4vw"
    },
-   newPaper: {
-      width: "40%",
-      height: "35vh",
-      marginLeft: "5vw",
-      marginTop: "4vh",
-      overflowY: "auto"
-   },
-   desc: {
-      textAlign: "justify",
-      padding: "30px",
-      fontSize: "13px",
-      paddingTop: "10px",
-      textIndent: "50px"
-   },
    breadlist: {
       color: "#a5a5a5",
       "&:hover": {
          color: "white"
       }
+   },
+   buysell: {
+      background: "white",
+      width: "29%",
+      height: "34vh",
+      margin: "3vh 2vw 2vh -1vw"
+   },
+   bs: {
+      background: "white",
+      width: "10%",
+      height: "34vh",
+      margin: "3vh 2vw 2vh 5vw",
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center"
+   },
+   button: {
+      width: "5vw"
+   },
+   buy: {
+      marginTop: "0.5vh",
+      background: "#2f2871bf",
+      color: "white",
+      padding: "2px",
+      width: "5vw"
+   },
+   sell: {
+      marginTop: "0.5vh",
+      background: "#592a8abf",
+      color: "white",
+      padding: "2px",
+      width: "5vw"
+   },
+   link: {
+      color: "white",
+      cursor: "default",
+      display: "flex",
+      alignItems: "center"
+   },
+   shop: {
+      width: "25px",
+      paddingRight: "10px"
+   },
+   div: {
+      marginTop: "3vh",
+      marginBottom: "1vh"
+   },
+   div1: {
+      marginTop: "1vh",
+      marginBottom: "4vh"
    }
 }));
 
@@ -77,6 +116,7 @@ export default function AcccessibleTable() {
    const [data, setData] = React.useState([]);
    const [image, setImage] = React.useState([]);
    const [load, setLoad] = React.useState(false);
+   const [price, setPrice] = React.useState([]);
 
    let { id } = useParams();
 
@@ -85,20 +125,11 @@ export default function AcccessibleTable() {
       Axios.get(`https://api.coingecko.com/api/v3/coins/${id}`).then(response => {
          setData(response.data);
          setImage(response.data.image);
+         setPrice(response.data.market_data.current_price);
          setLoad(false);
          console.log(response.data);
       });
    }, [id]);
-
-   const formatter = new Intl.NumberFormat("en-US", {
-      style: "currency",
-      currency: "USD",
-      minimumFractionDigits: 2
-   });
-
-   const circulatingFormat = num => {
-      return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
-   };
 
    return (
       <div>
@@ -109,7 +140,7 @@ export default function AcccessibleTable() {
                </Typography>
             ) : (
                <Typography className={classes.coinName}>
-                  <img className={classes.img} src={image.large} />
+                  <img className={classes.img} src={image.large} alt="logo" />
                   <span style={{ marginLeft: "10px" }}>{data.name}</span>
                </Typography>
             )}
@@ -120,14 +151,68 @@ export default function AcccessibleTable() {
                <Link className={classes.breadlist} to="/">
                   Home
                </Link>
+
                <Link aria-current="page" className={classes.breadlist} to={`/coin-details/${id}`}>
                   {data.name} Details
                </Link>
-               <Link aria-current="page" style={{ color: "white", cursor: "default" }}>
-                  Buy / Sell {data.name}
+
+               <Link aria-current="page" className={classes.link}>
+                  <img src={shop} className={classes.shop} />
+                  <span>Buy / Sell {data.name} </span>
                </Link>
             </Breadcrumbs>
          </Paper>
+         <div style={{ display: "flex" }}>
+            <Paper className={classes.bs}>
+               <Typography style={{ fontSize: "18px", marginTop: "2vh", padding: "3px" }}>
+                  {" "}
+                  Buy <b>{data.name}</b>
+               </Typography>
+               <div style={{ background: "lightgray", padding: "3px", borderRadius: "20px" }}>
+                  <p>
+                     Current Price: <b>${Math.round(price.usd * 100) / 100}</b>
+                  </p>
+               </div>
+
+               <div className={classes.div}>
+                  <Typography>BTC Balance:</Typography>
+                  <Typography className={classes.buy}>$0.00</Typography>
+               </div>
+
+               <div className={classes.div1}>
+                  <Typography>Total:</Typography>
+                  <Typography className={classes.buy}>$0.00</Typography>
+               </div>
+
+               <Button variant="contained" color="primary" className={classes.button}>
+                  BUY
+               </Button>
+            </Paper>
+            <Paper className={classes.buysell} style={{ background: "#2f2871" }}></Paper>
+         </div>
+
+         <div style={{ display: "flex", marginTop: "-3vh" }}>
+            <Paper className={classes.bs}>
+               <Typography style={{ fontSize: "18px", marginTop: "2vh", padding: "3px" }}>
+                  {" "}
+                  Sell <b>{data.name}</b>
+               </Typography>
+               <div className={classes.div}>
+                  <Typography>Price:</Typography>
+                  <Typography className={classes.sell}>$0.00</Typography>
+               </div>
+
+               <div className={classes.div1}>
+                  <Typography>Total:</Typography>
+                  <Typography className={classes.sell}>$0.00</Typography>
+               </div>
+
+               <Button variant="contained" style={{ background: "#592a8a", color: "white" }} className={classes.button}>
+                  SELL
+               </Button>
+            </Paper>
+            <Paper className={classes.buysell} style={{ background: "#592a8a" }}></Paper>
+         </div>
       </div>
    );
 }

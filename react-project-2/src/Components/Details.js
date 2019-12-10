@@ -138,7 +138,7 @@ export default function AcccessibleTable() {
                </Typography>
             ) : (
                <Typography className={classes.coinName}>
-                  <img className={classes.img} src={image.large} />
+                  <img className={classes.img} src={image.large} alt="coin" />
                   <span style={{ marginLeft: "10px" }}>{data.name}</span>
                </Typography>
             )}
@@ -186,7 +186,7 @@ export default function AcccessibleTable() {
                      </TableCell>
                      <TableCell style={{ textTransform: "uppercase" }}>{data.symbol}</TableCell>
                      <TableCell>
-                        <b>{!price.usd ? "0" : formatter.format(price.usd)}</b>
+                        <b style={{ fontSize: "15px" }}>{!price.usd ? "0" : formatter.format(price.usd)}</b>
                      </TableCell>
                      <TableCell>{circulatingFormat(Math.round(market.circulating_supply))}</TableCell>
                   </TableRow>

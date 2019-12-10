@@ -21,6 +21,8 @@ import Paper from "@material-ui/core/Paper";
 import Axios from "axios";
 import { Link, useParams } from "react-router-dom";
 import Button from "@material-ui/core/Button";
+// import ShopIcon from "@material-ui/icons/Shop";
+import bit from "../assets/images/bitcoin.png";
 
 function TabPanel(props) {
    const { children, value, index, ...other } = props;
@@ -127,7 +129,7 @@ export default function TabsC() {
                   className={classes.bsell}
                   style={{ marginLeft: "10px", color: "white", background: "purple" }}
                >
-                  Buy / Sell <img src={image.small} style={{ width: "25px", paddingLeft: "5px" }} />
+                  Buy / Sell <img src={bit} style={{ width: "25px", paddingLeft: "5px" }} alt="coin" />
                </Button>
             </Link>
             <div className={classes.root}>
