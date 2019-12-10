@@ -1,16 +1,30 @@
 import React from "react";
 import axios from "axios";
 import ReactHtmlParser from "react-html-parser";
-import { MDBTable, MDBTableBody, MDBTableHead } from "mdbreact";
+import {
+  MDBTable,
+  MDBTableBody,
+  MDBTableHead,
+  MDBBtn,
+  MDBIcon
+} from "mdbreact";
 import Button from "@material-ui/core/Button";
+import Dialog from "@material-ui/core/Dialog";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogTitle from "@material-ui/core/DialogTitle";
 import ButtonGroup from "@material-ui/core/ButtonGroup";
+import TextField from "@material-ui/core/TextField";
+import Typography from "@material-ui/core/Typography";
+
 import {
   AreaChart,
   Area,
   XAxis,
   YAxis,
   CartesianGrid,
-  Tooltip
+  Tooltip,
+  ResponsiveContainer
 } from "recharts";
 import {
   MainDiv,
@@ -22,14 +36,18 @@ import {
   Chart,
   Table,
   days,
-  months
+  Buttons,
+  Amount
 } from "../Details/Data";
+import { Divider } from "semantic-ui-react";
 
 export default class Details extends React.Component {
   constructor() {
     super();
     this.state = {
-      details: []
+      details: [],
+      toggleModal: false,
+      cryptValue: " "
     };
   }
 
@@ -44,11 +62,18 @@ export default class Details extends React.Component {
           return {
             date:
               value === 1
-                ? new_date.getMinutes() < 10
-                  ? new_date.getHours() + ":0" + new_date.getMinutes()
-                  : new_date.getHours() + ":" + new_date.getMinutes()
-                : new_date.getDate() + " " + months[new_date.getMonth()],
-            price: x[1]
+                ? new Intl.DateTimeFormat("en-US", {
+                    hour: "2-digit",
+                    minute: "2-digit"
+                  }).format(new_date)
+                : new Intl.DateTimeFormat("en-US", {
+                    year: "numeric",
+                    month: "short",
+                    day: "2-digit",
+                    hour: "2-digit",
+                    minute: "2-digit"
+                  }).format(new_date),
+            price: Number(Math.round(x[1] + "e2") + "e-2")
           };
         });
         this.setState({
@@ -88,17 +113,32 @@ export default class Details extends React.Component {
         const temp = response.data.prices.map(x => {
           const new_date = new Date(x[0]);
           return {
-            date:
-              new_date.getMinutes() < 10
-                ? new_date.getHours() + ":0" + new_date.getMinutes()
-                : new_date.getHours() + ":" + new_date.getMinutes(),
-            price: x[1]
+            date: new Intl.DateTimeFormat("en-US", {
+              hour: "2-digit",
+              minute: "2-digit"
+            }).format(new_date),
+            price: Number(Math.round(x[1] + "e2") + "e-2")
           };
         });
         this.setState({
           data: temp
         });
       });
+  };
+
+  handleClickOpen = () => {
+    this.setState({ toggleModal: true });
+  };
+
+  handleClose = () => {
+    this.setState({ toggleModal: false });
+  };
+
+  handleAmount = val => {
+    const crypt = val / this.state.current_price;
+    this.setState({
+      cryptValue: crypt
+    });
   };
   render() {
     return (
@@ -144,33 +184,49 @@ export default class Details extends React.Component {
                 })}
               </ButtonGroup>
             </Filter>
-            <AreaChart
-              width={1050}
-              height={400}
-              data={this.state.data}
-              margin={{
-                top: 10,
-                right: 30,
-                left: 0,
-                bottom: 0
-              }}
-            >
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="date" />
-              <YAxis
-                domain={["auto", "auto"]}
-                tickFormatter={label => `${this.props.currency.unit}${label}`}
-              />
-              <Tooltip />
-              <Area
-                type="monotone"
-                dataKey="price"
-                stroke="#8884d8"
-                fill="#F0FFF0"
-              />
-            </AreaChart>
+            <div style={{ width: "100%", height: 400 }}>
+              <ResponsiveContainer>
+                <AreaChart
+                  data={this.state.data}
+                  margin={{
+                    top: 10,
+                    right: 30,
+                    left: 0,
+                    bottom: 0
+                  }}
+                >
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="date" />
+                  <YAxis
+                    domain={["auto", "auto"]}
+                    tickFormatter={label =>
+                      `${this.props.currency.unit}${label}`
+                    }
+                  />
+                  <Tooltip />
+                  <Area
+                    type="monotone"
+                    dataKey="price"
+                    stroke="#8884d8"
+                    fill="#F0FFF0"
+                  />
+                </AreaChart>
+              </ResponsiveContainer>
+            </div>
           </Chart>
           <Table>
+            <Buttons>
+              <MDBBtn
+                color="info"
+                style={{ width: "150px", height: "47px" }}
+                onClick={this.handleClickOpen}
+              >
+                <MDBIcon icon="money-bill" className="mr-1" /> Buy
+              </MDBBtn>
+              <MDBBtn color="danger" style={{ width: "150px", height: "47px" }}>
+                <MDBIcon icon="exchange-alt" className="ml-1" /> Sell
+              </MDBBtn>
+            </Buttons>
             <MDBTable>
               <MDBTableHead>
                 <tr>
@@ -226,6 +282,57 @@ export default class Details extends React.Component {
             </MDBTable>
           </Table>
         </ContainerTwo>
+        <Dialog open={this.state.toggleModal} onClose={this.handleClose}>
+          <DialogTitle>
+            <img
+              src={this.state.logo}
+              alt=""
+              style={{ width: "60px", height: "50px", paddingRight: "15px" }}
+            />
+            {this.state.details.name}
+          </DialogTitle>
+          <DialogContent>
+            <select
+              className="custom-select"
+              style={{ width: "500px", height: "42px" }}
+            >
+              <option value="10">Payment Method</option>
+              <option value="10">Visa</option>
+              <option value="50">MasterCard</option>
+              <option value="100">Bank Transfer</option>
+            </select>
+            <Divider />
+            <Typography
+              variant="h6"
+              component="h6"
+              style={{ paddingBottom: "10px" }}
+            >
+              Amount
+            </Typography>
+            <Amount>
+              <TextField
+                label={this.props.currency.value.toUpperCase()}
+                variant="outlined"
+                onChange={e => this.handleAmount(e.target.value)}
+              />
+              <MDBIcon icon="exchange-alt" style={{ padding: "20px" }} />
+              <TextField
+                label={this.state.details.symbol}
+                variant="outlined"
+                style={{ textTransform: "uppercase" }}
+                value={this.state.cryptValue}
+              />
+            </Amount>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={this.handleClose} color="primary">
+              Cancel
+            </Button>
+            <Button onClick={this.handleClose} color="primary" autoFocus>
+              Buy
+            </Button>
+          </DialogActions>
+        </Dialog>
       </MainDiv>
     );
   }

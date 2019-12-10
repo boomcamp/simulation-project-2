@@ -10,16 +10,16 @@ const Container = styled.div`
   display: flex;
   box-sizing: border-box;
   flex-wrap: wrap;
-  margin-right: 10%;
-  margin-left: 10%;
+  margin-right: 4%;
+  margin-left: 4%;
   width: 100%;
   height: 280px;
 `;
 const ContainerTwo = styled.div`
   display: flex;
   box-sizing: border-box;
-  margin-right: 10%;
-  margin-left: 10%;
+  margin-right: 4%;
+  margin-left: 4%;
   width: 100%;
   height: 550px;
 `;
@@ -59,21 +59,13 @@ const days = [
   { name: "1Y", value: 365 },
   { name: "Max", value: "max" }
 ];
-var months = [
-  "Jan",
-  "Feb",
-  "Mar",
-  "Apr",
-  "May",
-  "Jun",
-  "Jul",
-  "Aug",
-  "Sep",
-  "Oct",
-  "Nov",
-  "Dec"
-];
+const Buttons = styled.div``;
 
+const Amount = styled.div`
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+`;
 export {
   MainDiv,
   Container,
@@ -84,5 +76,6 @@ export {
   Chart,
   Table,
   days,
-  months
+  Buttons,
+  Amount
 };

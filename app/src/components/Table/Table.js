@@ -216,7 +216,7 @@ export default class Table extends React.Component {
   render() {
     return (
       <MaterialTable
-        title="Top 100 Coins by Market Capitalization"
+        title="List of All Coins by Market Capitalization"
         columns={this.state.columns}
         data={this.props.getData}
         isLoading={this.props.isLoading}
