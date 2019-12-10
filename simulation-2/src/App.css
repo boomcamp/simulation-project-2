@@ -2,6 +2,7 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  font-family: 'Source Code Pro', monospace;
 }
 
 /* BRANDING COLOR START */
@@ -11,7 +12,8 @@
   --main-maroon: #730710;
   --main-blue: #143D73;
   --main-blue-dark: #143959;
-  --main-green: #C4F21D;
+  --main-green: rgb(101, 17, 122);
+  --main-green: rgb(192, 3, 240);
 }
 
 .stocks-red{ color: #F20C1F; }
@@ -150,7 +152,7 @@
   display: flex;
   justify-content: space-around;
   align-items: center;
-  background: #143959;
+  background: #032440;
 }
 
 .header-name-container{
