@@ -2,9 +2,9 @@ import React, {useEffect, useState} from 'react';
 import MaterialTable from 'material-table';
 import { LineChart, Line, XAxis, YAxis,} from 'recharts';
 import axios from 'axios'
-import Chart from './Chart.js';
+import CryptoChart from './Charts/CryptoChart';
 
-export default function Coins() {
+export default function CryptoCoins() {
   const [state, setState] = useState({
     columns: [
       { title: `#`, field: 'market_cap_rank', cellStyle: {width: `1%`}},
@@ -64,6 +64,7 @@ export default function Coins() {
   }
 
   useEffect(() => {
+    let isCancelled = false;
     axios
       .get(`https://api.coingecko.com/api/v3/coins/markets?vs_currency=USD&per_page=600&page=1&sparkline=true&price_change_percentage=1h%2C24h%2C7d`)
       .then(res => {
@@ -87,25 +88,33 @@ export default function Coins() {
                                 sparkline: coin.sparkline_in_7d.price.map(price => {return {oneWeek: price, date: count ++} }) 
                                })
           })
-          setState(prevState => { return {...prevState, data: temp} })
+          if(!isCancelled)
+            setState(prevState => { return {...prevState, data: temp} })
       })
-    return () => { };
+    return () => { isCancelled=true };
   }, [])
+  const headerStyle={ textAlign: `left`, 
+                      color: `white`, 
+                      backgroundColor: `#3f51b5`, 
+                      padding: `30px` }
   return (
     <MaterialTable
       components={{
-          Toolbar: props => <h2 className="tableHeader">List of Cryptocurrency Coins</h2>
+          Toolbar: props => <div style={{marginTop:`80px`}}></div> 
+          // <h2 className="tableHeader" style={headerStyle}>List of Cryptocurrency Coins</h2>
       }}
       columns={state.columns}
       data={state.data}
+      
       options={{
+        pageSizeOptions: [5,10,20,50,100],
         pageSize: 20,
         headerStyle: {
           fontWeight: `bold`,
         }
       }}
       detailPanel={rowData => {
-        return <Chart id={rowData.id} /> 
+        return <CryptoChart id={rowData.id} /> 
       }}
       onRowClick={(event, rowData, togglePanel) => togglePanel()}
     />

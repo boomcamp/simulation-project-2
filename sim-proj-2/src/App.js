@@ -1,14 +1,16 @@
-import React from 'react';
-import './App.css';
+import React from 'react'
+import {BrowserRouter, Switch, Route} from 'react-router-dom'
 
-import Dashboard from './components/Dashboard'
+import DashBoard from "./components/Dashboard";
+import InvestmentTracker from './components/investedCoins/InvestmentTracker'
 
-function App() {
-  return (
-    <div className="App">
-      <Dashboard />
-    </div>
-  );
+export default function App() {
+    return (
+        <BrowserRouter>
+            <Switch>
+                <Route exact path="/" component={DashBoard}/>
+                <Route path="/investment-tracker" component={InvestmentTracker}/>
+            </Switch>
+        </BrowserRouter>
+    )
 }
-
-export default App;
