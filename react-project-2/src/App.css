@@ -80,3 +80,8 @@ hr {
 .recharts-legend-wrapper {
    bottom: -5px !important;
 }
+
+.MuiTabs-scrollable {
+   background: linear-gradient(to left, #39366b 0%, #6a407f 42%) !important;
+   color: white !important;
+}
