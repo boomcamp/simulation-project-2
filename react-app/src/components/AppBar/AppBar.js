@@ -44,7 +44,7 @@ export default function ButtonAppBar() {
             </Button>
           </NavLink>
           <NavLink
-            to="/coinlist"
+            to="/investment-tracking"
             style={{ textDecoration: "none", color: "white" }}
           >
             <Button className={classes.white}>
