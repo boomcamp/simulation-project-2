@@ -104,7 +104,7 @@ class CoinList extends Component {
     }
 
     handleClick = () => {
-        console.info(`You clicked ${this.state.currency[this.state.selectedIndex]}`);
+        console.log(`You clicked ${this.state.currency[this.state.selectedIndex]}`);
     };
 
     handleMenuItemClick = (event, index) => {
@@ -158,7 +158,7 @@ class CoinList extends Component {
                 <div className={classes.currency}>
                     <Grid container direction="column" alignItems="flex-end">
                         <Grid item xs={12}>
-                            <ButtonGroup variant="contained" color="primary" ref={anchorRef} aria-label="split button">
+                            <ButtonGroup disabled variant="contained" color="primary" ref={anchorRef} aria-label="split button">
                                 <Button onClick={this.handleClick}>{currency[selectedIndex]}</Button>
                                 <Button
                                     color="primary"

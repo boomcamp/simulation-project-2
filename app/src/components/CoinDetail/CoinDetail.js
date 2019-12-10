@@ -21,14 +21,14 @@ const useStyles = makeStyles(theme => ({
         marginTop: 10,
         marginBottom: 10,
         color: '#000',
-
+        textAlign: 'justify'
     },
     descbox: {
         background: '#fff',
         border: "1px solid #e7e7e7",
         borderRadius: 10,
         color: '#000',
-        padding: 10,
+        padding: 20,
         marginBottom: 10
     },
     secondbox: {
@@ -52,8 +52,7 @@ export default function CoinDetail(props) {
     axios
         .get(`https://api.coingecko.com/api/v3/coins/${id}/market_chart?vs_currency=usd&days=1`)
         .then(val =>
-            setMarket_Cap(val.data.market_cap)
-        )
+            setMarket_Cap(val.data.market_cap))
         .catch(e => console.log(e))
 
     //exchange rates
