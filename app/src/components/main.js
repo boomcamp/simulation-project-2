@@ -13,11 +13,10 @@ import axios from "axios";
 import { Redirect } from "react-router-dom";
 const useStyles = theme => ({
   root: {
-    width: "100%",
-    // backgroundColor: "#304850",
+    width: "100%"
   },
-  head:{
-    backgroundColor:"#304050",
+  head: {
+    backgroundColor: "#304050",
     color: "white"
   },
   tableWrapper: {
@@ -28,8 +27,13 @@ const useStyles = theme => ({
     maxHeight: 30,
     maxWidth: 30
   },
-  row:{
+  row: {
     color: "white"
+  },
+  table: {
+    // padding: theme.spacing(3, 2),
+    marginLeft: theme.spacing(18),
+    maxWidth: 1450
   }
 });
 class main extends Component {
@@ -41,7 +45,7 @@ class main extends Component {
       id: [],
       activePage: 1,
       coinsList: [],
-      page:[],
+      page: [],
       columns: [
         { id: "market_cap_rank", label: "Rank", minWidth: 10 },
         { id: "image", label: "Logo", minWidth: 50, align: "center" },
@@ -61,7 +65,8 @@ class main extends Component {
   componentDidMount() {
     axios
       .get(
-        `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&page=1&per_page=25`)
+        `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&page=1&per_page=25`
+      )
       .then(res =>
         this.setState({
           coinsList: res.data
@@ -77,11 +82,10 @@ class main extends Component {
     this.props.history.push(`/coins/${id}`);
   };
   handleOnChange = (e, pageInfo) => {
-    console.log ()
+    console.log();
     this.setState({
       activePage: pageInfo.activePage,
-      url:
-        `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&per_page=20&page=${pageInfo.activePage.toString()}`
+      url: `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&per_page=20&page=${pageInfo.activePage.toString()}`
     });
   };
   render() {
@@ -91,7 +95,11 @@ class main extends Component {
       return (
         <div className={classes.card}>
           <Paper className={classes.root}>
-            <Table stickyHeader aria-label="sticky table" >
+            <Table
+              className={classes.table}
+              stickyHeader
+              aria-label="sticky table"
+            >
               <TableHead>
                 <TableRow>
                   {this.state.columns.map(column => (
@@ -135,17 +143,17 @@ class main extends Component {
               </TableBody>
             </Table>
             <Grid container justify="flex-end">
-          <Pagination
-            style={{
-              position: "fixed",
-              bottom: 0
-            }}
-            activePage={this.state.activePage}
-            onPageChange={this.handleOnChange}
-            totalPages={248}
-            ellipsisItem={null}
-          />
-        </Grid>
+              <Pagination
+                style={{
+                  position: "fixed",
+                  bottom: 0
+                }}
+                activePage={this.state.activePage}
+                onPageChange={this.handleOnChange}
+                totalPages={248}
+                ellipsisItem={null}
+              />
+            </Grid>
           </Paper>
         </div>
       );

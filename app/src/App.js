@@ -11,7 +11,6 @@ export default class App extends Component {
       <React.Fragment>
         <Router>
           <Header />
-          {/* <Coins /> */}
           <Route exact path="/" component={Main} />
           <Route path="/coins/:id" component={Coins} />
         </Router>

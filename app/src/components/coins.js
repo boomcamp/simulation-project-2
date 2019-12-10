@@ -4,8 +4,9 @@ import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
 import axios from "axios";
 import Card from "@material-ui/core/Card";
-import { Link } from "react-router-dom";
 import Chart from "./chart";
+import { Menu } from "semantic-ui-react";
+import { Table } from "semantic-ui-react";
 const useStyles = theme => ({
   root: {
     padding: theme.spacing(3, 2),
@@ -77,7 +78,7 @@ class coins extends Component {
     this.state = {
       id: {},
       details: {},
-      circulating_supply: ""
+      chartData: []
     };
   }
 
@@ -88,17 +89,47 @@ class coins extends Component {
       )
       .then(res => {
         this.setState({ details: res.data });
+        axios
+          .get(
+            `https://api.coingecko.com/api/v3/coins/${this.props.match.params.id}/market_chart?vs_currency=usd&days=1}`
+          )
+          .then(res => {
+            var arr = res.data.prices.map(x => {
+              return {
+                name: new Date(x[0]).toLocaleDateString("en-US"),
+                uv: x[1]
+              };
+            });
+            this.setState({ chartData: arr });
+          });
       });
   }
 
+  handleClick = e => {
+    axios
+      .get(
+        `https://api.coingecko.com/api/v3/coins/${this.props.match.params.id}/market_chart?vs_currency=usd&days=${e}`
+      )
+      .then(res => {
+        var arr = res.data.prices.map(x => {
+          return {
+            name: new Date(x[0]).toLocaleDateString("en-US"),
+            uv: x[1]
+          };
+        });
+        this.setState({ chartData: arr });
+      });
+  };
+
   render() {
     const { classes } = this.props;
-    // console.log(this.state.details);
+
     const formatter = new Intl.NumberFormat("en-US", {
       style: "currency",
       currency: "USD",
       minimumFractionDigits: 2
     });
+    const { activeItem } = this.state;
 
     return (
       <React.Fragment>
@@ -110,6 +141,7 @@ class coins extends Component {
                 <img
                   className={classes.logo}
                   src={this.state.details.image.large}
+                  alt="/"
                 />
                 {/* </Card> */}
 
@@ -121,13 +153,7 @@ class coins extends Component {
                   <span>{this.state.details.market_cap_rank}</span>
                 </Typography>
                 <Typography>
-                  Websites:{" "}
-                  <Link
-                    to="`${this.state.details.links.homepage}`"
-                    path="http://www.bitcoin.org"
-                  >
-                    {this.state.details.links.homepage}
-                  </Link>
+                  Websites: {this.state.details.links.homepage}
                 </Typography>
               </div>
               <div className={classes.container1}>
@@ -182,75 +208,106 @@ class coins extends Component {
                       )}
                     </span>
                   </Typography>
-                  {/* <Typography className={classes.vol}>
-                    <b>24h High:</b>
-                    <span>
-                      {"  "}
-                      {formatter.format(
-                        this.state.details.market_data.low_24h.usd
-                      )}
-                    </span>
-                  </Typography> */}
                 </div>
               </div>
             </div>
-            <div class="ui clearing divider"></div>
-            <div class="ui one item menu">
-              <a class="item active">Overview</a>
-              {/* <a class="item">Chart</a> */}
+            <div className="ui clearing divider"></div>
+            <div className="ui one item menu">
+              <Typography className="item active">Overview</Typography>
             </div>
             <Card className={classes.card}>
               <Typography className={classes.descripName}>
                 {this.state.details.name}({this.state.details.symbol})
               </Typography>
-              <Typography className={classes.details}>
-                <p
-                  dangerouslySetInnerHTML={{
-                    __html: this.state.details.description.en
-                  }}
-                ></p>
-              </Typography>
-              <table class="ui celled padded table">
-                <thead>
-                  <tr>
-                    <th class="single line">24h</th>
-                    <th>1 week</th>
-                    <th>1 Month</th>
-                    <th>6 Months</th>
-                    <th>1 Year</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <td>
-                    {this.state.details.market_data.price_change_percentage_24h}
-                  </td>
-                  <td>
-                    {this.state.details.market_data.price_change_percentage_7d}
-                  </td>
-                  <td>
-                    {this.state.details.market_data.price_change_percentage_30d}
-                  </td>
-                  /
-                  <td>
-                    {
-                      this.state.details.market_data
-                        .price_change_percentage_200d
-                    }
-                  </td>
-                  <td>
-                    {this.state.details.market_data.price_change_percentage_1y}
-                  </td>
-                </tbody>
-              </table>
-              <div class="ui clearing divider"></div>
-              <div class="ui five item menu">
-                <a class="item active">24h</a>
-                <a class="item ">7d</a>
-                <a class="item ">30d</a>
-                <a class="item ">200d</a>
-                <a class="item ">1y</a>
-              </div>
-              <Chart />
+              <Typography
+                className={classes.details}
+                dangerouslySetInnerHTML={{
+                  __html: this.state.details.description.en
+                }}
+              ></Typography>
+
+              <Table celled fixed singleLine textAlign="center">
+                <Table.Header>
+                  <Table.Row>
+                    <Table.HeaderCell>24h</Table.HeaderCell>
+                    <Table.HeaderCell>1 week</Table.HeaderCell>
+                    <Table.HeaderCell>1 Month</Table.HeaderCell>
+                    <Table.HeaderCell>6 Months</Table.HeaderCell>
+                    <Table.HeaderCell>1 year</Table.HeaderCell>
+                  </Table.Row>
+                </Table.Header>
+
+                <Table.Body>
+                  <Table.Row>
+                    <Table.Cell>
+                      {" "}
+                      {
+                        this.state.details.market_data
+                          .price_change_percentage_24h
+                      }
+                    </Table.Cell>
+                    <Table.Cell>
+                      {
+                        this.state.details.market_data
+                          .price_change_percentage_7d
+                      }
+                    </Table.Cell>
+                    <Table.Cell>
+                      {" "}
+                      {
+                        this.state.details.market_data
+                          .price_change_percentage_30d
+                      }
+                    </Table.Cell>
+                    <Table.Cell>
+                      {
+                        this.state.details.market_data
+                          .price_change_percentage_200d
+                      }
+                    </Table.Cell>
+                    <Table.Cell>
+                      {
+                        this.state.details.market_data
+                          .price_change_percentage_1y
+                      }
+                    </Table.Cell>
+                  </Table.Row>
+                </Table.Body>
+              </Table>
+
+              <Menu fluid widths={5}>
+                <Menu.Item
+                  name="1d"
+                  day="1"
+                  active={activeItem === "1"}
+                  onClick={() => this.handleClick(1)}
+                />
+                <Menu.Item
+                  day="7"
+                  name="7d"
+                  active={activeItem === "7d"}
+                  onClick={() => this.handleClick(7)}
+                />
+                <Menu.Item
+                  name="30d"
+                  day="30"
+                  active={activeItem === "30d"}
+                  onClick={() => this.handleClick(30)}
+                />
+                <Menu.Item
+                  name="200d"
+                  day="200"
+                  active={activeItem === "200d"}
+                  onClick={() => this.handleClick(200)}
+                />
+                <Menu.Item
+                  name="365d"
+                  day="365"
+                  active={activeItem === "365"}
+                  onClick={() => this.handleClick(365)}
+                />
+              </Menu>
+              <Chart chartData={this.state.chartData} />
             </Card>
           </Paper>
         ) : null}

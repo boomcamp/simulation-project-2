@@ -1,14 +1,12 @@
 import React, { Component } from "react";
-import axios from "axios";
 
 import {
-  LineChart,
-  Line,
   XAxis,
   YAxis,
   CartesianGrid,
   Tooltip,
-  Legend
+  AreaChart,
+  Area
 } from "recharts";
 
 class chart extends Component {
@@ -16,43 +14,50 @@ class chart extends Component {
     super(props);
 
     this.state = {
-      price: [0],
-      date: [1],
-      data: []
+      data: [],
+      id: {}
     };
   }
-  componentDidMount(e) {
-    axios
-      .get(
-        `https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=usd&days=50`
-      )
-      .then(res => {
-        console.log(res);
-        var arr = res.data.prices.map(x => {
-          return {
-            name: new Date(x[0]).toLocaleDateString("en-US"),
-            uv: x[1]
-          };
-        });
-        this.setState({ data: arr });
-      });
-  }
+
   render() {
     return (
-      <LineChart
-        width={1350}
-        height={400}
-        data={this.state.data}
-        margin={{ top: 55, right: 30, left: 20, bottom: 5 }}
-      >
-        <CartesianGrid strokeDasharray="3 3" />
-        <XAxis dataKey="name" />
-        <YAxis />
-        <Tooltip />
-        <Legend />
-        <Line type="monotone" dataKey="pv" stroke="#8884d8" />
-        <Line type="monotone" dataKey="uv" stroke="#82ca9d" />
-      </LineChart>
+      <React.Fragment>
+        <AreaChart
+          width={1400}
+          height={400}
+          data={this.props.chartData}
+          margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
+        >
+          <defs>
+            <linearGradient id="colorUv" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="5%" stopColor="#304850" stopOpacity={0.9} />
+              <stop offset="95%" stopColor="#304850" stopOpacity={0} />
+            </linearGradient>
+            <linearGradient id="colorPv" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="5%" stopColor="#304850" stopOpacity={0.8} />
+              <stop offset="95%" stopColor="#304850" stopOpacity={0} />
+            </linearGradient>
+          </defs>
+          <XAxis dataKey="name" />
+          <YAxis domain={["auto", "auto"]} />
+          <CartesianGrid strokeDasharray="3 3" />
+          <Tooltip />
+          <Area
+            type="monotone"
+            dataKey="uv"
+            stroke="#304850"
+            fillOpacity={1}
+            fill="url(#colorUv)"
+          />
+          <Area
+            type="monotone"
+            dataKey="pv"
+            stroke="#304850"
+            fillOpacity={1}
+            fill="url(#colorPv)"
+          />
+        </AreaChart>
+      </React.Fragment>
     );
   }
 }

@@ -8,18 +8,17 @@ import InputBase from "@material-ui/core/InputBase";
 import { fade } from "@material-ui/core/styles";
 import MenuIcon from "@material-ui/icons/Menu";
 import SearchIcon from "@material-ui/icons/Search";
-import { Link } from "react-router-dom";
-import Coins from "./coins";
+// import { Link } from "react-router-dom";
 
 const useStyles = theme => ({
   root: {
-    flexGrow: 1,
+    flexGrow: 1
   },
-  nav:{
-   background: "#304850"
+  nav: {
+    background: "#304850"
   },
   menuButton: {
-    marginRight: theme.spacing(2),
+    marginRight: theme.spacing(2)
   },
   title: {
     flexGrow: 1,
@@ -72,7 +71,7 @@ class header extends Component {
     return (
       <div>
         <React.Fragment>
-          <AppBar position="relative"  className={classes.nav}>
+          <AppBar position="relative" className={classes.nav}>
             <Toolbar>
               <IconButton
                 edge="start"
@@ -86,9 +85,9 @@ class header extends Component {
                 variant="h6"
                 noWrap
               ></Typography>
-              <Link to="/coins" path="/Main">
+              {/* <Link to="/coins" path="/Main">
                 <Typography>Coins</Typography>
-              </Link>
+              </Link> */}
               <div className={classes.search}>
                 <div className={classes.searchIcon}>
                   <SearchIcon />
