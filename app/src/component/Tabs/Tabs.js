@@ -43,7 +43,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function SimpleTabs({ setDays }) {
+export default function ButtonsTabs({ setDays }) {
   const classes = useStyles();
   const [value, setValue] = useState(0);
 

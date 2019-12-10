@@ -12,6 +12,7 @@ import "semantic-ui-css/semantic.min.css";
 import { Pagination } from "semantic-ui-react";
 import styled from "styled-components";
 import background from "../../img/background.jpg";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 const useStyles = makeStyles({
   root: {
@@ -35,7 +36,14 @@ const Header = styled.div`
   margin-bottom: 20px;
   text-transform: uppercase;
   color: white;
-  font-size: 60px;
+  font-size: 40px;
+`;
+const Loading = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0 auto;
 `;
 
 const HeadTable = styled(TableHead)`
@@ -47,6 +55,7 @@ const TableContainer = styled.div`
 `;
 export default function SimpleTable(props) {
   const classes = useStyles();
+  const [loading, setLoading] = useState(true);
   const [rows, setRows] = useState([]);
   const [cpage, setPage] = useState(1);
   const [num, setNum] = useState(0);
@@ -60,6 +69,9 @@ export default function SimpleTable(props) {
       .then(res => {
         setRows([...res.data]);
         console.log(res.data);
+        setTimeout(() => {
+          setLoading(false);
+        }, 1000);
       })
       .catch(err => console.log(err));
     axios.get(`${url}coins/list`).then(res => {
@@ -72,60 +84,77 @@ export default function SimpleTable(props) {
   return (
     <Paper className={classes.root}>
       <Header>Cryptocurrencies</Header>
-      <TableContainer>
-        <Table className={classes.table} aria-label="simple table">
-          <HeadTable>
-            <TableRow>
-              <TableCell>#</TableCell>
-              <TableCell>Coin</TableCell>
-              <TableCell>Symbol</TableCell>
-              <TableCell>Current Price</TableCell>
-              <TableCell>24h Volume</TableCell>
-              <TableCell>Circulating Supply</TableCell>
-              <TableCell>Mkt Cap</TableCell>
-            </TableRow>
-          </HeadTable>
-          <TableBody>
-            {rows.map(row => (
-              <TableRow key={row.name}>
-                <TableCell>{row.market_cap_rank}</TableCell>
-                <TableCell
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    cursor: "pointer"
-                  }}
-                  onClick={() => props.history.push(`/coindetails/${row.id}`)}
-                >
-                  <img
-                    style={{ width: 20, height: 20, marginRight: 20 }}
-                    src={`${row.image}`}
-                    alt="logo"
-                  ></img>
-                  {row.name}
-                </TableCell>
-                <TableCell style={{ textTransform: "uppercase" }}>
-                  {row.symbol}
-                </TableCell>
-                <TableCell>{row.current_price}</TableCell>
-                <TableCell>
-                  {row.total_volume
-                    ? `$${row.total_volume.toLocaleString()}`
-                    : " "}
-                </TableCell>
-                <TableCell>
-                  {row.circulating_supply
-                    ? row.circulating_supply.toLocaleString()
-                    : " "}
-                </TableCell>
-                <TableCell>
-                  {row.market_cap ? `$${row.market_cap.toLocaleString()}` : " "}
-                </TableCell>
+      {loading ? (
+        <Loading>
+          <CircularProgress
+            disableShrink
+            size={80}
+            color={"secondary"}
+            thickness={5}
+          />
+        </Loading>
+      ) : (
+        <TableContainer>
+          <Table className={classes.table} aria-label="simple table">
+            <HeadTable>
+              <TableRow>
+                <TableCell>#</TableCell>
+                <TableCell>Coin</TableCell>
+                <TableCell>Symbol</TableCell>
+                <TableCell>Current Price</TableCell>
+                <TableCell>24h Volume</TableCell>
+                <TableCell>Circulating Supply</TableCell>
+                <TableCell>Mkt Cap</TableCell>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+            </HeadTable>
+            <TableBody>
+              {rows.map(row => (
+                <TableRow key={row.name}>
+                  <TableCell>{row.market_cap_rank}</TableCell>
+                  <TableCell
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      cursor: "pointer"
+                    }}
+                    onClick={() => props.history.push(`/coindetails/${row.id}`)}
+                  >
+                    <img
+                      style={{ width: 20, height: 20, marginRight: 20 }}
+                      src={`${row.image}`}
+                      alt="logo"
+                    ></img>
+                    {row.name}
+                  </TableCell>
+                  <TableCell style={{ textTransform: "uppercase" }}>
+                    {row.symbol}
+                  </TableCell>
+                  <TableCell>
+                    {row.current_price
+                      ? `$${row.current_price.toLocaleString()}`
+                      : " "}
+                  </TableCell>
+                  <TableCell>
+                    {row.total_volume
+                      ? `$${row.total_volume.toLocaleString()}`
+                      : " "}
+                  </TableCell>
+                  <TableCell>
+                    {row.circulating_supply
+                      ? row.circulating_supply.toLocaleString()
+                      : " "}
+                  </TableCell>
+                  <TableCell>
+                    {row.market_cap
+                      ? `$${row.market_cap.toLocaleString()}`
+                      : " "}
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      )}
       <Grid
         container
         justify="center"

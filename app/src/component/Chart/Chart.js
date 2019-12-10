@@ -10,8 +10,6 @@ import {
 } from "recharts";
 
 export default function Chart({ chart }) {
-  console.log(chart);
-
   return (
     <LineChart
       width={1600}
@@ -35,13 +33,7 @@ export default function Chart({ chart }) {
       <YAxis type="number" domain={["auto", "auto"]} />
       <Tooltip />
       <Legend />
-      <Line
-        type="monotone"
-        dataKey="price"
-        stroke="#8884d8"
-        dot={false}
-        strokeWidth="[{x: 15, y: 15, value: 500}]"
-      />
+      <Line type="monotone" dataKey="price" stroke="#8884d8" dot={false} />
     </LineChart>
   );
 }

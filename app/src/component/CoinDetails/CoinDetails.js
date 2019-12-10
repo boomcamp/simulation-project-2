@@ -2,8 +2,9 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import styled from "styled-components";
 import Chart from "../Chart/Chart.js";
-import Tabs from "../Tabs/Tabs";
+import ButtonTabs from "../Tabs/Tabs";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import Modal from "../Modal/Modal";
 
 const Main = styled.div`
   display: flex;
@@ -37,18 +38,37 @@ const Details = styled.div`
   width: 90%;
   padding: 20px;
 `;
+const Btn = styled.button`
+  background-color: yellowgreen;
+  margin-top: 30px;
+  height: 40px;
+  border-radius: 8px;
+  width: 70px;
+  font-size: 20px;
+  border: none;
+  transition: 0.1s all ease-out;
+  &:hover {
+    background-color: #03fce3;
+    width: 75px;
+    height: 45px;
+  }
+`;
 
 export default function CoinDetails({ match }) {
   const [loading, setLoading] = useState(true);
   const [details, setDetails] = useState([]);
   const [chart, setChart] = useState([]);
   const [days, setDays] = useState(0);
+  const [open, setOpen] = useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
 
   useEffect(() => {
     axios
       .get(`https://api.coingecko.com/api/v3/coins/${match.params.id}`)
       .then(res => {
-        console.log(res.data);
         setDetails(res.data);
         setTimeout(() => {
           setLoading(false);
@@ -139,6 +159,20 @@ export default function CoinDetails({ match }) {
                   : " 0 "}{" "}
                 {details.symbol}
               </Word>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-evenly",
+                  width: 200
+                }}
+              >
+                <Btn onClick={handleClickOpen} id="buy">
+                  Buy
+                </Btn>
+                <Btn onClick={handleClickOpen} id="sell">
+                  Sell
+                </Btn>
+              </div>
             </Details>
           </Container>
           <Container
@@ -148,9 +182,10 @@ export default function CoinDetails({ match }) {
               borderRadius: 10
             }}
           >
-            <Tabs setDays={setDays} />
+            <ButtonTabs setDays={setDays} />
             <Chart chart={chart} />
           </Container>
+          <Modal setOpen={setOpen} open={open} details={details} />
         </Main>
       )}
     </>
