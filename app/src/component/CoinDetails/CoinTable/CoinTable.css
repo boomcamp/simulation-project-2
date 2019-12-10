@@ -1,0 +1,16 @@
+.container {
+	display: flex;
+	justify-content: center;
+}
+.column {
+	display: flex;
+	justify-content: center;
+	flex-flow: column;
+	padding: 10px;
+}
+.column div {
+	border: 1px solid #000;
+	text-align: center;
+	padding: 50px 10%;
+	border-radius: 2px;
+}
