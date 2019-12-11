@@ -1,3 +1,57 @@
 {
-  "transactions": []
+  "transactions": [
+    {
+      "name": "bitcoin",
+      "price": "7,267.40",
+      "id": 1
+    },
+    {
+      "name": "bitcoin",
+      "price": "7,267.40",
+      "transaction": "buy",
+      "id": 2
+    },
+    {
+      "name": "bitcoin",
+      "buy-price": "7,267.40",
+      "transaction": "buy",
+      "sell-price": "5,000",
+      "id": 3
+    },
+    {
+      "name": "Bitcoin",
+      "price": 7230.53,
+      "quantity": "7",
+      "transaction": "buy",
+      "id": 4
+    },
+    {
+      "name": "Tezos",
+      "price": 1.49,
+      "quantity": "1",
+      "transaction": "buy",
+      "id": 5
+    },
+    {
+      "name": "Tezos",
+      "price": 1.49,
+      "quantity": "5",
+      "transaction": "buy",
+      "id": 6
+    },
+    {
+      "name": "Ethereum",
+      "price": 145.98,
+      "quantity": "2",
+      "transaction": "buy",
+      "id": 7
+    },
+    {
+      "name": "Ethereum",
+      "price": 145.75,
+      "quantity": "1",
+      "transaction": "buy",
+      "id": 8
+    }
+  ]
 }

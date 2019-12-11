@@ -5,14 +5,22 @@ import Typography from "@material-ui/core/Typography";
 import axios from "axios";
 import Card from "@material-ui/core/Card";
 import Chart from "./chart";
-import { Menu } from "semantic-ui-react";
-import { Table } from "semantic-ui-react";
+import {
+  Menu,
+  Table,
+  Grid,
+  Button,
+  Icon,
+  Header,
+  Image,
+  Modal,
+  Input
+} from "semantic-ui-react";
+import Transaction from "./transaction";
 const useStyles = theme => ({
   root: {
     padding: theme.spacing(3, 2),
     marginLeft: theme.spacing(18),
-    // background: "#304050",
-    // color: "white"
     maxWidth: 1450
   },
   name: {
@@ -40,34 +48,16 @@ const useStyles = theme => ({
     minWidth: 275,
     padding: "20px"
   },
-  card1: {
-    maxWidth: 75
-  },
-  main: {
-    display: "flex",
-    // flexDirection: "row",
-    flexFlow: "row wrap",
-    padding: theme.spacing(2)
-  },
-  container: {
-    flex: 1,
-    flexDirection: "row",
-    marginLeft: theme.spacing(15)
-  },
-  container1: {
-    flex: 1
-  },
-  container2: {
-    marginLeft: theme.spacing(2),
-    fontSize: "20px",
-    margin: "30px",
-    display: "flex"
-  },
+
   supply: {
     fontSize: "18px"
   },
   vol: {
     fontSize: "18px"
+  },
+  receipt: {
+    display: "flex",
+    marginLeft: theme.spacing(38)
   }
 });
 
@@ -78,7 +68,9 @@ class coins extends Component {
     this.state = {
       id: {},
       details: {},
-      chartData: []
+      chartData: [],
+      price: null,
+      quantity: ""
     };
   }
 
@@ -120,6 +112,31 @@ class coins extends Component {
         this.setState({ chartData: arr });
       });
   };
+  handleChange = e => {
+    if (e < 10) {
+      this.setState({
+        price: this.state.details.market_data.current_price.usd * e,
+        quantity: e
+      });
+    } else {
+      return false;
+    }
+  };
+  onClick = e => {
+    axios({
+      method: `post`,
+      url: `http://localhost:4000/transactions`,
+      data: {
+        name: this.state.details.name,
+        price: this.state.details.market_data.current_price.usd,
+        quantity: this.state.quantity,
+        transaction: "buy"
+      }
+    }).then(res => {
+      console.log(res);
+    });
+    alert("Successfully buy");
+  };
 
   render() {
     const { classes } = this.props;
@@ -135,16 +152,13 @@ class coins extends Component {
       <React.Fragment>
         {this.state.details.description ? (
           <Paper className={classes.root}>
-            <div className={classes.main}>
-              <div className={classes.container}>
-                {/* <Card className={classes.logo}> */}
+            <Grid centered columns={2} padded="horizontally">
+              <Grid.Column>
                 <img
                   className={classes.logo}
                   src={this.state.details.image.large}
                   alt="/"
                 />
-                {/* </Card> */}
-
                 <Typography className={classes.name}>
                   {this.state.details.name}({this.state.details.symbol})
                 </Typography>
@@ -155,8 +169,8 @@ class coins extends Component {
                 <Typography>
                   Websites: {this.state.details.links.homepage}
                 </Typography>
-              </div>
-              <div className={classes.container1}>
+              </Grid.Column>
+              <Grid.Column>
                 <Typography className={classes.price}>
                   <span>
                     {" "}
@@ -165,56 +179,135 @@ class coins extends Component {
                     )}
                   </span>
                 </Typography>
-                <div className={classes.container2}>
-                  <Typography className={classes.vol}>
-                    <b> Market Cap:</b>
+                <Typography className={classes.vol}>
+                  <b> Market Cap:</b>
+                  <span>
+                    {" "}
+                    {formatter.format(
+                      this.state.details.market_data.market_cap.usd
+                    )}
+                  </span>
+                </Typography>
+
+                <Typography className={classes.vol}>
+                  <b>24 Hour Trading Vol:</b>
+                  <span>
+                    {" "}
+                    {formatter.format(
+                      this.state.details.market_data.total_volume.usd
+                    )}
+                  </span>
+                </Typography>
+                <Typography className={classes.vol} noWrap>
+                  <b>24h High</b>
+                  <span>
+                    {"  "}
+                    {formatter.format(
+                      this.state.details.market_data.high_24h.usd
+                    )}
+                  </span>
+                </Typography>
+                <Typography className={classes.vol} noWrap>
+                  <b>24h Low:</b>
+                  <span>
+                    {" "}
+                    {formatter.format(
+                      this.state.details.market_data.low_24h.usd
+                    )}
+                  </span>
+                </Typography>
+
+                <Modal
+                  size="large"
+                  trigger={
+                    <Button color="teal" onClick={e => this.handleClick()}>
+                      Purchase
+                    </Button>
+                  }
+                  centered={true}
+                  closeIcon
+                >
+                  <Modal.Header>
+                    <Typography className={classes.name}>
+                      {this.state.details.name}({this.state.details.symbol})
+                    </Typography>
+                  </Modal.Header>
+
+                  <Modal.Content image>
                     <span>
-                      {" "}
-                      {formatter.format(
-                        this.state.details.market_data.market_cap.usd
-                      )}
+                      <Image
+                        wrapped
+                        size="medium"
+                        src={this.state.details.image.large}
+                        alt="/"
+                      />
                     </span>
-                  </Typography>
-                  <Typography className={classes.vol}>
-                    <b>24 Hour Trading Vol:</b>
-                    <span>
-                      {" "}
-                      {formatter.format(
-                        this.state.details.market_data.total_volume.usd
-                      )}
-                    </span>
-                  </Typography>
-                </div>
-                <div className={classes.container2}>
-                  <Typography className={classes.vol}>
-                    <b>Circulating supply:</b>
-                    <span>
-                      {"  "}
-                      {formatter.format(
-                        this.state.details.market_data.low_24h.usd
-                      )}
-                    </span>
-                  </Typography>
-                  <Typography className={classes.vol} noWrap>
-                    <b>24h Low/24h High:</b>
-                    <span>
-                      {"  "}
-                      {formatter.format(
-                        this.state.details.market_data.high_24h.usd
-                      )}{" "}
-                      /{" "}
-                      {formatter.format(
-                        this.state.details.market_data.low_24h.usd
-                      )}
-                    </span>
-                  </Typography>
-                </div>
-              </div>
-            </div>
+
+                    <Modal.Description>
+                      <Header>
+                        <Typography className={classes.price}>
+                          <span>
+                            {" "}
+                            {formatter.format(
+                              this.state.details.market_data.current_price.usd
+                            )}
+                          </span>
+                        </Typography>
+                      </Header>
+                      <Input
+                        placeholder="Quantity"
+                        onChange={e => this.handleChange(e.target.value)}
+                        min="1"
+                        value={this.state.quantity}
+                      />
+                      <Button
+                        color="teal"
+                        labelPosition="right"
+                        icon="cart"
+                        content="Buy"
+                        onClick={e => this.onClick()}
+                      ></Button>
+                    </Modal.Description>
+                    <Modal.Description>
+                      <Typography variant="h5">Item</Typography>
+                      <div className="ui clearing divider"></div>
+
+                      <Typography variant="h6">
+                        Coin: {this.state.details.name}(
+                        {this.state.details.symbol})
+                      </Typography>
+                      <Typography variant="h6">
+                        Price:
+                        <span>
+                          {" "}
+                          {formatter.format(
+                            this.state.details.market_data.current_price.usd
+                          )}
+                        </span>
+                      </Typography>
+                      <Typography variant="h6">
+                        Quantity:{" "}
+                        <span>
+                          {"  "}
+                          {this.state.quantity}
+                        </span>
+                      </Typography>
+                      <div className="ui clearing divider"></div>
+                      <Typography variant="h5">
+                        Total Price: {formatter.format(this.state.price)}
+                      </Typography>
+                    </Modal.Description>
+                  </Modal.Content>
+                </Modal>
+              </Grid.Column>
+            </Grid>
+
             <div className="ui clearing divider"></div>
-            <div className="ui one item menu">
-              <Typography className="item active">Overview</Typography>
-            </div>
+
+            <Menu fluid widths={2}>
+              <Menu.Item active name="OverView" />
+              <Menu.Item name="Historical Transaction" />
+            </Menu>
             <Card className={classes.card}>
               <Typography className={classes.descripName}>
                 {this.state.details.name}({this.state.details.symbol})
@@ -308,6 +401,7 @@ class coins extends Component {
                 />
               </Menu>
               <Chart chartData={this.state.chartData} />
+              <Transaction />
             </Card>
           </Paper>
         ) : null}

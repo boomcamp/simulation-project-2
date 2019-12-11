@@ -31,7 +31,6 @@ const useStyles = theme => ({
     color: "white"
   },
   table: {
-    // padding: theme.spacing(3, 2),
     marginLeft: theme.spacing(18),
     maxWidth: 1450
   }
