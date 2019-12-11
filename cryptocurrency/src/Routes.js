@@ -1,11 +1,13 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import './App.css';
+import { Button, Grid, ButtonGroup } from '@material-ui/core';
 
 function Routes() {
 
     const navstyle = {
-        color:'white'
+        color:'white',
+        textDecoration:'none'
     }
 
   return (                                                              
@@ -15,13 +17,15 @@ function Routes() {
         <ul className="router-links">
 
             <Link style={navstyle} to = '/'>
-            <li> Coins List </li>
+            <Button variant='contained'> Coins List </Button>
             </Link>
 
             <Link style={navstyle} to = '/investmenttracking'>
-            <li> Investment Tracking </li>
+            <Button variant='contained'> Investment Tracking </Button>
             </Link>
-    
+
+        
+
         </ul>
         
     </nav>        

@@ -9,7 +9,7 @@ class CoinDetails extends Component {
 
 componentDidMount(){
   axios
-    .get(`https://api.coingecko.com/api/v3/coins/${this.props.match.params.id}`, {
+    .get(`https://api.coingecko.com/api/v3/coins/${this.props.match.params.id}`, {   // clicked coin
     })
     .then(response => { 
       localStorage.setItem('id', response.data.id)
@@ -17,10 +17,11 @@ componentDidMount(){
           coins:response.data,
         })
         return response
+
     })
     .then(res => {
       axios
-      .get(`https://api.coingecko.com/api/v3/coins/${res.data.id}/market_chart?vs_currency=usd&days=1`, {
+      .get(`https://api.coingecko.com/api/v3/coins/${res.data.id}/market_chart?vs_currency=usd&days=1`, {  // default chart
       })
       .then(response => { 
           let temp = []
@@ -38,8 +39,9 @@ componentDidMount(){
   }
 
   handleClick=(e)=>{
+    console.log(e)
     axios
-    .get(`https://api.coingecko.com/api/v3/coins/${localStorage.getItem('id')}/market_chart?vs_currency=usd&days=${e.days}`, {
+    .get(`https://api.coingecko.com/api/v3/coins/${localStorage.getItem('id')}/market_chart?vs_currency=usd&days=${e.days}`, { // chart that has been clicked
     })
     .then(response => { 
         let temp = []
@@ -53,7 +55,6 @@ componentDidMount(){
           chartArr: temp, label : e.text
         })
     })
-
   }
 
   constructor(props) {
@@ -62,11 +63,10 @@ componentDidMount(){
     this.state = {
       coins:[],
       chartArr:[],
-      label: '24 Hours',
-
+      label: '24 Hours', //default label 
     }
   }
-
+  
   render() {
  
     return (

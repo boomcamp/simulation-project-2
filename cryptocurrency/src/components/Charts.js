@@ -1,4 +1,3 @@
-
 import React, { PureComponent } from 'react';
 
 import {
@@ -12,7 +11,7 @@ export default class Example extends PureComponent {
   render() {
     return (
       < AreaChart
-        width={600}
+        width={800}
         height={400}
         data={this.props.chartArr}
         margin={{

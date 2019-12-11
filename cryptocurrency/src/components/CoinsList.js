@@ -3,7 +3,7 @@ import MaterialTable from 'material-table';
 import '../App.css';
 
 import axios from 'axios'
-
+ 
 export default function Coinslist(props) {
  
   const [state, setState] = useState({
@@ -18,7 +18,8 @@ export default function Coinslist(props) {
           },
           { title: 'Name', field: 'name' },
           { title: 'Symbol', field: 'symbol' },
-          { title: 'Current Price', field: 'current_price' },
+          { title: 'Current Price', field: 'current_price',
+          render: rowData => <span style={{color:rowData.current_price >0 ? 'green': 'red'}}>{rowData.current_price}</span> },
           { title: 'Total Volume', field: 'total_volume' },
     ],
     data: []
