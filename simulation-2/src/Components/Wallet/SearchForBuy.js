@@ -7,6 +7,17 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import { withStyles } from '@material-ui/styles';
 import { makeStyles } from '@material-ui/core/styles';
 
+import IconButton from '@material-ui/core/IconButton';
+import Input from '@material-ui/core/Input';
+import FilledInput from '@material-ui/core/FilledInput';
+import OutlinedInput from '@material-ui/core/OutlinedInput';
+import InputLabel from '@material-ui/core/InputLabel';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import FormHelperText from '@material-ui/core/FormHelperText';
+import FormControl from '@material-ui/core/FormControl';
+import Visibility from '@material-ui/icons/Visibility';
+import VisibilityOff from '@material-ui/icons/VisibilityOff';
+import Buy from './Buy'
 
 function sleep(delay = 0) {
   return new Promise(resolve => {
@@ -14,11 +25,30 @@ function sleep(delay = 0) {
   });
 }
 
-export default function SearchForBuy() {
+export default function SearchForBuy(props) {
     const [open, setOpen] = React.useState(false);
     const [options, setOptions] = React.useState([]);
     const loading = open && options.length === 0;
+    const [selected, setSelected] = React.useState();
+    const [amount, setAmount] = React.useState();
+    const [coin, setCoin] = React.useState();
 
+    const [coinValue, setCoinValue] = React.useState();
+
+    const [state, setState] = React.useState({
+      Amount_to_invest:0,
+      Bitcoin_value: 0
+    })
+
+    const changeValue = (value, type) => {
+      if(type === 'amount'){
+        setCoin(value / coinValue)
+      }
+      if(type === 'coin'){
+        setAmount(value * coinValue)
+      }
+    }
+    
     const classes = useStyles();
   
     React.useEffect(() => {
@@ -34,11 +64,9 @@ export default function SearchForBuy() {
         const cryptocoin = await response.json();
   
         if (active) {
-            //   setOptions(Object.keys(cryptocoin).map(key => cryptocoin[key]));
             setOptions(cryptocoin.map(coin=>{
                 return {
                     name: coin.name + '(' + coin.symbol+')',
-                    // id: coin.id 
                 }
             }))
         }
@@ -56,16 +84,27 @@ export default function SearchForBuy() {
 
 
     }, [open]);
-  
-    
-    return (
 
+    const getCoinDetails = (name) => {
+      (async () => {
+        const response = await fetch('https://api.coingecko.com/api/v3/coins/list');
+        // await sleep(1e3); // For demo purposes.
+        const cryptocoin = await response.json();
+        let coinobj = cryptocoin.filter((coin)=>{
+          return coin.name === name
+        })
+        const coinDetails = await fetch(`https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=${coinobj[0].id}&order=market_cap_desc&per_page=100&page=1&sparkline=false
+        `)
+        const coinres = await coinDetails.json();
+        setCoinValue(coinres[0].current_price)
+        setSelected(coinobj[0].id);
+      })();
+    }
+
+    return (
     <>
       <StyledaAutocomplete
         id="asynchronous-demo"
-        // style={{margin:'10px',color: 'white'}}
-        // style={{color:'white!important'}}
-
         open={open}
         onOpen={() => {
           setOpen(true);
@@ -77,9 +116,10 @@ export default function SearchForBuy() {
         getOptionLabel={option => option.name}
         options={options}
         loading={loading}
-        
-        onChange={(e)=>{console.log(e.target.getAttribute('data-option-index'))}}
-
+        onChange={(e)=>{
+          let coinName =  e.target.textContent.split('(')[0]
+          getCoinDetails(coinName)
+        }}
         renderInput={params => (
           <TextField
             classes={{root:classes.root}}
@@ -94,12 +134,46 @@ export default function SearchForBuy() {
                   {loading ? <CircularProgress color="inherit" size={20} /> : null}
                   { params.InputProps.endAdornment}
                 </React.Fragment>
-            
               ),
             }}
           />
         )}
       />
+
+        <FormControl fullWidth className={classes.margin} variant="outlined" style={{margin:'10px', width: '318px'}}>
+          <InputLabel htmlFor="outlined-adornment-amount">Amount</InputLabel>
+          <OutlinedInput
+            id="outlined-adornment-amount"
+            value={amount}
+            onChange={(e)=>{
+              setAmount(e.target.value)
+              changeValue(e.target.value,'amount')
+            }}
+            startAdornment={<InputAdornment position="start">$</InputAdornment>}
+            labelWidth={60}
+            type='number'
+            defaultValue={0}
+          />
+        </FormControl>
+
+        <FormControl fullWidth className={classes.margin} variant="outlined" style={{margin:'10px', width: '318px'}}>
+          <InputLabel htmlFor="outlined-adornment-amount">Coin</InputLabel>
+          <OutlinedInput
+            id="outlined-adornment-amount"
+            value={coin}
+            onChange={(e)=>{
+              setCoin(e.target.value)
+              changeValue(e.target.value,'coin')
+            }}
+            startAdornment={<InputAdornment position="start">C</InputAdornment>}
+            labelWidth={60}
+            type='number'
+            defaultValue={0}
+          />
+        </FormControl>
+      
+            <Buy selected={selected} BuyAmount={amount} CoinValue={coinValue} NumOfCoin={coin}/>
+      
       </>
     );
 }
@@ -107,11 +181,8 @@ export default function SearchForBuy() {
 const useStyles = makeStyles(theme => ({
   root: {
     '& .PrivateNotchedOutline-root-110.MuiOutlinedInput-notchedOutline, .MuiFormLabel-root, .MuiInputLabel-root,.MuiInputLabel-formControl,.MuiInputLabel-animated,.MuiInputLabel-outlined': {
-      // margin: theme.spacing(1),
-      // width: 200,
       borderColor: 'rgb(3, 36, 64)',
       color: 'white!important'
-
     },
     '& .MuiOutlinedInput-root.Mui-focused .PrivateNotchedOutline-root-110.MuiOutlinedInput-notchedOutline':{
       borderColor: 'white',
@@ -122,7 +193,6 @@ const useStyles = makeStyles(theme => ({
 
 const StyledButton = withStyles({
   inputMarginDense: {
-    // background: 'white',
     borderColor:'white'
   },
   label: {
