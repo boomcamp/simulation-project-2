@@ -1,3 +1,76 @@
 {
-  "transactions": []
+  "transactions": [
+    {
+      "coin": "Ethereum",
+      "transaction": "Buy",
+      "price": 145.35,
+      "quantity": "1",
+      "amount": 145.35,
+      "id": 1
+    },
+    {
+      "coin": "Ethereum",
+      "transaction": "Buy",
+      "price": 145.35,
+      "quantity": "11",
+      "amount": 1598.85,
+      "id": 2
+    },
+    {
+      "coin": "Bitcoin",
+      "transaction": "Buy",
+      "price": 7223.76,
+      "quantity": "4",
+      "amount": 28895.04,
+      "id": 6
+    },
+    {
+      "coin": "Bitcoin",
+      "transaction": "Buy",
+      "price": 7223.76,
+      "quantity": "1",
+      "amount": 7223.76,
+      "id": 7
+    },
+    {
+      "coin": "Bitcoin",
+      "transaction": "Buy",
+      "price": 7228.38,
+      "quantity": "1",
+      "amount": 7228.38,
+      "id": 8
+    },
+    {
+      "coin": "Bitcoin",
+      "transaction": "Buy",
+      "price": 7230.73,
+      "quantity": "3",
+      "amount": 21692.19,
+      "id": 9
+    },
+    {
+      "coin": "Bitcoin",
+      "transaction": "Buy",
+      "price": 7240.59,
+      "quantity": "1",
+      "amount": 7240.59,
+      "id": 10
+    },
+    {
+      "coin": "Bitcoin",
+      "transaction": "Buy",
+      "price": 7240.59,
+      "quantity": "10",
+      "amount": 72405.9,
+      "id": 11
+    },
+    {
+      "coin": "Bitcoin",
+      "transaction": "Buy",
+      "price": 7240.81,
+      "quantity": "1",
+      "amount": 7240.81,
+      "id": 12
+    }
+  ]
 }

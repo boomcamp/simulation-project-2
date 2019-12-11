@@ -8,20 +8,19 @@ import CoinTable from './CoinTable/CoinTable';
 import LineGraph from './LineGraph/LineGraph';
 import CoinPerDay from './CoinPerDay/CoinPerDay';
 
+import { Header } from './../../layout';
 export default function CoinDetails(props) {
 	const [coin, setCoin] = useState({});
 	const [loading, setLoading] = useState(false);
 	const [alignment, setAlignment] = useState('1');
 
 	useEffect(() => {
-		setTimeout(() => {
-			Axios.get(
-				`https://api.coingecko.com/api/v3/coins/${props.match.params.id}`
-			).then(res => {
-				setCoin(res.data);
-				setLoading(true);
-			});
-		}, 1000);
+		Axios.get(
+			`https://api.coingecko.com/api/v3/coins/${props.match.params.id}`
+		).then(res => {
+			setCoin(res.data);
+			setLoading(true);
+		});
 	}, []);
 
 	const handleChange = (event, newAlignment) => {
@@ -30,6 +29,7 @@ export default function CoinDetails(props) {
 	if (loading) {
 		return (
 			<React.Fragment>
+				<Header id={coin.id} />
 				<CoinMain coin={coin} />
 				<CoinDescription description={coin.description.en} />
 				<CoinTable market_data={coin.market_data} />

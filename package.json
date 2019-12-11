@@ -1,15 +1,15 @@
 {
-  "name": "simulation-project-2",
-  "version": "1.0.0",
-  "description": "## Project Overview",
-  "main": "index.js",
-  "dependencies": {
-    "json-server": "^0.15.1"
-  },
-  "devDependencies": {},
-  "scripts": {
-    "server": "json-server -p 4000 db.json"
-  },
-  "author": "",
-  "license": "ISC"
+	"name": "simulation-project-2",
+	"version": "1.0.0",
+	"description": "## Project Overview",
+	"main": "index.js",
+	"dependencies": {
+		"json-server": "^0.15.1"
+	},
+	"devDependencies": {},
+	"scripts": {
+		"server": "json-server -p 4000 db.json"
+	},
+	"author": "",
+	"license": "ISC"
 }

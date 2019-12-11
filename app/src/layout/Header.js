@@ -8,10 +8,10 @@ import {
 	makeStyles
 } from '@material-ui/core';
 
-export default function Header() {
+export default function Header(props) {
 	const classes = useStyles();
 	return (
-		<AppBar position="static" className={classes.nav}>
+		<AppBar position="fixed" className={classes.nav}>
 			<Toolbar>
 				<Typography variant="h5" className={classes.title}>
 					Simulation Project 2
@@ -19,6 +19,11 @@ export default function Header() {
 				<Link to="/" className={classes.link}>
 					<Button>Coins</Button>
 				</Link>
+				{props.id ? (
+					<Link to={`/transaction/${props.id}`} className={classes.link}>
+						<Button>Transaction</Button>
+					</Link>
+				) : null}
 			</Toolbar>
 		</AppBar>
 	);

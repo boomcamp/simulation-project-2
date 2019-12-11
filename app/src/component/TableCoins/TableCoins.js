@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Axios from 'axios';
+import { Header } from './../../layout';
 import {
 	makeStyles,
 	Paper,
@@ -32,14 +33,12 @@ export default function TableContent(props) {
 	});
 
 	useEffect(() => {
-		setTimeout(() => {
-			Axios.get(
-				'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=250&page=1&sparkline=false'
-			).then(res => {
-				setState({ ...state, data: res.data });
-				setLoading(true);
-			});
-		}, 3000);
+		Axios.get(
+			'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=250&page=1&sparkline=false'
+		).then(res => {
+			setState({ ...state, data: res.data });
+			setLoading(true);
+		});
 	}, []);
 	const handleChangePage = (event, newPage) => {
 		setPage(newPage);
@@ -58,70 +57,73 @@ export default function TableContent(props) {
 	});
 	if (loading) {
 		return (
-			<Paper className={classes.root}>
-				<div className={classes.tableWrapper}>
-					<Table stickyHeader aria-label="sticky table">
-						<TableHead>
-							<TableRow>
-								{state.columns.map(column => (
-									<TableCell
-										key={column.id}
-										align={column.align}
-										style={{ minWidth: column.minWidth }}
-										className={classes.head}
-									>
-										{column.label}
-									</TableCell>
-								))}
-							</TableRow>
-						</TableHead>
-						<TableBody>
-							{state.data
-								.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-								.map(column => {
-									return (
-										<TableRow
-											hover
+			<React.Fragment>
+				<Header />
+				<Paper className={classes.root}>
+					<div className={classes.tableWrapper}>
+						<Table stickyHeader aria-label="sticky table">
+							<TableHead>
+								<TableRow>
+									{state.columns.map(column => (
+										<TableCell
 											key={column.id}
-											onClick={() => handleClick(column.id)}
-											style={{ cursor: 'pointer' }}
+											align={column.align}
+											style={{ minWidth: column.minWidth }}
+											className={classes.head}
 										>
-											<TableCell>{column.market_cap_rank}</TableCell>
-											<TableCell align="center">
-												<img
-													className={classes.image}
-													src={column.image}
-													alt=""
-												/>
-											</TableCell>
-											<TableCell>{column.name}</TableCell>
-											<TableCell>{column.symbol}</TableCell>
-											<TableCell>
-												{formatter.format(column.current_price)}
-											</TableCell>
-											<TableCell>
-												{formatter.format(column.price_change_24h)}
-											</TableCell>
-											<TableCell>
-												{formatter.format(column.circulating_supply)}
-											</TableCell>
-											<TableCell>{column.last_updated}</TableCell>
-										</TableRow>
-									);
-								})}
-						</TableBody>
-					</Table>
-				</div>
-				<TablePagination
-					rowsPerPageOptions={[15, 25, 50, 100, 250]}
-					component="div"
-					count={state.data.length}
-					rowsPerPage={rowsPerPage}
-					page={page}
-					onChangePage={handleChangePage}
-					onChangeRowsPerPage={handleChangeRowsPerPage}
-				/>
-			</Paper>
+											{column.label}
+										</TableCell>
+									))}
+								</TableRow>
+							</TableHead>
+							<TableBody>
+								{state.data
+									.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+									.map(column => {
+										return (
+											<TableRow
+												hover
+												key={column.id}
+												onClick={() => handleClick(column.id)}
+												style={{ cursor: 'pointer' }}
+											>
+												<TableCell>{column.market_cap_rank}</TableCell>
+												<TableCell align="center">
+													<img
+														className={classes.image}
+														src={column.image}
+														alt=""
+													/>
+												</TableCell>
+												<TableCell>{column.name}</TableCell>
+												<TableCell>{column.symbol}</TableCell>
+												<TableCell>
+													{formatter.format(column.current_price)}
+												</TableCell>
+												<TableCell>
+													{formatter.format(column.price_change_24h)}
+												</TableCell>
+												<TableCell>
+													{formatter.format(column.circulating_supply)}
+												</TableCell>
+												<TableCell>{column.last_updated}</TableCell>
+											</TableRow>
+										);
+									})}
+							</TableBody>
+						</Table>
+					</div>
+					<TablePagination
+						rowsPerPageOptions={[15, 25, 50, 100, 250]}
+						component="div"
+						count={state.data.length}
+						rowsPerPage={rowsPerPage}
+						page={page}
+						onChangePage={handleChangePage}
+						onChangeRowsPerPage={handleChangeRowsPerPage}
+					/>
+				</Paper>
+			</React.Fragment>
 		);
 	} else {
 		return (
@@ -135,7 +137,7 @@ export default function TableContent(props) {
 const useStyles = makeStyles({
 	root: {
 		width: '100%',
-		marginTop: 60
+		marginTop: 80
 	},
 	tableWrapper: {
 		maxHeight: 649,

@@ -1,9 +1,8 @@
 import React from 'react';
 
 import { Grid } from '@material-ui/core';
-
 import './CoinMain.css';
-function CoinMain(props) {
+export default function CoinMain(props) {
 	const formatter = new Intl.NumberFormat('en-US', {
 		style: 'currency',
 		currency: 'USD',
@@ -39,5 +38,3 @@ function CoinMain(props) {
 		</div>
 	);
 }
-
-export default CoinMain;
