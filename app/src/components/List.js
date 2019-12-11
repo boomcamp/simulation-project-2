@@ -31,12 +31,6 @@ const theme = createMuiTheme({
 	}
 });
 
-const formatter = new Intl.NumberFormat("en-US", {
-	style: "currency",
-	currency: "USD",
-	minimumFractionDigits: 2
-});
-
 export default function Stats(props) {
 	const classes = useStyles();
 	const [coin, setCoin] = useState(null);
@@ -68,6 +62,12 @@ export default function Stats(props) {
 		return { onehour, oneday, sevendays, fourteendays, thirtydays, oneyear };
 	}
 
+	const formatter = new Intl.NumberFormat("en-US", {
+		style: "currency",
+		currency: "USD",
+		minimumFractionDigits: 2
+	});
+
 	const rows = [
 		createData(
 			props.priceHourPChange,
@@ -80,7 +80,7 @@ export default function Stats(props) {
 	];
 
 	if (transaction) {
-		return <Transaction symbol={props.symbol} price={props.priceData.usd} buy={buy} />;
+		return <Transaction symbol={props.symbol} price={props.priceData.usd} buy={buy} formatter={formatter} />;
 	}
 	return (
 		<Slide direction="right" in={true}>

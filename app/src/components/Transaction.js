@@ -35,8 +35,9 @@ const useStyles = makeStyles(theme => ({
 }));
 export default function Transaction(props) {
 	const classes = useStyles();
-	const [coin, setCoin] = useState(0);
-	const [amount, setAmount] = useState(0);
+	const [coin, setCoin] = useState("");
+	const [amount, setAmount] = useState("");
+	const [fee, setFee] = useState(0);
 	return (
 		<Slide direction="left" in>
 			<Paper className={classes.root} elevation={0} square={true}>
@@ -74,9 +75,13 @@ export default function Transaction(props) {
 								value={coin}
 								type="number"
 								onChange={e => {
-									setAmount(e.target.value / props.price);
-									setCoin(e.target.value);
+									if (e.target.value > -1) {
+										setAmount(+e.target.value / props.price);
+										setCoin(+e.target.value);
+										setFee(+e.target.value * 0.1);
+									}
 								}}
+								autoFocus={true}
 							/>
 							<SyncAltIcon />
 							<TextField
@@ -89,8 +94,11 @@ export default function Transaction(props) {
 								type="number"
 								value={amount}
 								onChange={e => {
-									setCoin(e.target.value * props.price);
-									setAmount(e.target.value);
+									if (e.target.value > -1) {
+										setCoin(+e.target.value * props.price);
+										setAmount(+e.target.value);
+										setFee(+e.target.value * props.price * 0.1);
+									}
 								}}
 							/>
 						</Grid>
@@ -98,7 +106,7 @@ export default function Transaction(props) {
 						<Grid container item xs={12} spacing={1} justify="center">
 							<Grid item>
 								<Button variant="contained" size="large" color="primary" style={{ marginTop: "20px" }}>
-									Buy
+									Confirm
 								</Button>
 							</Grid>
 							<Grid item>
@@ -127,8 +135,22 @@ export default function Transaction(props) {
 						</Grid>
 						<Grid item xs={12}>
 							<Typography variant="h6" align="center">
-								&#64; &#36;{`${props.price}`} per {props.symbol}
+								&#64; {`${props.formatter.format(props.price)}`} per {props.symbol}
 							</Typography>
+						</Grid>
+						<Grid item container xs={12} style={{ padding: "20px 20%" }}>
+							<Grid container item xs={12} justify="space-between">
+								<Typography variant="h6">Fee:</Typography>
+								<Typography variant="h6">{props.formatter.format(coin)}</Typography>
+							</Grid>
+							<Grid container item xs={12} justify="space-between">
+								<Typography variant="h6">Transaction Fee:</Typography>
+								<Typography variant="h6">{props.formatter.format(Math.round(fee * 10000) / 10000)}</Typography>
+							</Grid>
+							<Grid container item xs={12} justify="space-between">
+								<Typography variant="h6">Total:</Typography>
+								<Typography variant="h6">{props.formatter.format(coin + fee)}</Typography>
+							</Grid>
 						</Grid>
 					</Grid>
 				</Grid>
