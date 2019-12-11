@@ -8,6 +8,7 @@ import Currency from "./components/Currency/Currency";
 import Table from "./components/Table/Table";
 import Details from "./components/Details/Details";
 import Entries from "./components/Entries/Entries";
+import Investments from "./components/Investments/Investments";
 
 const MainDiv = styled.div``;
 const TableDiv = styled.div`
@@ -77,6 +78,14 @@ export default class Routes extends React.Component {
             </MainDiv>
           )}
           path="/details/:id"
+        />
+        <Route
+          render={() => (
+            <MainDiv>
+              <Investments />
+            </MainDiv>
+          )}
+          path="/investments"
         />
       </Switch>
     );

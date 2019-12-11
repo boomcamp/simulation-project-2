@@ -1,5 +1,6 @@
 import React from "react";
 import axios from "axios";
+import { toast } from "react-toastify";
 import ReactHtmlParser from "react-html-parser";
 import {
   MDBTable,
@@ -47,7 +48,8 @@ export default class Details extends React.Component {
     this.state = {
       details: [],
       toggleModal: false,
-      cryptValue: " "
+      cryptValue: "",
+      amountValue: ""
     };
   }
 
@@ -134,11 +136,59 @@ export default class Details extends React.Component {
     this.setState({ toggleModal: false });
   };
 
-  handleAmount = val => {
-    const crypt = val / this.state.current_price;
-    this.setState({
-      cryptValue: crypt
-    });
+  handleAmount = (val, option) => {
+    const crypt =
+      option === "amount"
+        ? val / this.state.current_price
+        : val * this.state.current_price;
+    option === "amount"
+      ? this.setState({
+          cryptValue: crypt,
+          amountValue: val
+        })
+      : this.setState({
+          amountValue: crypt,
+          cryptValue: val
+        });
+  };
+
+  handleInvest = e => {
+    e.preventDefault();
+    const tempDate = new Intl.DateTimeFormat("en-US", {
+      year: "numeric",
+      month: "short",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit"
+    }).format(Date.now());
+    const coinDetails = {
+      coin: this.props.match.params.id,
+      price: this.state.current_price,
+      image: this.state.logo,
+      name: this.state.details.name,
+      symbol: this.state.details.symbol
+    };
+    const Obj = {
+      date: tempDate,
+      invested: this.state.cryptValue,
+      amount: this.state.amountValue,
+      currency: this.props.currency.value,
+      details: coinDetails
+    };
+    axios
+      .post(`http://localhost:4000/transactions`, Obj)
+      .then(() => {
+        toast.success(
+          this.props.currency.unit +
+            " " +
+            Number(Math.round(this.state.amountValue + "e2") + "e-2") +
+            " successfully invested in " +
+            this.state.details.name
+        );
+      })
+      .catch(() => {
+        toast.error("Try again later!");
+      });
   };
   render() {
     return (
@@ -283,55 +333,65 @@ export default class Details extends React.Component {
           </Table>
         </ContainerTwo>
         <Dialog open={this.state.toggleModal} onClose={this.handleClose}>
-          <DialogTitle>
-            <img
-              src={this.state.logo}
-              alt=""
-              style={{ width: "60px", height: "50px", paddingRight: "15px" }}
-            />
-            {this.state.details.name}
-          </DialogTitle>
-          <DialogContent>
-            <select
-              className="custom-select"
-              style={{ width: "500px", height: "42px" }}
-            >
-              <option value="10">Payment Method</option>
-              <option value="10">Visa</option>
-              <option value="50">MasterCard</option>
-              <option value="100">Bank Transfer</option>
-            </select>
-            <Divider />
-            <Typography
-              variant="h6"
-              component="h6"
-              style={{ paddingBottom: "10px" }}
-            >
-              Amount
-            </Typography>
-            <Amount>
-              <TextField
-                label={this.props.currency.value.toUpperCase()}
-                variant="outlined"
-                onChange={e => this.handleAmount(e.target.value)}
+          <form onSubmit={e => this.handleInvest(e)}>
+            <DialogTitle>
+              <img
+                src={this.state.logo}
+                alt=""
+                style={{ width: "60px", height: "50px", paddingRight: "15px" }}
               />
-              <MDBIcon icon="exchange-alt" style={{ padding: "20px" }} />
-              <TextField
-                label={this.state.details.symbol}
-                variant="outlined"
-                style={{ textTransform: "uppercase" }}
-                value={this.state.cryptValue}
-              />
-            </Amount>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={this.handleClose} color="primary">
-              Cancel
-            </Button>
-            <Button onClick={this.handleClose} color="primary" autoFocus>
-              Buy
-            </Button>
-          </DialogActions>
+              {this.state.details.name}
+            </DialogTitle>
+            <DialogContent>
+              <select
+                className="custom-select"
+                style={{ width: "500px", height: "42px" }}
+              >
+                <option value="10">Payment Method</option>
+                <option value="10">Visa</option>
+                <option value="50">MasterCard</option>
+                <option value="100">Bank Transfer</option>
+              </select>
+              <Divider />
+              <Typography
+                variant="h6"
+                component="h6"
+                style={{ paddingBottom: "10px" }}
+              >
+                Amount
+              </Typography>
+              <Amount>
+                <TextField
+                  label={this.props.currency.value}
+                  variant="outlined"
+                  style={{ textTransform: "uppercase" }}
+                  value={this.state.amountValue}
+                  onChange={e => this.handleAmount(+e.target.value, "amount")}
+                />
+                <MDBIcon icon="exchange-alt" style={{ padding: "20px" }} />
+                <TextField
+                  label={this.state.details.symbol}
+                  variant="outlined"
+                  style={{ textTransform: "uppercase" }}
+                  value={this.state.cryptValue}
+                  onChange={e => this.handleAmount(+e.target.value, "crypt")}
+                />
+              </Amount>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={this.handleClose} color="primary">
+                Cancel
+              </Button>
+              <Button
+                color="primary"
+                type="submit"
+                onClick={this.handleClose}
+                autoFocus
+              >
+                Invest
+              </Button>
+            </DialogActions>
+          </form>
         </Dialog>
       </MainDiv>
     );

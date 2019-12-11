@@ -28,19 +28,6 @@ const ImgLogo = styled.img`
   height: 45px;
 `;
 class Sidenav extends React.Component {
-  constructor() {
-    super();
-    this.state = {
-      toggle: false
-    };
-  }
-  handleDrawerOpen = () => {
-    this.setState({ toggle: true });
-  };
-  handleDrawerClose = () => {
-    this.setState({ toggle: false });
-  };
-
   render() {
     const { classes } = this.props;
     return (
@@ -49,17 +36,17 @@ class Sidenav extends React.Component {
         <AppBar
           position="fixed"
           className={clsx(classes.appBar, {
-            [classes.appBarShift]: this.state.toggle
+            [classes.appBarShift]: this.props.toggle
           })}
         >
           <Toolbar>
             <IconButton
               color="inherit"
               aria-label="open drawer"
-              onClick={this.handleDrawerOpen}
+              onClick={this.props.handleDrawerOpen}
               edge="start"
               className={clsx(classes.menuButton, {
-                [classes.hide]: this.state.toggle
+                [classes.hide]: this.props.toggle
               })}
             >
               <MenuIcon />
@@ -67,27 +54,24 @@ class Sidenav extends React.Component {
             <Link to={"/"}>
               <ImgLogo src={Logo} alt="" />
             </Link>
-            {/* <Typography noWrap>
-              <b style={{ fontSize: "12px" }}>Investment Tracker</b>
-            </Typography> */}
           </Toolbar>
         </AppBar>
         <Drawer
           variant="permanent"
           className={clsx(classes.drawer, {
-            [classes.drawerOpen]: this.state.toggle,
-            [classes.drawerClose]: !this.state.toggle
+            [classes.drawerOpen]: this.props.toggle,
+            [classes.drawerClose]: !this.props.toggle
           })}
           classes={{
             paper: clsx({
-              [classes.drawerOpen]: this.state.toggle,
-              [classes.drawerClose]: !this.state.toggle
+              [classes.drawerOpen]: this.props.toggle,
+              [classes.drawerClose]: !this.props.toggle
             })
           }}
-          open={this.state.toggle}
+          open={this.props.toggle}
         >
           <div className={classes.toolbar}>
-            <IconButton onClick={this.handleDrawerClose}>
+            <IconButton onClick={this.props.handleDrawerClose}>
               {classes.direction === "rtl" ? (
                 <ChevronRightIcon />
               ) : (
@@ -110,7 +94,9 @@ class Sidenav extends React.Component {
                       <HomeOutlinedIcon />
                     </Link>
                   ) : index === 1 ? (
-                    <ViewListOutlinedIcon />
+                    <Link to={"/investments"} style={{ color: "grey" }}>
+                      <ViewListOutlinedIcon />
+                    </Link>
                   ) : index === 2 ? (
                     <ShoppingCartOutlinedIcon />
                   ) : index === 3 ? (

@@ -3,12 +3,15 @@ import axios from "axios";
 import { HashRouter } from "react-router-dom";
 import "./App.css";
 import Sidenav from "./components/Sidenav/Sidenav";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default class App extends React.Component {
   constructor() {
     super();
     this.state = {
       isLoading: false,
+      toggle: false,
       url:
         "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&price_change_percentage=1h%2C24h%2C7d&sparkline=true",
       activePage: 1,
@@ -111,9 +114,17 @@ export default class App extends React.Component {
     );
   };
 
+  handleDrawerOpen = () => {
+    this.setState({ toggle: true });
+  };
+  handleDrawerClose = () => {
+    this.setState({ toggle: false });
+  };
+
   render() {
     return (
       <HashRouter>
+        <ToastContainer />
         <Sidenav
           currencies={this.state.currencies}
           handleChange={this.handleChange}
@@ -126,6 +137,9 @@ export default class App extends React.Component {
           handleEntries={this.handleEntries}
           dataPerPage={this.state.dataPerPage}
           totalEntries={this.state.totalEntries}
+          handleDrawerOpen={this.handleDrawerOpen}
+          handleDrawerClose={this.handleDrawerClose}
+          toggle={this.state.toggle}
         />
       </HashRouter>
     );
