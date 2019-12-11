@@ -213,7 +213,7 @@ export default function AcccessibleTable(props) {
                      onChange={e => {
                         setCoin(e.target.value * price.usd);
                         setAmount(e.target.value);
-                        props.coi(e.target.value, coin);
+                        // props.coi(e.target.value, coin);
                      }}
                   />
                </Paper>

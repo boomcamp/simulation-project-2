@@ -146,7 +146,7 @@ export default function AcccessibleTable(props) {
                         ...........................
                      </span>{" "}
                      ${" "}
-                     {Math.round((props.amount + props.amount * 0.1) * 1000) /
+                     {Math.round((+props.amount + +props.amount * 0.1) * 1000) /
                         1000}
                   </p>
                </div>
