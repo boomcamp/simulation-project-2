@@ -1,16 +1,16 @@
 import React from 'react';
-import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
-import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
-import Paper from '@material-ui/core/Paper';
+// import Paper from '@material-ui/core/Paper';
+// import clsx from 'clsx';
+// import Container from '@material-ui/core/Container';
 
 import NavBar from './tools/NavBar'
 // import Title from './tools/Title'
 // import CryptoInvestedCoins from './CryptoInvestedCoins';
 // import CyptoBuy from './CyptoBuy'
-import CryptoTable from './coinsTable/CryptoTable';
+import CryptoTable from './CryptoTable';
 import Copyright from './tools/Copyright'
 
 
@@ -41,7 +41,7 @@ const useStyles = makeStyles(theme => ({
 
 export default function Dashboard() {
   const classes = useStyles();
-  const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
+  // const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
   return (
     <div className={classes.root}>
@@ -66,7 +66,7 @@ export default function Dashboard() {
                 <CryptoTable />
             </Grid>
           {/* </Grid> */}
-          <Box pt={4}>
+          <Box style={{padding:`80px 0 30px 0`}}>
             <Copyright />
           </Box>
         {/* </Container> */}

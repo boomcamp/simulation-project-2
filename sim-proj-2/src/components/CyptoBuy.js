@@ -2,35 +2,18 @@ import React, {useEffect, useState} from 'react';
 import Select from 'react-select';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
-import NumberFormat from 'react-number-format';
+import CompareArrows from '@material-ui/icons/CompareArrows';
+import InputAdornment from '@material-ui/core/InputAdornment';
 import axios from 'axios'
 import {Redirect} from 'react-router-dom'
+import { withSnackbar } from 'notistack';
 
 import Title from './tools/Title'
 // import ProfilePic from '../assest/download.jpeg'
 
-function NumberFormatCustom({ inputRef, onChange, ...other }) {
-  return (
-    <NumberFormat
-      {...other}
-      getInputRef={inputRef}
-      onValueChange={values => {
-        onChange({
-          target: {
-            value: values.value,
-          },
-        });
-      }}
-      thousandSeparator
-      isNumericString
-      prefix="$ "
-    />
-  );
-}
-
-export default function CyptoBuy() {
+function CyptoBuy({closeFn, enqueueSnackbar}) {
     const [redirect, setRedirect] = useState(false);
-    const [amount, setAmount] = useState();
+    const [amount, setAmount] = useState({ cash: 0, cryptoCoin: 0 });
     const [coins, setCoins] = useState([]);
     const [state, setState] = useState();
 
@@ -40,9 +23,9 @@ export default function CyptoBuy() {
             .get(`https://api.coingecko.com/api/v3/coins/markets?vs_currency=USD&per_page=600&page=1&sparkline=false&price_change_percentage=1h%2C24h%2C7d`)
             .then(res => {
                 let temp=[]
-                res.data.map(coin => { return temp.push({ id: coin.id, 
+                res.data.map(coin => { return temp.push({ id: coin.id,
                                                           // img: coin.image, 
-                                                          // value: coin.name,
+                                                          // value: {name: coin.name, sym: coin.symbol},
                                                           price: coin.current_price,                                                          
                                                           label: `${coin.name} (${coin.symbol.toUpperCase()})`
                                                         }) 
@@ -64,14 +47,23 @@ export default function CyptoBuy() {
             coinId: state.id,
             // coinImage: state.img,
             // coinName: state.value,
-            amountBuy: amount,
+            amountBuy: amount.cash,
             coinPrice: state.price,
-            profitOrLoss: (state.price * amount) - (state.price * amount)
+            profitOrLoss: (state.price * amount.cash) - (state.price * amount.cash)
           })
           .then(res => {console.log(res)})
         
         setRedirect(true);
+        closeFn();
+        enqueueSnackbar("Successfully Invested", {variant: 'success', autoHideDuration: 1000});
       }
+    }
+
+    const handleEnterAmount = (money, type) => {
+      (type === "cash") ?
+        setAmount({cash: money, cryptoCoin: (money/state.price)})
+      :
+        setAmount({cash: (state.price*money), cryptoCoin: money})
     }
 
     if(redirect) 
@@ -83,19 +75,44 @@ export default function CyptoBuy() {
           <Select 
               placeholder="Cryptocurrency to Invest"
               value={state} 
-              onChange={(state) => setState(state)} 
+              onChange={(state) => { setState(state); 
+                                     setAmount({cash: amount.cash, cryptoCoin: (amount.cash/state.price)})
+                                    }} 
               options={coins} loading={true} 
               className="profileBuySell" />
-          <TextField
-              InputProps={{
-                  inputComponent: NumberFormatCustom
-              }}
-              label="Amount" 
-              className="profileBuySell" 
-              style={{margin: `0 0 15px 0`}}
-              onChange={(e) => setAmount(e.target.value)}
-              value={amount} 
-              required />
+
+          <div style={{display:`flex`, alignItems:`center`, justifyContent:`space-around`, flexDirection:`column`}}>
+              <TextField
+                  type="number"
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start"> $ </InputAdornment>
+                    ),
+                  }}
+                  label="Amount" 
+                  className="profileBuySell" 
+                  style={{margin: `0 0 15px 0`,width:`95%`}}
+                  onChange={(e) => handleEnterAmount(e.target.value, "cash")}
+                  value={amount.cash} 
+                  required
+                  disabled={(state === undefined) ? true : false} />
+              <CompareArrows style={{width:`20%`}} />
+              <TextField
+                  type="number"
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start"> ℂ </InputAdornment>
+                    ),
+                  }}
+                  label="Cryptocurrency" 
+                  className="profileBuySell" 
+                  style={{margin: `0 0 15px 0`,width:`95%`}}
+                  onChange={(e) =>  handleEnterAmount(e.target.value, "crypto")}
+                  value={amount.cryptoCoin} 
+                  required 
+                  disabled={(state === undefined) ? true : false} />          
+          </div>
+
           <Button 
               variant="contained" 
               color="primary" 
@@ -105,3 +122,5 @@ export default function CyptoBuy() {
       </div>
     );
 }
+
+export default withSnackbar(CyptoBuy)

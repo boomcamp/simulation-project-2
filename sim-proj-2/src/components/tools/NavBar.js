@@ -8,7 +8,7 @@ import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import Typography from '@material-ui/core/Typography';
+// import Typography from '@material-ui/core/Typography';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -105,9 +105,9 @@ export default function NavBar() {
                 >
                     <MenuIcon />
                 </IconButton>
-                <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
+                {/* <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
                     Simulation Project 2
-                </Typography>
+                </Typography> */}
                 </Toolbar>
             </AppBar>
             <Drawer

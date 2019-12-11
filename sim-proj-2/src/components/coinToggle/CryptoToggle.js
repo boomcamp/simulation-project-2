@@ -1,17 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, Label} from 'recharts';
 import ToggleButton from '@material-ui/lab/ToggleButton';
 import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import CustomizedXAxisTick from '../CustomizedXAxisTick'
-import ChangesTable from './ChangesTable'
 import axios from 'axios'
+import PriceChanges from './PriceChanges'
+import QuickStats from './QuickStats'
+import CryptoChart from './CryptoChart'
 
-export default function CryptoChart({id}){
+export default function CryptoToggle({id, market_cap_rank, circulating_supply, high_24h, low_24h, price_change_24h, ath}){
   const [percentage, setPercentage] = useState({ oneH: 0, oneD: 0, oneW: 0, twoW: 0, oneM: 0, oneY: 0});
   const [data, setData] = useState();
   const [history, setHistory] = useState("1");
@@ -50,10 +45,10 @@ export default function CryptoChart({id}){
   return (
     <div style={{display:`flex`}}>
       <div>
-          <ChangesTable percentage={percentage}/>
+          <PriceChanges percentage={percentage}/>
           
           <ToggleButtonGroup
-              style={{margin:`30px 0 0 280px`}}
+              style={{margin:`30px 0 0 260px`}}
               value={history}
               exclusive
               onChange={(e, newDate) => setHistory(newDate)}
@@ -65,52 +60,16 @@ export default function CryptoChart({id}){
               <ToggleButton value="365" aria-label="1 year"> 1 Year </ToggleButton>
               <ToggleButton value="max" aria-label="max"> Max </ToggleButton>
           </ToggleButtonGroup>
-
-          <AreaChart  
-            style={{margin: `30px 0`}}
-            width={950}
-            height={300}
-            data={data}
-            margin={{ top: 10, right: 30, left: 20, bottom: 50,}}
-          >
-            <defs>
-              <linearGradient id="colorPv" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="#82ca9d" stopOpacity={1}/>
-                <stop offset="95%" stopColor="#82ca9d" stopOpacity={0.3}/>
-              </linearGradient>
-            </defs>
-            <CartesianGrid strokeDasharray="3 3" />
-            <YAxis type="number" domain={['auto', 'auto']} >
-              <Label angle={270} position="left" style={{ textAnchor: 'middle' }} >
-                  Price ($)
-              </Label>
-            </YAxis>
-            <XAxis dataKey="date" tick={<CustomizedXAxisTick/>} />
-            <Tooltip />
-            {/* <Legend /> */}
-            <Area type="monotone" dataKey="price" stroke="#82ca9d" fill="url(#colorPv)" dot={false} strokeWidth="2" />
-          </AreaChart>
+          
+          <CryptoChart data={data}/>
       </div>
 
-      <Table aria-label="simple table">
-          <TableHead>
-              <TableRow>
-                  <TableCell>Quick Stats</TableCell>
-              </TableRow>
-          </TableHead>
-
-          <TableBody>
-              <TableRow>
-                  <TableCell align="">sample</TableCell>
-              </TableRow>
-              <TableRow>
-                  <TableCell align="">sample</TableCell>
-              </TableRow>
-              <TableRow>
-                  <TableCell align="">sample</TableCell>
-              </TableRow>
-          </TableBody>
-      </Table>
+      <QuickStats market_cap_rank={market_cap_rank}
+                  circulating_supply={circulating_supply}
+                  high_24h={high_24h}
+                  low_24h={low_24h}
+                  price_change_24h={price_change_24h}
+                  ath={ath}/>
     </div>
   );
 }

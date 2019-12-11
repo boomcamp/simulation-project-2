@@ -5,7 +5,7 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import TrackChanges from '@material-ui/icons/TrackChanges';
-import LibraryAdd from '@material-ui/icons/AttachMoney';
+import AttachMoney from '@material-ui/icons/AttachMoney';
 import { makeStyles } from '@material-ui/core/styles';
 import Modal from '@material-ui/core/Modal';
 import Backdrop from '@material-ui/core/Backdrop';
@@ -37,6 +37,7 @@ const useStyles = makeStyles(theme => ({
 export default function ListItems() {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
+  
   return (
     <div>
        <Link to="/" style={{color:`black`, textDecoration:`none`}}>
@@ -59,7 +60,7 @@ export default function ListItems() {
         
         <ListItem button onClick={() => setOpen(true)}>
           <ListItemIcon title="Buy Cryptocurrency">
-            <LibraryAdd />
+            <AttachMoney />
           </ListItemIcon>
           <ListItemText primary="Buy Cryptocurrency" />
         </ListItem>
@@ -78,7 +79,7 @@ export default function ListItems() {
         >
           <Fade in={open}>
             <div className={classes.paper}>
-              <CryptoBuy />
+              <CryptoBuy closeFn={()=> setOpen(false)}/>
             </div>
           </Fade>
         </Modal>

@@ -2,9 +2,10 @@ import React, {useEffect, useState} from 'react';
 import MaterialTable from 'material-table';
 import { LineChart, Line, XAxis, YAxis,} from 'recharts';
 import axios from 'axios'
-import CryptoChart from './Charts/CryptoChart';
+import CryptoToggle from './coinToggle/CryptoToggle';
 
 export default function CryptoCoins() {
+  const [loading, setLoading] = useState(true)
   const [state, setState] = useState({
     columns: [
       { title: `#`, field: 'market_cap_rank', cellStyle: {width: `1%`}},
@@ -83,40 +84,54 @@ export default function CryptoCoins() {
                                 price_change_percentage_24h_in_currency: `${Math.round(coin.price_change_percentage_24h_in_currency * 100) / 100}%`,
                                 price_change_percentage_7d_in_currency: `${Math.round(coin.price_change_percentage_7d_in_currency * 100) / 100}%`, 
                                 total_volume: `$${addComma(coin.total_volume)}`, 
-                                circulating_supply: addComma(coin.circulating_supply), 
                                 market_cap: `$${addComma(coin.market_cap) }`,
-                                sparkline: coin.sparkline_in_7d.price.map(price => {return {oneWeek: price, date: count ++} }) 
+                                sparkline: coin.sparkline_in_7d.price.map(price => {return {oneWeek: price, date: count ++} }),
+                                circulating_supply: addComma(coin.circulating_supply), 
+                                high_24h: addComma(coin.high_24h),
+                                low_24h: addComma(coin.low_24h),
+                                price_change_24h: addComma(coin.price_change_24h),
+                                ath:  { ath: addComma(coin.ath),
+                                        ath_change_percentage: coin.ath_change_percentage,
+                                        ath_date: coin.ath_date
+                                      }
                                })
           })
-          if(!isCancelled)
+          if(!isCancelled){
             setState(prevState => { return {...prevState, data: temp} })
+            setLoading(false)
+          }
       })
     return () => { isCancelled=true };
   }, [])
-  const headerStyle={ textAlign: `left`, 
-                      color: `white`, 
-                      backgroundColor: `#3f51b5`, 
-                      padding: `30px` }
+
   return (
     <MaterialTable
       components={{
           Toolbar: props => <div style={{marginTop:`80px`}}></div> 
-          // <h2 className="tableHeader" style={headerStyle}>List of Cryptocurrency Coins</h2>
       }}
       columns={state.columns}
       data={state.data}
       
       options={{
         pageSizeOptions: [5,10,20,50,100],
-        pageSize: 20,
+        pageSize: 10,
         headerStyle: {
           fontWeight: `bold`,
-        }
+        },
+        loadingType: "linear"
       }}
       detailPanel={rowData => {
-        return <CryptoChart id={rowData.id} /> 
+        return <CryptoToggle id={rowData.id} 
+                            market_cap_rank={rowData.market_cap_rank}
+                            circulating_supply={rowData.circulating_supply}
+                            high_24h={rowData.high_24h}
+                            low_24h={rowData.low_24h}
+                            price_change_24h={rowData.price_change_24h}
+                            ath={rowData.ath}
+                            /> 
       }}
       onRowClick={(event, rowData, togglePanel) => togglePanel()}
+      isLoading={loading}
     />
   );
 }
