@@ -5,6 +5,8 @@ import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { withStyles } from '@material-ui/styles';
+import { makeStyles } from '@material-ui/core/styles';
+
 
 function sleep(delay = 0) {
   return new Promise(resolve => {
@@ -16,6 +18,8 @@ export default function SearchForBuy() {
     const [open, setOpen] = React.useState(false);
     const [options, setOptions] = React.useState([]);
     const loading = open && options.length === 0;
+
+    const classes = useStyles();
   
     React.useEffect(() => {
       let active = true;
@@ -57,9 +61,11 @@ export default function SearchForBuy() {
     return (
 
     <>
-      <Autocomplete
+      <StyledaAutocomplete
         id="asynchronous-demo"
-        style={{ width: 300 }}
+        // style={{margin:'10px',color: 'white'}}
+        // style={{color:'white!important'}}
+
         open={open}
         onOpen={() => {
           setOpen(true);
@@ -76,9 +82,7 @@ export default function SearchForBuy() {
 
         renderInput={params => (
           <TextField
-            classes={{
-                styles
-              }}
+            classes={{root:classes.root}}
             {...params}
             label="Search Cryptocurrency to buy"
             fullWidth
@@ -100,7 +104,60 @@ export default function SearchForBuy() {
     );
 }
 
-const styles = {
+const useStyles = makeStyles(theme => ({
+  root: {
+    '& .PrivateNotchedOutline-root-110.MuiOutlinedInput-notchedOutline, .MuiFormLabel-root, .MuiInputLabel-root,.MuiInputLabel-formControl,.MuiInputLabel-animated,.MuiInputLabel-outlined': {
+      // margin: theme.spacing(1),
+      // width: 200,
+      borderColor: 'rgb(3, 36, 64)',
+      color: 'white!important'
+
+    },
+    '& .MuiOutlinedInput-root.Mui-focused .PrivateNotchedOutline-root-110.MuiOutlinedInput-notchedOutline':{
+      borderColor: 'white',
+      color: 'white!important'
+    }
+  },
+}));
+
+const StyledButton = withStyles({
+  inputMarginDense: {
+    // background: 'white',
+    borderColor:'white'
+  },
+  label: {
+    textTransform: 'capitalize',
+  },
+
+})(TextField);
+
+
+const StyledaAutocomplete = withStyles({
+  root: {
+    color: 'white',
+    borderColor: 'white',
+    margin: '10px'
+  },
+  label: {
+    textTransform: 'capitalize',
+  },
+  input:{
+    color: 'white',
+    borderColor: 'white'
+  },
+  inputRoot:{
+    color: 'white',
+    borderColor: 'white'
+  },
+  popper:{
+    color: 'white'
+  },
+  focused:{
+    // border: '1px solid white'
+  },
+})(Autocomplete);
+
+export const styles = {
     root: {
         color: 'white'
     }
