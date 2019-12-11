@@ -73,7 +73,13 @@ const useStyles = makeStyles(theme => ({
         marginRight: 10
     },
     convert: {
-        padding: 10
+        padding: 10,
+        marginBottom: 7
+    },
+    bottom: {
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "space-around"
     }
 }));
 
@@ -96,7 +102,6 @@ export default function CoinDetail(props) {
             url: `https://api.coingecko.com/api/v3/coins/${id}`
         })
             .then(res => {
-                console.log(res.data)
                 if (res.status !== 200) {
                     alert('Unable to fetch data')
                 } else {
@@ -119,12 +124,6 @@ export default function CoinDetail(props) {
         //         setMarket_Cap(val.data.market_cap))
         //     .catch(e => console.log(e))
 
-        // exchange rates
-        //exchange rates
-        // axios
-        //     .get(`https://api.coingecko.com/api/v3/exchange_rates`)
-        //     .then(exc => console.log(exc.data))
-        //     .catch(e => console.log(e))
     })
 
 
@@ -133,7 +132,7 @@ export default function CoinDetail(props) {
             <div className={classes.descbox}>
                 <div className={classes.title}>
                     <h5 className={classes.name}>{name}</h5>
-                    <img src="https://assets.coingecko.com/coins/images/1/thumb/bitcoin.png?1547033579" />
+                    <img src="https://assets.coingecko.com/coins/images/1/thumb/bitcoin.png?1547033579" rel="noopener noreferrer" alt='logo' />
                 </div>
                 <div>Homepage: <span><a href={url} target="_blank">{url}</a></span></div>
                 <div>Official Forum: <span><a href={forum} target="_blank">{forum}</a></span></div>
@@ -216,30 +215,38 @@ export default function CoinDetail(props) {
                     </div>
                     <div className={classes.rootTable3}>
                         <div className={classes.convert}>CONVERSION:</div>
-                        <TextField
-                            label={name}
-                            id="outlined-start-adornment"
-                            className={clsx(classes.margin, classes.textField)}
-                            InputProps={{
-                                startAdornment: <InputAdornment position="start">{symbol}</InputAdornment>,
-                            }}
-                            variant="outlined"
-                            onChange={e => console.log(e.target.value)}
-                        />
-                        <TextField
-                            label="Currency"
-                            id="outlined-start-adornment"
-                            className={clsx(classes.margin, classes.textField)}
-                            InputProps={{
-                                startAdornment: <InputAdornment position="start">$</InputAdornment>,
-                            }}
-                            variant="outlined"
-                        />
+                        <div className={classes.bottom}>
+                            <TextField
+                                type="number"
+                                label={name}
+                                id="outlined-start-adornment"
+                                className={clsx(classes.margin, classes.textField)}
+                                InputProps={{
+                                    startAdornment: <InputAdornment position="start">{symbol}</InputAdornment>,
+                                }}
+                                variant="outlined"
+                                onChange={e => console.log(e.target.value)}
+                            />
+                            <TextField
+                                label="Currency"
+                                id="outlined-read-only-input"
+                                className={clsx(classes.margin, classes.textField)}
+                                InputProps={{
+                                    readOnly: true,
+                                    startAdornment: <InputAdornment position="start">$</InputAdornment>
+                                }}
+                                variant="outlined"
+                            />
+                        </div>
                     </div>
                 </div>
                 <div className={classes.graph}>
                     <DataChart
                         id={props.id}
+                        name={props.name}
+                        symbol={props.symbol}
+                        currentPrice={props.currentPrice}
+                        rank={props.rank}
                     />
                 </div>
             </div>

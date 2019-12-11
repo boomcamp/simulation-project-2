@@ -6,6 +6,17 @@ import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
 import { Loader } from 'rsuite';
+import moment from 'moment'
+
+import TextField from '@material-ui/core/TextField';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import clsx from 'clsx';
+
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
 
 const useStyles = {
     descbox: {
@@ -33,8 +44,13 @@ const useStyles = {
         alignItems: "center"
     },
     invest: {
-        margin: 5,
-        padding: 5,
+        display: "flex",
+        justifyContent: "flex-end",
+        alignItems: "center",
+        alignContent: "center"
+    },
+    q: {
+        marginRight: 5
     }
 };
 
@@ -51,10 +67,11 @@ class DataChart extends Component {
                 xaxis: {
                     categories: [],
                     labels: {
-                        formatter: (value) => {
-                            var val = new Date();
-                            val.toGMTString();
+                        formatter: function (timestamp) {
+                            return moment(new Date(timestamp)).format("MMM DD, YYYY/HH:MM")
                         },
+                        hideOverlappingLabels: true,
+                        trim: true
                     },
                 },
                 yaxis: {
@@ -118,7 +135,10 @@ class DataChart extends Component {
                 },
             ],
             days: "1",
-            isLoading: true
+            isLoading: true,
+            dialog: {
+                open: false
+            }
         }
     }
 
@@ -196,8 +216,28 @@ class DataChart extends Component {
             .catch(e => console.log(e))
     }
 
+    handleClickOpen = () => {
+        this.setState({
+            ...this.state,
+            dialog: {
+                open: true
+            }
+        })
+    }
+
+    handleClose = () => {
+        this.setState({
+            ...this.state,
+            dialog: {
+                open: false
+            }
+        })
+    }
+
     render() {
         const { classes } = this.props;
+        const { name, symbol, currentPrice, rank } = this.props
+        const { options, series } = this.state
         return (
             <div className={classes.descbox} >
                 <div className={classes.grid}>
@@ -230,13 +270,57 @@ class DataChart extends Component {
                     </div> :
                     <React.Fragment>
                         <Chart
-                            options={this.state.options}
-                            series={this.state.series}
+                            options={options}
+                            series={series}
                             type="line"
                             width="100%"
-                            height="700"
+                            height="750"
                         />
-                        <div className={classes.invest}>Want to Invest?</div>
+                        <div className={classes.invest}>
+                            <span className={classes.q}>Want to Invest?</span>
+                            <Button variant="outlined" onClick={this.handleClickOpen}>BUY</Button>
+                            <Dialog
+                                open={this.state.dialog.open}
+                                onClose={this.handleClose}
+                                aria-labelledby="alert-dialog-title"
+                                aria-describedby="alert-dialog-description"
+                            >
+                                <DialogTitle id="alert-dialog-title">{`Invest on ${name}`}</DialogTitle>
+                                <DialogContent>
+                                    <DialogContentText id="alert-dialog-description">
+                                        <TextField
+                                            type="number"
+                                            label={name}
+                                            id="outlined-start-adornment"
+                                            className={clsx(classes.margin, classes.textField)}
+                                            InputProps={{
+                                                startAdornment: <InputAdornment position="start">{symbol}</InputAdornment>,
+                                            }}
+                                            variant="outlined"
+                                            onChange={e => console.log(e.target.value)}
+                                        />
+                                        <TextField
+                                            label="Currency"
+                                            id="outlined-read-only-input"
+                                            className={clsx(classes.margin, classes.textField)}
+                                            InputProps={{
+                                                readOnly: true,
+                                                startAdornment: <InputAdornment position="start">$</InputAdornment>
+                                            }}
+                                            variant="outlined"
+                                        />
+                                    </DialogContentText>
+                                </DialogContent>
+                                <DialogActions>
+                                    <Button onClick={this.handleClose} color="primary">
+                                        CANCEL
+                                    </Button>
+                                    <Button onClick={this.handleClose} color="primary" autoFocus>
+                                        OKAY
+                                    </Button>
+                                </DialogActions>
+                            </Dialog>
+                        </div>
                     </React.Fragment>
                 }
             </div>
