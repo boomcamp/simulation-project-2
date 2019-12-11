@@ -72,7 +72,9 @@ export default function List() {
 
    useEffect(() => {
       setLoad(true);
-      Axios.get(`https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&per_page=10&page=${pagi}`).then(response => {
+      Axios.get(
+         `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&per_page=10&page=${pagi}`
+      ).then(response => {
          setData(response.data);
          setLoad(false);
       });
@@ -97,10 +99,18 @@ export default function List() {
          <img src={bit2} style={{ width: "6vw", marginTop: "4vh" }} alt="bit" />
          <Typography className={classes.type}>Cryptocurrency App</Typography>
          <hr />
-         <Typography style={{ width: "50%", margin: "0 auto", color: "white", marginBottom: "3vh" }}>
-            Cryptocurrency is an internet-based medium of exchange which uses cryptographical functions to conduct financial
-            transactions. Cryptocurrencies leverage blockchain technology to gain decentralization, transparency, and
-            immutability.
+         <Typography
+            style={{
+               width: "50%",
+               margin: "0 auto",
+               color: "white",
+               marginBottom: "3vh"
+            }}
+         >
+            Cryptocurrency is an internet-based medium of exchange which uses
+            cryptographical functions to conduct financial transactions.
+            Cryptocurrencies leverage blockchain technology to gain
+            decentralization, transparency, and immutability.
          </Typography>
          <Button variant="contained" color="primary" className={classes.button}>
             Investment Tracking
@@ -127,32 +137,69 @@ export default function List() {
                      {
                         title: "Cryptocurrencies",
                         render: rowData => (
-                           <NavLink to={`/coin-details/${rowData.id}`} style={{ textDecoration: "none", color: "black" }}>
-                              <span className={classes.name}>{rowData.name}</span>
+                           <NavLink
+                              to={`/coin-details/${rowData.id}`}
+                              style={{ textDecoration: "none", color: "black" }}
+                           >
+                              <span className={classes.name}>
+                                 {rowData.name}
+                              </span>
                            </NavLink>
                         )
                      },
                      {
                         title: "Logo",
                         render: rowData => (
-                           <NavLink to={`/coin-details/${rowData.id}`} style={{ textDecoration: "none", color: "black" }}>
-                              <img className={classes.logo} src={rowData.image} alt="Img" />
+                           <NavLink
+                              to={`/coin-details/${rowData.id}`}
+                              style={{ textDecoration: "none", color: "black" }}
+                           >
+                              <img
+                                 className={classes.logo}
+                                 src={rowData.image}
+                                 alt="Img"
+                              />
                            </NavLink>
                         )
                      },
                      {
                         title: "Ticker",
-                        render: rowData => <span className={classes.symbol}> {rowData.symbol}</span>
+                        render: rowData => (
+                           <span className={classes.symbol}>
+                              {" "}
+                              {rowData.symbol}
+                           </span>
+                        )
                      },
                      {
                         title: "Current Price",
-                        render: rowData => <span> ${!rowData.current_price ? "0" : rowData.current_price}</span>
+                        render: rowData => (
+                           <span>
+                              {" "}
+                              $
+                              {!rowData.current_price
+                                 ? "0"
+                                 : rowData.current_price}
+                           </span>
+                        )
                      },
                      {
                         title: "Circulating Supply",
-                        render: rowData => <span> {circulatingFormat(Math.round(rowData.circulating_supply))}</span>
+                        render: rowData => (
+                           <span>
+                              {" "}
+                              {circulatingFormat(
+                                 Math.round(rowData.circulating_supply)
+                              )}
+                           </span>
+                        )
                      },
-                     { title: "Mkt Cap", render: rowData => <span> {formatter.format(rowData.market_cap)} </span> }
+                     {
+                        title: "Mkt Cap",
+                        render: rowData => (
+                           <span> {formatter.format(rowData.market_cap)} </span>
+                        )
+                     }
                   ]}
                   data={data}
                   options={{
@@ -162,7 +209,12 @@ export default function List() {
             )}
          </Fade>
          <Paper className={classes.page}>
-            <Pagination style={{ width: "0vw" }} activePage={pagi} onPageChange={onChange} totalPages={626} />
+            <Pagination
+               style={{ width: "0vw" }}
+               activePage={pagi}
+               onPageChange={onChange}
+               totalPages={628}
+            />
          </Paper>
       </div>
    );

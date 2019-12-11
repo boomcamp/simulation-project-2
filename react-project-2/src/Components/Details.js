@@ -105,16 +105,18 @@ export default function AcccessibleTable() {
 
    useEffect(() => {
       setLoad(true);
-      Axios.get(`https://api.coingecko.com/api/v3/coins/${id}`).then(response => {
-         setData(response.data);
-         setImage(response.data.image);
-         setMarket(response.data.market_data);
-         setPrice(response.data.market_data.current_price);
-         setMCap(response.data.market_data.market_cap);
-         setDescription(response.data.description);
-         setLoad(false);
-         console.log(response.data);
-      });
+      Axios.get(`https://api.coingecko.com/api/v3/coins/${id}`).then(
+         response => {
+            setData(response.data);
+            setImage(response.data.image);
+            setMarket(response.data.market_data);
+            setPrice(response.data.market_data.current_price);
+            setMCap(response.data.market_data.market_cap);
+            setDescription(response.data.description);
+            setLoad(false);
+            console.log(response.data);
+         }
+      );
    }, [id]);
 
    const formatter = new Intl.NumberFormat("en-US", {
@@ -145,20 +147,30 @@ export default function AcccessibleTable() {
          </Paper>
 
          <Paper className={classes.paper}>
-            <Breadcrumbs aria-label="breadcrumb" className={classes.back} separator={<NavigateNextIcon fontSize="small" />}>
+            <Breadcrumbs
+               aria-label="breadcrumb"
+               className={classes.back}
+               separator={<NavigateNextIcon fontSize="small" />}
+            >
                <Link className={classes.breadlist} to="/">
                   Home
                </Link>
-               <Link aria-current="page" style={{ color: "white", cursor: "default" }}>
+               <Link
+                  aria-current="page"
+                  style={{ color: "white", cursor: "default" }}
+               >
                   {data.name} Details
                </Link>
             </Breadcrumbs>
          </Paper>
          <Fade in>
             <Paper className={classes.newPaper}>
-               <h3 style={{ textAlign: "left", padding: "30px  0px 0px 30px" }}>Description:</h3>
+               <h3 style={{ textAlign: "left", padding: "30px  0px 0px 30px" }}>
+                  Description:
+               </h3>
                <Typography className={classes.desc}>
-                  {ReactHtmlParser(description.en)} {!description.en ? "No Description" : description.en}{" "}
+                  {ReactHtmlParser(description.en)}{" "}
+                  {!description.en ? "No Description" : description.en}{" "}
                </Typography>
             </Paper>
          </Fade>
@@ -177,18 +189,35 @@ export default function AcccessibleTable() {
                </TableHead>
                <TableBody>
                   <TableRow>
-                     <TableCell> {!market.market_cap_rank ? "None" : market.market_cap_rank} </TableCell>
+                     <TableCell>
+                        {" "}
+                        {!market.market_cap_rank
+                           ? "None"
+                           : market.market_cap_rank}{" "}
+                     </TableCell>
                      <TableCell component="th" scope="row">
                         {data.name}
                      </TableCell>
                      <TableCell>
-                        <img style={{ width: "2vw" }} src={image.large} alt="coin-logo" />
+                        <img
+                           style={{ width: "2vw" }}
+                           src={image.large}
+                           alt="coin-logo"
+                        />
                      </TableCell>
-                     <TableCell style={{ textTransform: "uppercase" }}>{data.symbol}</TableCell>
+                     <TableCell style={{ textTransform: "uppercase" }}>
+                        {data.symbol}
+                     </TableCell>
                      <TableCell>
-                        <b style={{ fontSize: "15px" }}>{!price.usd ? "0" : formatter.format(price.usd)}</b>
+                        <b style={{ fontSize: "15px" }}>
+                           {!price.usd ? "0" : formatter.format(price.usd)}
+                        </b>
                      </TableCell>
-                     <TableCell>{circulatingFormat(Math.round(market.circulating_supply))}</TableCell>
+                     <TableCell>
+                        {circulatingFormat(
+                           Math.round(market.circulating_supply)
+                        )}
+                     </TableCell>
                   </TableRow>
                </TableBody>
             </Table>
@@ -208,33 +237,49 @@ export default function AcccessibleTable() {
                <TableBody>
                   <TableRow>
                      <TableCell>{data.last_updated}</TableCell>
-                     <TableCell>{!mCap.usd ? "0" : formatter.format(mCap.usd)}</TableCell>
+                     <TableCell>
+                        {!mCap.usd ? "0" : formatter.format(mCap.usd)}
+                     </TableCell>
                      {market.market_cap_change_24h < 0 ? (
-                        <TableCell style={{ color: "red" }}>{formatter.format(market.market_cap_change_24h)}</TableCell>
+                        <TableCell style={{ color: "red" }}>
+                           {formatter.format(market.market_cap_change_24h)}
+                        </TableCell>
                      ) : (
-                        <TableCell>{formatter.format(market.market_cap_change_24h)}</TableCell>
+                        <TableCell>
+                           {formatter.format(market.market_cap_change_24h)}
+                        </TableCell>
                      )}
 
                      {market.market_cap_change_percentage_24h < 0 ? (
                         <TableCell style={{ color: "red" }}>
                            {!market.market_cap_change_percentage_24h
                               ? "0"
-                              : Math.round(market.market_cap_change_percentage_24h * 100) / 100}
+                              : Math.round(
+                                   market.market_cap_change_percentage_24h * 100
+                                ) / 100}
                            %
                         </TableCell>
                      ) : (
                         <TableCell>
                            {!market.market_cap_change_percentage_24h
                               ? "0"
-                              : Math.round(market.market_cap_change_percentage_24h * 100) / 100}
+                              : Math.round(
+                                   market.market_cap_change_percentage_24h * 100
+                                ) / 100}
                            %
                         </TableCell>
                      )}
 
                      {market.price_change_24h < 0 ? (
-                        <TableCell style={{ color: "red" }}> {formatter.format(market.price_change_24h)}</TableCell>
+                        <TableCell style={{ color: "red" }}>
+                           {" "}
+                           {formatter.format(market.price_change_24h)}
+                        </TableCell>
                      ) : (
-                        <TableCell> {formatter.format(market.price_change_24h)}}</TableCell>
+                        <TableCell>
+                           {" "}
+                           {formatter.format(market.price_change_24h)}}
+                        </TableCell>
                      )}
                   </TableRow>
                </TableBody>

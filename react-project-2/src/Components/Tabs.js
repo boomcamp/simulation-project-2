@@ -96,7 +96,7 @@ export default function TabsC() {
    const [fourteen, setFourteen] = useState([]);
    const [thirty, setThirty] = useState([]);
    const [oneyear, setOneYear] = useState([]);
-   const [image, setImage] = React.useState([]);
+   // const [image, setImage] = React.useState([]);
 
    const handleChange = (event, newValue) => {
       setValue(newValue);
@@ -105,19 +105,33 @@ export default function TabsC() {
    let { id } = useParams();
 
    useEffect(() => {
-      Axios.get(`https://api.coingecko.com/api/v3/coins/${id}`).then(response => {
-         setData(response.data);
+      Axios.get(`https://api.coingecko.com/api/v3/coins/${id}`).then(
+         response => {
+            setData(response.data);
 
-         setOneHour(response.data.market_data.price_change_percentage_1h_in_currency);
-         setTwoFour(response.data.market_data.price_change_percentage_24h_in_currency);
-         setSeven(response.data.market_data.price_change_percentage_7d_in_currency);
-         setFourteen(response.data.market_data.price_change_percentage_14d_in_currency);
-         setThirty(response.data.market_data.price_change_percentage_30d_in_currency);
-         setOneYear(response.data.market_data.price_change_percentage_1y_in_currency);
-         setImage(response.data.image);
+            setOneHour(
+               response.data.market_data.price_change_percentage_1h_in_currency
+            );
+            setTwoFour(
+               response.data.market_data.price_change_percentage_24h_in_currency
+            );
+            setSeven(
+               response.data.market_data.price_change_percentage_7d_in_currency
+            );
+            setFourteen(
+               response.data.market_data.price_change_percentage_14d_in_currency
+            );
+            setThirty(
+               response.data.market_data.price_change_percentage_30d_in_currency
+            );
+            setOneYear(
+               response.data.market_data.price_change_percentage_1y_in_currency
+            );
+            // setImage(response.data.image);
 
-         console.log(response.data);
-      });
+            console.log(response.data);
+         }
+      );
    }, [id]);
 
    return (
@@ -127,17 +141,34 @@ export default function TabsC() {
                <Button
                   variant="contained"
                   className={classes.bsell}
-                  style={{ marginLeft: "10px", color: "white", background: "purple" }}
+                  style={{
+                     marginLeft: "10px",
+                     color: "white",
+                     background: "purple"
+                  }}
                >
-                  Buy / Sell <img src={bit} style={{ width: "25px", paddingLeft: "5px" }} alt="coin" />
+                  Buy / Sell{" "}
+                  <img
+                     src={bit}
+                     style={{ width: "25px", paddingLeft: "5px" }}
+                     alt="coin"
+                  />
                </Button>
             </Link>
             <div className={classes.root}>
                <AppBar
                   position="static"
-                  style={{ background: "linear-gradient(to left, #172c66 0%, #6a407f 42%)", color: "white" }}
+                  style={{
+                     background:
+                        "linear-gradient(to left, #172c66 0%, #6a407f 42%)",
+                     color: "white"
+                  }}
                >
-                  <Tabs value={value} onChange={handleChange} aria-label="simple tabs example">
+                  <Tabs
+                     value={value}
+                     onChange={handleChange}
+                     aria-label="simple tabs example"
+                  >
                      <Tab label="24 Hours" {...a11yProps(0)} />
                      <Tab label="1 Week" {...a11yProps(1)} />
                      <Tab label="1 Month" {...a11yProps(2)} />
@@ -167,12 +198,22 @@ export default function TabsC() {
             </div>
 
             <ExpansionPanel>
-               <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel1a-content" id="panel1a-header">
-                  <Typography className={classes.heading}>Other Details</Typography>
+               <ExpansionPanelSummary
+                  expandIcon={<ExpandMoreIcon />}
+                  aria-controls="panel1a-content"
+                  id="panel1a-header"
+               >
+                  <Typography className={classes.heading}>
+                     Other Details
+                  </Typography>
                </ExpansionPanelSummary>
                <ExpansionPanelDetails style={{ height: "9.8vh" }}>
                   <Paper className={classes.paper}>
-                     <Table className={classes.table} size="small" aria-label="a dense table">
+                     <Table
+                        className={classes.table}
+                        size="small"
+                        aria-label="a dense table"
+                     >
                         <TableHead>
                            <TableRow>
                               <TableCell>1hr</TableCell>
@@ -187,11 +228,21 @@ export default function TabsC() {
                            <TableCell component="th" scope="row">
                               {Math.round(onehour.usd * 10) / 10}%
                            </TableCell>
-                           <TableCell>{Math.round(twofour.usd * 10) / 10}%</TableCell>
-                           <TableCell>{Math.round(seven.usd * 10) / 10}%</TableCell>
-                           <TableCell>{Math.round(fourteen.usd * 10) / 10}%</TableCell>
-                           <TableCell>{Math.round(thirty.usd * 10) / 10}%</TableCell>
-                           <TableCell>{Math.round(oneyear.usd * 10) / 10}%</TableCell>
+                           <TableCell>
+                              {Math.round(twofour.usd * 10) / 10}%
+                           </TableCell>
+                           <TableCell>
+                              {Math.round(seven.usd * 10) / 10}%
+                           </TableCell>
+                           <TableCell>
+                              {Math.round(fourteen.usd * 10) / 10}%
+                           </TableCell>
+                           <TableCell>
+                              {Math.round(thirty.usd * 10) / 10}%
+                           </TableCell>
+                           <TableCell>
+                              {Math.round(oneyear.usd * 10) / 10}%
+                           </TableCell>
                         </TableBody>
                      </Table>
                   </Paper>
