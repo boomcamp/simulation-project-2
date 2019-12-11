@@ -52,6 +52,14 @@
       "quantity": "1",
       "transaction": "buy",
       "id": 8
+    },
+    {
+      "name": "Ethereum",
+      "price": 145.76,
+      "totalPrice": 728.8,
+      "quantity": "5",
+      "transaction": "buy",
+      "id": 9
     }
   ]
 }

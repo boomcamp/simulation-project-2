@@ -129,6 +129,7 @@ class coins extends Component {
       data: {
         name: this.state.details.name,
         price: this.state.details.market_data.current_price.usd,
+        totalPrice: this.state.price,
         quantity: this.state.quantity,
         transaction: "buy"
       }
