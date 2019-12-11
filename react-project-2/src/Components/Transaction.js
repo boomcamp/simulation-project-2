@@ -115,14 +115,14 @@ const useStyles = makeStyles(theme => ({
    }
 }));
 
-export default function AcccessibleTable() {
+export default function AcccessibleTable(props) {
    const classes = useStyles();
    const [data, setData] = React.useState([]);
    const [image, setImage] = React.useState([]);
    const [load, setLoad] = React.useState(false);
    const [confirmBy, setConfirmBy] = React.useState(false);
-   const [coin, setCoin] = React.useState(0);
-   const [amount, setAmount] = React.useState(0);
+   const [coin, setCoin] = React.useState("");
+   const [amount, setAmount] = React.useState("");
 
    const [value, setValue] = React.useState(0);
 
@@ -150,17 +150,25 @@ export default function AcccessibleTable() {
 
    let cons;
 
-   const trans = (amt, a) => {
-      setAmount(amt);
-      setCoin(a);
+   const trans = val => {
+      setCoin(val);
    };
 
-   const transCoin = v => {
-      setCoin(v);
+   const handleAmount = val => {
+      setAmount(val);
    };
+
+   console.log(amount);
 
    if (confirmBy) {
-      cons = <Confirm can={confirmAct} amount={amount} coin={coin} />;
+      cons = (
+         <Confirm
+            can={confirmAct}
+            amount={amount}
+            coin={coin}
+            handleAmount={handleAmount}
+         />
+      );
    }
 
    return (
@@ -218,7 +226,11 @@ export default function AcccessibleTable() {
                <Tab label="SELL" {...a11yProps(1)} />
             </Tabs>
             <TabPanel value={value} index={0}>
-               <Buy confirm={confirmAct} amo={trans} />
+               <Buy
+                  confirm={confirmAct}
+                  amo={trans}
+                  handleAmount={handleAmount}
+               />
             </TabPanel>
             <TabPanel value={value} index={1}>
                <Sell />

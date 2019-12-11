@@ -226,22 +226,68 @@ export default function TabsC() {
                         </TableHead>
                         <TableBody>
                            <TableCell component="th" scope="row">
-                              {Math.round(onehour.usd * 10) / 10}%
+                              {onehour.usd < 0 ? (
+                                 <span style={{ color: "red" }}>
+                                    {Math.round(onehour.usd * 10) / 10}%
+                                 </span>
+                              ) : (
+                                 <span>
+                                    {Math.round(onehour.usd * 10) / 10}%
+                                 </span>
+                              )}
                            </TableCell>
                            <TableCell>
-                              {Math.round(twofour.usd * 10) / 10}%
+                              {twofour.usd < 0 ? (
+                                 <span style={{ color: "red" }}>
+                                    {Math.round(twofour.usd * 10) / 10}%
+                                 </span>
+                              ) : (
+                                 <span>
+                                    {Math.round(twofour.usd * 10) / 10}%
+                                 </span>
+                              )}
                            </TableCell>
                            <TableCell>
-                              {Math.round(seven.usd * 10) / 10}%
+                              {seven.usd < 0 ? (
+                                 <span style={{ color: "red" }}>
+                                    {Math.round(seven.usd * 10) / 10}%
+                                 </span>
+                              ) : (
+                                 <span>{Math.round(seven.usd * 10) / 10}%</span>
+                              )}
                            </TableCell>
                            <TableCell>
-                              {Math.round(fourteen.usd * 10) / 10}%
+                              {fourteen.usd < 0 ? (
+                                 <span style={{ color: "red" }}>
+                                    {Math.round(fourteen.usd * 10) / 10}%
+                                 </span>
+                              ) : (
+                                 <span>
+                                    {Math.round(fourteen.usd * 10) / 10}%
+                                 </span>
+                              )}
                            </TableCell>
                            <TableCell>
-                              {Math.round(thirty.usd * 10) / 10}%
+                              {thirty.usd < 0 ? (
+                                 <span style={{ color: "red" }}>
+                                    {Math.round(thirty.usd * 10) / 10}%
+                                 </span>
+                              ) : (
+                                 <span>
+                                    {Math.round(thirty.usd * 10) / 10}%
+                                 </span>
+                              )}
                            </TableCell>
                            <TableCell>
-                              {Math.round(oneyear.usd * 10) / 10}%
+                              {oneyear.usd < 0 ? (
+                                 <span style={{ color: "red" }}>
+                                    {Math.round(oneyear.usd * 10) / 10}%
+                                 </span>
+                              ) : (
+                                 <span>
+                                    {Math.round(oneyear.usd * 10) / 10}%
+                                 </span>
+                              )}
                            </TableCell>
                         </TableBody>
                      </Table>

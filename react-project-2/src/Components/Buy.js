@@ -2,24 +2,26 @@ import React, { useEffect, useState } from "react";
 import Axios from "axios";
 import { useParams } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
+import InputAdornment from "@material-ui/core/InputAdornment";
 import Paper from "@material-ui/core/Paper";
 import { Typography } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import AccountBalanceIcon from "@material-ui/icons/AccountBalance";
 import TextField from "@material-ui/core/TextField";
 import SwapHorizIcon from "@material-ui/icons/SwapHoriz";
+import checkout from "../assets/images/crypt.jpg";
 
 const useStyles = makeStyles(theme => ({
    buysell: {
-      width: "100%",
-      height: "24vh",
+      width: "21vw",
+      height: "30vh",
       margin: "0vh 0vw 0vh 0.5vw",
       zIndex: 3000
    },
    bs: {
       background: "#9f8ca94f",
-      width: "10vw",
-      height: "34vh",
+      width: "7vw",
+      height: "40vh",
       marginLeft: "1vw",
       display: "flex",
       flexDirection: "column",
@@ -81,8 +83,8 @@ export default function AcccessibleTable(props) {
    const [image, setImage] = React.useState([]);
    const [price, setPrice] = React.useState([]);
    const [symbol, setSymbol] = React.useState([]);
-   const [coin, setCoin] = useState(0);
-   const [amount, setAmount] = useState(0);
+   const [coin, setCoin] = useState("");
+   const [amount, setAmount] = useState("");
    //    const [cancel, setCancel] = useState(false);
 
    let { id } = useParams();
@@ -98,6 +100,10 @@ export default function AcccessibleTable(props) {
          }
       );
    }, [id]);
+
+   const circulatingFormat = num => {
+      return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
+   };
 
    return (
       <div>
@@ -140,18 +146,31 @@ export default function AcccessibleTable(props) {
 
          <div style={{ display: "flex" }}>
             <div className={classes.bs}>
-               <img src={image.small} style={{ marginTop: "3vh" }} alt="coin" />
+               <img src={image.small} style={{ marginTop: "2vh" }} alt="coin" />
                <h3 style={{ textTransform: "uppercase" }}>{symbol}</h3>
                <p>
-                  1{" "}
                   <span style={{ textTransform: "uppercase" }}>
-                     {symbol} = {price.usd}
+                     {symbol} ={" "}
+                     {circulatingFormat(Math.round(price.usd * 10000) / 10000)}
                   </span>
                </p>
+
+               <div className={classes.div} style={{ marginBottom: "0vh" }}>
+                  <Typography>
+                     <span style={{ textTransform: "uppercase" }}>
+                        {data.symbol}{" "}
+                     </span>
+                     Total:
+                  </Typography>
+                  <Typography className={classes.buy}>
+                     {Math.round(amount * 1000) / 1000}
+                  </Typography>
+               </div>
+
                <div className={classes.div} style={{ marginBottom: "2vh" }}>
                   <Typography>Total:</Typography>
                   <Typography className={classes.buy}>
-                     ${Math.round(coin * 1000) / 1000}
+                     ${circulatingFormat(Math.round(coin * 1000) / 1000)}
                   </Typography>
                </div>
 
@@ -179,8 +198,8 @@ export default function AcccessibleTable(props) {
                   className={classes.buysell}
                   style={{
                      height: "6vh",
-                     marginBottom: "1vh",
-                     marginTop: "3vh",
+                     marginBottom: "2vh",
+                     marginTop: "2vh",
                      background: "white",
                      display: "flex",
                      alignItems: "baseline",
@@ -189,15 +208,25 @@ export default function AcccessibleTable(props) {
                >
                   <TextField
                      id="outlined-number"
-                     label="usd"
                      type="number"
                      ant="outlined"
-                     style={{ width: "8vw" }}
+                     style={{ width: "8vw", paddingTop: "2vh" }}
                      value={coin}
                      onChange={e => {
-                        setAmount(e.target.value / price.usd);
+                        var net =
+                           +e.target.value -
+                           (+e.target.value + -e.target.value * 0.01) * 0.01;
+                        setAmount(net / price.usd);
                         setCoin(e.target.value);
-                        props.amo(e.target.value, amount);
+                        props.amo(e.target.value);
+                        props.handleAmount(net / price.usd);
+                     }}
+                     InputProps={{
+                        startAdornment: (
+                           <InputAdornment position="start">
+                              &#36;
+                           </InputAdornment>
+                        )
                      }}
                   />
                   <SwapHorizIcon
@@ -205,7 +234,6 @@ export default function AcccessibleTable(props) {
                   />
                   <TextField
                      id="outlined-number"
-                     label={symbol}
                      ant="outlined"
                      type="number"
                      style={{ width: "8vw", margin: "2vw, 2vw, 2vw, 2vw" }}
@@ -213,37 +241,20 @@ export default function AcccessibleTable(props) {
                      onChange={e => {
                         setCoin(e.target.value * price.usd);
                         setAmount(e.target.value);
-                        // props.coi(e.target.value, coin);
+                        props.handleAmount(e.target.value);
+                        props.amo(e.target.value * price.usd);
+                     }}
+                     InputProps={{
+                        endAdornment: (
+                           <InputAdornment position="start">
+                              {symbol}
+                           </InputAdornment>
+                        )
                      }}
                   />
                </Paper>
-               <Paper
-                  className={classes.buysell}
-                  style={{ background: "#693f7e", color: "white" }}
-               >
-                  <p
-                     style={{
-                        paddingTop: "5vh",
-                        letterSpacing: "8px",
-                        color: "#bdaaaa"
-                     }}
-                  >
-                     YOU ARE BUYING
-                  </p>
-                  <Typography style={{ fontSize: "36px" }}>
-                     {Math.round(amount * 10000) / 10000}{" "}
-                     <span style={{ textTransform: "uppercase" }}>
-                        {symbol}
-                     </span>
-                  </Typography>
-                  <p style={{ color: "#bdaaaa" }}>
-                     @ ${!price.usd ? "0.00" : price.usd} per{" "}
-                     <span style={{ textTransform: "uppercase" }}>
-                        {symbol}
-                     </span>
-                  </p>
-                  <hr style={{ border: "1px solid white" }} />
-               </Paper>
+
+               <img src={checkout} className={classes.buysell} />
             </div>
          </div>
       </div>

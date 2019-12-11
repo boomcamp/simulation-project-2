@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Axios from "axios";
 import { useParams } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
@@ -6,6 +6,7 @@ import { Typography } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import AccountBalanceIcon from "@material-ui/icons/AccountBalance";
 import Grow from "@material-ui/core/Grow";
+import Success from "./Success";
 
 const useStyles = makeStyles(theme => ({
    second: {
@@ -37,6 +38,9 @@ export default function AcccessibleTable(props) {
    const [data, setData] = React.useState([]);
    const [price, setPrice] = React.useState([]);
    const [symbol, setSymbol] = React.useState([]);
+   const [done, setDone] = React.useState(false);
+   const [image, setImage] = React.useState(false);
+   const [name, setName] = React.useState(false);
 
    let { id } = useParams();
 
@@ -46,10 +50,39 @@ export default function AcccessibleTable(props) {
             setData(response.data);
             setPrice(response.data.market_data.current_price);
             setSymbol(response.data.symbol);
+            setImage(response.data.image.small);
+            setName(response.data.id);
             console.log(response.data);
          }
       );
    }, [id]);
+
+   const succ = value => {
+      setDone(value);
+   };
+
+   const confirm = () => {
+      setDone(true);
+      Axios.post("http://localhost:4000/transactions", {
+         price: price.usd,
+         name: name,
+         coin: symbol,
+         total: props.coin,
+         image: image,
+         transaction: "buy",
+         timestamp: new Date().getTime()
+      }).catch(error => {
+         console.log(error.response.data);
+      });
+   };
+
+   if (done) {
+      return <Success buyMore={succ} confirmAct={props.can} />;
+   }
+
+   const circulatingFormat = num => {
+      return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
+   };
 
    return (
       <Grow in>
@@ -67,11 +100,11 @@ export default function AcccessibleTable(props) {
                <Typography
                   style={{ fontSize: "48px", color: "rgb(105, 63, 126)" }}
                >
-                  {Math.round(props.coin * 1000) / 1000}{" "}
+                  {Math.round(props.amount * 1000) / 1000}{" "}
                   <span style={{ textTransform: "uppercase" }}>{symbol}</span>
                </Typography>
                <p style={{ color: "gray" }}>
-                  @ ${price.usd} per{" "}
+                  @ ${Math.round(price.usd * 10000) / 10000} per{" "}
                   <span style={{ textTransform: "uppercase" }}>{symbol}</span>
                </p>
                <hr style={{ border: "1px solid gray", width: "20vw" }} />
@@ -115,23 +148,35 @@ export default function AcccessibleTable(props) {
                <hr style={{ border: "1px solid gray", width: "20vw" }} />
                <div style={{ textAlign: "justify", marginLeft: "7.5vw" }}>
                   <p>
-                     {Math.round(props.coin * 1000) / 1000}{" "}
-                     <span style={{ textTransform: "uppercase" }}>
+                     {Math.round(props.amount * 1000) / 1000}
+                     <span
+                        style={{
+                           textTransform: "uppercase",
+                           paddingLeft: "2px"
+                        }}
+                     >
                         {symbol}
-                     </span>{" "}
+                     </span>
                      <span style={{ letterSpacing: "7px" }}>
-                        {" "}
                         ...........................
-                     </span>{" "}
-                     $ {props.amount}
+                     </span>
+                     ${" "}
+                     {circulatingFormat(
+                        props.coin -
+                           +((props.coin - +(props.coin * 0.01)) * 0.01)
+                     )}
                   </p>
                   <p>
-                     Coinbase fee{" "}
+                     Transaction Fee (1%)
                      <span style={{ letterSpacing: "7px" }}>
-                        {" "}
-                        ...........................
-                     </span>{" "}
-                     $ {Math.round(props.amount * 0.1 * 1000) / 1000}
+                        .......................
+                     </span>
+                     ${" "}
+                     {circulatingFormat(
+                        Math.round(
+                           (props.coin - +(props.coin * 0.01)) * 0.01 * 1000
+                        ) / 1000
+                     )}
                   </p>
                   <p
                      style={{
@@ -140,14 +185,11 @@ export default function AcccessibleTable(props) {
                         color: "rgb(105, 63, 126)"
                      }}
                   >
-                     Total{" "}
+                     Total
                      <span style={{ letterSpacing: "7px" }}>
-                        {" "}
                         ...........................
-                     </span>{" "}
-                     ${" "}
-                     {Math.round((+props.amount + +props.amount * 0.1) * 1000) /
-                        1000}
+                     </span>
+                     ${circulatingFormat(props.coin)}
                   </p>
                </div>
             </div>
@@ -160,6 +202,7 @@ export default function AcccessibleTable(props) {
                   variant="contained"
                   color="primary"
                   style={{ width: "10vw", height: "5vh", marginTop: "3vh" }}
+                  onClick={confirm}
                >
                   Confirm Buy
                </Button>
