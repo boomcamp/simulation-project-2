@@ -26,7 +26,7 @@ export default class Details extends Component {
   render() {
     return (
       <div>
-        <table className="table">
+        <table className="tbl">
           <tbody>
             <tr>
               <td>1h</td>

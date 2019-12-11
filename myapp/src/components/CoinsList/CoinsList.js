@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Table, Icon, Descriptions, Typography } from "antd";
-
+import { ToastContainer } from "react-toastify";
 import axios from "axios";
 import { Modal } from "antd";
 import { Pagination } from "semantic-ui-react";
@@ -8,6 +8,7 @@ import "semantic-ui-css/semantic.min.css";
 import "./coinslist.css";
 import Details from "../Details/Details";
 import Chart from "../Chart/Chart";
+import Converter from "../Converter/Converter";
 var commaNumber = require("comma-number");
 const { Title, Paragraph } = Typography;
 export default class CoinsList extends Component {
@@ -128,6 +129,7 @@ export default class CoinsList extends Component {
     axios
       .get(`https://api.coingecko.com/api/v3/coins/${e.id}`)
       .then(results => {
+        // console.log(results);
         currentComponent.setState({
           id: e,
           visible: true,
@@ -141,13 +143,15 @@ export default class CoinsList extends Component {
           price: results.data.market_data.current_price.usd,
           mkcap: results.data.market_data.market_cap.usd,
           cs: results.data.market_data.circulating_supply,
-          desc: results.data.description.en
+          desc: results.data.description.en,
+          vol: results.data.market_data.total_volume.usd
         });
       });
   };
   render() {
     return (
       <div>
+        <ToastContainer />
         <Pagination
           activePage={this.state.activePage}
           onPageChange={this.handleOnChange}
@@ -162,6 +166,7 @@ export default class CoinsList extends Component {
           rowKey="id"
           pagination={false}
           onRowClick={e => this.handleClick(e)}
+          style={{ cursor: "pointer" }}
         />
         <br></br>
         <Pagination
@@ -170,74 +175,114 @@ export default class CoinsList extends Component {
           totalPages={62}
           ellipsisItem={null}
         />
-        <Modal
-          title="Coins Details"
-          visible={this.state.visible}
-          onOk={this.handleOk}
-          onCancel={this.handleCancel}
-          width="60%"
-        >
-          <Descriptions>
-            <Descriptions.Item label="">
-              {" "}
-              <img src={this.state.image} alt={``} />
-              <span className="name">{this.state.name}</span>
-              <span className="symbol">({this.state.symbol})</span>
-            </Descriptions.Item>
-            <Descriptions.Item label=""></Descriptions.Item>
-            <Descriptions.Item label="">
-              <span className="price">${this.state.price}</span>
-            </Descriptions.Item>
-            <Descriptions.Item label="">
-              {" "}
-              <span className="info">Market Cap:</span> Rank #{this.state.mkc}
-              <br />
-            </Descriptions.Item>
-            <Descriptions.Item label=""></Descriptions.Item>
-            <Descriptions.Item label="">
-              <span className="info">Market Cap: </span>$
-              {commaNumber(this.state.mkcap)}
-            </Descriptions.Item>
-            <Descriptions.Item label="">
-              {" "}
-              <span className="info">Website:</span>{" "}
-              <a
-                href={this.state.links}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                {this.state.links}
-              </a>
-            </Descriptions.Item>
-            <Descriptions.Item label=""></Descriptions.Item>
-            <Descriptions.Item label="">
-              <span className="info">Circulating Supply:</span> $
-              {commaNumber(this.state.cs)}
-            </Descriptions.Item>
-            <Descriptions.Item label="">
-              <span className="info">Community</span>:{" "}
-              <a
-                href={this.state.community}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                {this.state.community}
-              </a>
-            </Descriptions.Item>
-            <Descriptions.Item label=""></Descriptions.Item>
-            <Descriptions.Item label=""></Descriptions.Item>
-          </Descriptions>
-          <Typography>
-            <Title>
-              <span className="names">{this.state.name}</span>
-            </Title>
-            <Paragraph style={{ textAlign: "justify" }}>
-              <em dangerouslySetInnerHTML={{ __html: this.state.desc }} />
-            </Paragraph>
-          </Typography>
-          <Details id={this.state.id} />
-          <Chart />
-        </Modal>
+        <div className="modal">
+          <Modal
+            title="Coins Details"
+            visible={this.state.visible}
+            onOk={this.handleOk}
+            onCancel={this.handleCancel}
+            width="60%"
+          >
+            <Descriptions>
+              <Descriptions.Item label="">
+                {" "}
+                <img src={this.state.image} alt={``} />
+                <span className="name">{this.state.name}</span>
+                <span className="symbol">({this.state.symbol})</span>
+              </Descriptions.Item>
+              <Descriptions.Item label=""></Descriptions.Item>
+              <Descriptions.Item label="">
+                <span className="price">${commaNumber(this.state.price)}</span>
+              </Descriptions.Item>
+              <Descriptions.Item label="">
+                {" "}
+                <span className="info">Market Cap:</span>{" "}
+                <span
+                  style={{
+                    background: "black",
+                    color: "white",
+                    padding: "5px",
+                    borderRadius: "5px"
+                  }}
+                >
+                  Rank #{this.state.mkc}
+                </span>
+                <br />
+              </Descriptions.Item>
+              <Descriptions.Item label=""></Descriptions.Item>
+              <Descriptions.Item label="">
+                <span className="info">Market Cap: </span>
+                <span className="data">${commaNumber(this.state.mkcap)}</span>
+              </Descriptions.Item>
+              <Descriptions.Item label="">
+                {" "}
+                <span className="info">Website:</span>{" "}
+                <span
+                  style={{
+                    background: "#eee",
+                    color: "white",
+                    padding: "5px",
+                    borderRadius: "5px"
+                  }}
+                >
+                  <a
+                    href={this.state.links}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {this.state.links}
+                  </a>
+                </span>
+              </Descriptions.Item>
+              <Descriptions.Item label=""></Descriptions.Item>
+              <Descriptions.Item label="">
+                <span className="info">Circulating Supply:</span>{" "}
+                <span className="data">${commaNumber(this.state.cs)}</span>
+              </Descriptions.Item>
+              <Descriptions.Item label="">
+                <span className="info">Community</span>:{" "}
+                <span
+                  style={{
+                    background: "#eee",
+                    color: "white",
+                    padding: "5px",
+                    borderRadius: "5px"
+                  }}
+                >
+                  <a
+                    href={this.state.community}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {this.state.community}
+                  </a>
+                </span>
+              </Descriptions.Item>
+              <Descriptions.Item label=""></Descriptions.Item>
+              <Descriptions.Item label="">
+                <span className="info">24 Hour Trading Vol:</span>{" "}
+                <span className="data">${commaNumber(this.state.vol)}</span>
+              </Descriptions.Item>
+            </Descriptions>
+            <Converter
+              id={this.state.symbol}
+              price={this.state.price}
+              image={this.state.image}
+              name={this.state.name}
+            />
+            <Typography>
+              <Title>
+                <span className="names">{this.state.name}</span>
+              </Title>
+              <Paragraph style={{ textAlign: "justify" }}>
+                <em dangerouslySetInnerHTML={{ __html: this.state.desc }} />
+              </Paragraph>
+            </Typography>
+            <Details id={this.state.id} />
+
+            <Chart id={this.state.id} />
+          </Modal>
+        </div>
       </div>
     );
   }

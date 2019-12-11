@@ -1,0 +1,16 @@
+.buysell{
+  height: auto;
+  width:100%;
+  background: #eee;
+  display: flex;
+  justify-content: center;
+  padding: 10px;
+}
+.center{
+ margin-top:10px;
+}
+.btc{
+  height:30px;
+  padding:12px;
+
+}

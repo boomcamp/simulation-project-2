@@ -1,9 +1,7 @@
 import React, { Component } from "react";
 import axios from "axios";
 import CoinsList from "../CoinsList/CoinsList";
-import { Link } from "react-router-dom";
-
-// import CoinTable from "../CoinTable/CoinTable";
+import "./homepage.css";
 import {
   MDBContainer,
   MDBNavbar,
@@ -34,6 +32,7 @@ export default class HomePage extends Component {
       });
   }
   onClick() {
+    this.props.history.push("/investment");
     this.setState({
       collapse: !this.state.collapse
     });
@@ -46,13 +45,16 @@ export default class HomePage extends Component {
           <header>
             <MDBNavbar style={bgPink} dark expand="md" scrolling fixed="top">
               <MDBNavbarBrand href="/">
-                <strong>Cryptocurrency Price Explorer</strong>
+                <strong>Simulation Project 2</strong>
               </MDBNavbarBrand>
               <MDBNavbarToggler onClick={this.onClick} />
               <MDBCollapse isOpen={this.state.collapse} navbar>
-                <Link to="/">
-                  <MDBNavbarNav left>Home</MDBNavbarNav>
-                </Link>
+                <span onClick={() => this.props.history.push("/investment")}>
+                  <MDBNavbarNav right style={{ color: "white" }}>
+                    &nbsp;&nbsp;&nbsp;&nbsp;
+                    <span className="track">Investment Tracking</span>
+                  </MDBNavbarNav>
+                </span>
                 <MDBNavbarNav right></MDBNavbarNav>
               </MDBCollapse>
             </MDBNavbar>
