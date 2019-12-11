@@ -13,7 +13,17 @@ export default class Routes extends React.Component {
       handleSelect,
       loading,
       handlePagination,
-      currencies
+      currencies,
+      crypto,
+      cryptoList,
+      handleCrypto,
+      currentPrice,
+      cryptoValue,
+      moneyValue,
+      handleOnChange,
+      handleSubmitInvest,
+      lastTrans,
+      transList
     } = this.props;
     return (
       <Switch>
@@ -38,7 +48,24 @@ export default class Routes extends React.Component {
         />
         <Route
           path="/investment/tracking"
-          render={props => <Investment {...props} />}
+          render={props => (
+            <Investment
+              {...props}
+              currency={currency}
+              crypto={crypto}
+              cryptoList={cryptoList}
+              currencies={currencies}
+              handleCrypto={handleCrypto}
+              currentPrice={currentPrice}
+              cryptoValue={cryptoValue}
+              moneyValue={moneyValue}
+              handleOnChange={handleOnChange}
+              handleSubmitInvest={handleSubmitInvest}
+              lastTrans={lastTrans}
+              transList={transList}
+              loading={loading}
+            />
+          )}
         />
       </Switch>
     );

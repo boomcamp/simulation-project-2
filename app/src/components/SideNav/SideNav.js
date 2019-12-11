@@ -115,6 +115,16 @@ export default function SideNav(props) {
             handlePagination={props.handlePagination}
             currentPage={props.currentPage}
             currencies={props.currencies}
+            cryptoList={props.cryptoList}
+            crypto={props.crypto}
+            handleCrypto={props.handleCrypto}
+            currentPrice={props.currentPrice}
+            cryptoValue={props.cryptoValue}
+            moneyValue={props.moneyValue}
+            handleOnChange={props.handleOnChange}
+            handleSubmitInvest={props.handleSubmitInvest}
+            lastTrans={props.lastTrans}
+            transList={props.transList}
           />
         </Div>
       </main>
