@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Axios from "axios";
 import Transaction from "./Transaction";
 import Table from "@material-ui/core/Table";
@@ -33,27 +33,14 @@ const theme = createMuiTheme({
 
 export default function Stats(props) {
 	const classes = useStyles();
-	const [coin, setCoin] = useState(null);
-	const [price, setPrice] = useState(null);
 	const [transaction, setTransaction] = useState(false);
 
-	useEffect(() => {
-		setCoin(props.name);
-		setPrice(props.priceData.usd);
-	}, [props.priceData.usd, props.name]);
-
 	const buy = val => {
-		// Axios.post("http://localhost:4000/transactions", {
-		// 	coin: coin,
-		// 	price: price
-		// }).catch(error => {
-		// 	console.log(error.response.data);
-		// });
 		setTransaction(val);
 	};
 
 	const sell = () => {
-		Axios.delete("http://localhost:4000/transactions/2").then(response => {
+		Axios.delete("http://localhost:4000/transactions/3").then(response => {
 			console.log("deleted");
 		});
 	};
@@ -80,7 +67,17 @@ export default function Stats(props) {
 	];
 
 	if (transaction) {
-		return <Transaction symbol={props.symbol} price={props.priceData.usd} buy={buy} formatter={formatter} />;
+		return (
+			<Transaction
+				symbol={props.symbol}
+				price={props.priceData.usd}
+				buy={buy}
+				formatter={formatter}
+				img={props.img}
+				id={props.id}
+				name={props.name}
+			/>
+		);
 	}
 	return (
 		<Slide direction="right" in={true}>

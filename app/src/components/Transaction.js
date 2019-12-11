@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Axios from "axios";
 import clsx from "clsx";
 import Typography from "@material-ui/core/Typography";
 import Paper from "@material-ui/core/Paper";
@@ -38,6 +39,29 @@ export default function Transaction(props) {
 	const [coin, setCoin] = useState("");
 	const [amount, setAmount] = useState("");
 	const [fee, setFee] = useState(0);
+
+	const confirmBuy = () => {
+		if (coin) {
+			Axios.post("http://localhost:4000/transactions", {
+				id: props.id,
+				name: props.name,
+				image: props.img.small,
+				priceP: props.price,
+				transaction: "buy",
+				timestamp: new Date().getTime()
+			}).catch(error => {
+				console.log(error.response.data);
+			});
+			console.log(
+				` ${props.id}`,
+				`name ${props.name}`,
+				`image ${props.img.small}`,
+				`priceP ${props.price}`,
+				"transaction buy",
+				`date ${new Date().getTime()}`
+			);
+		}
+	};
 	return (
 		<Slide direction="left" in>
 			<Paper className={classes.root} elevation={0} square={true}>
@@ -105,7 +129,13 @@ export default function Transaction(props) {
 
 						<Grid container item xs={12} spacing={1} justify="center">
 							<Grid item>
-								<Button variant="contained" size="large" color="primary" style={{ marginTop: "20px" }}>
+								<Button
+									variant="contained"
+									size="large"
+									color="primary"
+									onClick={confirmBuy}
+									style={{ marginTop: "20px" }}
+								>
 									Confirm
 								</Button>
 							</Grid>

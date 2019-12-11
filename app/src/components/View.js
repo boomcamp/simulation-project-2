@@ -51,6 +51,7 @@ export default function View() {
 				setSetMarketData(response.data.market_data);
 				setPriceHourPChange(response.data.market_data.price_change_percentage_1h_in_currency.usd);
 				setSymbol(response.data.symbol);
+				console.log(response.data);
 			})
 			.catch(error => {
 				setChecker(true);
@@ -98,6 +99,7 @@ export default function View() {
 				name={data.name}
 				priceHourPChange={priceHourPChange}
 				symbol={symbol}
+				img={img}
 			/>
 		</Container>
 	);
