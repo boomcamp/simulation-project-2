@@ -2,20 +2,21 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import {
   Container,
-  CircularProgress,
   Button,
-  Box,
   Paper,
   Typography,
   TextField,
+  AppBar,
+  Toolbar,
   InputAdornment
 } from "@material-ui/core";
 import "semantic-ui-css/semantic.min.css";
 import { makeStyles } from "@material-ui/core/styles";
 import { NavLink, useParams } from "react-router-dom";
-import { AppBar, Toolbar } from "@material-ui/core";
 import TrendingUpOutlinedIcon from "@material-ui/icons/TrendingUpOutlined";
 import SwapHorizIcon from "@material-ui/icons/SwapHoriz";
+import Buy from "../Buy/Buy";
+import Sell from "../Sell/Sell";
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -44,7 +45,6 @@ const useStyles = makeStyles(theme => ({
     fontSize: 40,
     color: "white",
     textAlign: "left",
-    // borderLeft: "10px solid white",
     padding: "0px 20px",
     margin: "0 auto",
     display: "flex",
@@ -53,7 +53,6 @@ const useStyles = makeStyles(theme => ({
   },
   mainCon: {
     width: "90%",
-    height: "50vh",
     margin: "20px auto",
     display: "flex",
     flexDirection: "row",
@@ -109,7 +108,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function BuySell() {
+export default function BuySell(props) {
   const classes = useStyles();
   const [loader, setLoader] = useState(false);
   const { id } = useParams();
@@ -117,8 +116,10 @@ export default function BuySell() {
   const [price, setPrice] = useState([]);
   const [symbol, setSymbol] = useState([]);
   const [image, setImage] = useState([]);
-  const [coin, setCoin] = useState(0);
+  const [coin, setCoin] = useState(null);
   const [amount, setAmount] = useState(0);
+  const [buyBtn, setBuyBtn] = useState(false);
+  const [sellBtn, setSellBtn] = useState(false);
 
   useEffect(() => {
     setLoader(true);
@@ -135,6 +136,24 @@ export default function BuySell() {
     currency: "USD",
     minimumFractionDigits: 2
   });
+
+  const handleBuy = val => {
+    setBuyBtn(val);
+  };
+  const handleSell = val => {
+    setSellBtn(val);
+  };
+
+  let buy;
+  if (buyBtn) {
+    buy = <Buy amount={amount} coin={coin} cancel={handleBuy} />;
+  }
+
+  let sell;
+
+  if (sellBtn) {
+    sell = <Sell amount={amount} coin={coin} cancel={handleSell} />;
+  }
   return (
     <div>
       <div className={classes.root}>
@@ -175,139 +194,202 @@ export default function BuySell() {
           {"\xa0" + data.name} Buy / Sell
         </Typography>
       </Paper>
-      <Container className={classes.mainCon}>
-        <Paper className={classes.paper}>
-          <Paper className={classes.topTitle}>
-            <Typography className={classes.typoTitle}>Buy</Typography>
-          </Paper>
-          <Paper style={{ height: "85%" }}>
-            <Paper
-              style={{
-                height: "35%",
-                padding: 20,
-                display: "flex",
-                paddingTop: 20
-              }}
-            >
-              <div className={classes.inputDiv}>
-                <TextField
-                  label="Amount"
-                  id="outlined-start-adornment"
-                  InputProps={{
-                    startAdornment: (
-                      <InputAdornment position="start">&#36;</InputAdornment>
-                    )
-                  }}
-                  variant="outlined"
-                  value={coin}
-                  type="number"
-                  onChange={e => {
-                    setAmount(e.target.value / price);
-                    setCoin(e.target.value);
-                  }}
-                />
-              </div>
-              <div style={{ marginTop: 26 }}>
-                <SwapHorizIcon />
-              </div>
-              <div className={classes.inputDiv}>
-                <TextField
-                  id="outlined-start-adornment"
-                  InputProps={{
-                    endAdornment: (
-                      <InputAdornment position="start">{symbol}</InputAdornment>
-                    )
-                  }}
-                  variant="outlined"
-                  type="number"
-                  value={amount}
-                  onChange={e => {
-                    setCoin(e.target.value * price);
-                    setAmount(e.target.value);
-                  }}
-                />
-              </div>
+      <Container style={{ width: "100%" }}>
+        <Container className={classes.mainCon}>
+          <Paper className={classes.paper}>
+            <Paper className={classes.topTitle}>
+              <Typography className={classes.typoTitle}>Buy</Typography>
             </Paper>
-            <Paper style={{ height: "65%" }}>
-              <div className={classes.subtitleDiv}>
-                <span className={classes.subtitle}>
-                  Current
-                  <p style={{ textTransform: "uppercase" }}>
-                    {"\xa0" + data.symbol + "\xa0"}
-                  </p>{" "}
-                  Price:
-                </span>
-                <span className={classes.value}>{formatter.format(price)}</span>
-              </div>
-              <div className={classes.subtitleDiv}>
-                <span className={classes.subtitle}>Total:</span>
-                <span className={classes.value}>{formatter.format(coin)}</span>
-              </div>
-              <Button
-                variant="contained"
-                style={{ backgroundColor: "#6fc5d5" }}
+            <Paper style={{ height: "85%" }}>
+              <Paper
+                style={{
+                  height: "35%",
+                  padding: 10,
+                  display: "flex",
+                  paddingTop: 20
+                }}
               >
-                Buy now
-              </Button>
+                <div className={classes.inputDiv}>
+                  <TextField
+                    label="Amount"
+                    id="outlined-start-adornment"
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">&#36;</InputAdornment>
+                      )
+                    }}
+                    variant="outlined"
+                    value={coin}
+                    type="number"
+                    onChange={e => {
+                      var estNet =
+                        +e.target.value -
+                        (+e.target.value + -e.target.value * 0.01) * 0.01;
+                      setAmount(estNet / price);
+                      setCoin(e.target.value);
+                    }}
+                  />
+                </div>
+                <div style={{ marginTop: 26 }}>
+                  <SwapHorizIcon />
+                </div>
+                <div className={classes.inputDiv}>
+                  <TextField
+                    id="outlined-start-adornment"
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment
+                          style={{ textTransform: "uppercase" }}
+                          position="start"
+                        >
+                          {symbol}
+                        </InputAdornment>
+                      )
+                    }}
+                    variant="outlined"
+                    type="number"
+                    value={amount}
+                    onChange={e => {
+                      setCoin(e.target.value * price);
+                      setAmount(e.target.value);
+                    }}
+                  />
+                </div>
+              </Paper>
+              <Paper style={{ paddingBottom: 20 }}>
+                <div className={classes.subtitleDiv}>
+                  <span className={classes.subtitle}>
+                    <p style={{ textTransform: "uppercase" }}>
+                      EST. NET ({symbol})
+                    </p>{" "}
+                  </span>
+                  <span className={classes.value}>
+                    {formatter.format(+coin - (+coin + -coin * 0.01) * 0.01)}
+                  </span>
+                </div>
+                <div className={classes.subtitleDiv}>
+                  <span className={classes.subtitle}>
+                    <p style={{ textTransform: "uppercase" }}></p>
+                    Coin Base Fee (1%)
+                  </span>
+                  <span className={classes.value}>
+                    {formatter.format((+coin + -coin * 0.01) * 0.01)}
+                  </span>
+                </div>
+                <div className={classes.subtitleDiv}>
+                  <span className={classes.subtitle}>Total Amount:</span>
+                  <span className={classes.value}>
+                    {formatter.format(coin)}
+                  </span>
+                </div>
+                <Button
+                  variant="contained"
+                  style={{ backgroundColor: "#6fc5d5" }}
+                  onClick={handleBuy}
+                >
+                  Buy now
+                </Button>
+              </Paper>
             </Paper>
           </Paper>
-        </Paper>
-        <Paper className={classes.paper}>
-          <Paper className={classes.topTitle}>
-            <Typography className={classes.typoTitle}>Sell</Typography>
-          </Paper>
-          {/* <Paper style={{ height: "90%" }}>
-            <Paper style={{ height: "45%", padding: 20 }}>
-              <div className={classes.inputDiv}>
-                <span className={classes.inputTitle}>RATE:</span>
-                <TextField
-                  id="outlined-number"
-                  type="number"
-                  InputLabelProps={{
-                    shrink: true
-                  }}
-                  variant="outlined"
-                />
-              </div>
-              <div className={classes.inputDiv}>
-                <span className={classes.inputTitle}>AMOUNT:</span>
-                <TextField
-                  id="outlined-number"
-                  type="number"
-                  InputLabelProps={{
-                    shrink: true
-                  }}
-                  variant="outlined"
-                />
-              </div>
+          <Paper className={classes.paper}>
+            <Paper className={classes.topTitle}>
+              <Typography className={classes.typoTitle}>Sell</Typography>
             </Paper>
-            <Paper
-              style={{
-                height: "55%",
-                padding: 20
-              }}
-            >
-              <div className={classes.subtitleDiv}>
-                <span className={classes.subtitle}>Est. Net BTC:</span>
-                <span className={classes.value}>$0.00</span>
-              </div>
-              <div className={classes.subtitleDiv}>
-                <span className={classes.subtitle}>Est. Fee BTC: (0.15%)</span>
-                <span className={classes.value}>$0.00</span>
-              </div>
-              <div className={classes.subtitleDiv}>
-                <span className={classes.subtitle}>Est. Total BTC:</span>
-                <span className={classes.value}>$0.00</span>
-              </div>
-              <Button
-                variant="contained"
-                style={{ backgroundColor: "#6fc5d5", marginTop: 20 }}
+            <Paper style={{ height: "85%" }}>
+              <Paper
+                style={{
+                  height: "35%",
+                  padding: 10,
+                  display: "flex",
+                  paddingTop: 20
+                }}
               >
-                Sell now
-              </Button>
+                <div className={classes.inputDiv}>
+                  <TextField
+                    label="Amount"
+                    id="outlined-start-adornment"
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">&#36;</InputAdornment>
+                      )
+                    }}
+                    variant="outlined"
+                    value={coin}
+                    type="number"
+                    onChange={e => {
+                      setAmount(e.target.value / price);
+                      setCoin(e.target.value);
+                    }}
+                  />
+                </div>
+                <div style={{ marginTop: 26 }}>
+                  <SwapHorizIcon />
+                </div>
+                <div className={classes.inputDiv}>
+                  <TextField
+                    id="outlined-start-adornment"
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment
+                          style={{ textTransform: "uppercase" }}
+                          position="start"
+                        >
+                          {symbol}
+                        </InputAdornment>
+                      )
+                    }}
+                    variant="outlined"
+                    type="number"
+                    value={amount}
+                    onChange={e => {
+                      setCoin(e.target.value * price);
+                      setAmount(e.target.value);
+                    }}
+                  />
+                </div>
+              </Paper>
+              <Paper style={{ paddingBottom: 20 }}>
+                <div className={classes.subtitleDiv}>
+                  <span className={classes.subtitle}>
+                    Current
+                    <p style={{ textTransform: "uppercase" }}>
+                      {"\xa0" + data.symbol + "\xa0"}
+                    </p>{" "}
+                    Price:
+                  </span>
+                  <span className={classes.value}>
+                    {formatter.format(price)}
+                  </span>
+                </div>
+                <div className={classes.subtitleDiv}>
+                  <span className={classes.subtitle}>
+                    <p style={{ textTransform: "uppercase" }}></p>
+                    Coin Base Fee (10%)
+                  </span>
+                  <span className={classes.value}>
+                    {formatter.format(coin * 0.1)}
+                  </span>
+                </div>
+                <div className={classes.subtitleDiv}>
+                  <span className={classes.subtitle}>Total:</span>
+                  <span className={classes.value}>
+                    {formatter.format(coin)}
+                  </span>
+                </div>
+                <Button
+                  variant="contained"
+                  style={{ backgroundColor: "#6fc5d5" }}
+                  onClick={handleSell}
+                >
+                  Sell now
+                </Button>
+              </Paper>
             </Paper>
-          </Paper> */}
-        </Paper>
+          </Paper>
+        </Container>
+        {buy}
+        {sell}
       </Container>
     </div>
   );
