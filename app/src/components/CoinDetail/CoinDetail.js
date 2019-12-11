@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { Table, TableCell, TableRow, Paper, TableHead, TableBody } from '@material-ui/core'
+import { Table, TableCell, TableRow, Paper, TableHead, TableBody } from '@material-ui/core';
+import TextField from '@material-ui/core/TextField';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import clsx from 'clsx';
 import axios from 'axios';
 
 import DataChart from './DataChart';
@@ -23,6 +26,9 @@ const useStyles = makeStyles(theme => ({
         color: '#000',
         textAlign: 'justify'
     },
+    title: {
+        display: "flex"
+    },
     descbox: {
         background: '#fff',
         border: "1px solid #e7e7e7",
@@ -42,60 +48,95 @@ const useStyles = makeStyles(theme => ({
     rootTable2: {
         marginTop: 10
     },
+    rootTable3: {
+        background: '#fff',
+        border: "1px solid #e7e7e7",
+        borderRadius: 2,
+        padding: 5,
+        color: '#000',
+        marginTop: 10
+    },
+    textField: {
+        width: "95%",
+    },
+    margin: {
+        margin: theme.spacing(1),
+    },
     graph: {
         width: "100%"
     },
     stat: {
         height: "100%",
+    },
+    name: {
+        fontSize: '24px',
+        marginRight: 10
+    },
+    convert: {
+        padding: 10
     }
 }));
 
 export default function CoinDetail(props) {
     const classes = useStyles();
-    const { id, high24h, low24h, currentPrice, marketCap, name, rank } = props;
+    const { symbol, id, high24h, low24h, currentPrice, marketCap, name, rank } = props;
     const [desc, setDesc] = useState("");
     const [url, setUrl] = useState('');
+    const [forum, setForum] = useState('');
     const [priceChange1, setPriceChange1] = useState(0);
     const [priceChange7, setPriceChange7] = useState(0);
     const [priceChange14, setPriceChange14] = useState(0);
     const [priceChange30, setPriceChange30] = useState(0);
     const [priceChange1yr, setPriceChange1yr] = useState(0);
-    const [market_Cap, setMarket_Cap] = useState(0);
+    // const [market_Cap, setMarket_Cap] = useState(0);
 
     useEffect(() => {
+        axios({
+            method: 'get',
+            url: `https://api.coingecko.com/api/v3/coins/${id}`
+        })
+            .then(res => {
+                console.log(res.data)
+                if (res.status !== 200) {
+                    alert('Unable to fetch data')
+                } else {
+                    setDesc(res.data.description.en)
+                    setUrl(res.data.links.homepage[0])
+                    setForum(res.data.links.official_forum_url[0])
+                    setPriceChange1(res.data.market_data.price_change_percentage_24h)
+                    setPriceChange7(res.data.market_data.price_change_percentage_7d)
+                    setPriceChange14(res.data.market_data.price_change_percentage_14d)
+                    setPriceChange30(res.data.market_data.price_change_percentage_30d)
+                    setPriceChange1yr(res.data.market_data.price_change_percentage_1y)
+                }
+            })
+            .catch(e => console.log(e))
+
+        // currencies
         // axios
         //     .get(`https://api.coingecko.com/api/v3/coins/${id}/market_chart?vs_currency=usd&days=1`)
         //     .then(val =>
         //         setMarket_Cap(val.data.market_cap))
         //     .catch(e => console.log(e))
 
+        // exchange rates
         //exchange rates
         // axios
         //     .get(`https://api.coingecko.com/api/v3/exchange_rates`)
         //     .then(exc => console.log(exc.data))
         //     .catch(e => console.log(e))
-
-        axios({
-            method: 'get',
-            url: `https://api.coingecko.com/api/v3/coins/${id}`
-        })
-            .then(res => {
-                setDesc(res.data.description.en)
-                setUrl(res.data.links.homepage)
-                setPriceChange1(res.data.market_data.price_change_percentage_24h)
-                setPriceChange7(res.data.market_data.price_change_percentage_7d)
-                setPriceChange14(res.data.market_data.price_change_percentage_14d)
-                setPriceChange30(res.data.market_data.price_change_percentage_30d)
-                setPriceChange1yr(res.data.market_data.price_change_percentage_1y)
-            })
-            .catch(e => console.log(e))
     })
 
 
     return (
         <div className={classes.background}>
             <div className={classes.descbox}>
-                <h5>Details</h5>
+                <div className={classes.title}>
+                    <h5 className={classes.name}>{name}</h5>
+                    <img src="https://assets.coingecko.com/coins/images/1/thumb/bitcoin.png?1547033579" />
+                </div>
+                <div>Homepage: <span><a href={url} target="_blank">{url}</a></span></div>
+                <div>Official Forum: <span><a href={forum} target="_blank">{forum}</a></span></div>
                 <div
                     className={classes.description}
                     dangerouslySetInnerHTML={{ __html: desc }}>
@@ -144,7 +185,7 @@ export default function CoinDetail(props) {
                                 <TableHead>
                                     <TableRow>
                                         <TableCell align="center" colSpan={2}>
-                                            Percentage Monitor
+                                            PERCENTAGE MONITOR
                                     </TableCell>
                                     </TableRow>
                                 </TableHead>
@@ -173,7 +214,28 @@ export default function CoinDetail(props) {
                             </Table>
                         </Paper>
                     </div>
-                    <button>Test</button>
+                    <div className={classes.rootTable3}>
+                        <div className={classes.convert}>CONVERSION:</div>
+                        <TextField
+                            label={name}
+                            id="outlined-start-adornment"
+                            className={clsx(classes.margin, classes.textField)}
+                            InputProps={{
+                                startAdornment: <InputAdornment position="start">{symbol}</InputAdornment>,
+                            }}
+                            variant="outlined"
+                            onChange={e => console.log(e.target.value)}
+                        />
+                        <TextField
+                            label="Currency"
+                            id="outlined-start-adornment"
+                            className={clsx(classes.margin, classes.textField)}
+                            InputProps={{
+                                startAdornment: <InputAdornment position="start">$</InputAdornment>,
+                            }}
+                            variant="outlined"
+                        />
+                    </div>
                 </div>
                 <div className={classes.graph}>
                     <DataChart

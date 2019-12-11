@@ -10,7 +10,7 @@ const useStyles = makeStyles(theme => ({
         background: 'rgb(82, 86, 89)',
         color: ' #fff',
         width: "100%",
-        height: "100%",
+        height: "100vh",
         margin: 0
     },
     root: ({ inactive }) => ({
@@ -28,7 +28,7 @@ export default function Main() {
     const classes = useStyles();
     return (
         <div className={classes.background}>
-            <Box width={"75%"} borderRadius={2} height={'100vh'} background={'#fff'} />
+            <Box width={"100%"} borderRadius={2} height={'100%'} />
         </div>
     );
 }

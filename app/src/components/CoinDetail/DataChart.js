@@ -14,7 +14,8 @@ const useStyles = {
         borderRadius: 10,
         color: '#000',
         padding: 20,
-        marginLeft: 10
+        marginLeft: 10,
+        height: '100%'
     },
     grid: {
         display: "flex",
@@ -30,6 +31,10 @@ const useStyles = {
         display: "flex",
         justifyContent: "center",
         alignItems: "center"
+    },
+    invest: {
+        margin: 5,
+        padding: 5,
     }
 };
 
@@ -46,11 +51,13 @@ class DataChart extends Component {
                 xaxis: {
                     categories: [],
                     labels: {
-                        formatter: (value) => value.toFixed(0),
+                        formatter: (value) => {
+                            var val = new Date();
+                            val.toGMTString();
+                        },
                     },
                 },
                 yaxis: {
-                    forceNiceScale: false,
                     labels: {
                         formatter: (value) => "$ " + value.toFixed(2),
                     },
@@ -220,13 +227,17 @@ class DataChart extends Component {
                         <Loader size="md" />
                         Loading... <br />
                         Please wait.
-                    </div> : <Chart
-                        options={this.state.options}
-                        series={this.state.series}
-                        type="line"
-                        width="100%"
-                        height="700"
-                    />
+                    </div> :
+                    <React.Fragment>
+                        <Chart
+                            options={this.state.options}
+                            series={this.state.series}
+                            type="line"
+                            width="100%"
+                            height="700"
+                        />
+                        <div className={classes.invest}>Want to Invest?</div>
+                    </React.Fragment>
                 }
             </div>
         );

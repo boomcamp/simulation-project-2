@@ -64,13 +64,6 @@ class CoinList extends Component {
             open: false,
             anchorRef: null,
             selectedIndex: 1,
-            percentage: {
-                changePrice1: 0,
-                changePrice7: 0,
-                changePrice14: 0,
-                changePrice30: 0,
-                changePrice1y: 0
-            }
         }
     }
 
@@ -165,7 +158,7 @@ class CoinList extends Component {
                 <div className={classes.currency}>
                     <Grid container direction="column" alignItems="flex-end">
                         <Grid item xs={12}>
-                            <Tooltip title="Disabled(BETA)" arrow>
+                            <Tooltip title="Currency List - BETA(In Progress)" arrow>
                                 <ButtonGroup disabled variant="contained" color="secondary" ref={anchorRef} aria-label="split button">
                                     <Button onClick={this.handleClick}>{currency[selectedIndex]}</Button>
                                     <Button
@@ -231,7 +224,9 @@ class CoinList extends Component {
                             }
                         }}
                         detailPanel={rowData => {
+                            console.log(rowData.data)
                             return <CoinDetail
+                                symbol={rowData.symbol}
                                 id={rowData.id}
                                 high24h={rowData.high_24h}
                                 low24h={rowData.low_24h}
@@ -239,11 +234,6 @@ class CoinList extends Component {
                                 marketCap={rowData.market_cap}
                                 name={rowData.name}
                                 rank={rowData.market_cap_rank}
-                                oneDay={this.state.percentage.changePrice1}
-                                sevenDay={this.state.percentage.changePrice7}
-                                fourteenDay={this.state.percentage.changePric14}
-                                thirtyDay={this.state.percentage.changePrice30}
-                                oneYear={this.state.percentage.changePrice1y}
                             />
                         }}
                         onRowClick={(event, rowData, togglePanel) => togglePanel()}
