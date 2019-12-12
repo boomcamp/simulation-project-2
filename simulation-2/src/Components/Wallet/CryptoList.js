@@ -8,12 +8,13 @@ import {GetDetail} from '../API/API'
 
 let donesignal = false;
 
-export default function CryptoList() {
+export default function CryptoList(props) {
 
     const [state, setState] = useState();
 
+
     const selected = (data) =>{
-        alert(data);
+        // alert(data);
     }
 
     useEffect(()=>{
@@ -27,13 +28,13 @@ export default function CryptoList() {
 
                 const coindata = await coinmarketdata.json()
 
-                data.push(coindata)
+                data.push({...coindata, transaction_id:coin.id})
 
             }
             setState(data)
             donesignal = true
         })()
-    })
+    },[])
 
 
     const ExpandUserTransactionsData = (data) => {
@@ -43,7 +44,6 @@ export default function CryptoList() {
         data.map(coin=>{
             GetDetail(coin.coinRef.id)
             .then(data=>{
-                // addtostate(data.data)
                 datastate.push({
                     symbol: data.data[0].symbol,
                     priceChangePercentage: data.data[0].price_change_percentage_24h
@@ -54,7 +54,6 @@ export default function CryptoList() {
             })
         })
         setState(datastate)
-        // console.log(state)
         donesignal = true;
         return
     }
@@ -81,7 +80,7 @@ export default function CryptoList() {
                     isBuying?<SearchForBuy toggle={()=>toggle()} selectedpass={selected}/>:''
                 }
                 {
-                    state?state.map((coin)=>(<InvestmentTracker index={coin[0].symbol} percentage={coin[0].price_change_percentage_24h.toFixed(2)}/>)):''
+                    state?state.map((coin)=>(<InvestmentTracker transactionId={coin.transaction_id} index={coin[0].symbol}  percentage={coin[0].price_change_percentage_24h.toFixed(2)} selectedpass={props.selectedpass} coinid={coin[0].id}/>)):''
                 }
             </div>
         </div>
@@ -106,17 +105,16 @@ const investment_container = {
     flexDirection: 'column',
     background: 'rgb(20, 57, 89)',
     color: 'white',
-    // height: '520px'
 }
 
 const mainText = {
-    // padding: '20px 0 ',
     margin: '10px 10px',
     border: '1px #032440 solid',
     width: '340px',
     display: 'flex',
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    padding: '10px 0'
 }
 
 const tableContainer = {

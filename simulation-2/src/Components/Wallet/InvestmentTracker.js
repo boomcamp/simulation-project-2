@@ -2,13 +2,17 @@ import React,{useEffect, useState} from 'react'
 import { textAlign } from '@material-ui/system'
 
 export default function InvestmentTracker(props) {
+
+    const ExpandDetails = (e) => {
+        // alert(e.target.getAttribute('data-index'))
+    }
+
     return (
         <>
-            <div className='cryptocoin-container' style={cryptocoinContainer}>
-                <div className='cryptocoin-name' style={{marginLeft: '10px'}}>{String(props.index).toUpperCase()}</div>
-                        
-                <div className='gen-profit-loss-percentage' >{props.percentage}</div>
-                <div className='gen-profit-loss' style={props.percentage<0?loss:profit}>{props.percentage<0?'DOWN':'UP'}</div>
+            <div className='cryptocoin-container'  style={cryptocoinContainer} data-transactionId={props.transactionId} data-index={props.coinid} onClick={props.selectedpass}>
+                <div className='cryptocoin-name' style={{marginLeft: '10px'}} data-transactionId={props.transactionId} data-index={props.coinid}>{String(props.index).toUpperCase()}</div>
+                <div className='gen-profit-loss-percentage' data-transactionId={props.transactionId} data-index={props.coinid}>{props.percentage}</div>
+                <div className='gen-profit-loss' data-transactionId={props.transactionId} style={props.percentage<0?loss:profit} data-index={props.coinid}>{props.percentage<0?'DOWN':'UP'}</div>
             </div>
         </>
     )
@@ -30,7 +34,10 @@ const cryptocoinContainer={
     margin: '10px',
     padding: '10px 0',
     border: '1px #032440 solid',
-
+    cursor: 'pointer',
+    ':hover' : {
+        border: '1px white solid',
+    }
 }
 
 const profit = {

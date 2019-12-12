@@ -53,7 +53,7 @@ export default function CoinWatch(props) {
                     return <span style={rowdata.sevendays>0?{color:'green'}:{color:'#F20C1F'}}> {rowdata.oneday.toFixed(2)+'%'} </span>
                 } },
                 { title: 'ATH%', field: 'pchange', type: 'numeric', render: rowdata=>{return <span style={{color:'#143D73', textAlign:'left'}} >{rowdata.pchange}</span>}},
-                {title: 'Last 7 Days', field: 'sparkline',  type: 'numeric', render: rowdata=>{
+                {title: 'Lasft 7 Days', field: 'sparkline',  type: 'numeric', render: rowdata=>{
                     return <Sparkline clicks={()=>props.click(rowdata)} style={{marginLeft:'-500px'}} datasignal={(rowdata.sevendays>0? true: false )} sparkdata={rowdata.sparkline}/>
                 }, headerStyle:{
                     width:'200px',

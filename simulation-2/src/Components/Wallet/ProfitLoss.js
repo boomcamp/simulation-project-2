@@ -13,16 +13,13 @@ export default function ProfitLoss() {
 
     return (
         <>
-            <div className='' style={{background: '#032440', width:'100%', height:'100vh', position:'fixed', zIndex:'-1', top:'0'}}>
-            </div>
-
             <div className='tamount-tracker-container' style={tamount_tracker_container}>
                 <div className='tamount-invested-container' style={tamount_invested_container}>
-                    <p className='tamount-invested-main'> Amount Invested</p>
+                    <p className='tamount-invested-main'> NET AMOUNT INVESTED</p>
                     <h1 className='tamount-invested-value' style={tamount_invested}> {state.total.amount_invested} </h1>
                 </div>
                 <div className='profit-loss-container' style={profit_loss_container}>
-                    <p className='tamount-invested-main'> Profit/Loss</p>   
+                    <p className='tamount-invested-main'> NET PROFIT/LOSS</p>   
                     <h1 className='profit-loss-state' style={profit_loss_state}> {state.total.isGain?state.total.profit:state.total.loss} </h1>
                 </div>  
             </div>

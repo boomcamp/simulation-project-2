@@ -9,7 +9,7 @@ export default function Buy(props) {
         console.log(id)
 
         axios.post(`http://localhost:4000/transactions`,{
-            transactionId: sha256(new Date()+buyAmount+valueCurrent+ccoinBought),
+            id: sha256(new Date()+buyAmount+valueCurrent+ccoinBought),
             coinRef:{
                 id: id
             },

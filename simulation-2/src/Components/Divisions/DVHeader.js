@@ -13,7 +13,6 @@ export default function DVHeader(props) {
             return <div className='up' style={{borderBottomColor:'green'}}/>
     }
 
-
     return (
         <div className="dv-header-container">
             
