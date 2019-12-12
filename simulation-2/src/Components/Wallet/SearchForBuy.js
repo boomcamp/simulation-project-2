@@ -90,11 +90,14 @@ export default function SearchForBuy(props) {
         const response = await fetch('https://api.coingecko.com/api/v3/coins/list');
         // await sleep(1e3); // For demo purposes.
         const cryptocoin = await response.json();
+        
         let coinobj = cryptocoin.filter((coin)=>{
           return coin.name === name
         })
+
         const coinDetails = await fetch(`https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=${coinobj[0].id}&order=market_cap_desc&per_page=100&page=1&sparkline=false
         `)
+        
         const coinres = await coinDetails.json();
         setCoinValue(coinres[0].current_price)
         setSelected(coinobj[0].id);
@@ -172,7 +175,7 @@ export default function SearchForBuy(props) {
           />
         </FormControl>
       
-            <Buy selected={selected} BuyAmount={amount} CoinValue={coinValue} NumOfCoin={coin}/>
+            <Buy toggle={props.toggle} selected={selected} BuyAmount={amount} CoinValue={coinValue} NumOfCoin={coin}/>
       
       </>
     );

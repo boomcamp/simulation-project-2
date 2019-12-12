@@ -4,16 +4,6 @@ import { sha256 } from 'js-sha256';
 
 export default function Buy(props) {
 
-    const [selected, setSelected] = useState();
-
-    useEffect(()=>{
-        // console.log(props.selected)
-    })
-
-    // const RandomId = () => {
-    //     return arr[Math.floor(Math.random() * arr.length)];
-    // }
-
     const buy_coin = (id, buyAmount, valueCurrent, ccoinBought) => {
         
         console.log(id)
@@ -34,11 +24,12 @@ export default function Buy(props) {
         }).catch(e=>{
             console.log(e)
         })
+        
     }
 
     return (
         <>
-            <div className='buy-action-btn' onClick={()=>buy_coin(props.selected, props.BuyAmount, props.CoinValue, props.NumOfCoin)} style={buybtn}>+ BUY COIN</div>
+            <div className='buy-action-btn' onClick={()=>{buy_coin(props.selected, props.BuyAmount, props.CoinValue, props.NumOfCoin);props.toggle()}} style={buybtn}>+ BUY COIN</div>
         </>
     )
 }
