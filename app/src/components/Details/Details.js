@@ -153,6 +153,7 @@ export default class Details extends React.Component {
   };
 
   handleInvest = e => {
+    this.setState({ toggleModal: false });
     e.preventDefault();
     const tempDate = new Intl.DateTimeFormat("en-US", {
       year: "numeric",
@@ -172,6 +173,7 @@ export default class Details extends React.Component {
       date: tempDate,
       invested: this.state.cryptValue,
       amount: this.state.amountValue,
+      amountSold: 0,
       currency: this.props.currency.value,
       details: coinDetails
     };
@@ -362,6 +364,7 @@ export default class Details extends React.Component {
               </Typography>
               <Amount>
                 <TextField
+                  required
                   label={this.props.currency.value}
                   variant="outlined"
                   style={{ textTransform: "uppercase" }}
@@ -370,6 +373,7 @@ export default class Details extends React.Component {
                 />
                 <MDBIcon icon="exchange-alt" style={{ padding: "20px" }} />
                 <TextField
+                  required
                   label={this.state.details.symbol}
                   variant="outlined"
                   style={{ textTransform: "uppercase" }}
@@ -382,12 +386,7 @@ export default class Details extends React.Component {
               <Button onClick={this.handleClose} color="primary">
                 Cancel
               </Button>
-              <Button
-                color="primary"
-                type="submit"
-                onClick={this.handleClose}
-                autoFocus
-              >
+              <Button color="primary" type="submit" autoFocus>
                 Invest
               </Button>
             </DialogActions>
