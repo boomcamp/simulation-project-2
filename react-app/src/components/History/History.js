@@ -7,7 +7,7 @@ import { Pagination } from "semantic-ui-react";
 import { makeStyles } from "@material-ui/core/styles";
 import TrendingUpOutlinedIcon from "@material-ui/icons/TrendingUpOutlined";
 import MonetizationOnOutlinedIcon from "@material-ui/icons/MonetizationOnOutlined";
-import Portfolio from "../Portfolio/Portfolio";
+import HistoryTable from "../HistoryTable/HistoryTable";
 import RecentTrans from "../RecentTrans/RecentTrans";
 
 import { NavLink, useParams } from "react-router-dom";
@@ -116,21 +116,32 @@ export default function MaterialTableDemo() {
                 Coin List
               </Button>
             </NavLink>
+            <NavLink
+              to="/investment-tracking"
+              style={{ textDecoration: "none", color: "white" }}
+            >
+              <Button className={classes.white}>
+                <TrendingUpOutlinedIcon />
+                Investment Tracking
+              </Button>
+            </NavLink>
           </Toolbar>
         </AppBar>
       </div>
       <div>
         <Box style={{ marginLeft: "41%" }}>
-          <p className={classes.para}>Investment Tracking</p>
+          <p className={classes.para}>Transaction History</p>
         </Box>
       </div>
       <div style={{ overflow: "scroll" }}>
         <Paper className={classes.portfolio}>
           <Paper style={{ height: "100%" }}>
             <Paper className={classes.topTitle}>
-              <Typography className={classes.typoTitle}>Portfolio</Typography>
+              <Typography className={classes.typoTitle}>
+                <img src={image}></img>
+              </Typography>
             </Paper>
-            <Portfolio />
+            <HistoryTable />
           </Paper>
         </Paper>
       </div>

@@ -13,11 +13,13 @@ export default function BuySell(props) {
   const [data, setData] = useState([]);
   const [price, setPrice] = useState([]);
   const [symbol, setSymbol] = useState([]);
+  const [coinId, setCoinId] = useState([]);
   const [image, setImage] = useState([]);
 
   let coinval = +props.coin - (+props.coin + -props.coin * 0.01) * 0.01;
   let coinfee = (+props.coin + -props.coin * 0.01) * 0.01;
   let totalfee = +coinval + +coinfee;
+  let coinQuantity = (props.amount * 10000) / 10000;
 
   useEffect(() => {
     setLoader(true);
@@ -25,8 +27,9 @@ export default function BuySell(props) {
       setData(response.data);
       setPrice(response.data.market_data.current_price.usd);
       setSymbol(response.data.symbol);
+      setCoinId(response.data.id);
       setImage(response.data.image.small);
-      console.log(response.data);
+      // console.log(response.data);
     });
   }, [id]);
   const formatter = new Intl.NumberFormat("en-US", {
@@ -36,25 +39,41 @@ export default function BuySell(props) {
   });
 
   const handleConfirm = val => {
-    axios
-      .post("http://localhost:4000/transactions", {
-        name: data.name,
-        coin: symbol,
-        price: price,
-        total: props.coin,
-        buy: true,
-        timestamp: Date.now()
-      })
-      .then(response => {
-        props.cancel(false);
-        Swal.fire({
-          icon: "success",
-          title: `Succesfully purchased ${data.name}`,
-          footer: `<a href=/investment-tracking>View Dashboard</a>`
-        });
-      })
-      .catch(e => {});
+    if (coinQuantity) {
+      axios
+        .post("http://localhost:4000/transactions", {
+          name: data.name,
+          coin: symbol,
+          img: image,
+          coinId: coinId,
+          currentPrice: price,
+          coinQuantity: coinQuantity,
+          totalAmount: totalfee,
+          amount: coinval,
+          transaction: "Buy",
+          timestamp: new Date().getTime()
+        })
+        .then(() => {
+          props.cancel(false);
+          props.setAmount(0);
+          props.setCoin(0);
+          Swal.fire({
+            icon: "success",
+            title: `Succesfully purchased ${data.name}`,
+            footer: `<a href=/investment-tracking>View Dashboard</a>`
+          });
+        })
+        .catch(e => console.log(e.response.data));
+    } else {
+      props.cancel(false);
+      Swal.fire({
+        icon: "error",
+        title: `Unable to Buy ${data.name}`,
+        text: "Empty Transaction"
+      });
+    }
   };
+
   return (
     <Paper
       style={{
@@ -203,7 +222,11 @@ export default function BuySell(props) {
                     <Button
                       variant="contained"
                       style={{ backgroundColor: "#6fc5d5" }}
-                      onClick={() => props.cancel(false)}
+                      onClick={() => {
+                        props.cancel(false);
+                        props.setAmount(0);
+                        props.setCoin(0);
+                      }}
                     >
                       Cancel
                     </Button>

@@ -14,6 +14,7 @@ import "semantic-ui-css/semantic.min.css";
 import { makeStyles } from "@material-ui/core/styles";
 import { NavLink, useParams } from "react-router-dom";
 import TrendingUpOutlinedIcon from "@material-ui/icons/TrendingUpOutlined";
+import MonetizationOnOutlinedIcon from "@material-ui/icons/MonetizationOnOutlined";
 import SwapHorizIcon from "@material-ui/icons/SwapHoriz";
 import Buy from "../Buy/Buy";
 import Sell from "../Sell/Sell";
@@ -118,8 +119,11 @@ export default function BuySell(props) {
   const [image, setImage] = useState([]);
   const [coin, setCoin] = useState(null);
   const [amount, setAmount] = useState(0);
+  const [sellCoin, setSellCoin] = useState(null);
+  const [sellAmount, setSellAmount] = useState(0);
   const [buyBtn, setBuyBtn] = useState(false);
   const [sellBtn, setSellBtn] = useState(false);
+  const [balance, setBalance] = useState(false);
 
   useEffect(() => {
     setLoader(true);
@@ -128,9 +132,23 @@ export default function BuySell(props) {
       setPrice(response.data.market_data.current_price.usd);
       setSymbol(response.data.symbol);
       setImage(response.data.image.small);
-      console.log(response.data);
+      // console.log(response.data);
     });
   }, [id]);
+
+  useEffect(() => {
+    axios.get(`http://localhost:4000/transactions`).then(response => {
+      let initBalance = 0;
+      let fArray = response.data.filter(val => {
+        return val.coinId === id;
+      });
+      fArray.forEach(newVal => {
+        if (newVal.transaction === "buy") initBalance += newVal.coinQuantity;
+        setBalance(newVal.coinQuantity);
+      });
+    });
+  }, [id]);
+
   const formatter = new Intl.NumberFormat("en-US", {
     style: "currency",
     currency: "USD",
@@ -146,7 +164,15 @@ export default function BuySell(props) {
 
   let buy;
   if (buyBtn) {
-    buy = <Buy amount={amount} coin={coin} cancel={handleBuy} />;
+    buy = (
+      <Buy
+        amount={amount}
+        coin={coin}
+        cancel={handleBuy}
+        setAmount={setAmount}
+        setCoin={setCoin}
+      />
+    );
   }
 
   let sell;
@@ -166,6 +192,15 @@ export default function BuySell(props) {
               <Button className={classes.white}>
                 <img src={image} alt="img" style={{ height: 20, width: 20 }} />
                 {"\xa0" + data.name} Details
+              </Button>
+            </NavLink>
+            <NavLink
+              to="/coinlist"
+              style={{ textDecoration: "none", color: "white" }}
+            >
+              <Button className={classes.white}>
+                <MonetizationOnOutlinedIcon />
+                Coin List
               </Button>
             </NavLink>
             <NavLink
@@ -315,11 +350,11 @@ export default function BuySell(props) {
                       )
                     }}
                     variant="outlined"
-                    value={coin}
+                    value={sellCoin}
                     type="number"
                     onChange={e => {
-                      setAmount(e.target.value / price);
-                      setCoin(e.target.value);
+                      setSellAmount(e.target.value / price);
+                      setSellCoin(e.target.value);
                     }}
                   />
                 </div>
@@ -341,10 +376,10 @@ export default function BuySell(props) {
                     }}
                     variant="outlined"
                     type="number"
-                    value={amount}
+                    value={sellAmount}
                     onChange={e => {
-                      setCoin(e.target.value * price);
-                      setAmount(e.target.value);
+                      setSellCoin(e.target.value * price);
+                      setSellAmount(e.target.value);
                     }}
                   />
                 </div>
@@ -364,12 +399,11 @@ export default function BuySell(props) {
                 </div>
                 <div className={classes.subtitleDiv}>
                   <span className={classes.subtitle}>
-                    <p style={{ textTransform: "uppercase" }}></p>
-                    Coin Base Fee (10%)
+                    <p style={{ textTransform: "uppercase" }}>
+                      Current {data.symbol} Balance
+                    </p>
                   </span>
-                  <span className={classes.value}>
-                    {formatter.format(coin * 0.1)}
-                  </span>
+                  <span className={classes.value}>{balance}</span>
                 </div>
                 <div className={classes.subtitleDiv}>
                   <span className={classes.subtitle}>Total:</span>

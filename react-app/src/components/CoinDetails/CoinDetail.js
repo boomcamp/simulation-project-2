@@ -138,7 +138,7 @@ export default function CoinDetail() {
       setMarketExchangePercent(
         response.data.market_data.market_cap_change_percentage_24h
       );
-      console.log(response.data);
+      // console.log(response.data);
     });
   }, [id]);
   const formatter = new Intl.NumberFormat("en-US", {

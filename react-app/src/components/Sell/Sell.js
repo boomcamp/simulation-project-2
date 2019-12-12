@@ -13,6 +13,7 @@ export default function BuySell(props) {
   const [price, setPrice] = useState([]);
   const [symbol, setSymbol] = useState([]);
   const [image, setImage] = useState([]);
+  const [balance, setBalance] = useState([]);
 
   let coinval = props.coin;
   let coinfee = props.coin * 0.1;
@@ -25,14 +26,28 @@ export default function BuySell(props) {
       setPrice(response.data.market_data.current_price.usd);
       setSymbol(response.data.symbol);
       setImage(response.data.image.small);
-      console.log(response.data);
+      // console.log(response.data);
     });
   }, [id]);
+
   const formatter = new Intl.NumberFormat("en-US", {
     style: "currency",
     currency: "USD",
     minimumFractionDigits: 2
   });
+  useEffect(() => {
+    axios.get(`http/localhost:4000/transactions`).then(response => {
+      let initBalance = 0;
+      let fArray = response.data.filter(val => {
+        return val.coinId === id;
+      });
+      fArray.forEach(newVal => {
+        console.log(newVal.coinQuantity);
+        if (newVal.transaction === "buy") initBalance += newVal.coinQuantity;
+      });
+      setBalance(initBalance);
+    });
+  }, [id]);
 
   return (
     <Paper
