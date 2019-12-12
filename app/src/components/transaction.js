@@ -1,66 +1,75 @@
 import React, { Component } from "react";
-import { Icon, Table } from "semantic-ui-react";
-import Axios from "axios";
+import { Table } from "semantic-ui-react";
+import axios from "axios";
+import { classes } from "istanbul-lib-coverage";
+import { withStyles } from "@material-ui/styles";
+import Paper from "@material-ui/core/Paper";
+import { Typography } from "@material-ui/core";
+
+const useStyles = theme => ({
+  head: {
+    backgroundColor: "#304050"
+  }
+});
 
 class transaction extends Component {
   constructor() {
     super();
-    this.setState = {
-      buyhistory: {}
+    this.state = {
+      name: []
     };
   }
 
   componentDidMount() {
-    // Axios.get(`http://localhost:4000/transactions`).then(res =>
-    //   this.setState({
-    //     buyhistory: res.data
-    //   })
-    // );
+    axios({
+      method: `get`,
+      url: `http://localhost:4000/transactions`,
+      data: this.state
+    }).then(res => {
+      this.setState({ name: res.data });
+    });
   }
+
   render() {
+    // console.log(this.state.name ? this.state.name : null);
     return (
       <React.Fragment>
         <Table celled striped>
-          <Table.Header>
-            <Table.Row>
-              <Table.HeaderCell colSpan="3">
-                Historical Transaction
+          <Table.Header className={classes.table}>
+            <Table.Row className={classes.head}>
+              <Table.HeaderCell colSpan="4">
+                <Typography variant="h4"> Historical Transaction</Typography>
               </Table.HeaderCell>
+            </Table.Row>
+            <Table.Row>
+              <Table.Cell>
+                <b>Coin Name</b>
+              </Table.Cell>
+              <Table.Cell>
+                <b>Coin Quantity</b>
+              </Table.Cell>
+              <Table.Cell>
+                <b>Coin price</b>
+              </Table.Cell>
+              <Table.Cell>
+                <b>Transaction</b>
+              </Table.Cell>
             </Table.Row>
           </Table.Header>
 
           <Table.Body>
-            <Table.Row>
-              <Table.Cell collapsing></Table.Cell>
-              <Table.Cell></Table.Cell>
-              <Table.Cell collapsing textAlign="right">
-                10 hours ago
-              </Table.Cell>
-            </Table.Row>
-            <Table.Row>
-              <Table.Cell></Table.Cell>
-              <Table.Cell>Initial commit</Table.Cell>
-              <Table.Cell textAlign="right">10 hours ago</Table.Cell>
-            </Table.Row>
-            <Table.Row>
-              <Table.Cell></Table.Cell>
-              <Table.Cell>Initial commit</Table.Cell>
-              <Table.Cell textAlign="right">10 hours ago</Table.Cell>
-            </Table.Row>
-            <Table.Row>
-              <Table.Cell></Table.Cell>
-              <Table.Cell>Initial commit</Table.Cell>
-              <Table.Cell textAlign="right">10 hours ago</Table.Cell>
-            </Table.Row>
-            <Table.Row>
-              <Table.Cell></Table.Cell>
-              <Table.Cell>Initial commit</Table.Cell>
-              <Table.Cell textAlign="right">10 hours ago</Table.Cell>
-            </Table.Row>
+            {this.state.name.map(x => (
+              <Table.Row>
+                <Table.Cell>{x.name}</Table.Cell>
+                <Table.Cell>{x.quantity}</Table.Cell>
+                <Table.Cell>{x.price}</Table.Cell>
+                <Table.Cell>{x.transaction}</Table.Cell>
+              </Table.Row>
+            ))}
           </Table.Body>
         </Table>
       </React.Fragment>
     );
   }
 }
-export default transaction;
+export default withStyles(useStyles)(transaction);

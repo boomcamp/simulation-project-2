@@ -1,24 +1,6 @@
 {
   "transactions": [
     {
-      "name": "bitcoin",
-      "price": "7,267.40",
-      "id": 1
-    },
-    {
-      "name": "bitcoin",
-      "price": "7,267.40",
-      "transaction": "buy",
-      "id": 2
-    },
-    {
-      "name": "bitcoin",
-      "buy-price": "7,267.40",
-      "transaction": "buy",
-      "sell-price": "5,000",
-      "id": 3
-    },
-    {
       "name": "Bitcoin",
       "price": 7230.53,
       "quantity": "7",
@@ -60,6 +42,22 @@
       "quantity": "5",
       "transaction": "buy",
       "id": 9
+    },
+    {
+      "name": "Bitcoin",
+      "price": 7132.41,
+      "totalPrice": 35662.05,
+      "quantity": "5",
+      "transaction": "buy",
+      "id": 10
+    },
+    {
+      "name": "Bitcoin",
+      "price": 7156.23,
+      "totalPrice": 57249.84,
+      "quantity": "8",
+      "transaction": "buy",
+      "id": 11
     }
   ]
 }

@@ -31,8 +31,8 @@ const useStyles = theme => ({
     color: "white"
   },
   table: {
-    marginLeft: theme.spacing(18),
-    maxWidth: 1450
+    // marginLeft: theme.spacing(18),
+    // maxWidth: 1450
   }
 });
 class main extends Component {
@@ -76,9 +76,10 @@ class main extends Component {
     console.log(id);
     this.setState({
       redirect: false,
-      id: id
+      id: id.id
     });
-    this.props.history.push(`/coins/${id}`);
+    localStorage.setItem("name", id.name);
+    this.props.history.push(`/coins/${id.id}`);
   };
   handleOnChange = (e, pageInfo) => {
     console.log();
@@ -119,7 +120,7 @@ class main extends Component {
                   return (
                     <TableRow
                       key={column.id}
-                      onClick={() => this.handleClick(column.id)}
+                      onClick={() => this.handleClick(column)}
                       className={classes.row}
                     >
                       <TableCell>{column.market_cap_rank}</TableCell>

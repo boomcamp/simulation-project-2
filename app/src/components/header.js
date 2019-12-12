@@ -4,11 +4,10 @@ import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import IconButton from "@material-ui/core/IconButton";
 import Typography from "@material-ui/core/Typography";
-import InputBase from "@material-ui/core/InputBase";
 import { fade } from "@material-ui/core/styles";
 import MenuIcon from "@material-ui/icons/Menu";
-import SearchIcon from "@material-ui/icons/Search";
-// import { Link } from "react-router-dom";
+import { Link } from "react-router-dom";
+import { Breadcrumb } from "semantic-ui-react";
 
 const useStyles = theme => ({
   root: {
@@ -63,44 +62,38 @@ const useStyles = theme => ({
         width: 200
       }
     }
+  },
+  link: {
+    textDecoration: "none",
+    color: "white",
+    margin: "15px"
   }
 });
+
 class header extends Component {
   render() {
     const { classes } = this.props;
+
     return (
       <div>
         <React.Fragment>
           <AppBar position="relative" className={classes.nav}>
             <Toolbar>
-              <IconButton
-                edge="start"
-                className={classes.menuButton}
-                aria-label="open drawer"
-              >
-                <MenuIcon />
-              </IconButton>
               <Typography
                 className={classes.title}
                 variant="h6"
                 noWrap
               ></Typography>
-              {/* <Link to="/coins" path="/Main">
-                <Typography>Coins</Typography>
-              </Link> */}
-              <div className={classes.search}>
-                <div className={classes.searchIcon}>
-                  <SearchIcon />
-                </div>
-                <InputBase
-                  placeholder="Search…"
-                  classes={{
-                    root: classes.inputRoot,
-                    input: classes.inputInput
-                  }}
-                  inputProps={{ "aria-label": "search" }}
-                />
-              </div>
+
+              <Link to="/">
+                <Typography className={classes.link}>Home</Typography>
+              </Link>
+              <Typography>></Typography>
+              <Link to="/transaction">
+                <Typography className={classes.link}>
+                  Historical Transaction
+                </Typography>
+              </Link>
             </Toolbar>
           </AppBar>
         </React.Fragment>

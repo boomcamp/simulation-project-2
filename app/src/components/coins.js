@@ -16,7 +16,8 @@ import {
   Modal,
   Input
 } from "semantic-ui-react";
-import Transaction from "./transaction";
+import Sell from "./sell";
+
 const useStyles = theme => ({
   root: {
     padding: theme.spacing(3, 2),
@@ -60,7 +61,7 @@ const useStyles = theme => ({
     marginLeft: theme.spacing(38)
   }
 });
-
+var z = [];
 class coins extends Component {
   constructor(props) {
     super(props);
@@ -70,11 +71,16 @@ class coins extends Component {
       details: {},
       chartData: [],
       price: null,
-      quantity: ""
+      quantity: "",
+      open: false,
+      totalcoin: "",
+      totalCoins: [],
+      sellaction: false
     };
   }
 
   componentDidMount() {
+    var coinName = localStorage.getItem("name");
     axios
       .get(
         `https://api.coingecko.com/api/v3/coins/${this.props.match.params.id}`
@@ -85,8 +91,8 @@ class coins extends Component {
           .get(
             `https://api.coingecko.com/api/v3/coins/${this.props.match.params.id}/market_chart?vs_currency=usd&days=1}`
           )
-          .then(res => {
-            var arr = res.data.prices.map(x => {
+          .then(ress => {
+            var arr = ress.data.prices.map(x => {
               return {
                 name: new Date(x[0]).toLocaleDateString("en-US"),
                 uv: x[1]
@@ -94,7 +100,21 @@ class coins extends Component {
             });
             this.setState({ chartData: arr });
           });
-      });
+      })
+      .then(
+        axios.get("http://localhost:4000/transactions").then(res => {
+          res.data.map(item => {
+            if (item.name == coinName) {
+              this.setState({
+                totalCoins: this.state.totalCoins.concat(
+                  parseInt(item.quantity)
+                )
+              });
+            }
+          });
+        })
+      )
+      .catch(err => console.log(err));
   }
 
   handleClick = e => {
@@ -133,13 +153,23 @@ class coins extends Component {
         quantity: this.state.quantity,
         transaction: "buy"
       }
-    }).then(res => {
-      console.log(res);
-    });
+    }).then(res => {});
     alert("Successfully buy");
   };
 
+  handleClickOpen = () => {
+    this.state.open(true);
+  };
+
+  // handlesellOpen = () => {
+  //   this.setState({ sellaction: true });
+  // };
+  // handlesellDis = () => {
+  //   this.setState({ sellaction: false });
+  // };
   render() {
+    var total = this.state.totalCoins.reduce((a, b) => a + b, 0);
+
     const { classes } = this.props;
 
     const formatter = new Intl.NumberFormat("en-US", {
@@ -153,7 +183,7 @@ class coins extends Component {
       <React.Fragment>
         {this.state.details.description ? (
           <Paper className={classes.root}>
-            <Grid centered columns={2} padded="horizontally">
+            <Grid centered columns={3} padded="horizontally">
               <Grid.Column>
                 <img
                   className={classes.logo}
@@ -189,7 +219,6 @@ class coins extends Component {
                     )}
                   </span>
                 </Typography>
-
                 <Typography className={classes.vol}>
                   <b>24 Hour Trading Vol:</b>
                   <span>
@@ -217,7 +246,12 @@ class coins extends Component {
                     )}
                   </span>
                 </Typography>
-
+                <Typography variant="h6">
+                  <b>
+                    Total coin:
+                    <span> {total ? total : "Not enough coins"}</span>
+                  </b>
+                </Typography>
                 <Modal
                   size="large"
                   trigger={
@@ -300,14 +334,24 @@ class coins extends Component {
                     </Modal.Description>
                   </Modal.Content>
                 </Modal>
+                <Modal>
+                  {/* {total ? (
+                    <Button onClick={this.handlesellOpen()}> Sell </Button>
+                  ) : (
+                    <Button onClick={this.handlesellDis()}></Button>
+                  )} */}
+                </Modal>
+              </Grid.Column>
+              <Grid.Column>
+                {" "}
+                <Sell />{" "}
               </Grid.Column>
             </Grid>
 
             <div className="ui clearing divider"></div>
 
-            <Menu fluid widths={2}>
+            <Menu fluid widths={1}>
               <Menu.Item active name="OverView" />
-              <Menu.Item name="Historical Transaction" />
             </Menu>
             <Card className={classes.card}>
               <Typography className={classes.descripName}>
@@ -402,7 +446,6 @@ class coins extends Component {
                 />
               </Menu>
               <Chart chartData={this.state.chartData} />
-              <Transaction />
             </Card>
           </Paper>
         ) : null}
