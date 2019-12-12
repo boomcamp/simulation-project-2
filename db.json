@@ -1,3 +1,81 @@
 {
-  "transactions": []
+  "transactions": [
+    {
+      "type": "buy",
+      "cryptoCurrencyQty": 10,
+      "amount": 71336,
+      "cryptoCurrency": "bitcoin",
+      "coinSymbol": "btc",
+      "coinImage": "https://assets.coingecko.com/coins/images/1/small/bitcoin.png?1547033579",
+      "cryptoCurrencyPrice": 7133,
+      "transactionDate": 1576138683934,
+      "id": 1
+    },
+    {
+      "type": "buy",
+      "cryptoCurrencyQty": 1,
+      "amount": 7133,
+      "cryptoCurrency": "bitcoin",
+      "coinSymbol": "btc",
+      "coinImage": "https://assets.coingecko.com/coins/images/1/small/bitcoin.png?1547033579",
+      "cryptoCurrencyPrice": 7133,
+      "transactionDate": 1576138691341,
+      "id": 2
+    },
+    {
+      "type": "buy",
+      "cryptoCurrencyQty": 2,
+      "amount": 14267,
+      "cryptoCurrency": "bitcoin",
+      "coinSymbol": "btc",
+      "coinImage": "https://assets.coingecko.com/coins/images/1/small/bitcoin.png?1547033579",
+      "cryptoCurrencyPrice": 7133,
+      "transactionDate": 1576138693309,
+      "id": 3
+    },
+    {
+      "type": "buy",
+      "cryptoCurrencyQty": 3,
+      "amount": 21400,
+      "cryptoCurrency": "bitcoin",
+      "coinSymbol": "btc",
+      "coinImage": "https://assets.coingecko.com/coins/images/1/small/bitcoin.png?1547033579",
+      "cryptoCurrencyPrice": 7133,
+      "transactionDate": 1576138696670,
+      "id": 4
+    },
+    {
+      "type": "buy",
+      "cryptoCurrencyQty": 2,
+      "amount": 283,
+      "cryptoCurrency": "ethereum",
+      "coinSymbol": "eth",
+      "coinImage": "https://assets.coingecko.com/coins/images/279/small/ethereum.png?1547034048",
+      "cryptoCurrencyPrice": 141,
+      "transactionDate": 1576138702952,
+      "id": 5
+    },
+    {
+      "type": "buy",
+      "cryptoCurrencyQty": 3,
+      "amount": 424,
+      "cryptoCurrency": "ethereum",
+      "coinSymbol": "eth",
+      "coinImage": "https://assets.coingecko.com/coins/images/279/small/ethereum.png?1547034048",
+      "cryptoCurrencyPrice": 141,
+      "transactionDate": 1576138704663,
+      "id": 6
+    },
+    {
+      "type": "buy",
+      "cryptoCurrencyQty": 5,
+      "amount": 707,
+      "cryptoCurrency": "ethereum",
+      "coinSymbol": "eth",
+      "coinImage": "https://assets.coingecko.com/coins/images/279/small/ethereum.png?1547034048",
+      "cryptoCurrencyPrice": 141,
+      "transactionDate": 1576138707183,
+      "id": 7
+    }
+  ]
 }

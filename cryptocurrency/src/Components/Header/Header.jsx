@@ -89,7 +89,7 @@ function Header(props) {
             Simulation Project 2
           </Typography>
           <Link className={classes.navButton} color="inherit" to="/">Coins</Link>
-          <Link className={classes.navButton} color="inherit" to="/track">Track Investment</Link>
+          <Link className={classes.navButton} color="inherit" to="/track-investment">Track Investment</Link>
           {/* <div className={classes.search}>
             <div className={classes.searchIcon}>
               <SearchIcon />

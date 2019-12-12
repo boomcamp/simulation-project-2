@@ -21,7 +21,7 @@ function CoinLink(props) {
 
   const style = thisStyles();
   return (
-    <Link className={style.linkStyle} to={"/" + props.id}>
+    <Link className={style.linkStyle} to={"/coins/" + props.id}>
       <Button className={style.buttonStyle} title={"Click me for "+ props.name + " details"}>{props.name}</Button>
     </Link>
   )

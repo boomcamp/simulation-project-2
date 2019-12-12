@@ -16,6 +16,12 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
+import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
+import ToggleButton from '@material-ui/lab/ToggleButton';
+import Chart from './Chart';
+import Buy from './Buy';
+//import Sell from './Sell';
+
 
 function Coin(props) {
   const useStyles = makeStyles(theme => ({
@@ -71,19 +77,35 @@ function Coin(props) {
     tableCell: {
       border: '1px solid black',
       textAlign: 'center'
-    }
+    },
+    topBotMargin: {
+      margin: '2% auto'
+    },
+    graphBtn: {
+      display: 'flex',
+      justifyContent: 'center'
+    },
+    graphGrid: {
+      margin: '1% auto',
+      display: 'flex'
+    },
+    buysellBtn: {
+      display: 'flex',
+      margin: '2%', 
+      padding: '2px',
+      justifyContent: 'center'
+    },
   }))
 
   const classes = useStyles();
 
   const [coinData, setCoinData] = useState({
-    data: [],
+    data: []
   });
 
   useEffect(() => {
     getCoinDetailsFn();
-    console.log('check')
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    /* eslint-disable react-hooks/exhaustive-deps */
   }, [])
 
   const getCoinDetailsFn = () => {
@@ -99,7 +121,18 @@ function Coin(props) {
     })
     .catch(error => console.log(error))
   }
-  console.log(coinData.data)
+
+  const [graphDays, setGraphDays] = useState(1);
+  
+  const graphChangeDays = (e) => {
+    setGraphDays(e);
+  }
+
+  const [alignment, setAlignment] = useState('hr24');
+
+  const handleAlignment = (event, newAlignment) => {
+    setAlignment(newAlignment);
+  }
   return (
     <React.Fragment>
       <Header />
@@ -111,10 +144,10 @@ function Coin(props) {
                 <FormatListBulletedIcon className={classes.icon} />
                 Coins
               </Link>
-              <Link disabled to="/"color="inherit" className={classes.link}>
+              <p disabled color="inherit" className={classes.link}>
                 <MonetizationOnIcon className={classes.icon} />
                 {coinData.data.name}
-              </Link>
+              </p>
             </Breadcrumbs>
           </Box>
         </Grid>
@@ -130,7 +163,7 @@ function Coin(props) {
                   <h1 className={classes.currencyHeader}>{coinData.data.name}</h1>
                 </Container>
               </Grid>
-              <Grid container className={classes.currencyDetails} justify="space-around">
+              <Grid container className={classes.currencyDetails} justify="space-around" spacing={2}>
                 <ul className={classes.currencyList}>
                   <li><span>Market Cap: </span> Rank #{coinData.data.coingecko_rank}</li>
                   <li><span>Symbol: </span> {coinData.data.symbol}</li>
@@ -148,15 +181,19 @@ function Coin(props) {
                   <li><span>24h Low / 24h High: </span> <NumberFormat decimalScale={2} value={(coinData.data.market_data) && coinData.data.market_data.low_24h.usd} displayType={'text'} thousandSeparator={true} prefix={'$'} /> / <NumberFormat decimalScale={2} value={(coinData.data.market_data) && coinData.data.market_data.high_24h.usd} displayType={'text'} thousandSeparator={true} prefix={'$'} /></li>
                   <li><span>All-Time High: </span> <NumberFormat decimalScale={2} value={(coinData.data.market_data) && coinData.data.market_data.ath.usd} displayType={'text'} thousandSeparator={true} prefix={'$'} /></li>
                   <li><span>All-Time Low: </span> <NumberFormat decimalScale={2} value={(coinData.data.market_data) && coinData.data.market_data.atl.usd} displayType={'text'} thousandSeparator={true} prefix={'$'} /></li>
+                  <li className={classes.buysellBtn}>
+                    <Buy coinID={props.match.params.coin} coinSymbol={coinData.data.symbol} coinImage={(coinData.data.image) && coinData.data.image.small} coinName={coinData.data.name} coinSym={coinData.data.symbol} coinPrice={(coinData.data.market_data) && coinData.data.market_data.current_price.usd} />
+                    {/* <Sell oinID={props.match.params.coin} coinName={coinData.data.name} coinSym={coinData.data.symbol} coinPrice={(coinData.data.market_data) && coinData.data.market_data.current_price.usd} /> */}
+                  </li>
                 </ul>
               </Grid>      
-              <Grid container className={classes.currencyDetails} justify="space-around">
+              <Grid container className={classes.currencyDetails} justify="space-around" spacing={2}>
                 <Grid item xs={12} sm={10} md={9} lg={9}>
                   <h3>Description:</h3>
                   <p dangerouslySetInnerHTML = {{__html: (coinData.data.description) && coinData.data.description.en}}/>
                 </Grid>
               </Grid>  
-              <Grid item xs={12}>
+              <Grid item xs={12} className={classes.topBotMargin}>
                 <Grid container justify="space-around">
                   <Table className={classes.table}>
                     <TableHead>
@@ -181,7 +218,26 @@ function Coin(props) {
                     </TableBody>
                   </Table>
                 </Grid>
-              </Grid>    
+              </Grid>  
+              <Grid item xs={12} sm={11} md={9} lg={9} className={classes.topBotMargin}>
+                <Grid container justify="space-around">
+                  <Grid item xs={12} md={12} lg={8} className={classes.graphBtn}>
+                  <ToggleButtonGroup value={alignment} exclusive  onChange={handleAlignment} fullwidth='true' aria-label="Graph">
+                    <ToggleButton value="hr24" onClick={e => graphChangeDays(1)}>24 Hours</ToggleButton>
+                    <ToggleButton value="week1" onClick={e => graphChangeDays(7)}>1 Week</ToggleButton>
+                    <ToggleButton value="month1" onClick={e => graphChangeDays(30)}>1 Month</ToggleButton>
+                    <ToggleButton value="month6" onClick={e => graphChangeDays(182)}>6 Months</ToggleButton>
+                    <ToggleButton value="year1" onClick={e => graphChangeDays(365)}>1 Year</ToggleButton>
+                    <ToggleButton value="max" onClick={e => graphChangeDays('max')}>All Time</ToggleButton>
+                  </ToggleButtonGroup>
+                  </Grid>
+                  <Grid item xs={12}>
+                    <Grid container justify="space-around" className={classes.graphGrid}>
+                      <Chart id={props.match.params.coin} days={graphDays}/>
+                    </Grid>
+                  </Grid>
+                </Grid>  
+              </Grid>  
           </Paper>
         </Grid>
       </Grid>
