@@ -15,6 +15,8 @@ import PropTypes from "prop-types";
 import Buy from "./Buy";
 import Sell from "./Sell";
 import Confirm from "./Confirmation";
+import bitcoin from "../assets/images/bitcoin1.png";
+import Fade from "@material-ui/core/Fade";
 
 function TabPanel(props) {
    const { children, value, index, ...other } = props;
@@ -112,6 +114,24 @@ const useStyles = makeStyles(theme => ({
    shop: {
       width: "25px",
       paddingRight: "10px"
+   },
+   display: {
+      background: "#533a78",
+      width: "30%",
+      position: "absolute",
+      right: "15vw",
+      top: "35vh",
+      padding: "15px",
+      borderRadius: "25px",
+      boxShadow: "5px 5px white",
+      color: "white",
+      "&:hover ": {
+         animationName: "pulse",
+         animationDuration: "1s",
+         animationTimingFunction: "ease-in-out",
+         animationIterationCount: "infinite",
+         animationDirection: "reverse"
+      }
    }
 }));
 
@@ -123,6 +143,7 @@ export default function AcccessibleTable(props) {
    const [confirmBy, setConfirmBy] = React.useState(false);
    const [coin, setCoin] = React.useState("");
    const [amount, setAmount] = React.useState("");
+   const [display, setDisplay] = React.useState(true);
 
    const [value, setValue] = React.useState(0);
 
@@ -149,6 +170,7 @@ export default function AcccessibleTable(props) {
    };
 
    let cons;
+   let disp;
 
    const trans = val => {
       setCoin(val);
@@ -156,6 +178,10 @@ export default function AcccessibleTable(props) {
 
    const handleAmount = val => {
       setAmount(val);
+   };
+
+   const handleDisplay = val => {
+      setDisplay(val);
    };
 
    console.log(amount);
@@ -167,7 +193,23 @@ export default function AcccessibleTable(props) {
             amount={amount}
             coin={coin}
             handleAmount={handleAmount}
+            handleDisplay={handleDisplay}
          />
+      );
+   }
+
+   if (display) {
+      disp = (
+         <Fade in>
+            <div className={classes.display}>
+               <img src={bitcoin} alt="icon" style={{ width: "8vw" }} />
+               <h1 style={{ fontSize: "36px" }}>
+                  “Understanding block-chain makes you go mad, unless you start
+                  your own cult”
+               </h1>
+               <h3 style={{ color: "#f9d171" }}>― Arif Naseem ―</h3>
+            </div>
+         </Fade>
       );
    }
 
@@ -213,6 +255,8 @@ export default function AcccessibleTable(props) {
 
          {cons}
 
+         {disp}
+
          <div className={classes.root}>
             <Tabs
                orientation="vertical"
@@ -230,6 +274,7 @@ export default function AcccessibleTable(props) {
                   confirm={confirmAct}
                   amo={trans}
                   handleAmount={handleAmount}
+                  handleDisplay={handleDisplay}
                />
             </TabPanel>
             <TabPanel value={value} index={1}>

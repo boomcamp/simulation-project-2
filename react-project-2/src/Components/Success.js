@@ -6,6 +6,7 @@ import Button from "@material-ui/core/Button";
 import Grow from "@material-ui/core/Grow";
 import got from "../assets/images/got.gif";
 import { Typography } from "@material-ui/core";
+import { Link } from "react-router-dom";
 
 const useStyles = makeStyles(theme => ({
    second: {
@@ -46,13 +47,15 @@ const useStyles = makeStyles(theme => ({
       marginTop: "5vh"
    },
    dash: {
-      marginTop: "15px",
+      marginTop: "15px !important",
       fontSize: "12px",
       color: "gray",
       "&:hover": {
          color: "purple"
       },
-      cursor: "pointer"
+      cursor: "pointer",
+      paddingLeft: "15px",
+      paddingRight: "15px"
    }
 }));
 
@@ -78,17 +81,22 @@ export default function Success(props) {
                   Successfully purchased{" "}
                   <span className={classes.name}>{data.name}</span> !
                </Typography>
+
                <Button
                   variant="outlined"
                   color="primary"
                   className={classes.buymore}
                   onClick={() => (
-                     props.buyMore(false), props.confirmAct(false)
+                     props.buyMore(false),
+                     props.confirmAct(false),
+                     props.handleDisplay(true)
                   )}
                >
                   Buy More
                </Button>
-               <p className={classes.dash}>Go to Dashboard</p>
+               <Link to="/investment-tracking">
+                  <p className={classes.dash}>Go to Dashboard</p>
+               </Link>
             </div>
          </div>
       </Grow>

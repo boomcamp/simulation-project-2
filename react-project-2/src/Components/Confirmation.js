@@ -64,11 +64,14 @@ export default function AcccessibleTable(props) {
    const confirm = () => {
       setDone(true);
       Axios.post("http://localhost:4000/transactions", {
-         price: price.usd,
+         coinID: id,
          name: name,
          coin: symbol,
-         total: props.coin,
+         coinQuantity: props.amount,
+         amount: props.coin - +((props.coin - +(props.coin * 0.01)) * 0.01),
+         totalAmount: props.coin,
          image: image,
+         currentCoinPrice: price.usd,
          transaction: "buy",
          timestamp: new Date().getTime()
       }).catch(error => {
@@ -77,11 +80,22 @@ export default function AcccessibleTable(props) {
    };
 
    if (done) {
-      return <Success buyMore={succ} confirmAct={props.can} />;
+      return (
+         <Success
+            buyMore={succ}
+            confirmAct={props.can}
+            handleDisplay={props.handleDisplay}
+         />
+      );
    }
 
    const circulatingFormat = num => {
       return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
+   };
+
+   const handleFunc = () => {
+      props.can(false);
+      props.handleDisplay(true);
    };
 
    return (
@@ -206,7 +220,7 @@ export default function AcccessibleTable(props) {
                >
                   Confirm Buy
                </Button>
-               <p className={classes.cancel} onClick={() => props.can(false)}>
+               <p className={classes.cancel} onClick={handleFunc}>
                   Cancel Transaction
                </p>
             </div>

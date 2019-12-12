@@ -10,6 +10,7 @@ import AccountBalanceIcon from "@material-ui/icons/AccountBalance";
 import TextField from "@material-ui/core/TextField";
 import SwapHorizIcon from "@material-ui/icons/SwapHoriz";
 import checkout from "../assets/images/crypt.jpg";
+import Fade from "@material-ui/core/Fade";
 
 const useStyles = makeStyles(theme => ({
    buysell: {
@@ -105,158 +106,171 @@ export default function AcccessibleTable(props) {
       return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
    };
 
+   const handleBuy = () => {
+      props.confirm(true);
+      props.handleDisplay(false);
+   };
+
    return (
-      <div>
-         <div className={classes.name}>
-            <Typography style={{ fontSize: "18px" }}>
-               Buy <b>{data.name}</b>
-            </Typography>
-         </div>
-         <p>
-            Current Price:{" "}
-            <b
-               style={{
-                  fontSize: "18px",
-                  textDecoration: "underline",
-                  color: "#6a407f"
-               }}
-            >
-               ${!price.usd ? "0.00" : Math.round(price.usd * 1000) / 1000}
-            </b>
-         </p>
-
-         <div className={classes.payment}>
-            <b>
-               <p style={{ fontSize: "16px" }}>Payment Method</p>
-            </b>
-         </div>
-         <Typography
-            style={{
-               marginTop: "1vh",
-               display: "flex",
-               alignItems: "center",
-               padding: "5px",
-               paddingLeft: "2vw"
-            }}
-         >
-            <AccountBalanceIcon className={classes.account} />{" "}
-            <span style={{ paddingLeft: "5px" }}>Bank Account</span>
-         </Typography>
-         <hr className={classes.hr} />
-
-         <div style={{ display: "flex" }}>
-            <div className={classes.bs}>
-               <img src={image.small} style={{ marginTop: "2vh" }} alt="coin" />
-               <h3 style={{ textTransform: "uppercase" }}>{symbol}</h3>
-               <p>
-                  <span style={{ textTransform: "uppercase" }}>
-                     {symbol} ={" "}
-                     {circulatingFormat(Math.round(price.usd * 10000) / 10000)}
-                  </span>
-               </p>
-
-               <div className={classes.div} style={{ marginBottom: "0vh" }}>
-                  <Typography>
-                     <span style={{ textTransform: "uppercase" }}>
-                        {data.symbol}{" "}
-                     </span>
-                     Total:
-                  </Typography>
-                  <Typography className={classes.buy}>
-                     {Math.round(amount * 1000) / 1000}
-                  </Typography>
-               </div>
-
-               <div className={classes.div} style={{ marginBottom: "2vh" }}>
-                  <Typography>Total:</Typography>
-                  <Typography className={classes.buy}>
-                     ${circulatingFormat(Math.round(coin * 1000) / 1000)}
-                  </Typography>
-               </div>
-
-               <Button
-                  variant="contained"
-                  color="primary"
-                  className={classes.button}
-                  onClick={() => props.confirm(true)}
-               >
-                  BUY
-               </Button>
+      <Fade in>
+         <div>
+            <div className={classes.name}>
+               <Typography style={{ fontSize: "18px" }}>
+                  Buy <b>{data.name}</b>
+               </Typography>
             </div>
-            <p
-               style={{
-                  position: "absolute",
-                  left: "22vw",
-                  zIndex: 3000,
-                  fontSize: "12px"
-               }}
-            >
-               Amount:
-            </p>
-            <div className={classes.buysell}>
-               <Paper
-                  className={classes.buysell}
+            <p>
+               Current Price:{" "}
+               <b
                   style={{
-                     height: "6vh",
-                     marginBottom: "2vh",
-                     marginTop: "2vh",
-                     background: "white",
-                     display: "flex",
-                     alignItems: "baseline",
-                     justifyContent: "center"
+                     fontSize: "18px",
+                     textDecoration: "underline",
+                     color: "#6a407f"
                   }}
                >
-                  <TextField
-                     id="outlined-number"
-                     type="number"
-                     ant="outlined"
-                     style={{ width: "8vw", paddingTop: "2vh" }}
-                     value={coin}
-                     onChange={e => {
-                        var net =
-                           +e.target.value -
-                           (+e.target.value + -e.target.value * 0.01) * 0.01;
-                        setAmount(net / price.usd);
-                        setCoin(e.target.value);
-                        props.amo(e.target.value);
-                        props.handleAmount(net / price.usd);
-                     }}
-                     InputProps={{
-                        startAdornment: (
-                           <InputAdornment position="start">
-                              &#36;
-                           </InputAdornment>
-                        )
-                     }}
-                  />
-                  <SwapHorizIcon
-                     style={{ marginLeft: "20px", marginRight: "20px" }}
-                  />
-                  <TextField
-                     id="outlined-number"
-                     ant="outlined"
-                     type="number"
-                     style={{ width: "8vw", margin: "2vw, 2vw, 2vw, 2vw" }}
-                     value={amount}
-                     onChange={e => {
-                        setCoin(e.target.value * price.usd);
-                        setAmount(e.target.value);
-                        props.handleAmount(e.target.value);
-                        props.amo(e.target.value * price.usd);
-                     }}
-                     InputProps={{
-                        endAdornment: (
-                           <InputAdornment position="start">
-                              {symbol}
-                           </InputAdornment>
-                        )
-                     }}
-                  />
-               </Paper>
+                  ${!price.usd ? "0.00" : Math.round(price.usd * 1000) / 1000}
+               </b>
+            </p>
 
-               <img src={checkout} className={classes.buysell} />
+            <div className={classes.payment}>
+               <b>
+                  <p style={{ fontSize: "16px" }}>Payment Method</p>
+               </b>
+            </div>
+            <Typography
+               style={{
+                  marginTop: "1vh",
+                  display: "flex",
+                  alignItems: "center",
+                  padding: "5px",
+                  paddingLeft: "2vw"
+               }}
+            >
+               <AccountBalanceIcon className={classes.account} />{" "}
+               <span style={{ paddingLeft: "5px" }}>Bank Account</span>
+            </Typography>
+            <hr className={classes.hr} />
+
+            <div style={{ display: "flex" }}>
+               <div className={classes.bs}>
+                  <img
+                     src={image.small}
+                     style={{ marginTop: "2vh" }}
+                     alt="coin"
+                  />
+                  <h3 style={{ textTransform: "uppercase" }}>{symbol}</h3>
+                  <p>
+                     <span style={{ textTransform: "uppercase" }}>
+                        {symbol} ={" "}
+                        {circulatingFormat(
+                           Math.round(price.usd * 10000) / 10000
+                        )}
+                     </span>
+                  </p>
+
+                  <div className={classes.div} style={{ marginBottom: "0vh" }}>
+                     <Typography>
+                        <span style={{ textTransform: "uppercase" }}>
+                           {data.symbol}{" "}
+                        </span>
+                        Total:
+                     </Typography>
+                     <Typography className={classes.buy}>
+                        {Math.round(amount * 1000) / 1000}
+                     </Typography>
+                  </div>
+
+                  <div className={classes.div} style={{ marginBottom: "2vh" }}>
+                     <Typography>Total:</Typography>
+                     <Typography className={classes.buy}>
+                        ${circulatingFormat(Math.round(coin * 1000) / 1000)}
+                     </Typography>
+                  </div>
+
+                  <Button
+                     variant="contained"
+                     color="primary"
+                     className={classes.button}
+                     onClick={handleBuy}
+                  >
+                     BUY
+                  </Button>
+               </div>
+               <p
+                  style={{
+                     position: "absolute",
+                     left: "22vw",
+                     zIndex: 3000,
+                     fontSize: "12px"
+                  }}
+               >
+                  Amount:
+               </p>
+               <div className={classes.buysell}>
+                  <Paper
+                     className={classes.buysell}
+                     style={{
+                        height: "6vh",
+                        marginBottom: "2vh",
+                        marginTop: "2vh",
+                        background: "white",
+                        display: "flex",
+                        alignItems: "baseline",
+                        justifyContent: "center"
+                     }}
+                  >
+                     <TextField
+                        id="outlined-number"
+                        type="number"
+                        ant="outlined"
+                        style={{ width: "8vw", paddingTop: "2vh" }}
+                        value={coin}
+                        onChange={e => {
+                           var net =
+                              +e.target.value -
+                              (+e.target.value + -e.target.value * 0.01) * 0.01;
+                           setAmount(net / price.usd);
+                           setCoin(e.target.value);
+                           props.amo(e.target.value);
+                           props.handleAmount(net / price.usd);
+                        }}
+                        InputProps={{
+                           startAdornment: (
+                              <InputAdornment position="start">
+                                 &#36;
+                              </InputAdornment>
+                           )
+                        }}
+                     />
+                     <SwapHorizIcon
+                        style={{ marginLeft: "20px", marginRight: "20px" }}
+                     />
+                     <TextField
+                        id="outlined-number"
+                        ant="outlined"
+                        type="number"
+                        style={{ width: "8vw", margin: "2vw, 2vw, 2vw, 2vw" }}
+                        value={amount}
+                        onChange={e => {
+                           setCoin(e.target.value * price.usd);
+                           setAmount(e.target.value);
+                           props.handleAmount(e.target.value);
+                           props.amo(e.target.value * price.usd);
+                        }}
+                        InputProps={{
+                           endAdornment: (
+                              <InputAdornment position="start">
+                                 {symbol}
+                              </InputAdornment>
+                           )
+                        }}
+                     />
+                  </Paper>
+
+                  <img src={checkout} className={classes.buysell} />
+               </div>
             </div>
          </div>
-      </div>
+      </Fade>
    );
 }

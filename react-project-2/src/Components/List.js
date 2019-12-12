@@ -112,9 +112,15 @@ export default function List() {
             Cryptocurrencies leverage blockchain technology to gain
             decentralization, transparency, and immutability.
          </Typography>
-         <Button variant="contained" color="primary" className={classes.button}>
-            Investment Tracking
-         </Button>
+         <NavLink to="/investment-tracking">
+            <Button
+               variant="contained"
+               color="primary"
+               className={classes.button}
+            >
+               Investment Tracking
+            </Button>
+         </NavLink>
          <Fade in>
             {load ? (
                <div className={classes.load}>
@@ -213,7 +219,7 @@ export default function List() {
                style={{ width: "0vw" }}
                activePage={pagi}
                onPageChange={onChange}
-               totalPages={628}
+               totalPages={629}
             />
          </Paper>
       </div>
