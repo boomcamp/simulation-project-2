@@ -1,3 +1,37 @@
 {
-  "transactions": []
+  "transactions": [
+    {
+      "coin": "Bitcoin",
+      "date": "Dec 12, 2019, 04:11:11 PM",
+      "transaction": "Buy",
+      "paymentMethod": "Bank",
+      "price": 7143.98,
+      "coinCountT": 4.199339863773415,
+      "coinCountU": 4.199339863773415,
+      "investment": 30000,
+      "id": 3
+    },
+    {
+      "coin": "Ethereum",
+      "date": "Dec 12, 2019, 04:23:18 PM",
+      "transaction": "Buy",
+      "paymentMethod": "Bank",
+      "price": 141.52,
+      "coinCountT": 70.66139061616732,
+      "coinCountU": 70.66139061616732,
+      "investment": 10000,
+      "id": 4
+    },
+    {
+      "coin": "Bitcoin",
+      "date": "Dec 12, 2019, 05:01:40 PM",
+      "transaction": "Sell",
+      "Deposit": "Bank",
+      "profit": 0,
+      "loss": 3,
+      "coinCountSell": "1",
+      "amount": 7140.01,
+      "id": 5
+    }
+  ]
 }

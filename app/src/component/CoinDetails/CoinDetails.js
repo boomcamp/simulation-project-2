@@ -4,7 +4,8 @@ import styled from "styled-components";
 import Chart from "../Chart/Chart.js";
 import ButtonTabs from "../Tabs/Tabs";
 import CircularProgress from "@material-ui/core/CircularProgress";
-import Modal from "../Modal/Modal";
+import BuyModal from "../Modal/BuyModal";
+import SellModal from "../Modal/SellModal";
 
 const Main = styled.div`
   display: flex;
@@ -54,16 +55,13 @@ const Btn = styled.button`
   }
 `;
 
-export default function CoinDetails({ match }) {
+export default function CoinDetails({ match, history }) {
   const [loading, setLoading] = useState(true);
   const [details, setDetails] = useState([]);
   const [chart, setChart] = useState([]);
   const [days, setDays] = useState(0);
-  const [open, setOpen] = useState(false);
-
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
+  const [openBuy, setOpenBuy] = useState(false);
+  const [openSell, setOpenSell] = useState(false);
 
   useEffect(() => {
     axios
@@ -74,7 +72,7 @@ export default function CoinDetails({ match }) {
           setLoading(false);
         }, 1000);
       });
-  }, []);
+  }, [match]);
 
   useEffect(() => {
     axios
@@ -94,7 +92,7 @@ export default function CoinDetails({ match }) {
         });
         setChart(output);
       });
-  }, [days]);
+  }, [days, match]);
   return (
     <>
       {loading ? (
@@ -108,6 +106,7 @@ export default function CoinDetails({ match }) {
             <img
               style={{ margin: "20px 20px", width: "15%" }}
               src={details.image.large}
+              alt="coin-img"
             ></img>
             <Details>
               <Word>
@@ -166,12 +165,13 @@ export default function CoinDetails({ match }) {
                   width: 200
                 }}
               >
-                <Btn onClick={handleClickOpen} id="buy">
+                <Btn onClick={() => setOpenBuy(true)} id="buy">
                   Buy
                 </Btn>
-                <Btn onClick={handleClickOpen} id="sell">
+                <Btn onClick={() => setOpenSell(true)} id="sell">
                   Sell
                 </Btn>
+                <Btn onClick={() => history.push("/")}>Back</Btn>
               </div>
             </Details>
           </Container>
@@ -185,7 +185,16 @@ export default function CoinDetails({ match }) {
             <ButtonTabs setDays={setDays} />
             <Chart chart={chart} />
           </Container>
-          <Modal setOpen={setOpen} open={open} details={details} />
+          <BuyModal
+            setOpenBuy={setOpenBuy}
+            openBuy={openBuy}
+            details={details}
+          />
+          <SellModal
+            setOpenSell={setOpenSell}
+            openSell={openSell}
+            details={details}
+          />
         </Main>
       )}
     </>

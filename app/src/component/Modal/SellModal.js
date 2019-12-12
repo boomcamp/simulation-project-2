@@ -1,6 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Button from "@material-ui/core/Button";
-import { Link } from "react-router-dom";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
@@ -18,7 +17,7 @@ import OutlinedInput from "@material-ui/core/OutlinedInput";
 import SyncAltIcon from "@material-ui/icons/SyncAlt";
 import clsx from "clsx";
 import styled from "styled-components";
-import { textAlign } from "@material-ui/system";
+import Axios from "axios";
 
 const BootstrapInput = withStyles(theme => ({
   root: {
@@ -31,7 +30,7 @@ const BootstrapInput = withStyles(theme => ({
   },
 
   input: {
-    width: 485,
+    width: 493,
     borderRadius: 4,
     position: "relative",
     backgroundColor: theme.palette.background.paper,
@@ -68,43 +67,121 @@ const Convert = styled(OutlinedInput)`
     color: black;
   }
 `;
-export default function Modal({ setOpen, open, details }) {
+export default function SellModal({ setOpenSell, openSell, details }) {
   const theme = useTheme();
   const classes = useStyles();
-  const [payment, setPayment] = useState("");
-  const [values, setValues] = useState(0);
+  const [payment, setPayment] = useState("Bank");
+  const [coins, setCoins] = useState("");
+  const [amount, setAmount] = useState("");
+  const [wallet, setWallet] = useState(0);
+  const [profit, setProfit] = useState(0);
+  const [loss, setLoss] = useState(0);
 
   const fullScreen = useMediaQuery(theme.breakpoints.down("sm"));
 
   const handleClose = () => {
-    setOpen(false);
-    setValues(0);
+    setOpenSell(false);
+    setAmount("");
+    setCoins("");
   };
 
-  const handleChangeValues = event => {
-    setValues(event.target.value);
-  };
+  const today = new Date().toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit"
+  });
+  const usd = new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD"
+  });
 
   const handleChangePayment = event => {
     setPayment(event.target.value);
+  };
+
+  useEffect(() => {
+    Axios.get(`http://localhost:4000/transactions`).then(res => {
+      setWallet(...res.data);
+    });
+  }, []);
+
+  const addTransaction = () => {
+    Axios.post(`http://localhost:4000/transactions`, {
+      coin: details.localization.en,
+      date: today,
+      transaction: "Sell",
+      Deposit: payment,
+      profit: profit,
+      loss: loss,
+      coinCountSell: coins,
+      amount: amount
+    })
+      .then(() => (window.location.href = "/transaction"))
+      .catch(error => console.log(error));
   };
   return (
     <>
       <Dialog
         fullScreen={fullScreen}
-        open={open}
-        onClose={handleClose}
+        open={openSell}
+        onClose={() => {
+          if (!amount) {
+            handleClose();
+          }
+        }}
         aria-labelledby="responsive-dialog-title"
       >
-        <DialogTitle id="responsive-dialog-title">{"Buy"}</DialogTitle>
+        <DialogTitle id="responsive-dialog-title">{"Sell"}</DialogTitle>
         <DialogContent>
-          <div style={{ display: "flex", justifyContent: "space-evenly" }}>
-            <img src={details.image.small} alt="CoinImage"></img>
-            <DialogContentText>{details.localization.en}</DialogContentText>
-          </div>
+          <DialogContentText>{"Sell From"}</DialogContentText>
+          <FormControl style={{ width: 533, marginLeft: 8 }}>
+            <OutlinedInput
+              id="outlined-adornment-weight"
+              startAdornment={
+                <InputAdornment position="start">
+                  <img
+                    src={details.image.small}
+                    style={{ width: 30, marginRight: 20 }}
+                    alt="bitcoin"
+                  ></img>
+                  <div>{details.localization.en} Wallet</div>
+                </InputAdornment>
+              }
+              endAdornment={
+                <InputAdornment position="end">
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      marginRight: 30
+                    }}
+                  >
+                    {wallet.coinCountU}
+                    <small>
+                      =
+                      {usd.format(
+                        details.market_data.current_price.usd *
+                          wallet.coinCountU
+                      )}
+                    </small>
+                  </div>
+                </InputAdornment>
+              }
+              aria-describedby="outlined-weight-
+
+                lper-text"
+              inputProps={{
+                "aria-label": "weight"
+              }}
+              labelWidth={0}
+            />
+          </FormControl>
           <FormControl className={classes.margin}>
             <InputLabel htmlFor="demo-customized-select-native">
-              Payment Method
+              Deposit To
             </InputLabel>
             <NativeSelect
               id="demo-customized-select-native"
@@ -133,8 +210,15 @@ export default function Modal({ setOpen, open, details }) {
               <OutlinedInput
                 type="number"
                 id="outlined-adornment-weight"
-                value={values === 0 ? "" : values}
-                onChange={handleChangeValues}
+                value={amount}
+                onChange={e => {
+                  setAmount(e.target.value);
+                  setCoins(
+                    (
+                      e.target.value / details.market_data.current_price.usd
+                    ).toLocaleString()
+                  );
+                }}
                 endAdornment={
                   <InputAdornment position="end">USD</InputAdornment>
                 }
@@ -153,16 +237,25 @@ export default function Modal({ setOpen, open, details }) {
               variant="outlined"
             >
               <Convert
-                disabled
+                type="number"
                 id="outlined-adornment-weight"
-                value={
-                  values === 0
-                    ? " "
-                    : (
-                        values / details.market_data.current_price.usd
-                      ).toLocaleString()
-                }
-                onChange={handleChangeValues}
+                value={coins}
+                onChange={e => {
+                  setCoins(e.target.value);
+                  setAmount(
+                    e.target.value * details.market_data.current_price.usd
+                  );
+                  const CurrentPrice = Math.ceil(
+                    e.target.value * details.market_data.current_price.usd
+                  );
+                  const Investment = Math.ceil(e.target.value * wallet.price);
+
+                  if (Investment < CurrentPrice) {
+                    setProfit(Investment - CurrentPrice);
+                  } else {
+                    setLoss(Investment - CurrentPrice);
+                  }
+                }}
                 endAdornment={
                   <InputAdornment
                     style={{ textTransform: "uppercase" }}
@@ -186,24 +279,18 @@ export default function Modal({ setOpen, open, details }) {
               borderRadius: 5,
               display: "flex",
               alignItems: "center",
-              justifyContent: "center"
+              justifyContent: "center",
+              width: 533,
+              margin: "0 auto"
             }}
-            className={classes.margin}
           >
-            {values === 0
-              ? " "
-              : new Intl.NumberFormat("en-US", {
-                  style: "currency",
-                  currency: "USD"
-                }).format(values)}
+            {amount === 0 ? " " : usd.format(amount)}
           </div>
         </DialogContent>
         <DialogActions>
-          <Link to="/transaction">
-            <Button autoFocus color="primary">
-              Confirm
-            </Button>
-          </Link>
+          <Button autoFocus color="primary" onClick={addTransaction}>
+            Confirm
+          </Button>
           <Button onClick={handleClose} color="primary" autoFocus>
             Cancel
           </Button>

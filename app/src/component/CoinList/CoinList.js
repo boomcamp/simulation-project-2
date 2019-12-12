@@ -13,6 +13,7 @@ import { Pagination } from "semantic-ui-react";
 import styled from "styled-components";
 import background from "../../img/background.jpg";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 
 const useStyles = makeStyles({
   root: {
@@ -31,7 +32,7 @@ const Header = styled.div`
   background: blue;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-around;
   height: 70px;
   margin-bottom: 20px;
   text-transform: uppercase;
@@ -83,7 +84,13 @@ export default function SimpleTable(props) {
   };
   return (
     <Paper className={classes.root}>
-      <Header>Cryptocurrencies</Header>
+      <Header>
+        Cryptocurrencies
+        <AccountCircleIcon
+          fontSize="inherit"
+          onClick={() => props.history.push("/profile")}
+        />
+      </Header>
       {loading ? (
         <Loading>
           <CircularProgress
