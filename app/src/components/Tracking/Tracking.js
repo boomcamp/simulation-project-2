@@ -40,15 +40,6 @@ export default function Tracking() {
                 type: 'numeric'
             }
         ],
-        data: [
-            { name: 'Mehmet', surname: 'Baran', birthYear: 1987, birthCity: 63 },
-            {
-                name: 'Zerya Betül',
-                surname: 'Baran',
-                birthYear: 2017,
-                birthCity: 34,
-            },
-        ],
     });
     // const [isLoading, setIsLoading] = useState(true)
     // const [trans, setTrans] = useState([])

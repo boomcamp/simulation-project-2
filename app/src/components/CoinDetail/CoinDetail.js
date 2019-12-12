@@ -126,16 +126,15 @@ export default function CoinDetail(props) {
 
     })
 
-
     return (
         <div className={classes.background}>
             <div className={classes.descbox}>
                 <div className={classes.title}>
                     <h5 className={classes.name}>{name}</h5>
-                    <img src="https://assets.coingecko.com/coins/images/1/thumb/bitcoin.png?1547033579" rel="noopener noreferrer" alt='logo' />
+                    <img src="https://assets.coingecko.com/coins/images/1/thumb/bitcoin.png?1547033579" alt='logo' />
                 </div>
-                <div>Homepage: <span><a href={url} target="_blank">{url}</a></span></div>
-                <div>Official Forum: <span><a href={forum} target="_blank">{forum}</a></span></div>
+                <div>Homepage: <span><a href={url} target="_blank" rel="noopener noreferrer">{url}</a></span></div>
+                <div>Official Forum: <span><a href={forum} target="_blank" rel="noopener noreferrer">{forum}</a></span></div>
                 <div
                     className={classes.description}
                     dangerouslySetInnerHTML={{ __html: desc }}>

@@ -224,7 +224,6 @@ class CoinList extends Component {
                             }
                         }}
                         detailPanel={rowData => {
-                            console.log(rowData.data)
                             return <CoinDetail
                                 symbol={rowData.symbol}
                                 id={rowData.id}

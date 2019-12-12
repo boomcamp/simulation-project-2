@@ -18,7 +18,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 
-const useStyles = {
+const useStyles = (theme => ({
     descbox: {
         background: '#fff',
         border: "1px solid #e7e7e7",
@@ -51,8 +51,20 @@ const useStyles = {
     },
     q: {
         marginRight: 5
-    }
-};
+    },
+    info: {
+        display: "flex",
+        justifyContent: "space-around",
+        margin: 10,
+        width: 400
+    },
+    textField: {
+        width: "95%",
+    },
+    margin: {
+        margin: theme.spacing(1),
+    },
+}));
 
 
 class DataChart extends Component {
@@ -138,6 +150,17 @@ class DataChart extends Component {
             isLoading: true,
             dialog: {
                 open: false
+            },
+            invest: {
+                data: [
+                    {
+                        id: 0,
+                        name: '',
+                        date: 0,
+                        time: 0,
+                        amount: 0
+                    }
+                ]
             }
         }
     }
@@ -234,9 +257,19 @@ class DataChart extends Component {
         })
     }
 
+    handlePost = () => {
+        axios({
+            method: 'post',
+            url: `http://localhost:4000/transactions`,
+            data: this.state.invest.data
+        })
+            .then(e => this.props.history.push('/tracking'))
+            .catch(err => console.log(err))
+    }
+
     render() {
         const { classes } = this.props;
-        const { name, symbol, currentPrice, rank } = this.props
+        const { name, symbol } = this.props
         const { options, series } = this.state
         return (
             <div className={classes.descbox} >
@@ -286,39 +319,45 @@ class DataChart extends Component {
                                 aria-describedby="alert-dialog-description"
                             >
                                 <DialogTitle id="alert-dialog-title">{`Invest on ${name}`}</DialogTitle>
-                                <DialogContent>
-                                    <DialogContentText id="alert-dialog-description">
-                                        <TextField
-                                            type="number"
-                                            label={name}
-                                            id="outlined-start-adornment"
-                                            className={clsx(classes.margin, classes.textField)}
-                                            InputProps={{
-                                                startAdornment: <InputAdornment position="start">{symbol}</InputAdornment>,
-                                            }}
-                                            variant="outlined"
-                                            onChange={e => console.log(e.target.value)}
-                                        />
-                                        <TextField
-                                            label="Currency"
-                                            id="outlined-read-only-input"
-                                            className={clsx(classes.margin, classes.textField)}
-                                            InputProps={{
-                                                readOnly: true,
-                                                startAdornment: <InputAdornment position="start">$</InputAdornment>
-                                            }}
-                                            variant="outlined"
-                                        />
-                                    </DialogContentText>
-                                </DialogContent>
-                                <DialogActions>
-                                    <Button onClick={this.handleClose} color="primary">
-                                        CANCEL
+
+                                <form onSubmit={this.handlePost}>
+                                    <DialogContent>
+                                        <DialogContentText id="alert-dialog-description">
+                                            <span className={classes.buy}>
+                                                <TextField
+                                                    required
+                                                    label="Amount to Invest"
+                                                    type="number"
+                                                    id="outlined-read-only-input"
+                                                    className={clsx(classes.margin, classes.textField)}
+                                                    InputProps={{
+                                                        startAdornment: <InputAdornment position="start">$</InputAdornment>
+                                                    }}
+                                                    variant="outlined"
+                                                />
+                                                <TextField
+                                                    label={name}
+                                                    id="outlined-start-adornment"
+                                                    className={clsx(classes.margin, classes.textField)}
+                                                    InputProps={{
+                                                        readOnly: true,
+                                                        startAdornment: <InputAdornment position="start">{symbol}</InputAdornment>,
+                                                    }}
+                                                    variant="outlined"
+                                                    onChange={e => console.log(e.target.value)}
+                                                />
+                                            </span>
+                                        </DialogContentText>
+                                    </DialogContent>
+                                    <DialogActions>
+                                        <Button onClick={this.handleClose} color="primary">
+                                            CANCEL
                                     </Button>
-                                    <Button onClick={this.handleClose} color="primary" autoFocus>
-                                        OKAY
+                                        <Button type="submit" color="primary" autoFocus>
+                                            OKAY
                                     </Button>
-                                </DialogActions>
+                                    </DialogActions>
+                                </form>
                             </Dialog>
                         </div>
                     </React.Fragment>
