@@ -4,15 +4,26 @@ const Div = styled.div`
   width: 100%;
   display: flex;
   padding: 80px;
+  @media screen and (max-width: 1080px) {
+    flex-direction: column-reverse;
+    padding: 70px 5px 5px 5px;
+  }
 `;
 
 const Left = styled.div`
   width: 65%;
+  @media screen and (max-width: 1080px) {
+    width: 100%;
+  }
 `;
 const Right = styled.div`
   width: 35%;
   display: flex;
   flex-direction: column;
+  @media screen and (max-width: 1080px) {
+    margin: 0 0 15px 0;
+    width: 100%;
+  }
 `;
 const Buy = styled.div`
   margin: 10px 0 0 0;
@@ -33,22 +44,18 @@ const Tracking = styled.div`
   font-size: 16px;
 `;
 const Label = styled.div`
-  font-size: 35px;
+  font-size: 30px;
   width: 100%;
   display: flex;
   justify-content: space-between;
   text-transform: capitalize;
+  padding: 0 0 0 15px;
 `;
 const Value = styled.div`
   width: 100%;
   display: flex;
   justify-content: space-between;
-`;
-const Green = styled.span`
-  color: green;
-`;
-const Red = styled.span`
-  color: red;
+  padding: 0 0 0 15px;
 `;
 const move = {
   marginTop: "-5px"
@@ -114,6 +121,9 @@ const Title = styled.span`
 const TableCont = styled.div`
   width: 100%;
   padding: 0 20px 0 0;
+  @media screen and (max-width: 1080px) {
+    padding: 0;
+  }
 `;
 const Convert = styled.div`
   margin: 20px 0 0 0;
@@ -133,21 +143,44 @@ const History = styled.span`
   color: #3f51b5;
 `;
 const ValueBox = styled.div`
-  width: 230px;
+  width: 200px;
 `;
 const Span = styled.span`
   text-transform: capitalize;
+  font-size: 18px;
+  padding: 4px 0 0 0;
+`;
+const Span2 = styled.span`
+  text-transform: uppercase;
+  font-size: 16px;
 `;
 const Img = styled.img`
-  height: 40px;
+  width: 30px;
+  margin: 0 10px 0 0;
 `;
 const Fresh = styled.span`
   width: 100%;
   display: flex;
   justify-content: center;
 `;
+const blue = { color: "blue" };
+const red = { color: "red" };
+const green = { color: "#5ee52e" };
 const active = { border: "3px solid #5ee52e" };
+const CoinName = styled.div`
+  display: flex;
+  width: 130px;
+`;
+const ImgCont = styled.div`
+  width: 30px;
+  display: flex;
+  justify-content: center;
+`;
+const arrow = {
+  margin: "-3px 0 0 5px"
+};
 export {
+  Span2,
   Div,
   Left,
   Right,
@@ -155,8 +188,6 @@ export {
   Tracking,
   Label,
   Value,
-  Green,
-  Red,
   move,
   Button,
   Box,
@@ -175,5 +206,11 @@ export {
   ValueBox,
   Span,
   Img,
-  Fresh
+  Fresh,
+  blue,
+  red,
+  green,
+  CoinName,
+  ImgCont,
+  arrow
 };

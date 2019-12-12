@@ -10,6 +10,7 @@ const Div = styled.div`
   width: 100%;
   box-sizing: border-box;
   justify-content: center;
+  font-weight: bold;
 `;
 const white = { color: "white" };
 const Span = styled.span`

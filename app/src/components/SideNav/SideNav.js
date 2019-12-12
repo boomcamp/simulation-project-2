@@ -17,7 +17,7 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import { FaHome } from "react-icons/fa";
 import Routes from "../Routes/Routes";
-import { TitleDiv, Div, white, Span, font } from "../AppStyle";
+import { TitleDiv, white, Span, font } from "../AppStyle";
 import { Link } from "react-router-dom";
 import { useStyles } from "./useStyles";
 import { GiMoneyStack } from "react-icons/gi";
@@ -36,7 +36,7 @@ export default function SideNav(props) {
   };
 
   return (
-    <div className={classes.root}>
+    <React.Fragment>
       <CssBaseline />
       <AppBar
         className={clsx(classes.appBar, {
@@ -106,28 +106,31 @@ export default function SideNav(props) {
           [classes.contentShift]: open
         })}
       >
-        <Div>
-          <Routes
-            data={props.data}
-            loading={props.loading}
-            currency={props.currency}
-            handleSelect={props.handleSelect}
-            handlePagination={props.handlePagination}
-            currentPage={props.currentPage}
-            currencies={props.currencies}
-            cryptoList={props.cryptoList}
-            crypto={props.crypto}
-            handleCrypto={props.handleCrypto}
-            currentPrice={props.currentPrice}
-            cryptoValue={props.cryptoValue}
-            moneyValue={props.moneyValue}
-            handleOnChange={props.handleOnChange}
-            handleSubmitInvest={props.handleSubmitInvest}
-            lastTrans={props.lastTrans}
-            transList={props.transList}
-          />
-        </Div>
+        <Routes
+          data={props.data}
+          loading={props.loading}
+          currency={props.currency}
+          handleSelect={props.handleSelect}
+          handlePagination={props.handlePagination}
+          currentPage={props.currentPage}
+          currencies={props.currencies}
+          cryptoList={props.cryptoList}
+          crypto={props.crypto}
+          handleCrypto={props.handleCrypto}
+          currentPrice={props.currentPrice}
+          cryptoValue={props.cryptoValue}
+          moneyValue={props.moneyValue}
+          handleOnChange={props.handleOnChange}
+          handleSubmitInvest={props.handleSubmitInvest}
+          lastTrans={props.lastTrans}
+          transList={props.transList}
+          handleSubmitSell={props.handleSubmitSell}
+          handleClickOpen={props.handleClickOpen}
+          handleClose={props.handleClose}
+          open={props.open}
+          totalProfit={props.totalProfit}
+        />
       </main>
-    </div>
+    </React.Fragment>
   );
 }
