@@ -9,15 +9,21 @@ export default function CryptoCoins() {
   const [state, setState] = useState({
     columns: [
       { title: `#`, field: 'market_cap_rank', cellStyle: {width: `1%`}},
-      { title: 'Coin', 
-        field: 'coin', 
-        render: rowData => (
-        <div style={{display: `flex`, justifyContent:`space-around`}}>
-          <img src={rowData.coin.image} style={{width: 40, borderRadius: '50%'}} alt="logo"/>
-          <p><b>{rowData.coin.name}</b></p>
-          <p>{rowData.coin.symbol}</p>
-        </div>),
-        customSort: (a, b) => a.coin.name.length - b.coin.name.length
+      {   title:"",
+          render: rowData => (
+            <img src={rowData.image} style={{width: 40, borderRadius: '50%'}} alt="logo"/>
+          ),
+          cellStyle:{padding:`3px 3px 3px 0`, textAlign:`right`},
+          headerStyle:{padding:`0`},
+          sorting:false
+      },
+      {   title: 'Coin', field: 'name', 
+          render: rowData => (
+                  <div style={{display:`flex`, justifyContent:`space-around`}}>
+                      <b>{rowData.name}</b> 
+                      <span> {rowData.symbol.toUpperCase()}</span>
+                  </div>
+              )
       },
       { title: 'Price', field: 'current_price', cellStyle: {color: `#428bca`} },
       { title: '1h', field: 'price_change_percentage_1h_in_currency',
@@ -74,11 +80,9 @@ export default function CryptoCoins() {
             let count=0;
             return temp.push({  id: coin.id,
                                 market_cap_rank: coin.market_cap_rank,
-                                coin: {
-                                        name: coin.name,
-                                        symbol: coin.symbol.toUpperCase(),
-                                        image: coin.image,
-                                      },
+                                name: coin.name,
+                                symbol: coin.symbol.toUpperCase(),
+                                image: coin.image,
                                 current_price: `$${addComma(coin.current_price)}`, 
                                 price_change_percentage_1h_in_currency: `${Math.round(coin.price_change_percentage_1h_in_currency * 100) / 100}%`,
                                 price_change_percentage_24h_in_currency: `${Math.round(coin.price_change_percentage_24h_in_currency * 100) / 100}%`,
@@ -106,17 +110,16 @@ export default function CryptoCoins() {
 
   return (
     <MaterialTable
-      components={{
-          Toolbar: props => <div style={{marginTop:`80px`}}></div> 
-      }}
+      style={{marginTop:`80px`}}    
       columns={state.columns}
       data={state.data}
-      
+      title={null}
       options={{
         pageSizeOptions: [5,10,20,50,100],
         pageSize: 10,
         headerStyle: {
           fontWeight: `bold`,
+          textTransform:'uppercase'
         },
         loadingType: "linear"
       }}

@@ -2,7 +2,6 @@ import React, {useEffect, useState} from 'react';
 import Select from 'react-select';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
-import CompareArrows from '@material-ui/icons/CompareArrows';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import axios from 'axios'
 import {Redirect} from 'react-router-dom'
@@ -11,9 +10,10 @@ import { withSnackbar } from 'notistack';
 import Title from './tools/Title'
 // import ProfilePic from '../assest/download.jpeg'
 
-function CyptoBuy({closeFn, enqueueSnackbar}) {
+function CryptoBuy({closeFn, enqueueSnackbar}) {
     const [redirect, setRedirect] = useState(false);
-    const [amount, setAmount] = useState({ cash: 0, cryptoCoin: 0 });
+    const [amount, setAmount] = useState({ cash: 0, cryptoCoin: 0});
+    const [coinName, setCoinName] = useState("")
     const [coins, setCoins] = useState([]);
     const [state, setState] = useState();
 
@@ -41,7 +41,7 @@ function CyptoBuy({closeFn, enqueueSnackbar}) {
     // Profit/loss = ( today’s price of 1BTC * X bitcoins you bought) - (price you bought 1BTC at * X bitcoins you bought)
     
     const handleBuy = () => {
-      if(amount && state){
+      if(amount.cash > 0 && state){
         axios
           .post(`http://localhost:4000/transactions`, {
             coinId: state.id,
@@ -49,20 +49,20 @@ function CyptoBuy({closeFn, enqueueSnackbar}) {
             // coinName: state.value,
             amountBuy: amount.cash,
             coinPrice: state.price,
-            profitOrLoss: (state.price * amount.cash) - (state.price * amount.cash)
+            // profitOrLoss: (state.price * amount.cash) - (state.price * amount.cash)
           })
-          .then(res => {console.log(res)})
-        
-        setRedirect(true);
-        closeFn();
-        enqueueSnackbar("Successfully Invested", {variant: 'success', autoHideDuration: 1000});
+          .then(res => {console.log(res)
+            setRedirect(true);
+            closeFn();
+            enqueueSnackbar("Successfully Invested", {variant: 'success', autoHideDuration: 1000});
+          })
       }
     }
 
     const handleEnterAmount = (money, type) => {
-      (type === "cash") ?
+      if (type === "cash")
         setAmount({cash: money, cryptoCoin: (money/state.price)})
-      :
+      else if (type === "crypto")
         setAmount({cash: (state.price*money), cryptoCoin: money})
     }
 
@@ -75,8 +75,9 @@ function CyptoBuy({closeFn, enqueueSnackbar}) {
           <Select 
               placeholder="Cryptocurrency to Invest"
               value={state} 
-              onChange={(state) => { setState(state); 
-                                     setAmount({cash: amount.cash, cryptoCoin: (amount.cash/state.price)})
+              onChange={(state) => { setState(state);
+                                     setAmount({cash: amount.cash, cryptoCoin: (amount.cash/state.price)});  
+                                     setCoinName(state.label)                                   
                                     }} 
               options={coins} loading={true} 
               className="profileBuySell" />
@@ -96,7 +97,7 @@ function CyptoBuy({closeFn, enqueueSnackbar}) {
                   value={amount.cash} 
                   required
                   disabled={(state === undefined) ? true : false} />
-              <CompareArrows style={{width:`20%`}} />
+              <p style={{fontSize:`24px`, margin:`0`}}>⥮</p>
               <TextField
                   type="number"
                   InputProps={{
@@ -104,7 +105,7 @@ function CyptoBuy({closeFn, enqueueSnackbar}) {
                       <InputAdornment position="start"> ℂ </InputAdornment>
                     ),
                   }}
-                  label="Cryptocurrency" 
+                  label={(coinName) ? coinName : `Cryptocurrency`} 
                   className="profileBuySell" 
                   style={{margin: `0 0 15px 0`,width:`95%`}}
                   onChange={(e) =>  handleEnterAmount(e.target.value, "crypto")}
@@ -123,4 +124,4 @@ function CyptoBuy({closeFn, enqueueSnackbar}) {
     );
 }
 
-export default withSnackbar(CyptoBuy)
+export default withSnackbar(CryptoBuy)

@@ -11,7 +11,7 @@ import Modal from '@material-ui/core/Modal';
 import Backdrop from '@material-ui/core/Backdrop';
 import Fade from '@material-ui/core/Fade';
 
-import CryptoBuy from '../CyptoBuy'
+import CryptoBuy from '../CryptoBuy'
 
 // import ListSubheader from '@material-ui/core/ListSubheader';
 // import BarChartIcon from '@material-ui/icons/BarChart';
@@ -60,7 +60,7 @@ export default function ListItems() {
         
         <ListItem button onClick={() => setOpen(true)}>
           <ListItemIcon title="Buy Cryptocurrency">
-            <AttachMoney />
+            <AttachMoney style={{color:`green`}}/>
           </ListItemIcon>
           <ListItemText primary="Buy Cryptocurrency" />
         </ListItem>
@@ -79,7 +79,7 @@ export default function ListItems() {
         >
           <Fade in={open}>
             <div className={classes.paper}>
-              <CryptoBuy closeFn={()=> setOpen(false)}/>
+              <CryptoBuy closeFn={()=> setOpen(false)} />
             </div>
           </Fade>
         </Modal>

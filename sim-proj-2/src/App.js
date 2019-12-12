@@ -7,7 +7,7 @@ import InvestmentTracker from './components/investedCoins/InvestmentTracker'
 
 export default function App() {
     return (
-        <SnackbarProvider maxSnack={3} anchorOrigin={{ vertical: 'top', horizontal: 'center' }}>
+        <SnackbarProvider maxSnack={3} anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}>
             <BrowserRouter>
                 <Switch>
                     <Route exact path="/" component={DashBoard}/>

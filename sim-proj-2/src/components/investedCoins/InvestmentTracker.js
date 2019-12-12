@@ -10,6 +10,7 @@ import axios from 'axios'
 // import Box from '@material-ui/core/Box';
 
 export default function InvestmentTracker() {
+    const [profitLoss, setProfitLoss] = useState(0)
     const [investedCoin, setInvestedCoin] = useState([])
     
     useEffect(() => {
@@ -30,10 +31,16 @@ export default function InvestmentTracker() {
                 })
                 if(!isCancelled)
                     setInvestedCoin(res.data)
-          })
+            })
+        
+        axios
+            .get(`http://localhost:4000/wallet`)
+            .then(res => {
+                setProfitLoss(res.data.amount)
+            })
         return () => { isCancelled=true };
     }, [])
-    
+
     return (
         <div style={{display:`flex`}}>
             <NavBar />
@@ -41,12 +48,15 @@ export default function InvestmentTracker() {
                 <Grid container spacing={3} style={{margin:`100px 100px 100px 100px`, height:`100vh`}}>
                     <Grid item xs={4} >
                         <Paper style={{height:`250px`, padding:`20px`}}>
-                            <Title>Total Profit/Loss</Title>
+                            <Title>My Wallet: </Title>
+                            <p style={{fontSize:`55px`, margin:`0`, opacity:`0.70`}}><sup>$</sup> 
+                                {profitLoss}{(profitLoss===0)? ".00": null}
+                            </p>
                         </Paper>
                     </Grid>
 
                     <Grid item xs={8} >
-                        <InvestedCoinsTable investedCoin={investedCoin}/>
+                        <InvestedCoinsTable investedCoin={investedCoin} />
                     </Grid>
                 </Grid>
 
