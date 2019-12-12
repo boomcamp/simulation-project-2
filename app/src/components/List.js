@@ -40,7 +40,7 @@ export default function Stats(props) {
 	};
 
 	const sell = () => {
-		Axios.delete("http://localhost:4000/transactions/3").then(response => {
+		Axios.delete("http://localhost:4000/transactions/rmopGY8").then(response => {
 			console.log("deleted");
 		});
 	};

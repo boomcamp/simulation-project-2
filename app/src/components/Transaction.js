@@ -39,14 +39,18 @@ export default function Transaction(props) {
 	const [coin, setCoin] = useState("");
 	const [amount, setAmount] = useState("");
 	const [fee, setFee] = useState(0);
+	const [basePrice, setBasePrice] = useState(0);
 
 	const confirmBuy = () => {
 		if (coin) {
 			Axios.post("http://localhost:4000/transactions", {
-				id: props.id,
+				coinId: props.id,
 				name: props.name,
 				image: props.img.small,
-				priceP: props.price,
+				coinQuantity: amount,
+				Amount: basePrice,
+				totalAmount: coin,
+				currentCoinPrice: props.price,
 				transaction: "buy",
 				timestamp: new Date().getTime()
 			}).catch(error => {
@@ -100,9 +104,10 @@ export default function Transaction(props) {
 								type="number"
 								onChange={e => {
 									if (e.target.value > -1) {
-										setAmount(+e.target.value / props.price);
+										setAmount((+e.target.value - +e.target.value * 0.0149) / props.price);
+										setBasePrice(+e.target.value - +e.target.value * 0.0149);
 										setCoin(+e.target.value);
-										setFee(+e.target.value * 0.1);
+										setFee(+e.target.value * 0.0149);
 									}
 								}}
 								autoFocus={true}
@@ -119,9 +124,10 @@ export default function Transaction(props) {
 								value={amount}
 								onChange={e => {
 									if (e.target.value > -1) {
-										setCoin(+e.target.value * props.price);
+										setCoin(+e.target.value * props.price + +e.target.value * props.price * 0.0149);
 										setAmount(+e.target.value);
-										setFee(+e.target.value * props.price * 0.1);
+										setFee(+e.target.value * props.price * 0.0149);
+										setBasePrice(+e.target.value * props.price);
 									}
 								}}
 							/>
@@ -171,7 +177,7 @@ export default function Transaction(props) {
 						<Grid item container xs={12} style={{ padding: "20px 20%" }}>
 							<Grid container item xs={12} justify="space-between">
 								<Typography variant="h6">Fee:</Typography>
-								<Typography variant="h6">{props.formatter.format(coin)}</Typography>
+								<Typography variant="h6">{props.formatter.format(basePrice)}</Typography>
 							</Grid>
 							<Grid container item xs={12} justify="space-between">
 								<Typography variant="h6">Transaction Fee:</Typography>
@@ -179,7 +185,7 @@ export default function Transaction(props) {
 							</Grid>
 							<Grid container item xs={12} justify="space-between">
 								<Typography variant="h6">Total:</Typography>
-								<Typography variant="h6">{props.formatter.format(coin + fee)}</Typography>
+								<Typography variant="h6">{props.formatter.format(coin)}</Typography>
 							</Grid>
 						</Grid>
 					</Grid>

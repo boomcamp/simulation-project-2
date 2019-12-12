@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState } from "react";
+import Axios from "axios";
 import { makeStyles, createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
@@ -15,8 +16,8 @@ import ListItemText from "@material-ui/core/ListItemText";
 import SwapHorizontalCircleIcon from "@material-ui/icons/SwapHorizontalCircle";
 import HomeIcon from "@material-ui/icons/Home";
 import { useHistory } from "react-router-dom";
-
 import { NavLink } from "react-router-dom";
+import Avatar from "@material-ui/core/Avatar";
 
 const useStyles = makeStyles(theme => ({
 	root: {
@@ -59,13 +60,16 @@ export default function Navigation() {
 		bottom: false,
 		right: false
 	});
+	const [coin, setCoin] = useState([]);
 
 	const toggleDrawer = (side, open) => event => {
 		if (event.type === "keydown" && (event.key === "Tab" || event.key === "Shift")) {
 			return;
 		}
-
 		setState({ ...state, [side]: open });
+		Axios.get(`http://localhost:4000/transactions`).then(response => {
+			setCoin(response.data);
+		});
 	};
 
 	const sideList = side => (
@@ -85,12 +89,34 @@ export default function Navigation() {
 			</List>
 			<Divider />
 			<List>
-				<ListItem button>
+				<ListItem
+					button
+					onClick={() => {
+						history.push("/");
+					}}
+				>
 					<ListItemIcon>
 						<SwapHorizontalCircleIcon />
 					</ListItemIcon>
 					<ListItemText primary={"Transactions"} />
 				</ListItem>
+			</List>
+			<Divider />
+			<List>
+				{coin.map((val, i) => (
+					<ListItem
+						button
+						key={i}
+						onClick={() => {
+							history.push(`/coin/invested/${val.coinId}`);
+						}}
+					>
+						<ListItemIcon>
+							<Avatar alt={val.name} src={val.image} />
+						</ListItemIcon>
+						<ListItemText primary={val.name} />
+					</ListItem>
+				))}
 			</List>
 		</div>
 	);
