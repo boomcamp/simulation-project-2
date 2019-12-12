@@ -3,6 +3,7 @@ import {
   AreaChart,
   Area,
   CartesianGrid,
+  ResponsiveContainer,
   XAxis,
   YAxis,
   Tooltip
@@ -17,6 +18,8 @@ import DialogContent from "@material-ui/core/DialogContent";
 import TextField from "@material-ui/core/TextField";
 import { FaExchangeAlt } from "react-icons/fa";
 import DialogTitle from "@material-ui/core/DialogTitle";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const MainDiv = styled.div`
   margin: 0 auto;
@@ -64,16 +67,9 @@ const Buy = styled.button`
   background-color: lightgreen;
 `;
 
-const Sell = styled.button`
-  width: 100px;
-  height: 25px;
-  background-color: red;
-  color: white;
-`;
-
 const Btn = styled.div`
   float: right;
-  margin-right: 75px;
+  margin-right: 20px;
 `;
 
 const Div = styled.div`
@@ -110,7 +106,8 @@ export default class chartInfo extends React.Component {
     this.state = {
       toggleModal: false,
       data: [],
-      value: ""
+      current: "",
+      usd: ""
     };
   }
 
@@ -121,7 +118,13 @@ export default class chartInfo extends React.Component {
       https://api.coingecko.com/api/v3/coins/${this.props.match.params.id}`
       )
       .then(response => {
-        this.setState({ details: response.data });
+        this.setState({
+          details: response.data,
+          price: response.data.market_data.current_price.usd,
+          name: response.data.name,
+          invested: "",
+          image: response.data.image.small
+        });
       });
 
     axios
@@ -170,18 +173,41 @@ export default class chartInfo extends React.Component {
   };
 
   handleClose = () => {
-    this.setState({ toggleModal: false });
+    this.setState({ toggleModal: false, current: "", usd: "" });
   };
 
-  handleChange = e => {
-    axios.get("https://api.coingecko.com/api/v3/exchange_rates").then(res => {
-      console.log(res.data.rates);
+  currencyChange = (value, price) => {
+    if (price === "current") {
+      this.setState({
+        usd: value * this.state.price,
+        current: value
+      });
+    } else {
+      this.setState({
+        current: value / this.state.price,
+        usd: value
+      });
+    }
+  };
+
+  investHandler = e => {
+    e.preventDefault();
+    axios.post("http://localhost:4000/transactions", {
+      coinName: this.state.details.name,
+      price: this.state.details.market_data.current_price.usd,
+      invested: this.state.usd,
+      amountSold: 0,
+      coinId: this.state.details.id,
+      profit: 0,
+      image: this.state.image
     });
+    toast.success("Investment Successful !");
   };
 
   render() {
     return (
       <MainDiv>
+        <ToastContainer />
         <Name>{this.state.details ? this.state.details.name : ""}</Name>
         <Rank>
           Market Cap Rank:
@@ -189,7 +215,6 @@ export default class chartInfo extends React.Component {
         </Rank>
         <Btn>
           <Buy onClick={this.handleClickOpen}>Buy</Buy>
-          <Sell>Sell</Sell>
         </Btn>
         <Dialog
           open={this.state.toggleModal}
@@ -197,40 +222,49 @@ export default class chartInfo extends React.Component {
           aria-labelledby="alert-dialog-title"
           aria-describedby="alert-dialog-description"
         >
-          <DialogTitle id="alert-dialog-title">{"Amount"}</DialogTitle>
-          <DialogContent>
-            <Div>
-              <TextField
-                onChange={e => this.handleChange(e.target.value)}
-                id="outlined-basic"
-                label="Amount"
-                margin="normal"
-                variant="outlined"
-              />
-              <FaExchangeAlt
-                style={{
-                  marginTop: 35,
-                  marginRight: 10,
-                  marginLeft: 10
-                }}
-              />
-              <TextField
-                id="outlined-basic"
-                label="Amount"
-                margin="normal"
-                variant="outlined"
-              />
-            </Div>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={this.handleClose} color="primary">
-              Invest
-            </Button>
-            <Button onClick={this.handleClose} color="primary">
-              Close
-            </Button>
-          </DialogActions>
+          <form onSubmit={e => this.investHandler(e)}>
+            <DialogTitle id="alert-dialog-title">{"Amount"}</DialogTitle>
+
+            <DialogContent>
+              <Div>
+                <TextField
+                  label="USD"
+                  margin="normal"
+                  value={this.state.usd}
+                  variant="outlined"
+                  onChange={e => this.currencyChange(+e.target.value, "usd")}
+                />
+                <FaExchangeAlt
+                  style={{
+                    marginTop: 35,
+                    marginRight: 10,
+                    marginLeft: 10
+                  }}
+                />
+                <TextField
+                  onChange={e =>
+                    this.currencyChange(+e.target.value, "current")
+                  }
+                  label={this.state.name}
+                  value={this.state.current}
+                  margin="normal"
+                  variant="outlined"
+                  required
+                />
+              </Div>
+            </DialogContent>
+            <DialogActions>
+              <Button type="submit" color="primary" onClick={this.notify}>
+                Invest
+              </Button>
+
+              <Button onClick={this.handleClose} color="primary">
+                Close
+              </Button>
+            </DialogActions>
+          </form>
         </Dialog>
+
         <ButtonGroup>
           {days.map(e => {
             return (
@@ -240,24 +274,26 @@ export default class chartInfo extends React.Component {
             );
           })}
         </ButtonGroup>
-        <AreaChart
-          width={1450}
-          height={600}
-          data={this.state.data}
-          margin={{ top: 5, right: 20, bottom: 10, left: 0 }}
-        >
-          <Area
-            type="monotone"
-            dataKey="prices"
-            stroke="#8884d8"
-            strokeWidth={4}
-            dot={false}
-          />
-          <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
-          <XAxis dataKey="getdate" />
-          <YAxis domain={["auto", "auto"]} />
-          <Tooltip />
-        </AreaChart>
+        <div style={{ width: "100%", height: 600 }}>
+          <ResponsiveContainer>
+            <AreaChart
+              data={this.state.data}
+              margin={{ top: 5, right: 20, bottom: 10, left: 0 }}
+            >
+              <Area
+                type="monotone"
+                dataKey="prices"
+                stroke="#8884d8"
+                strokeWidth={4}
+                dot={false}
+              />
+              <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
+              <XAxis dataKey="getdate" />
+              <YAxis domain={["auto", "auto"]} />
+              <Tooltip />
+            </AreaChart>
+          </ResponsiveContainer>
+        </div>
       </MainDiv>
     );
   }

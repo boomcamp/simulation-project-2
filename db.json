@@ -1,3 +1,32 @@
 {
-  "transactions": []
+  "transactions": [
+    {
+      "coinName": "Ethereum",
+      "price": 141.98,
+      "invested": 1,
+      "coinId": "ethereum",
+      "profit": 0,
+      "image": "https://assets.coingecko.com/coins/images/279/small/ethereum.png?1547034048",
+      "id": 2
+    },
+    {
+      "coinName": "Bitcoin SV",
+      "price": 91.96,
+      "invested": 12,
+      "coinId": "bitcoin-cash-sv",
+      "profit": 0,
+      "image": "https://assets.coingecko.com/coins/images/6799/small/BSV.png?1558947902",
+      "id": 3
+    },
+    {
+      "coinName": "Bitcoin Cash",
+      "price": 205.88,
+      "invested": 12,
+      "amountSold": 0,
+      "coinId": "bitcoin-cash",
+      "profit": 0,
+      "image": "https://assets.coingecko.com/coins/images/780/small/bitcoin_cash.png?1547034541",
+      "id": 4
+    }
+  ]
 }
