@@ -184,6 +184,10 @@ export default function AcccessibleTable(props) {
       setDisplay(val);
    };
 
+   const handleZero = () => {
+      setDisplay(0);
+   };
+
    console.log(amount);
 
    if (confirmBy) {
@@ -194,6 +198,7 @@ export default function AcccessibleTable(props) {
             coin={coin}
             handleAmount={handleAmount}
             handleDisplay={handleDisplay}
+            handleZero={handleZero}
          />
       );
    }
@@ -203,10 +208,10 @@ export default function AcccessibleTable(props) {
          <Fade in>
             <div className={classes.display}>
                <img src={bitcoin} alt="icon" style={{ width: "8vw" }} />
-               <h1 style={{ fontSize: "36px" }}>
+               <p style={{ fontSize: "36px", fontWeight: "bold" }}>
                   “Understanding block-chain makes you go mad, unless you start
                   your own cult”
-               </h1>
+               </p>
                <h3 style={{ color: "#f9d171" }}>― Arif Naseem ―</h3>
             </div>
          </Fade>

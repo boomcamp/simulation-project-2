@@ -112,13 +112,13 @@ export default function List() {
             Cryptocurrencies leverage blockchain technology to gain
             decentralization, transparency, and immutability.
          </Typography>
-         <NavLink to="/investment-tracking">
+         <NavLink to="/transaction-history">
             <Button
                variant="contained"
                color="primary"
                className={classes.button}
             >
-               Investment Tracking
+               Transaction History
             </Button>
          </NavLink>
          <Fade in>

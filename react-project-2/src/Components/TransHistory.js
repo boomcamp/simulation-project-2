@@ -6,7 +6,6 @@ import Axios from "axios";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
-import Button from "@material-ui/core/Button";
 import IconButton from "@material-ui/core/IconButton";
 import MenuIcon from "@material-ui/icons/Menu";
 import Drawer from "@material-ui/core/Drawer";
@@ -47,11 +46,16 @@ const useStyles = makeStyles(theme => ({
       marginTop: "35vh",
       overflow: "auto"
    },
-   green: {
-      color: "green"
+   image: {
+      width: "2vw"
    },
-   red: {
-      color: "red"
+   name: {
+      textTransform: "uppercase",
+      color: "black",
+      "&:hover": {
+         color: "purple",
+         cursor: "pointer"
+      }
    }
 }));
 
@@ -61,7 +65,6 @@ export default function InvestmentTracking() {
    const [trans, setTrans] = React.useState([]);
    const [buyLength, setBuyLength] = React.useState(0);
    const [sellLength, setSellLength] = React.useState(0);
-
    let { id } = useParams();
    let coinList = {};
    const [coinLs, setCoinLs] = useState({});
@@ -76,20 +79,6 @@ export default function InvestmentTracking() {
 
    useEffect(() => {
       Axios.get(`http://localhost:4000/transactions`).then(response => {
-         let buyData = response.data.filter(data => data.transaction === "buy");
-         let coins = [...buyData.map(el => el.coinID)].toString();
-         // setState({ ...state, data: buyData });
-         const pricesWs = new WebSocket(
-            `wss://ws.coincap.io/prices?assets=${coins}`
-         );
-         pricesWs.onmessage = function(msg) {
-            Object.keys(JSON.parse(msg.data)).forEach(e => {
-               coinList[e] = JSON.parse(msg.data)[`${e}`];
-               setCoinLs(coinList);
-               setTrans({ ...trans, data: buyData });
-               // console.log(coinList);
-            });
-         };
          setTrans(
             response.data.filter(val => {
                val.timestamp = new Intl.DateTimeFormat("en-US", {
@@ -99,19 +88,25 @@ export default function InvestmentTracking() {
                   hour: "2-digit",
                   minute: "2-digit"
                }).format(val.timestamp);
-               return val.coinID === id;
+               return val;
             })
          );
          setBuyLength(
             response.data.filter(val => {
-               return val.coinID === id && val.transaction === "buy";
+               return val.transaction === "buy";
             }).length
          );
          setSellLength(
             response.data.filter(val => {
-               return val.coinID === id && val.transaction === "sell";
+               return val.transaction === "sell";
             }).length
          );
+      });
+   }, [id]);
+
+   useEffect(() => {
+      Axios.get(`http://localhost:4000/transactions`).then(response => {
+         setTrans(response.data);
       });
    }, [id]);
 
@@ -183,7 +178,7 @@ export default function InvestmentTracking() {
                   <MenuIcon />
                </IconButton>
                <Typography variant="h6" className={classes.title}>
-                  {data}
+                  Transaction History
                </Typography>
             </Toolbar>
          </AppBar>
@@ -208,7 +203,7 @@ export default function InvestmentTracking() {
 
             <article className="widget1">
                <div className="weatherIcon">
-                  <h1>0</h1>
+                  <h1>{sellLength}</h1>
                </div>
                <div className="weatherInfo">
                   <div className="temperature">
@@ -222,26 +217,45 @@ export default function InvestmentTracking() {
             </article>
 
             <article className="widget2">
-               <div className="weatherIcon1">
-                  <h1>0</h1>
+               <div className="weatherIcon">
+                  <h1>{trans.length}</h1>
                </div>
-               <div className="weatherInfo1">
-                  <div className="weatherCondition1">Profit / Loss</div>
+               <div className="weatherInfo">
+                  <div className="temperature">
+                     <img src={Buy} style={{ width: "3vw" }} />
+                  </div>
+                  <div className="description">
+                     <div className="weatherCondition">Total Transactions</div>
+                  </div>
                </div>
-               <div className="date1">
-                  <img src={Buy} style={{ width: "3vw" }} />
-               </div>
+               <div className="date">ALL</div>
             </article>
          </div>
          <div className={classes.table}>
             <MaterialTable
-               title="Transactions"
+               title="Invested Coins"
                columns={[
                   {
-                     title: "Date",
+                     title: "Logo",
+                     render: rowData => (
+                        <Link to={`/coin-history/${rowData.coinID}`}>
+                           <img src={rowData.image} className={classes.image} />
+                        </Link>
+                     )
+                  },
+                  {
+                     title: "Coin",
+                     render: rowData => (
+                        <Link to={`/coin-history/${rowData.coinID}`}>
+                           <span className={classes.name}>{rowData.name}</span>
+                        </Link>
+                     )
+                  },
+                  {
+                     title: "Symbol",
                      render: rowData => (
                         <span style={{ textTransform: "uppercase" }}>
-                           {rowData.timestamp}
+                           {rowData.coin}
                         </span>
                      )
                   },
@@ -294,51 +308,12 @@ export default function InvestmentTracking() {
                      )
                   },
                   {
-                     title: "Last Price",
-                     field: "",
-                     render: rowData => {
-                        return <p>{coinLs[rowData.coinID]}</p>;
-                     }
-                  },
-                  {
-                     title: "Profit",
-                     type: "numeric",
-                     render: rowData => {
-                        var profitVal =
-                           +rowData.totalAmount *
-                           (+(
-                              parseInt(-1, 10) +
-                              (+coinLs[rowData.coinID] -
-                                 +rowData.currentCoinPrice) /
-                                 +rowData.currentCoinPrice
-                           ) /
-                              100);
-                        return (
-                           <p className={profitVal > 0 ? "green" : "red"}>
-                              {profitVal.toFixed(2)}
-                           </p>
-                        );
-                     }
-                  },
-                  {
-                     title: "% Profit",
-                     type: "numeric",
-                     render: rowData => {
-                        var profitPercent =
-                           parseInt(-1, 10) +
-                           (+coinLs[rowData.coinID] -
-                              +rowData.currentCoinPrice) /
-                              +rowData.currentCoinPrice;
-                        return (
-                           <p
-                              className={
-                                 profitPercent > 0 ? "blueviolet" : "red"
-                              }
-                           >
-                              {profitPercent.toFixed(4)}%
-                           </p>
-                        );
-                     }
+                     title: "Date",
+                     render: rowData => (
+                        <span style={{ textTransform: "uppercase" }}>
+                           {rowData.timestamp}
+                        </span>
+                     )
                   }
                ]}
                data={trans}

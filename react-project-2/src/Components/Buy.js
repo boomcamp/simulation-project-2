@@ -226,13 +226,16 @@ export default function AcccessibleTable(props) {
                         style={{ width: "8vw", paddingTop: "2vh" }}
                         value={coin}
                         onChange={e => {
-                           var net =
-                              +e.target.value -
-                              (+e.target.value + -e.target.value * 0.01) * 0.01;
-                           setAmount(net / price.usd);
-                           setCoin(e.target.value);
-                           props.amo(e.target.value);
-                           props.handleAmount(net / price.usd);
+                           if (e.target.value > -1) {
+                              var net =
+                                 +e.target.value -
+                                 (+e.target.value + -e.target.value * 0.01) *
+                                    0.01;
+                              setAmount(net / price.usd);
+                              setCoin(e.target.value);
+                              props.amo(e.target.value);
+                              props.handleAmount(net / price.usd);
+                           }
                         }}
                         InputProps={{
                            startAdornment: (
@@ -252,10 +255,12 @@ export default function AcccessibleTable(props) {
                         style={{ width: "8vw", margin: "2vw, 2vw, 2vw, 2vw" }}
                         value={amount}
                         onChange={e => {
-                           setCoin(e.target.value * price.usd);
-                           setAmount(e.target.value);
-                           props.handleAmount(e.target.value);
-                           props.amo(e.target.value * price.usd);
+                           if (e.target.value > -1) {
+                              setCoin(e.target.value * price.usd);
+                              setAmount(e.target.value);
+                              props.handleAmount(e.target.value);
+                              props.amo(e.target.value * price.usd);
+                           }
                         }}
                         InputProps={{
                            endAdornment: (

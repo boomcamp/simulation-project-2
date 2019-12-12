@@ -63,20 +63,22 @@ export default function AcccessibleTable(props) {
 
    const confirm = () => {
       setDone(true);
-      Axios.post("http://localhost:4000/transactions", {
-         coinID: id,
-         name: name,
-         coin: symbol,
-         coinQuantity: props.amount,
-         amount: props.coin - +((props.coin - +(props.coin * 0.01)) * 0.01),
-         totalAmount: props.coin,
-         image: image,
-         currentCoinPrice: price.usd,
-         transaction: "buy",
-         timestamp: new Date().getTime()
-      }).catch(error => {
-         console.log(error.response.data);
-      });
+      if (props.amount) {
+         Axios.post("http://localhost:4000/transactions", {
+            coinID: id,
+            name: name,
+            coin: symbol,
+            coinQuantity: props.amount,
+            amount: props.coin - +((props.coin - +(props.coin * 0.01)) * 0.01),
+            totalAmount: props.coin,
+            image: image,
+            currentCoinPrice: price.usd,
+            transaction: "buy",
+            timestamp: new Date().getTime()
+         }).catch(error => {
+            console.log(error.response.data);
+         });
+      }
    };
 
    if (done) {

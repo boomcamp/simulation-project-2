@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import Axios from "axios";
-import { useParams } from "react-router-dom";
+import { useParams, useHistory } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import Grow from "@material-ui/core/Grow";
@@ -63,6 +63,7 @@ export default function Success(props) {
    const classes = useStyles();
    const [data, setData] = React.useState([]);
    let { id } = useParams();
+   let history = useHistory();
 
    useEffect(() => {
       Axios.get(`https://api.coingecko.com/api/v3/coins/${id}`).then(
@@ -89,12 +90,13 @@ export default function Success(props) {
                   onClick={() => (
                      props.buyMore(false),
                      props.confirmAct(false),
-                     props.handleDisplay(true)
+                     props.handleDisplay(true),
+                     history.push(`/`)
                   )}
                >
                   Buy More
                </Button>
-               <Link to="/investment-tracking">
+               <Link to="/transaction-history">
                   <p className={classes.dash}>Go to Dashboard</p>
                </Link>
             </div>
