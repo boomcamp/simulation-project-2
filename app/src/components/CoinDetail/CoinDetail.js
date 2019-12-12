@@ -94,6 +94,7 @@ export default function CoinDetail(props) {
     const [priceChange14, setPriceChange14] = useState(0);
     const [priceChange30, setPriceChange30] = useState(0);
     const [priceChange1yr, setPriceChange1yr] = useState(0);
+    const [convert, setConvert] = useState(0);
     // const [market_Cap, setMarket_Cap] = useState(0);
 
     useEffect(() => {
@@ -113,6 +114,7 @@ export default function CoinDetail(props) {
                     setPriceChange14(res.data.market_data.price_change_percentage_14d)
                     setPriceChange30(res.data.market_data.price_change_percentage_30d)
                     setPriceChange1yr(res.data.market_data.price_change_percentage_1y)
+
                 }
             })
             .catch(e => console.log(e))
@@ -224,7 +226,8 @@ export default function CoinDetail(props) {
                                     startAdornment: <InputAdornment position="start">{symbol}</InputAdornment>,
                                 }}
                                 variant="outlined"
-                                onChange={e => console.log(e.target.value)}
+                                placeholder="0"
+                                onChange={e => setConvert(e.target.value)}
                             />
                             <TextField
                                 label="Currency"
@@ -235,6 +238,7 @@ export default function CoinDetail(props) {
                                     startAdornment: <InputAdornment position="start">$</InputAdornment>
                                 }}
                                 variant="outlined"
+                                value={convert * currentPrice}
                             />
                         </div>
                     </div>

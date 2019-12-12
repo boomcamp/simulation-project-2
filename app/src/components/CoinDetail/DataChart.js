@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { withStyles } from "@material-ui/core/styles";
 import axios from 'axios';
-import Chart from "react-apexcharts";
+import ReactApexChart from "react-apexcharts";
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
@@ -71,16 +71,69 @@ class DataChart extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            // options
             options: {
+                annotations: {
+                    yaxis: [
+                        {
+                            y: 30,
+                            borderColor: "#999",
+                            label: {
+                                show: true,
+                                style: {
+                                    color: "#fff",
+                                    background: "#00E396"
+                                }
+                            }
+                        }
+                    ],
+                    xaxis: [
+                        {
+                            borderColor: "#999",
+                            yAxisIndex: 0,
+                            label: {
+                                show: true,
+                                style: {
+                                    color: "#fff",
+                                    background: "#775DD0"
+                                }
+                            }
+                        }
+                    ]
+                },
                 chart: {
                     background: '#f4f4f4',
-                    foreColor: '#333'
+                    foreColor: '#333',
+                    zoom: {
+                        enabled: true,
+                        type: 'x',
+                        resetIcon: {
+                            offsetX: -10,
+                            offsetY: 0,
+                            fillColor: '#fff',
+                            strokeColor: '#37474F'
+                        },
+                        selection: {
+                            background: '#90CAF9',
+                            border: '#0D47A1'
+                        },
+                        zoomedArea: {
+                            fill: {
+                                color: '#90CAF9',
+                                opacity: 0.4
+                            },
+                            stroke: {
+                                color: '#0D47A1',
+                                opacity: 0.4,
+                                width: 1
+                            }
+                        }
+                    }
                 },
                 xaxis: {
-                    categories: [],
                     labels: {
                         formatter: function (timestamp) {
-                            return moment(new Date(timestamp)).format("MMM DD, YYYY/HH:MM")
+                            return moment(new Date(timestamp)).format("MM/DD/YY'HH:MM")
                         },
                         hideOverlappingLabels: true,
                         trim: true
@@ -99,6 +152,10 @@ class DataChart extends Component {
                 dataLabels: {
                     enabled: false
                 },
+                markers: {
+                    size: 0,
+                    style: "hollow"
+                },
                 tooltip: {
                     theme: "dark",
                     shared: true
@@ -109,63 +166,49 @@ class DataChart extends Component {
                         shadeIntensity: 1,
                         opacityFrom: 0.7,
                         opacityTo: 0.9,
-                        colorStops: [
-                            {
-                                offset: 0,
-                                color: "#EB656F",
-                                opacity: 1
-                            },
-                            {
-                                offset: 20,
-                                color: "#FAD375",
-                                opacity: 1
-                            },
-                            {
-                                offset: 60,
-                                color: "#61DBC3",
-                                opacity: 1
-                            },
-                            {
-                                offset: 100,
-                                color: "#95DA74",
-                                opacity: 1
-                            }
-                        ]
-                    },
-                    pattern: {
-                        style: "verticalLines",
+                        stops: [0, 100]
                     }
+                },
+                pattern: {
+                    style: "verticalLines",
                 },
                 grid: {
                     borderColor: '#6D6D6D'
-                },
+                }
             },
+            // end of options
             series: [
                 {
                     name: 'Price',
                     data: [],
                 },
             ],
-            days: "1",
+            days: "max",
             isLoading: true,
             dialog: {
                 open: false
             },
             invest: {
-                data: [
-                    {
-                        id: 0,
-                        name: '',
-                        date: 0,
-                        time: 0,
-                        amount: 0
-                    }
-                ]
-            }
+                name: '',
+                date: '',
+                time: '',
+                amount: 0,
+                value: 0
+            },
+            convert: 0,
+            time: '',
+            date: '',
         }
     }
 
     componentDidMount() {
+        var times = moment()
+            .utcOffset('+08:00')
+            .format(' hh:mm:ss a');
+        this.setState({ time: times })
+
+        // var dates = moment()
+
         axios({
             method: 'get',
             url: `https://api.coingecko.com/api/v3/coins/${this.props.id}/market_chart?vs_currency=usd&days=${this.state.days}`
@@ -199,6 +242,7 @@ class DataChart extends Component {
             })
             .catch(e => console.log(e))
     }
+
     // Market Cap Chart
     handleTopic2 = () => {
         axios({
@@ -257,11 +301,24 @@ class DataChart extends Component {
         })
     }
 
+    getCurrentDate = (separator = '') => {
+        let newDate = new Date()
+        // let date = newDate.getDate();
+        let month = newDate.getMonth() + 1;
+        let year = newDate.getFullYear();
+        return `${year}${separator}${month < 10 ? `0${month}` : `${month}`}${separator}`
+    }
+
     handlePost = () => {
         axios({
             method: 'post',
             url: `http://localhost:4000/transactions`,
-            data: this.state.invest.data
+            data: {
+                name: this.props.name,
+                date: this.getCurrentDate,
+                time: this.state.time,
+                amount: this.state.convert
+            }
         })
             .then(e => this.props.history.push('/tracking'))
             .catch(err => console.log(err))
@@ -269,7 +326,7 @@ class DataChart extends Component {
 
     render() {
         const { classes } = this.props;
-        const { name, symbol } = this.props
+        const { name, symbol, currentPrice } = this.props
         const { options, series } = this.state
         return (
             <div className={classes.descbox} >
@@ -302,13 +359,12 @@ class DataChart extends Component {
                         Please wait.
                     </div> :
                     <React.Fragment>
-                        <Chart
+                        <ReactApexChart
                             options={options}
                             series={series}
-                            type="line"
+                            type="area"
                             width="100%"
-                            height="750"
-                        />
+                            height="750" />
                         <div className={classes.invest}>
                             <span className={classes.q}>Want to Invest?</span>
                             <Button variant="outlined" onClick={this.handleClickOpen}>BUY</Button>
@@ -333,7 +389,9 @@ class DataChart extends Component {
                                                     InputProps={{
                                                         startAdornment: <InputAdornment position="start">$</InputAdornment>
                                                     }}
+                                                    placeholder="0"
                                                     variant="outlined"
+                                                    onChange={e => this.setState({ convert: e.target.value })}
                                                 />
                                                 <TextField
                                                     label={name}
@@ -344,8 +402,10 @@ class DataChart extends Component {
                                                         startAdornment: <InputAdornment position="start">{symbol}</InputAdornment>,
                                                     }}
                                                     variant="outlined"
+                                                    value={this.state.convert / currentPrice}
                                                     onChange={e => console.log(e.target.value)}
                                                 />
+                                                <div>Tip: Buy low and Sell high.</div>
                                             </span>
                                         </DialogContentText>
                                     </DialogContent>
@@ -358,6 +418,7 @@ class DataChart extends Component {
                                     </Button>
                                     </DialogActions>
                                 </form>
+
                             </Dialog>
                         </div>
                     </React.Fragment>

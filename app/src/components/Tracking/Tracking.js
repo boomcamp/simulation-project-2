@@ -26,7 +26,7 @@ export default function Tracking() {
     const classes = useStyles();
     const [state, setState] = useState({
         columns: [
-            { title: 'ID', field: 'id' },
+            { title: '#', field: 'id' },
             { title: 'Coin Name', field: 'name' },
             { title: 'Date', field: 'date' },
             {
@@ -35,23 +35,30 @@ export default function Tracking() {
                 type: 'numeric'
             },
             {
-                title: 'Amount',
+                title: 'Amount in USD',
                 field: 'amount',
+                type: 'numeric'
+            },
+            {
+                title: 'Value',
+                field: 'value',
                 type: 'numeric'
             }
         ],
     });
     // const [isLoading, setIsLoading] = useState(true)
-    // const [trans, setTrans] = useState([])
+    const [trans, setTrans] = useState([])
 
     useEffect(() => {
         axios({
             method: 'get',
             url: `http://localhost:4000/transactions`
         })
-            .then(data => console.log(data.data))
+            .then(data => {
+                setTrans(data.data)
+            })
             .catch(e => console.log(e))
-    })
+    }, [])
 
 
     return (
@@ -59,7 +66,7 @@ export default function Tracking() {
             <MaterialTable
                 title="Investment Transactions"
                 columns={state.columns}
-                data={state.data}
+                data={trans}
                 options={{
                     filtering: true,
                     pageSize: 10,
@@ -69,29 +76,32 @@ export default function Tracking() {
                     }
                 }}
                 editable={{
-                    onRowAdd: newData =>
-                        new Promise(resolve => {
-                            setTimeout(() => {
-                                resolve();
-                                setState(prevState => {
-                                    const data = [...prevState.data];
-                                    data.push(newData);
-                                    return { ...prevState, data };
-                                });
-                            }, 600);
-                        }),
                     onRowUpdate: (newData, oldData) =>
                         new Promise(resolve => {
                             setTimeout(() => {
                                 resolve();
                                 if (oldData) {
                                     setState(prevState => {
-                                        const data = [...prevState.data];
+                                        const data = [...prevState.trans];
                                         data[data.indexOf(oldData)] = newData;
                                         return { ...prevState, data };
                                     });
                                 }
                             }, 600);
+
+                            axios({
+                                method: 'patch',
+                                url: `/transactions/${newData.id}`,
+                                data: {
+                                    name: newData.name,
+                                    date: newData.date,
+                                    time: newData.time,
+                                    amount: newData.amount,
+                                    value: newData.value
+                                },
+                            })
+                                .then(e => console.log(e.data))
+                                .catch(err => console.log(err))
                         }),
                     onRowDelete: oldData =>
                         new Promise(resolve => {
@@ -103,6 +113,13 @@ export default function Tracking() {
                                     return { ...prevState, data };
                                 });
                             }, 600);
+
+                            axios({
+                                method: 'delete',
+                                url: `/transactions/${oldData.id}`,
+                            })
+                                .then(e => console.log(e.data))
+                                .catch(e => console.log(e))
                         }),
                 }}
             />
