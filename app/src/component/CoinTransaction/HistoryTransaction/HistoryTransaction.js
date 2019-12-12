@@ -11,19 +11,28 @@ export default function HistoryTransaction() {
 	const classes = useStyles();
 	const [history, setHistory] = useState({});
 	const [loading, setLoading] = useState(false);
+	const [wallet, setWallet] = useState(0);
 
 	useEffect(() => {
 		Axios.get(`http://localhost:4000/transactions/`).then(res => {
 			setHistory(res.data);
 			setLoading(true);
+			let money = res.data[res.data.length - 1];
+			money ? setWallet(money.wallet) : setWallet(1000000);
 		});
 	}, []);
 
+	const formatter = new Intl.NumberFormat('en-US', {
+		style: 'currency',
+		currency: 'USD',
+		minimumFractionDigits: 2
+	});
 	if (loading) {
 		return (
 			<Paper className={classes.paper_child}>
 				<center>
 					<h2>History Transaction</h2>
+					<h1>$ Wallet : {formatter.format(wallet)}</h1>
 				</center>
 				<Divider />
 				<Table className={classes.table} aria-label="simple table">

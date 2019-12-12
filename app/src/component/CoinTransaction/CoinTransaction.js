@@ -14,11 +14,15 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import Divider from '@material-ui/core/Divider';
-import InboxIcon from '@material-ui/icons/Inbox';
-import DraftsIcon from '@material-ui/icons/Drafts';
-import { Header } from './../../layout';
-import BuyTransaction from './BuyTransaction/BuyTransaction';
+
+import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
+import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
+import AllInboxIcon from '@material-ui/icons/AllInbox';
+
 import HistoryTransaction from './HistoryTransaction/HistoryTransaction';
+import BuyTransaction from './BuyTransaction/BuyTransaction';
+import SellTransaction from './SellTransaction/SellTransaction';
+import { Header } from './../../layout';
 
 export default function CoinTransaction(props) {
 	const classes = useStyles();
@@ -62,7 +66,7 @@ export default function CoinTransaction(props) {
 										onClick={event => handleListItemClick(event, 'buy')}
 									>
 										<ListItemIcon>
-											<InboxIcon />
+											<ShoppingCartIcon />
 										</ListItemIcon>
 										<ListItemText primary="Buy" />
 									</ListItem>
@@ -73,7 +77,7 @@ export default function CoinTransaction(props) {
 										onClick={event => handleListItemClick(event, 'sell')}
 									>
 										<ListItemIcon>
-											<DraftsIcon />
+											<AttachMoneyIcon />
 										</ListItemIcon>
 										<ListItemText primary="Sell" />
 									</ListItem>
@@ -84,7 +88,7 @@ export default function CoinTransaction(props) {
 										onClick={event => handleListItemClick(event, 'history')}
 									>
 										<ListItemIcon>
-											<DraftsIcon />
+											<AllInboxIcon />
 										</ListItemIcon>
 										<ListItemText primary="History Transaction" />
 									</ListItem>
@@ -98,6 +102,8 @@ export default function CoinTransaction(props) {
 								<BuyTransaction coin={coin} />
 							) : selectedIndex === 'history' ? (
 								<HistoryTransaction />
+							) : selectedIndex === 'sell' ? (
+								<SellTransaction coin={coin} />
 							) : null}
 						</Paper>
 					</Grid>
