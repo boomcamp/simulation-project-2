@@ -4,6 +4,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import { useParams } from "react-router-dom";
 import MaterialTable from "material-table";
 import Container from "@material-ui/core/Container";
+import Typography from "@material-ui/core/Typography";
 
 const useStyles = makeStyles(theme => ({
 	root: {
@@ -19,32 +20,55 @@ const useStyles = makeStyles(theme => ({
 	}
 }));
 
+const formatter = new Intl.NumberFormat("en-US", {
+	style: "currency",
+	currency: "USD",
+	minimumFractionDigits: 2
+});
+
 export default function Investment() {
 	let { id } = useParams();
 	const classes = useStyles();
+	const [transactions, setData] = useState([]);
 	const [coin, setCoin] = useState("");
-	const [state, setState] = React.useState({
+	const [state] = React.useState({
 		columns: [
-			{ title: "Quantity", field: "quantity" },
-			{ title: "Amount", field: "amount" },
-			{ title: "Birth Year", field: "birthYear", type: "numeric" },
 			{
-				title: "Birth Place",
-				field: "birthCity",
-				lookup: { 34: "İstanbul", 63: "Şanlıurfa" }
-			}
+				title: "Quantity Bought/Sold",
+				field: "coinQuantity",
+				type: "numeric",
+				render: rowData => (
+					<Typography variant="subtitle2" color={rowData.transaction === "buy" ? "primary" : "secondary"}>
+						{rowData.coinQuantity}
+					</Typography>
+				)
+			},
+			{ title: "Amount Cost/Earned", field: "Amount", type: "numeric", render: rowData => formatter.format(rowData.Amount) },
+			{
+				title: "Total Amount Paid/Earned",
+				field: "totalAmount",
+				type: "numeric",
+				render: rowData => formatter.format(rowData.totalAmount)
+			},
+			{
+				title: "Coin Price Bought / Sell",
+				field: "currentCoinPrice",
+				type: "numeric",
+				render: rowData => formatter.format(rowData.currentCoinPrice)
+			},
+			{
+				title: "Transaction Type",
+				field: "transaction",
+				render: rowData => (
+					<Typography variant="subtitle2" color={rowData.transaction === "buy" ? "primary" : "secondary"}>
+						{rowData.transaction.toUpperCase()}
+					</Typography>
+				)
+			},
+			{ title: "Date", field: "timestamp" }
 		],
-		data: [
-			{ name: "Mehmet", surname: "Baran", birthYear: 1987, birthCity: 63 },
-			{
-				name: "Zerya Betül",
-				surname: "Baran",
-				birthYear: 2017,
-				birthCity: 34
-			}
-		]
+		data: []
 	});
-
 	useEffect(() => {
 		Axios.get(`https://api.coingecko.com/api/v3/coins/${id}`)
 			.then(response => {
@@ -55,9 +79,26 @@ export default function Investment() {
 			});
 	}, [id]);
 
+	useEffect(() => {
+		Axios.get(`http://localhost:4000/transactions`).then(response => {
+			setData(
+				response.data.filter(val => {
+					val.timestamp = new Intl.DateTimeFormat("en-US", {
+						year: "numeric",
+						month: "short",
+						day: "2-digit",
+						hour: "2-digit",
+						minute: "2-digit"
+					}).format(val.timestamp);
+					return val.coinId === id;
+				})
+			);
+		});
+	}, [id]);
+
 	return (
 		<Container className={classes.root} fixed>
-			<MaterialTable title={coin} columns={state.columns} data={state.data} />
+			<MaterialTable title={coin} columns={state.columns} data={transactions} />
 		</Container>
 	);
 }

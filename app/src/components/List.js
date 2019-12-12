@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import Axios from "axios";
 import Transaction from "./Transaction";
+import SellT from "./Sell";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
@@ -34,15 +34,14 @@ const theme = createMuiTheme({
 export default function Stats(props) {
 	const classes = useStyles();
 	const [transaction, setTransaction] = useState(false);
+	const [transactionsSell, setTransactionSell] = useState(false);
 
 	const buy = val => {
 		setTransaction(val);
 	};
 
-	const sell = () => {
-		Axios.delete("http://localhost:4000/transactions/rmopGY8").then(response => {
-			console.log("deleted");
-		});
+	const sell = val => {
+		setTransactionSell(val);
 	};
 
 	function createData(onehour, oneday, sevendays, fourteendays, thirtydays, oneyear) {
@@ -72,6 +71,18 @@ export default function Stats(props) {
 				symbol={props.symbol}
 				price={props.priceData.usd}
 				buy={buy}
+				formatter={formatter}
+				img={props.img}
+				id={props.id}
+				name={props.name}
+			/>
+		);
+	} else if (transactionsSell) {
+		return (
+			<SellT
+				symbol={props.symbol}
+				price={props.priceData.usd}
+				sell={sell}
 				formatter={formatter}
 				img={props.img}
 				id={props.id}
@@ -132,7 +143,14 @@ export default function Stats(props) {
 							</Button>
 						</Grid>
 						<Grid item xs={12}>
-							<Button variant="contained" color="primary" fullWidth={true} onClick={sell}>
+							<Button
+								variant="contained"
+								color="primary"
+								fullWidth={true}
+								onClick={() => {
+									sell(true);
+								}}
+							>
 								Sell
 							</Button>
 						</Grid>

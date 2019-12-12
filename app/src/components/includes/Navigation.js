@@ -103,20 +103,29 @@ export default function Navigation() {
 			</List>
 			<Divider />
 			<List>
-				{coin.map((val, i) => (
-					<ListItem
-						button
-						key={i}
-						onClick={() => {
-							history.push(`/coin/invested/${val.coinId}`);
-						}}
-					>
-						<ListItemIcon>
-							<Avatar alt={val.name} src={val.image} />
-						</ListItemIcon>
-						<ListItemText primary={val.name} />
-					</ListItem>
-				))}
+				{Array.from(new Set(coin.map(s => s.coinId)))
+					.map(id => {
+						return {
+							id: id,
+							name: coin.find(s => s.coinId === id).name,
+							coinId: coin.find(s => s.coinId === id).coinId,
+							image: coin.find(s => s.coinId === id).image
+						};
+					})
+					.map((val, i) => (
+						<ListItem
+							button
+							key={i}
+							onClick={() => {
+								history.push(`/coin/invested/${val.coinId}`);
+							}}
+						>
+							<ListItemIcon>
+								<Avatar alt={val.name} src={val.image} />
+							</ListItemIcon>
+							<ListItemText primary={val.name} />
+						</ListItem>
+					))}
 			</List>
 		</div>
 	);
