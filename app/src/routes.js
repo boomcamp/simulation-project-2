@@ -1,9 +1,9 @@
 import React from "react";
 import { Switch, Route } from "react-router-dom";
 import "semantic-ui-css/semantic.min.css";
-import { Pagination } from "semantic-ui-react";
 import Table from "./components/Table/Table";
-import Coindetail from "./components/Coindetail/Coindetail";
+import Coin from "./components/Coin/Coin";
+import Investment from "./components/Investment/Investment";
 
 export default class Routes extends React.Component {
   render() {
@@ -13,21 +13,16 @@ export default class Routes extends React.Component {
         <Route
           exact
           render={() => (
-            <div>
-              <div className="table-cont">
-                <Pagination
-                  activePage={activePage}
-                  onPageChange={handleChange}
-                  totalPages={125}
-                  ellipsisItem={null}
-                />
-                <Table coinData={coinData} />
-              </div>
-            </div>
+            <Table
+              coinData={coinData}
+              handleChange={handleChange}
+              activePage={activePage}
+            />
           )}
           path="/"
         />
-        <Route component={Coindetail} path="/coindetails" />
+        <Route component={Coin} path="/coin/:id" />
+        <Route component={Investment} coinData={coinData} path="/investment" />
       </Switch>
     );
   }

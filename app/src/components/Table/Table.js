@@ -1,6 +1,7 @@
 import React from "react";
 import MaterialTable from "material-table";
-import { Link, Switch, Route } from "react-router-dom";
+import { Link } from "react-router-dom";
+import { Pagination } from "semantic-ui-react";
 import "../../App.css";
 
 export default class Table extends React.Component {
@@ -11,16 +12,14 @@ export default class Table extends React.Component {
         { title: "#", field: "market_cap_rank" },
         {
           title: "Coin",
-          field: "name",
+          field: "id",
           render: rowData => (
             <div className="weight">
-              <img src={rowData.image} alt="" />
-              <Link key={rowData.id} to={`/coindetail/${rowData.id}`}>
+              {" "}
+              <img src={rowData.image} alt="" className="resize" />
+              <Link key={rowData.id} to={`/coin/${rowData.id}`}>
                 {rowData.name}
               </Link>
-              <Switch>
-                <Route />
-              </Switch>
             </div>
           )
         },
@@ -30,12 +29,12 @@ export default class Table extends React.Component {
           render: rowData => <div className="upcase"> {rowData.symbol}</div>
         },
         {
-          title: "Price",
+          title: "Current Price",
           field: "current_price",
           render: rowData => (
             <React.Fragment>
               {rowData.current_price === null ? (
-                <div>$ 0</div>
+                <div>$0</div>
               ) : (
                 <div>
                   $
@@ -157,12 +156,16 @@ export default class Table extends React.Component {
           field: "total_volume",
           render: rowData => (
             <React.Fragment>
-              <div>
-                $
-                {rowData.total_volume.toLocaleString(undefined, {
-                  maximumFractionDigits: 2
-                })}
-              </div>
+              {rowData.total_volume === null ? (
+                <div>$0</div>
+              ) : (
+                <div>
+                  $
+                  {rowData.total_volume.toLocaleString(undefined, {
+                    maximumFractionDigits: 2
+                  })}
+                </div>
+              )}
             </React.Fragment>
           )
         },
@@ -208,12 +211,20 @@ export default class Table extends React.Component {
 
   render() {
     return (
-      <MaterialTable
-        title="List of Coins by Market Capitalization"
-        columns={this.state.columns}
-        data={this.props.coinData}
-        options={{ search: false, paging: false }}
-      />
+      <div className="table-cont">
+        <Pagination
+          activePage={this.props.activePage}
+          onPageChange={this.props.handleChange}
+          totalPages={126}
+          ellipsisItem={null}
+        />
+        <MaterialTable
+          title="List of Coins by Market Capitalization"
+          columns={this.state.columns}
+          data={this.props.coinData}
+          options={{ search: false, paging: false }}
+        />
+      </div>
     );
   }
 }

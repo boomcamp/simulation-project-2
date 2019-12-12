@@ -34,6 +34,7 @@ export default class App extends React.Component {
         `&per_page=50&page=${pageInfo.activePage.toString()}`
     });
   };
+
   render() {
     return (
       <HashRouter>

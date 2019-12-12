@@ -20,25 +20,66 @@ body {
   border-radius: 10px;
   width: 75%;
   margin: auto;
-  margin-top: 70px;
-  margin-bottom: 20px;
+  margin-top: 50px;
+}
+
+.invest-cont {
+  box-sizing: border-box;
+  border: 5px solid lightgray;
+  border-radius: 10px;
+  width: 75%;
+  margin-top: 50px;
+  margin-left: 100px;
 }
 
 .detail-cont {
   display: flex;
   flex-wrap: wrap;
   box-sizing: border-box;
-  width: 50%;
+  width: 55%;
   margin: auto;
-  margin-top: 70px;
+  margin-top: 100px;
   margin-bottom: 20px;
+  padding: 10px 10px 10px 10px;
 }
 
 .logo-box {
+  display: flex;
+  flex-direction: row;
   box-sizing: border-box;
-  background-color: lightgreen;
-  height: 150px;
-  width: 150px;
+  height: 250px;
+}
+
+.logo-name {
+  margin-top: 30px;
+  margin-left: 10px;
+}
+
+.des {
+  box-sizing: border-box;
+  overflow: auto;
+  height: 250px;
+  padding: 10px 20px 10px 20px;
+}
+
+.chart {
+  box-sizing: border-box;
+  width: 100%;
+  margin-top: 1px;
+  height: 300px;
+}
+
+.profit-cont {
+  box-sizing: border-box;
+  margin-top: 50px;
+  margin-left: 10px;
+  border: 3px solid lightgray;
+  border-radius: 10px;
+  height: 300px;
+  width: 300px;
+  padding-top: 10px;
+  padding-left: 10px;
+  font-size: 25px;
 }
 
 .upcase {
@@ -49,7 +90,7 @@ body {
   font-weight: 700;
 }
 
-img {
+.resize {
   height: 30px;
   width: 30px;
   margin-right: 5px;
@@ -61,6 +102,47 @@ img {
 
 .r {
   color: red;
+}
+
+.size {
+  font-size: 35px;
+}
+.btn-cont {
+  display: flex;
+  flex-direction: row;
+  margin: 20px 0px 15px 60px;
+}
+
+.btn {
+  color: whitesmoke;
+}
+.pos {
+  margin-left: 300px;
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+}
+
+.align {
+  display: flex;
+  flex-direction: row;
+  padding-left: 20px;
+  padding-top: 20px;
+}
+
+.ml {
+  margin-left: 20px;
+}
+
+.back-btn {
+  margin-bottom: 20px;
+}
+
+.r {
+  display: flex;
+  flex-direction: row;
 }
 
 @font-face {
@@ -82,10 +164,11 @@ img {
   white-space: nowrap;
   word-wrap: normal;
   direction: ltr;
+  -webkit-font-feature-settings: "liga";
   -webkit-font-smoothing: antialiased;
 }
 .MuiTableRow-root:hover {
-  background: rgb(185, 238, 185) !important;
+  background: #dedede !important;
 }
 span {
   font-size: 15px;
