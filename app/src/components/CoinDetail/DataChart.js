@@ -190,8 +190,6 @@ class DataChart extends Component {
             },
             invest: {
                 name: '',
-                date: '',
-                time: '',
                 amount: 0,
                 value: 0
             },
@@ -203,11 +201,12 @@ class DataChart extends Component {
 
     componentDidMount() {
         var times = moment()
-            .utcOffset('+08:00')
-            .format(' hh:mm:ss a');
+            .format('hh:mm:ss a');
         this.setState({ time: times })
 
-        // var dates = moment()
+        var dates = moment()
+            .format('YYYY/MM/DD')
+        this.setState({ date: dates })
 
         axios({
             method: 'get',
@@ -301,23 +300,16 @@ class DataChart extends Component {
         })
     }
 
-    getCurrentDate = (separator = '') => {
-        let newDate = new Date()
-        // let date = newDate.getDate();
-        let month = newDate.getMonth() + 1;
-        let year = newDate.getFullYear();
-        return `${year}${separator}${month < 10 ? `0${month}` : `${month}`}${separator}`
-    }
-
-    handlePost = () => {
+    handlePost = (e) => {
         axios({
             method: 'post',
             url: `http://localhost:4000/transactions`,
             data: {
                 name: this.props.name,
-                date: this.getCurrentDate,
+                date: this.state.date,
                 time: this.state.time,
-                amount: this.state.convert
+                amount: this.state.convert,
+                value: this.state.convert * this.props.currentPrice
             }
         })
             .then(e => this.props.history.push('/tracking'))

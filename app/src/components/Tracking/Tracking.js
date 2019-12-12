@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-// import { Loader } from 'rsuite';
+import { Loader } from 'rsuite';
 import MaterialTable from 'material-table';
 import axios from 'axios';
 
@@ -26,7 +26,7 @@ export default function Tracking() {
     const classes = useStyles();
     const [state, setState] = useState({
         columns: [
-            { title: '#', field: 'id' },
+            { title: 'ID', field: 'id', options: { readonly: true } },
             { title: 'Coin Name', field: 'name' },
             { title: 'Date', field: 'date' },
             {
@@ -46,7 +46,7 @@ export default function Tracking() {
             }
         ],
     });
-    // const [isLoading, setIsLoading] = useState(true)
+    const [isLoading, setIsLoading] = useState(true)
     const [trans, setTrans] = useState([])
 
     useEffect(() => {
@@ -56,6 +56,7 @@ export default function Tracking() {
         })
             .then(data => {
                 setTrans(data.data)
+                setIsLoading(false)
             })
             .catch(e => console.log(e))
     }, [])
@@ -63,66 +64,71 @@ export default function Tracking() {
 
     return (
         <div className={classes.background}>
-            <MaterialTable
-                title="Investment Transactions"
-                columns={state.columns}
-                data={trans}
-                options={{
-                    filtering: true,
-                    pageSize: 10,
-                    pageSizeOptions: [10, 13],
-                    rowStyle: {
-                        backgroundColor: '#EEE',
-                    }
-                }}
-                editable={{
-                    onRowUpdate: (newData, oldData) =>
-                        new Promise(resolve => {
-                            setTimeout(() => {
-                                resolve();
-                                if (oldData) {
+            {isLoading ?
+                <div className={classes.loader}>
+                    <Loader size="md" />
+                    Loading... <br />
+                    Please wait.
+                </div>
+                :
+                <MaterialTable
+                    title="Investment Transactions"
+                    columns={state.columns}
+                    data={trans}
+                    options={{
+                        filtering: true,
+                        pageSize: 10,
+                        pageSizeOptions: [10],
+                        rowStyle: {
+                            backgroundColor: '#EEE',
+                        },
+                        actionsColumnIndex: 6
+                    }}
+                    editable={{
+                        onRowUpdate: (newData, oldData) =>
+                            new Promise(resolve => {
+                                setTimeout(() => {
+                                    resolve();
+                                    if (oldData) {
+                                        setState(prevState => {
+                                            const data = [...prevState.trans];
+                                            data[data.indexOf(oldData)] = newData;
+                                            return { ...prevState, data };
+                                        });
+                                    }
+                                }, 600);
+
+                                axios({
+                                    method: 'patch',
+                                    url: `/transactions/${newData.id}`,
+                                    data: {
+                                        amount: newData.amount,
+                                    },
+                                })
+                                    .then(e => console.log(e.data))
+                                    .catch(err => console.log(err))
+                            }),
+                        onRowDelete: oldData =>
+                            new Promise(resolve => {
+                                setTimeout(() => {
+                                    resolve();
                                     setState(prevState => {
-                                        const data = [...prevState.trans];
-                                        data[data.indexOf(oldData)] = newData;
+                                        const data = [...prevState.data];
+                                        data.splice(data.indexOf(oldData), 1);
                                         return { ...prevState, data };
                                     });
-                                }
-                            }, 600);
+                                }, 600);
 
-                            axios({
-                                method: 'patch',
-                                url: `/transactions/${newData.id}`,
-                                data: {
-                                    name: newData.name,
-                                    date: newData.date,
-                                    time: newData.time,
-                                    amount: newData.amount,
-                                    value: newData.value
-                                },
-                            })
-                                .then(e => console.log(e.data))
-                                .catch(err => console.log(err))
-                        }),
-                    onRowDelete: oldData =>
-                        new Promise(resolve => {
-                            setTimeout(() => {
-                                resolve();
-                                setState(prevState => {
-                                    const data = [...prevState.data];
-                                    data.splice(data.indexOf(oldData), 1);
-                                    return { ...prevState, data };
-                                });
-                            }, 600);
-
-                            axios({
-                                method: 'delete',
-                                url: `/transactions/${oldData.id}`,
-                            })
-                                .then(e => console.log(e.data))
-                                .catch(e => console.log(e))
-                        }),
-                }}
-            />
+                                axios({
+                                    method: 'delete',
+                                    url: `/transactions/${oldData.id}`,
+                                })
+                                    .then(e => console.log(e.data))
+                                    .catch(e => console.log(e))
+                            }),
+                    }}
+                />
+            }
         </div>
     );
 }

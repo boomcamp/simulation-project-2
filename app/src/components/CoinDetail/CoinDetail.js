@@ -5,6 +5,7 @@ import TextField from '@material-ui/core/TextField';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import clsx from 'clsx';
 import axios from 'axios';
+import Tooltip from '@material-ui/core/Tooltip';
 
 import DataChart from './DataChart';
 
@@ -73,8 +74,14 @@ const useStyles = makeStyles(theme => ({
         marginRight: 10
     },
     convert: {
+        display: 'flex',
+        justifyContent: 'space-between',
         padding: 10,
-        marginBottom: 7
+        marginBottom: 7,
+    },
+    swap: {
+        justifyContent: 'flex-end',
+        cursor: 'pointer',
     },
     bottom: {
         display: "flex",
@@ -215,7 +222,17 @@ export default function CoinDetail(props) {
                         </Paper>
                     </div>
                     <div className={classes.rootTable3}>
-                        <div className={classes.convert}>CONVERSION:</div>
+                        <div className={classes.convert}>
+                            <div>
+                                CONVERSION:
+                            </div>
+                            <div className={classes.swap}>
+                                <Tooltip title="swap" arrow>
+                                    <h6>&#8595;&#8593;</h6>
+                                </Tooltip>
+                            </div>
+
+                        </div>
                         <div className={classes.bottom}>
                             <TextField
                                 type="number"
