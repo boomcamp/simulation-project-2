@@ -333,12 +333,14 @@ function Home() {
     let today = `${new Date().toDateString()},  ${new Date().toLocaleTimeString()}`;
     let data = {
       coinID: selected.id,
-      value: input.btc,
+      value: parseFloat(input.btc),
       date: today,
       coinName: selected.name,
       symbol: selected.symbol,
       image: selected.image,
-      amount: `$${input.usd}`
+      amount: input.usd,
+      priceBefore: selected.market_data.current_price.usd,
+      coinBalance: parseFloat(input.btc)
     };
     axios({
       method: "POST",

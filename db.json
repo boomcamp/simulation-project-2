@@ -2,8 +2,8 @@
   "transactions": [
     {
       "coinID": "bitcoin",
-      "value": 0.06834055465194155,
-      "date": "Tue Dec 10 2019,  5:43:05 PM",
+      "value": 0.02798846875087464,
+      "date": "Thu Dec 12 2019,  9:35:52 AM",
       "coinName": "Bitcoin",
       "symbol": "btc",
       "image": {
@@ -11,27 +11,31 @@
         "small": "https://assets.coingecko.com/coins/images/1/small/bitcoin.png?1547033579",
         "large": "https://assets.coingecko.com/coins/images/1/large/bitcoin.png?1547033579"
       },
-      "amount": "$500",
+      "amount": "200",
+      "priceBefore": 3500.8,
+      "coinBalance": 0.02798846875087464,
       "id": 1
     },
     {
-      "coinID": "ethereum",
-      "value": 0.34036759700476515,
-      "date": "Tue Dec 10 2019,  5:43:38 PM",
-      "coinName": "Ethereum",
-      "symbol": "eth",
+      "coinID": "bitcoin",
+      "value": 0.028049192674111857,
+      "date": "Thu Dec 12 2019,  9:56:39 AM",
+      "coinName": "Bitcoin",
+      "symbol": "btc",
       "image": {
-        "thumb": "https://assets.coingecko.com/coins/images/279/thumb/ethereum.png?1547034048",
-        "small": "https://assets.coingecko.com/coins/images/279/small/ethereum.png?1547034048",
-        "large": "https://assets.coingecko.com/coins/images/279/large/ethereum.png?1547034048"
+        "thumb": "https://assets.coingecko.com/coins/images/1/thumb/bitcoin.png?1547033579",
+        "small": "https://assets.coingecko.com/coins/images/1/small/bitcoin.png?1547033579",
+        "large": "https://assets.coingecko.com/coins/images/1/large/bitcoin.png?1547033579"
       },
-      "amount": "$50",
+      "amount": "200",
+      "priceBefore": 7130.33,
+      "coinBalance": 0.028049192674111857,
       "id": 2
     },
     {
       "coinID": "ethereum",
-      "value": 0.17018379850238258,
-      "date": "Tue Dec 10 2019,  5:43:40 PM",
+      "value": 0.14201519562593196,
+      "date": "Thu Dec 12 2019,  10:15:31 AM",
       "coinName": "Ethereum",
       "symbol": "eth",
       "image": {
@@ -39,41 +43,47 @@
         "small": "https://assets.coingecko.com/coins/images/279/small/ethereum.png?1547034048",
         "large": "https://assets.coingecko.com/coins/images/279/large/ethereum.png?1547034048"
       },
-      "amount": "$25",
+      "amount": "20",
+      "priceBefore": 140.83,
+      "coinBalance": 0.14201519562593196,
       "id": 3
     },
     {
-      "coinID": "bitcoin",
-      "value": "1",
-      "date": "Tue Dec 10 2019,  5:49:20 PM",
-      "coinName": "Bitcoin",
-      "symbol": "btc",
+      "coinID": "ethereum",
+      "value": 0.14201519562593196,
+      "date": "Thu Dec 12 2019,  10:15:35 AM",
+      "coinName": "Ethereum",
+      "symbol": "eth",
       "image": {
-        "thumb": "https://assets.coingecko.com/coins/images/1/thumb/bitcoin.png?1547033579",
-        "small": "https://assets.coingecko.com/coins/images/1/small/bitcoin.png?1547033579",
-        "large": "https://assets.coingecko.com/coins/images/1/large/bitcoin.png?1547033579"
+        "thumb": "https://assets.coingecko.com/coins/images/279/thumb/ethereum.png?1547034048",
+        "small": "https://assets.coingecko.com/coins/images/279/small/ethereum.png?1547034048",
+        "large": "https://assets.coingecko.com/coins/images/279/large/ethereum.png?1547034048"
       },
-      "amount": "$7324.65",
+      "amount": "20",
+      "priceBefore": 140.83,
+      "coinBalance": 0.14201519562593196,
       "id": 4
     },
     {
-      "coinID": "tether",
-      "value": 5.003282153092429,
-      "date": "Wed Dec 11 2019,  9:29:14 AM",
-      "coinName": "Tether",
-      "symbol": "usdt",
+      "coinID": "ripple",
+      "value": 181.95961406365856,
+      "date": "Thu Dec 12 2019,  10:17:43 AM",
+      "coinName": "XRP",
+      "symbol": "xrp",
       "image": {
-        "thumb": "https://assets.coingecko.com/coins/images/325/thumb/tether.png?1547034089",
-        "small": "https://assets.coingecko.com/coins/images/325/small/tether.png?1547034089",
-        "large": "https://assets.coingecko.com/coins/images/325/large/tether.png?1547034089"
+        "thumb": "https://assets.coingecko.com/coins/images/44/thumb/xrp.png?1564480400",
+        "small": "https://assets.coingecko.com/coins/images/44/small/xrp.png?1564480400",
+        "large": "https://assets.coingecko.com/coins/images/44/large/xrp.png?1564480400"
       },
-      "amount": "$5",
+      "amount": "40",
+      "priceBefore": 0.219829,
+      "coinBalance": 181.95961406365856,
       "id": 5
     },
     {
       "coinID": "bitcoin",
-      "value": 0.03445096869233769,
-      "date": "Wed Dec 11 2019,  10:22:06 AM",
+      "value": 0.1,
+      "date": "Thu Dec 12 2019,  10:21:34 AM",
       "coinName": "Bitcoin",
       "symbol": "btc",
       "image": {
@@ -81,13 +91,15 @@
         "small": "https://assets.coingecko.com/coins/images/1/small/bitcoin.png?1547033579",
         "large": "https://assets.coingecko.com/coins/images/1/large/bitcoin.png?1547033579"
       },
-      "amount": "$250",
+      "amount": 716.4114,
+      "priceBefore": 4020.14,
+      "coinBalance": 0.1,
       "id": 6
     },
     {
       "coinID": "bitcoin",
-      "value": 0.003443203666874177,
-      "date": "Wed Dec 11 2019,  10:44:24 AM",
+      "value": 1,
+      "date": "Thu Dec 12 2019,  11:53:08 AM",
       "coinName": "Bitcoin",
       "symbol": "btc",
       "image": {
@@ -95,55 +107,15 @@
         "small": "https://assets.coingecko.com/coins/images/1/small/bitcoin.png?1547033579",
         "large": "https://assets.coingecko.com/coins/images/1/large/bitcoin.png?1547033579"
       },
-      "amount": "$25",
+      "amount": 7171.5,
+      "priceBefore": 7171.5,
+      "coinBalance": 1,
       "id": 7
     },
     {
-      "coinID": "bitcoin",
-      "value": 0.004131844400249013,
-      "date": "Wed Dec 11 2019,  10:45:46 AM",
-      "coinName": "Bitcoin",
-      "symbol": "btc",
-      "image": {
-        "thumb": "https://assets.coingecko.com/coins/images/1/thumb/bitcoin.png?1547033579",
-        "small": "https://assets.coingecko.com/coins/images/1/small/bitcoin.png?1547033579",
-        "large": "https://assets.coingecko.com/coins/images/1/large/bitcoin.png?1547033579"
-      },
-      "amount": "$30",
-      "id": 8
-    },
-    {
-      "coinID": "bitcoin",
-      "value": 0.00013782761624381155,
-      "date": "Wed Dec 11 2019,  10:47:25 AM",
-      "coinName": "Bitcoin",
-      "symbol": "btc",
-      "image": {
-        "thumb": "https://assets.coingecko.com/coins/images/1/thumb/bitcoin.png?1547033579",
-        "small": "https://assets.coingecko.com/coins/images/1/small/bitcoin.png?1547033579",
-        "large": "https://assets.coingecko.com/coins/images/1/large/bitcoin.png?1547033579"
-      },
-      "amount": "$1",
-      "id": 9
-    },
-    {
-      "coinID": "bitcoin",
-      "value": 0.003445690406095289,
-      "date": "Wed Dec 11 2019,  10:48:48 AM",
-      "coinName": "Bitcoin",
-      "symbol": "btc",
-      "image": {
-        "thumb": "https://assets.coingecko.com/coins/images/1/thumb/bitcoin.png?1547033579",
-        "small": "https://assets.coingecko.com/coins/images/1/small/bitcoin.png?1547033579",
-        "large": "https://assets.coingecko.com/coins/images/1/large/bitcoin.png?1547033579"
-      },
-      "amount": "$25",
-      "id": 10
-    },
-    {
       "coinID": "ethereum",
-      "value": 0.17111567419575635,
-      "date": "Wed Dec 11 2019,  10:49:29 AM",
+      "value": 0.35184012384772356,
+      "date": "Thu Dec 12 2019,  11:55:54 AM",
       "coinName": "Ethereum",
       "symbol": "eth",
       "image": {
@@ -151,50 +123,10 @@
         "small": "https://assets.coingecko.com/coins/images/279/small/ethereum.png?1547034048",
         "large": "https://assets.coingecko.com/coins/images/279/large/ethereum.png?1547034048"
       },
-      "amount": "$25",
-      "id": 11
-    },
-    {
-      "coinID": "litecoin",
-      "value": 7.931112621799229,
-      "date": "Wed Dec 11 2019,  10:50:28 AM",
-      "coinName": "Litecoin",
-      "symbol": "ltc",
-      "image": {
-        "thumb": "https://assets.coingecko.com/coins/images/2/thumb/litecoin.png?1547033580",
-        "small": "https://assets.coingecko.com/coins/images/2/small/litecoin.png?1547033580",
-        "large": "https://assets.coingecko.com/coins/images/2/large/litecoin.png?1547033580"
-      },
-      "amount": "$350",
-      "id": 12
-    },
-    {
-      "coinID": "bitcoin",
-      "value": 0.061855442865684146,
-      "date": "Wed Dec 11 2019,  10:52:39 AM",
-      "coinName": "Bitcoin",
-      "symbol": "btc",
-      "image": {
-        "thumb": "https://assets.coingecko.com/coins/images/1/thumb/bitcoin.png?1547033579",
-        "small": "https://assets.coingecko.com/coins/images/1/small/bitcoin.png?1547033579",
-        "large": "https://assets.coingecko.com/coins/images/1/large/bitcoin.png?1547033579"
-      },
-      "amount": "$449",
-      "id": 13
-    },
-    {
-      "coinID": "bitcoin",
-      "value": 0.01033220092411205,
-      "date": "Wed Dec 11 2019,  10:55:46 AM",
-      "coinName": "Bitcoin",
-      "symbol": "btc",
-      "image": {
-        "thumb": "https://assets.coingecko.com/coins/images/1/thumb/bitcoin.png?1547033579",
-        "small": "https://assets.coingecko.com/coins/images/1/small/bitcoin.png?1547033579",
-        "large": "https://assets.coingecko.com/coins/images/1/large/bitcoin.png?1547033579"
-      },
-      "amount": "$75",
-      "id": 14
+      "amount": "50",
+      "priceBefore": 142.11,
+      "coinBalance": 0.35184012384772356,
+      "id": 8
     }
   ]
 }
