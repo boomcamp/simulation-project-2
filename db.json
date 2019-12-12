@@ -1,3 +1,124 @@
 {
-  "transactions": []
+  "transactions": [
+    {
+      "date": "12/12/2019 10:14:43",
+      "amount": "1",
+      "sum": 7150.96,
+      "price": 7150.96,
+      "symbol": "btc",
+      "image": "https://assets.coingecko.com/coins/images/1/small/bitcoin.png?1547033579",
+      "name": "bitcoin",
+      "id": 1
+    },
+    {
+      "date": "12/12/2019 10:24:25",
+      "amount": "3",
+      "sum": 423.59999999999997,
+      "price": 141.2,
+      "symbol": "eth",
+      "image": "https://assets.coingecko.com/coins/images/279/small/ethereum.png?1547034048",
+      "name": "ethereum",
+      "id": 2
+    },
+    {
+      "date": "12/12/2019 11:38:54",
+      "amount": 0.00013965466195192528,
+      "sum": "1",
+      "price": 7160.52,
+      "symbol": "btc",
+      "image": "https://assets.coingecko.com/coins/images/1/small/bitcoin.png?1547033579",
+      "name": "bitcoin",
+      "id": 3
+    },
+    {
+      "date": "12/12/2019 11:45:1",
+      "amount": 9.099884886456186,
+      "sum": "2",
+      "price": 0.219783,
+      "symbol": "xrp",
+      "image": "https://assets.coingecko.com/coins/images/44/small/xrp.png?1564480400",
+      "name": "ripple",
+      "id": 4
+    },
+    {
+      "date": "12/12/2019 11:46:1",
+      "amount": "2",
+      "sum": 5.02,
+      "price": 2.51,
+      "symbol": "okb",
+      "image": "https://assets.coingecko.com/coins/images/4463/small/okb_token.png?1548386209",
+      "name": "okb",
+      "id": 5
+    },
+    {
+      "date": "12/12/2019 13:31:46",
+      "amount": "4",
+      "sum": 15.2,
+      "price": 3.8,
+      "symbol": "atom",
+      "image": "https://assets.coingecko.com/coins/images/1481/small/cosmos_hub.png?1555657960",
+      "name": "cosmos",
+      "id": 6
+    },
+    {
+      "date": "12/12/2019 13:32:49",
+      "amount": "8",
+      "sum": 29.92,
+      "price": 3.74,
+      "symbol": "etc",
+      "image": "https://assets.coingecko.com/coins/images/453/small/ethereum-classic-logo.png?1547034169",
+      "name": "ethereum-classic",
+      "id": 7
+    },
+    {
+      "date": "12/12/2019 13:33:39",
+      "amount": "7",
+      "sum": 4.092424,
+      "price": 0.584632,
+      "symbol": "ont",
+      "image": "https://assets.coingecko.com/coins/images/3447/small/ont.png?1560322209",
+      "name": "ontology",
+      "id": 8
+    },
+    {
+      "date": "12/12/2019 13:34:9",
+      "amount": "4",
+      "sum": 4,
+      "price": 1,
+      "symbol": "pax",
+      "image": "https://assets.coingecko.com/coins/images/6013/small/paxos_standard.png?1548386291",
+      "name": "paxos-standard",
+      "id": 9
+    },
+    {
+      "date": "12/12/2019 13:50:17",
+      "amount": "7",
+      "sum": 216.16,
+      "price": 30.88,
+      "symbol": "zec",
+      "image": "https://assets.coingecko.com/coins/images/486/small/circle-zcash-color.png?1547034197",
+      "name": "zcash",
+      "id": 10
+    },
+    {
+      "date": "12/12/2019 14:16:52",
+      "amount": "6",
+      "sum": 10.379999999999999,
+      "price": 1.73,
+      "symbol": "ftt",
+      "image": "https://assets.coingecko.com/coins/images/9026/small/ftt.png?1563776835",
+      "name": "ftx-token",
+      "id": 11
+    },
+    {
+      "date": "12/12/2019 14:17:39",
+      "amount": "2",
+      "sum": 0.03215162,
+      "price": 0.01607581,
+      "symbol": "matic",
+      "image": "https://assets.coingecko.com/coins/images/4713/small/Matic.png?1553498071",
+      "name": "matic-network",
+      "id": 12
+    }
+  ]
 }

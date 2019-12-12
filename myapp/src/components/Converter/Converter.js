@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import "./converter.css";
 import { Icon, Button } from "antd";
+
 import axios from "axios";
 import "react-toastify/dist/ReactToastify.css";
 import { toast } from "react-toastify";
@@ -12,7 +13,9 @@ export default class BuySell extends Component {
 
     this.state = {
       sum: "",
-      amount: ""
+      amount: "",
+      date: "",
+      visible: true
     };
   }
   handleChange = e => {
@@ -21,9 +24,23 @@ export default class BuySell extends Component {
       sum: e.target.value * this.props.price
     });
   };
+  handleUsd = e => {
+    this.setState({
+      amount: e.target.value / this.props.price,
+      sum: e.target.value
+    });
+  };
   submitClick() {
+    const date = new Date().getDate();
+    const month = new Date().getMonth() + 1;
+    const year = new Date().getFullYear();
+    const hours = new Date().getHours();
+    const min = new Date().getMinutes();
+    const sec = new Date().getSeconds();
     axios
       .post("http://localhost:4000/transactions", {
+        date:
+          date + "/" + month + "/" + year + " " + hours + ":" + min + ":" + sec,
         amount: this.state.amount,
         sum: this.state.sum,
         price: this.props.price,
@@ -32,6 +49,9 @@ export default class BuySell extends Component {
         name: this.props.name
       })
       .then(res => {
+        // Moment.locale("en");
+        // // console.log(date);
+        // console.log(Moment(date).format(`d MMM`));
         toast.success("You bought successfully!");
       })
       .catch(err => {
@@ -67,11 +87,12 @@ export default class BuySell extends Component {
               size="lg"
               type="number"
               value={this.state.sum}
+              onChange={e => this.handleUsd(e)}
             />
             &nbsp;&nbsp;
             <Button
               type="primary"
-              size="lg"
+              size="large"
               style={{ height: "40px" }}
               onClick={event => this.submitClick()}
               disabled={!this.state.amount}

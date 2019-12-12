@@ -29,6 +29,7 @@ export default class CoinsList extends Component {
       community: [],
       mkcap: [],
       cs: [],
+      date: [],
       columns: [
         {
           title: "Rank #",
@@ -125,6 +126,7 @@ export default class CoinsList extends Component {
     });
   };
   handleClick = e => {
+    // console.log(e);
     let currentComponent = this;
     axios
       .get(`https://api.coingecko.com/api/v3/coins/${e.id}`)
@@ -269,6 +271,7 @@ export default class CoinsList extends Component {
               price={this.state.price}
               image={this.state.image}
               name={this.state.name}
+              visible={this.state.visible}
             />
             <Typography>
               <Title>
