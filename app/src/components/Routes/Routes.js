@@ -28,7 +28,8 @@ export default class Routes extends React.Component {
       handleClickOpen,
       handleClose,
       open,
-      totalProfit
+      totalProfit,
+      currentTransaction
     } = this.props;
     return (
       <Switch>
@@ -74,6 +75,7 @@ export default class Routes extends React.Component {
               handleClose={handleClose}
               open={open}
               totalProfit={totalProfit}
+              currentTransaction={currentTransaction}
             />
           )}
         />

@@ -8,8 +8,8 @@
       },
       "amount": 20,
       "price": 7133.64,
-      "amountSold": 2,
-      "profit": 0,
+      "amountSold": 20,
+      "profit": -19.380000000021028,
       "id": 1
     },
     {
@@ -20,9 +20,21 @@
       },
       "amount": 12,
       "price": 141.59,
-      "amountSold": 0,
-      "profit": 0,
+      "amountSold": 12,
+      "profit": 12.720000000000255,
       "id": 2
+    },
+    {
+      "crypto": {
+        "id": "litecoin",
+        "img": "https://assets.coingecko.com/coins/images/2/large/litecoin.png?1547033580",
+        "unit": "ltc"
+      },
+      "amount": 28.016643550624135,
+      "price": 43.26,
+      "amountSold": 28,
+      "profit": 3.0799999999999272,
+      "id": 3
     }
   ]
 }

@@ -34,12 +34,15 @@ export default class App extends React.Component {
       transList: [],
       sellingAmount: "",
       open: false,
-      totalProfit: ""
+      totalProfit: "",
+      currentTransaction: {}
     };
   }
-  handleClickOpen = () => {
+  handleClickOpen = val => {
+    console.log(val);
     this.setState({
-      open: true
+      open: true,
+      currentTransaction: val
     });
   };
 
@@ -231,15 +234,13 @@ export default class App extends React.Component {
       this.state.sellingAmount * data.currentPrice -
       this.state.sellingAmount * data.price;
     Axios.patch(`http://localhost:4000/transactions/${data.id}`, {
-      crypto: data.crypto,
-      amount: data.amount,
-      price: data.price,
       amountSold: this.state.sellingAmount + data.amountSold,
       profit: temp + data.profit
     })
       .then(() => {
-        this.setState({ moneyValue: "", cryptoValue: "" });
+        this.setState({ open: false });
         Axios.get("http://localhost:4000/transactions").then(res => {
+          let sum = res.data.map(x => x.profit).reduce((a, b) => a + b, 0);
           const temp = res.data.map(x => {
             axios
               .get(`https://api.coingecko.com/api/v3/coins/${x.crypto.id}`)
@@ -248,12 +249,13 @@ export default class App extends React.Component {
               });
             return x;
           });
+          this.setState({
+            transList: temp,
+            lastTrans: res.data[res.data.length - 1],
+            totalProfit: sum
+          });
           setTimeout(() => {
-            this.setState({
-              transList: temp,
-              lastTrans: res.data[res.data.length - 1],
-              loading: false
-            });
+            this.setState({ loading: false });
           }, 1000);
         });
         toast.info("Investment Successful!", {
@@ -294,6 +296,7 @@ export default class App extends React.Component {
             handleClose={this.handleClose}
             open={this.state.open}
             totalProfit={this.state.totalProfit}
+            currentTransaction={this.state.currentTransaction}
           />
         </Div>
       </HashRouter>
