@@ -15,7 +15,6 @@ import clsx from 'clsx';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 
 const useStyles = (theme => ({
@@ -195,7 +194,7 @@ class DataChart extends Component {
             },
             convert: 0,
             time: '',
-            date: '',
+            date: ''
         }
     }
 
@@ -301,18 +300,21 @@ class DataChart extends Component {
     }
 
     handlePost = (e) => {
+        e.preventDefault()
         axios({
             method: 'post',
             url: `http://localhost:4000/transactions`,
             data: {
+                coinID: this.props.id,
                 name: this.props.name,
                 date: this.state.date,
                 time: this.state.time,
                 amount: this.state.convert,
-                value: this.state.convert * this.props.currentPrice
+                priceBought: this.props.currentPrice,
+                value: this.state.convert / this.props.currentPrice
             }
         })
-            .then(e => this.props.history.push('/tracking'))
+            .then(e => e.preventDefault())
             .catch(err => console.log(err))
     }
 
@@ -370,44 +372,42 @@ class DataChart extends Component {
 
                                 <form onSubmit={this.handlePost}>
                                     <DialogContent>
-                                        <DialogContentText id="alert-dialog-description">
-                                            <span className={classes.buy}>
-                                                <TextField
-                                                    required
-                                                    label="Amount to Invest"
-                                                    type="number"
-                                                    id="outlined-read-only-input"
-                                                    className={clsx(classes.margin, classes.textField)}
-                                                    InputProps={{
-                                                        startAdornment: <InputAdornment position="start">$</InputAdornment>
-                                                    }}
-                                                    placeholder="0"
-                                                    variant="outlined"
-                                                    onChange={e => this.setState({ convert: e.target.value })}
-                                                />
-                                                <TextField
-                                                    label={name}
-                                                    id="outlined-start-adornment"
-                                                    className={clsx(classes.margin, classes.textField)}
-                                                    InputProps={{
-                                                        readOnly: true,
-                                                        startAdornment: <InputAdornment position="start">{symbol}</InputAdornment>,
-                                                    }}
-                                                    variant="outlined"
-                                                    value={this.state.convert / currentPrice}
-                                                    onChange={e => console.log(e.target.value)}
-                                                />
-                                                <div>Tip: Buy low and Sell high.</div>
-                                            </span>
-                                        </DialogContentText>
+                                        <span className={classes.buy}>
+                                            <TextField
+                                                required
+                                                label="Amount to Invest"
+                                                type="number"
+                                                id="outlined-read-only-input"
+                                                className={clsx(classes.margin, classes.textField)}
+                                                InputProps={{
+                                                    startAdornment: <InputAdornment position="start">$</InputAdornment>
+                                                }}
+                                                placeholder="0"
+                                                variant="outlined"
+                                                onChange={e => this.setState({ convert: e.target.value })}
+                                            />
+                                            <TextField
+                                                label={name}
+                                                id="outlined-start-adornment"
+                                                className={clsx(classes.margin, classes.textField)}
+                                                InputProps={{
+                                                    readOnly: true,
+                                                    startAdornment: <InputAdornment position="start">{symbol}</InputAdornment>,
+                                                }}
+                                                variant="outlined"
+                                                value={this.state.convert / currentPrice}
+                                                onChange={e => console.log(e.target.value)}
+                                            />
+                                            <div>Tip: Buy low and Sell high.</div>
+                                        </span>
                                     </DialogContent>
                                     <DialogActions>
                                         <Button onClick={this.handleClose} color="primary">
                                             CANCEL
-                                    </Button>
-                                        <Button type="submit" color="primary" autoFocus>
+                                        </Button>
+                                        <Button type="submit" color="primary" autoFocus onClick={this.handleClose}>
                                             OKAY
-                                    </Button>
+                                        </Button>
                                     </DialogActions>
                                 </form>
 

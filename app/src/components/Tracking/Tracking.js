@@ -3,6 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Loader } from 'rsuite';
 import MaterialTable from 'material-table';
 import axios from 'axios';
+import moment from 'moment';
 
 const useStyles = makeStyles(theme => ({
     background: {
@@ -26,13 +27,15 @@ export default function Tracking() {
     const classes = useStyles();
     const [state, setState] = useState({
         columns: [
-            { title: 'ID', field: 'id', options: { readonly: true } },
-            { title: 'Coin Name', field: 'name' },
-            { title: 'Date', field: 'date' },
+            { title: '#', field: 'id', editable: 'never' },
+            { title: 'Coin ID', field: 'coinID', editable: 'never' },
+            { title: 'Coin Name', field: 'name', editable: 'never' },
+            { title: 'Date', field: 'date', editable: 'never' },
             {
                 title: 'Time',
                 field: 'time',
-                type: 'numeric'
+                type: 'numeric',
+                editable: 'never'
             },
             {
                 title: 'Amount in USD',
@@ -42,14 +45,31 @@ export default function Tracking() {
             {
                 title: 'Value',
                 field: 'value',
-                type: 'numeric'
+                type: 'numeric',
+                editable: 'never'
+            },
+            {
+                title: 'Price of Coin Upon Buying',
+                field: 'priceBought',
+                type: 'numeric',
+                editable: 'never'
             }
         ],
     });
     const [isLoading, setIsLoading] = useState(true)
     const [trans, setTrans] = useState([])
+    const [time, setTime] = useState('')
+    const [date, setDate] = useState('')
 
     useEffect(() => {
+        var times = moment()
+            .format('hh:mm:ss a');
+        setTime(times)
+
+        var dates = moment()
+            .format('YYYY/MM/DD')
+        setDate(dates)
+
         axios({
             method: 'get',
             url: `http://localhost:4000/transactions`
@@ -82,8 +102,17 @@ export default function Tracking() {
                         rowStyle: {
                             backgroundColor: '#EEE',
                         },
-                        actionsColumnIndex: 6
+                        actionsColumnIndex: 8
                     }}
+                    actions={
+                        [
+                            {
+                                icon: 'save',
+                                tooltip: 'Sell',
+                                onClick: (event, rowData) => alert("You saved " + rowData.name)
+                            }
+                        ]
+                    }
                     editable={{
                         onRowUpdate: (newData, oldData) =>
                             new Promise(resolve => {
@@ -91,7 +120,7 @@ export default function Tracking() {
                                     resolve();
                                     if (oldData) {
                                         setState(prevState => {
-                                            const data = [...prevState.trans];
+                                            const data = [...prevState.data];
                                             data[data.indexOf(oldData)] = newData;
                                             return { ...prevState, data };
                                         });
@@ -102,10 +131,33 @@ export default function Tracking() {
                                     method: 'patch',
                                     url: `/transactions/${newData.id}`,
                                     data: {
+                                        date: date,
+                                        time: time,
                                         amount: newData.amount,
+                                        value: newData.value
                                     },
                                 })
-                                    .then(e => console.log(e.data))
+                                    .then(
+                                        axios({
+                                            method: 'get',
+                                            url: `/transactions/${newData.id}`
+                                        })
+                                            .then(e => {
+                                                let a = parseInt(e.data.amount) / parseInt(e.data.priceBought)
+
+                                                axios({
+                                                    method: 'patch',
+                                                    url: `/transactions/${newData.id}`,
+                                                    data: {
+                                                        date: date,
+                                                        time: time,
+                                                        amount: newData.amount,
+                                                        value: a.toFixed(3)
+                                                    }
+                                                })
+                                            })
+                                            .catch(e => console.log(e))
+                                    )
                                     .catch(err => console.log(err))
                             }),
                         onRowDelete: oldData =>
@@ -113,7 +165,7 @@ export default function Tracking() {
                                 setTimeout(() => {
                                     resolve();
                                     setState(prevState => {
-                                        const data = [...prevState.data];
+                                        const data = [...prevState.trans];
                                         data.splice(data.indexOf(oldData), 1);
                                         return { ...prevState, data };
                                     });
