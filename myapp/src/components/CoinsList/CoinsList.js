@@ -9,6 +9,9 @@ import "./coinslist.css";
 import Details from "../Details/Details";
 import Chart from "../Chart/Chart";
 import Converter from "../Converter/Converter";
+// import { Tabs } from "antd";
+// import CoinWallet from "../CoinWallet/CoinWallet";
+
 var commaNumber = require("comma-number");
 const { Title, Paragraph } = Typography;
 export default class CoinsList extends Component {

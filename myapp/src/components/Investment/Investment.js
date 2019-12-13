@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import axios from "axios";
 import "./investment.css";
 import Moment from "moment";
+import CoinWallet from "../CoinWallet/CoinWallet";
 import { Tabs } from "antd";
 import {
   MDBBtn,
@@ -38,6 +39,7 @@ export default class Investment extends Component {
     };
     this.onClick = this.onClick.bind(this);
   }
+
   componentDidMount() {
     axios.get("http://localhost:4000/transactions").then(res => {
       res.data.map(info => {
@@ -47,7 +49,7 @@ export default class Investment extends Component {
             sum: `$ ${commaNumber(info.sum)}`,
             price: `$ ${commaNumber(info.price)}`,
             name: info.name,
-            date: Moment(info.date).format("LLL"),
+            date: info.date,
             option: (
               <MDBBtn
                 color="info"
@@ -56,7 +58,7 @@ export default class Investment extends Component {
                 value={JSON.stringify(info)}
                 onClick={e => this.handleClick(e.target.value)}
               >
-                View
+                Sell
               </MDBBtn>
             )
           })
@@ -66,10 +68,12 @@ export default class Investment extends Component {
   }
   handleClick = e => {
     const x = JSON.parse(e);
+    console.log(x);
     // console.log(x.amount);
     axios.get(`https://api.coingecko.com/api/v3/coins/${x.name}`).then(res => {
-      const profit = res.data.market_data.current_price.usd - x.price;
-      const finalprof = (profit / x.price) * 100;
+      const profit =
+        res.data.market_data.current_price.usd * x.amount - x.price * x.amount;
+      // const finalprof = (profit / x.price) * 100;
       // console.log(finalprof);
       this.setState({
         image: res.data.image.small,
@@ -78,7 +82,7 @@ export default class Investment extends Component {
         name: res.data.id,
         mkc: res.data.market_data.current_price.usd,
         balance: x.amount,
-        profits: finalprof
+        profits: profit
       });
     });
   };
@@ -86,6 +90,27 @@ export default class Investment extends Component {
     this.setState({
       modal: !this.state.modal
     });
+  };
+  handleSell = () => {
+    const date = new Date().getDate();
+    const month = new Date().getMonth() + 1;
+    const year = new Date().getFullYear();
+    const hours = new Date().getHours();
+    const min = new Date().getMinutes();
+    const sec = new Date().getSeconds();
+    axios
+      .put("http://localhost:4000/transactions", {
+        date:
+          date + "/" + month + "/" + year + " " + hours + ":" + min + ":" + sec,
+        amount: this.state.amount,
+        coinBalance: this.state.amount,
+        sum: this.state.sum,
+        price: this.props.price,
+        symbol: this.props.id,
+        image: this.props.image,
+        name: this.props.name
+      })
+      .then(res => {});
   };
   onClick() {
     this.props.history.push("/investment");
@@ -163,7 +188,7 @@ export default class Investment extends Component {
               <MDBDataTable striped hover data={data} />
             </TabPane>
             <TabPane tab="Coin Wallet" key="2">
-              Content of tab 2
+              <CoinWallet />
             </TabPane>
             <TabPane tab="Tab 3" key="3">
               Content of tab 3
@@ -172,8 +197,9 @@ export default class Investment extends Component {
           <MDBModal isOpen={this.state.modal} toggle={this.toggle} size="lg">
             <MDBModalHeader toggle={this.toggle}>
               <span style={{ textTransform: "uppercase", color: "gray" }}>
+                Are you sure you want to sell this&nbsp;
                 {this.state.name}&nbsp;
-                <img src={this.state.image} height="25px" alt="" />
+                <img src={this.state.image} height="25px" alt="" /> ?
               </span>
             </MDBModalHeader>
             <MDBModalBody>
@@ -182,7 +208,9 @@ export default class Investment extends Component {
                   <tr>
                     <th>Market Price</th>
                     <th>Coin Balance</th>
-                    <th>{this.state.profits > 0 ? "Profit" : "Loss"}</th>
+                    <th>
+                      {this.state.profits > 0 ? "Total Profit" : "Total Loss"}
+                    </th>
                   </tr>
                 </MDBTableHead>
                 <MDBTableBody>
@@ -197,11 +225,11 @@ export default class Investment extends Component {
                     <td>
                       {this.state.profits > 0 ? (
                         <span style={{ color: "green" }}>
-                          {this.state.profits}
+                          {Math.round(10 * this.state.profits) / 10} usd
                         </span>
                       ) : (
                         <span style={{ color: "red" }}>
-                          {this.state.profits}
+                          {Math.round(10 * this.state.profits) / 10} usd
                         </span>
                       )}
                     </td>
@@ -212,6 +240,9 @@ export default class Investment extends Component {
             <MDBModalFooter>
               <MDBBtn onClick={this.toggle} color="info">
                 Close
+              </MDBBtn>
+              <MDBBtn color="primary" onClick={this.handleSell}>
+                Proceed
               </MDBBtn>
             </MDBModalFooter>
           </MDBModal>

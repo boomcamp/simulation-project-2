@@ -42,6 +42,7 @@ export default class BuySell extends Component {
         date:
           date + "/" + month + "/" + year + " " + hours + ":" + min + ":" + sec,
         amount: this.state.amount,
+        coinBalance: this.state.amount,
         sum: this.state.sum,
         price: this.props.price,
         symbol: this.props.id,
@@ -95,7 +96,9 @@ export default class BuySell extends Component {
               size="large"
               style={{ height: "40px" }}
               onClick={event => this.submitClick()}
-              disabled={!this.state.amount}
+              disabled={
+                !this.state.amount || this.state.amount === 0 ? true : false
+              }
             >
               Buy
             </Button>
