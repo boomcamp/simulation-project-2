@@ -4,9 +4,6 @@ import { Container } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import MaterialTable from 'material-table';
 import axios from 'axios';
-import NumberFormat from 'react-number-format';
-import TrackBtn from './TrackBtn';
-import TransactDate from './TransactDate';
 
 function TrackInvestment() {
 
@@ -18,76 +15,76 @@ function TrackInvestment() {
   }));
 
   const classes = useStyles();
+
   const [transactionList, setTransactionList] = useState({
     columns: [
       {
-        render: coinImgID => <img style={{width: 30, borderRadius: '50%'}} src={coinImgID.coinImage} alt={coinImgID.cryptoCurrency} />
-      },
-      {
         title: 'Coin',
-        field: 'cryptoCurrency',
-        render: rowName => <p style={{textTransform: 'capitalize'}}>{rowName.cryptoCurrency}</p>
+        field: 'coin'
       },
       {
-        title: 'Coin Amount',
-        field: 'cryptoCurrencyQty',
-        render: rowAmount => <p>{rowAmount.cryptoCurrencyQty + " " +rowAmount.coinSymbol}</p>
+        title: 'Coin Held',
+        field: 'value'
       },
       {
-        title: 'Price per Coin',
-        field: 'cryptoCurrencyPrice',
-        render: rowCryptoCurrencyPrice => 
-          <NumberFormat 
-            style={{
-              color: '#00897b'
-            }} 
-            value={rowCryptoCurrencyPrice.cryptoCurrencyPrice} 
-            displayType={'text'} 
-            thousandSeparator={true} 
-            prefix={'$'} 
-          />
+        title: 'Total Amount'
       },
       {
-        title: 'Total Price',
-        field: 'amount',
-        render: 
-          rowTotalPrice => 
-            <NumberFormat 
-              style={{
-                color: '#ba0d0d'
-              }} 
-              value={rowTotalPrice.amount} 
-              displayType={'text'} 
-              thousandSeparator={true} 
-              prefix={'$'} 
-            />
-      },
-      {
-        title: 'Transaction Date',
-        field: 'transactionDate',
-        render: rowDate => <TransactDate date={rowDate.transactionDate}/>
-      },
-      {
-        title: '',
-        render: rowTrack => <TrackBtn transactionID={rowTrack.id} coinID={rowTrack.cryptoCurrency} />
+        render: rowTrackBtn => <btn>Track</btn>
       }
     ],
-    data: [],
+    data: [
+      {
+        coin: 'bitcoin',
+        value: 1
+      }
+    ],
   });
+  console.log(transactionList)
+  const [coinData, setCoinData] = useState([])
+
+  const [wallet, setWallet] = useState({});
+
+  const fetchWalletAndTransaction = () => {
+    let tempWalletArr = [];
+    let fetchedWallet = localStorage.getItem('wallet');
+    let parsedWallet = JSON.parse(fetchedWallet);
+    //setWallet(parsedWallet)
+    tempWalletArr.push(parsedWallet)
+    let temp = tempWalletArr[0]
+    console.log(temp)
+    // setTransactionList({
+    //   ...transactionList, 
+    //   data: temp
+    // })
+
+    axios
+    .get('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=250&page=1&sparkline=false')
+    .then(response => {
+      let tempResponseData = response.data;
+      let tempCoinDetails = [];
+      for(let matchCoin of tempResponseData){
+        for(let coinName in tempWalletArr[0]){
+          if(matchCoin.id === coinName){
+            tempCoinDetails.push(matchCoin)
+          }
+        }
+      }
+      setCoinData(tempCoinDetails)
+    })
+
+    // axios
+    // .get('http://localhost:4000/transactions/')
+    // .then(response => {
+    //   setTransactionList({
+    //     ...transactionList,
+    //     data: response.data
+    //   })
+    // })
+  }
 
   useEffect(() => {
-    axios({
-      method: 'get',
-      url: 'http://localhost:4000/transactions'
-    })
-    .then(response => {
-      setTransactionList({
-        ...transactionList,
-        data: response.data
-      })
-    })
-    .catch(error => console.log(error))
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    fetchWalletAndTransaction();
   }, [])
 
   return (
@@ -96,7 +93,7 @@ function TrackInvestment() {
       <Container maxWidth="xl" className={classes.paper}>
         <MaterialTable 
           columns={transactionList.columns}
-          data={transactionList.data.reverse()}
+          data={transactionList.data}
           title="List of Investments"
           options={{
             pageSize: 10

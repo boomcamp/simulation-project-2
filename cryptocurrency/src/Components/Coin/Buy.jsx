@@ -65,16 +65,16 @@ function Buy(props) {
     data: {}
   })
 
+  // const [wallet, setWallet] = useState([]);
   const [wallet, setWallet] = useState({});
-
+  
   useEffect(() => {
-    let fetchedWallet = localStorage.getItem('wallet');
-    if(fetchedWallet){
+    if(localStorage.getItem("wallet") !== null){
+      let fetchedWallet = localStorage.getItem('wallet');
       let parsedWallet = JSON.parse(fetchedWallet)
       setWallet(parsedWallet)
     }else{
-      var setItemWallet = {}
-      localStorage.setItem('wallet', JSON.stringify(setItemWallet));
+      localStorage.setItem('wallet', JSON.stringify(wallet));
     }
   }, [])
   const buyCryptocurrencyFn = (value) => {
@@ -95,6 +95,33 @@ function Buy(props) {
           wallet[coinID] = transactionData.data.cryptoCurrencyQty
           localStorage.setItem('wallet', JSON.stringify(wallet))
         }
+        // let tempCoinArr = wallet;
+        // console.log(tempCoinArr)
+        // tempCoinArr.forEach((coinData) => {
+        //   if(coinData.coin === coinID){
+        //     coinData.value += transactionData.data.cryptoCurrencyQty
+        //   }
+        // })
+        // if(wallet.coin === coinID){
+        //   // let tempCoinObject = wallet;
+        //   // console.log(tempCoinObject)
+        //   // // tempCoinObject['coin'] = coinID;
+        //   // // tempCoinObject['value'] = transactionData.data.cryptoCurrencyQty;
+        //   // // setWallet(tempCoinObject)
+        //   // // localStorage.setItem('wallet', JSON.stringify(wallet))
+        //   // // let newCoinBalance = wallet[coinID] + transactionData.data.cryptoCurrencyQty
+        //   // // wallet[coinID] = newCoinBalance;
+        //   // // localStorage.setItem('wallet', JSON.stringify(wallet))
+        // }else{
+        //   let tempCoinArr = wallet;
+        //   let coinObject = {
+        //     coin: coinID,
+        //     value: transactionData.data.cryptoCurrencyQty
+        //   }
+        //   tempCoinArr.push(coinObject);
+        //   setWallet(tempCoinArr)
+        //   //localStorage.setItem('wallet', JSON.stringify(wallet))
+        // }
         setOpen(false);
         toast.success(`Success! You Bought ${transactionData.data.cryptoCurrencyQty} ${coinName}`);
       })
