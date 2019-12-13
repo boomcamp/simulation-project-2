@@ -128,7 +128,9 @@ export default function Transaction(props) {
 										setNewBalance(balance - +e.target.value);
 										setError(false);
 									}
-									setCoin(+e.target.value);
+									if (e.target.value > -1) {
+										setCoin(+e.target.value);
+									}
 								}}
 								autoFocus={true}
 								fullWidth={true}

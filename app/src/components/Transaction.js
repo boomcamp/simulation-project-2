@@ -15,6 +15,7 @@ import InputAdornment from "@material-ui/core/InputAdornment";
 import SyncAltIcon from "@material-ui/icons/SyncAlt";
 import Button from "@material-ui/core/Button";
 import Slide from "@material-ui/core/Slide";
+import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles(theme => ({
 	root: {
@@ -35,6 +36,7 @@ const useStyles = makeStyles(theme => ({
 	}
 }));
 export default function Transaction(props) {
+	let history = useHistory();
 	const classes = useStyles();
 	const [coin, setCoin] = useState("");
 	const [amount, setAmount] = useState("");
@@ -53,17 +55,15 @@ export default function Transaction(props) {
 				currentCoinPrice: props.price,
 				transaction: "buy",
 				timestamp: new Date().getTime()
-			}).catch(error => {
-				console.log(error.response.data);
-			});
-			console.log(
-				` ${props.id}`,
-				`name ${props.name}`,
-				`image ${props.img.small}`,
-				`priceP ${props.price}`,
-				"transaction buy",
-				`date ${new Date().getTime()}`
-			);
+			})
+				.then(response => {
+					sessionStorage.setItem("success", "success");
+
+					history.push(`/coin/invested/${props.id}`);
+				})
+				.catch(error => {
+					console.log(error.response.data);
+				});
 		}
 	};
 	return (

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Axios from "axios";
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles, createMuiTheme, MuiThemeProvider } from "@material-ui/core/styles";
 import { useParams } from "react-router-dom";
 import MaterialTable from "material-table";
 import Container from "@material-ui/core/Container";
@@ -26,6 +26,12 @@ const formatter = new Intl.NumberFormat("en-US", {
 	minimumFractionDigits: 2
 });
 
+const theme = createMuiTheme({
+	palette: {
+		primary: { main: "#4caf50" }
+	}
+});
+
 export default function Investment() {
 	let { id } = useParams();
 	const classes = useStyles();
@@ -33,14 +39,18 @@ export default function Investment() {
 	const [coin, setCoin] = useState("");
 	const [state] = React.useState({
 		columns: [
+			{ title: "#", field: "rowData.tableData.id", type: "numeric", render: rowData => rowData.tableData.id + 1 },
 			{
 				title: "Quantity Bought/Sold",
 				field: "coinQuantity",
 				type: "numeric",
 				render: rowData => (
-					<Typography variant="subtitle2" color={rowData.transaction === "buy" ? "primary" : "secondary"}>
-						{rowData.coinQuantity}
-					</Typography>
+					<MuiThemeProvider theme={theme}>
+						<Typography variant="subtitle2" color={rowData.transaction === "buy" ? "primary" : "error"}>
+							{rowData.coinQuantity}
+							{console.log(rowData.tableData.id)}
+						</Typography>
+					</MuiThemeProvider>
 				)
 			},
 			{ title: "Amount Cost/Earned", field: "Amount", type: "numeric", render: rowData => formatter.format(rowData.Amount) },
@@ -60,9 +70,11 @@ export default function Investment() {
 				title: "Transaction Type",
 				field: "transaction",
 				render: rowData => (
-					<Typography variant="subtitle2" color={rowData.transaction === "buy" ? "primary" : "secondary"}>
-						{rowData.transaction.toUpperCase()}
-					</Typography>
+					<MuiThemeProvider theme={theme}>
+						<Typography variant="subtitle2" color={rowData.transaction === "buy" ? "primary" : "error"}>
+							{rowData.transaction.toUpperCase()}
+						</Typography>
+					</MuiThemeProvider>
 				)
 			},
 			{ title: "Date", field: "timestamp" }
@@ -80,7 +92,7 @@ export default function Investment() {
 	}, [id]);
 
 	useEffect(() => {
-		Axios.get(`http://localhost:4000/transactions`).then(response => {
+		Axios.get(`http://localhost:4000/transactions?_sort=timestamp&_order=desc`).then(response => {
 			setData(
 				response.data.filter(val => {
 					val.timestamp = new Intl.DateTimeFormat("en-US", {
