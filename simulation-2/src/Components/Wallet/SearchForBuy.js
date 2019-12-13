@@ -142,17 +142,18 @@ export default function SearchForBuy(props) {
           />
         )}
       />
-
         <FormControl fullWidth className={classes.margin} variant="outlined" style={{margin:'10px', width: '318px'}}>
-          <InputLabel   htmlFor="outlined-adornment-amount">Amount</InputLabel>
+          <InputLabel style={inputStyle}  htmlFor="outlined-adornment-amount">Amount</InputLabel>
           <OutlinedInput
+           classes={{root:classes.root}} 
+            style={inputStyle} 
             id="outlined-adornment-amount"
             value={amount}
             onChange={(e)=>{
               setAmount(e.target.value)
               changeValue(e.target.value,'amount')
             }}
-            startAdornment={<InputAdornment position="start">$</InputAdornment>}
+            startAdornment={<InputAdornment classes={{root:classes.root}}  position="start">$</InputAdornment>}
             labelWidth={60}
             type='number'
             defaultValue={0}
@@ -160,15 +161,17 @@ export default function SearchForBuy(props) {
         </FormControl>
 
         <FormControl fullWidth className={classes.margin} variant="outlined" style={{margin:'10px', width: '318px'}}>
-          <InputLabel htmlFor="outlined-adornment-amount">Coin</InputLabel>
-          <OutlinedInput
+          <InputLabel style={inputStyle}  htmlFor="outlined-adornment-amount">Coin</InputLabel>
+          <OutlinedInput  
+             classes={{root:classes.root}} 
+            style={inputStyle} 
             id="outlined-adornment-amount"
             value={coin}
             onChange={(e)=>{
               setCoin(e.target.value)
               changeValue(e.target.value,'coin')
             }}
-            startAdornment={<InputAdornment position="start">C</InputAdornment>}
+            startAdornment={<InputAdornment classes={{root:classes.root}}  position="start">C</InputAdornment>}
             labelWidth={60}
             type='number'
             defaultValue={0}
@@ -194,7 +197,15 @@ const useStyles = makeStyles(theme => ({
     '& .MuiOutlinedInput-root.Mui-focused .PrivateNotchedOutline-root-110.MuiOutlinedInput-notchedOutline':{
       borderColor: 'white',
       color: 'white!important'
-    }
+    },
+    '& .MuiTypography-root.MuiTypography-body1.MuiTypography-colorTextSecondary':{
+      borderColor: 'white',
+      color: 'white!important'
+    },
+    '& .MuiInputBase-root.MuiOutlinedInput-root.MuiInputBase-formControl.MuiInputBase-adornedStart.MuiOutlinedInput-adornedStart':{
+      borderColor: 'white',
+      color: 'white!important'
+    },
   },
 }));
 

@@ -7,8 +7,8 @@ export default function Buy(props) {
     const buy_coin = (id, buyAmount, valueCurrent, ccoinBought) => {
         
         console.log(id)
-
-        axios.post(`http://localhost:4000/transactions`,{
+        if(buyAmount > 0 && ccoinBought && id){
+            axios.post(`http://localhost:4000/transactions`,{
             id: sha256(new Date()+buyAmount+valueCurrent+ccoinBought),
             coinRef:{
                 id: id
@@ -19,12 +19,12 @@ export default function Buy(props) {
                 Crypto_coin_bought: ccoinBought
             },
             timeRef: new Date()
-        }).then(data=>{
-            return data
-        }).catch(e=>{
-            console.log(e)
-        })
-        
+            }).then(data=>{
+                return data
+            }).catch(e=>{
+                console.log(e)
+            })
+        }
     }
 
     return (

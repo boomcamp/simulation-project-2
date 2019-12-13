@@ -280,3 +280,7 @@
 
 /* CHART END */
 
+
+.cryptocoin-container:hover{
+  border-color:'white!important'
+}

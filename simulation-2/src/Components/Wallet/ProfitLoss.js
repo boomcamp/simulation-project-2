@@ -49,12 +49,12 @@ export default function ProfitLoss() {
 
     if(netInvestment){
         netInvestment.map(data=>{
-            console.log(data.BuyRef.amount_bought_usd)
             if(data.BuyRef.Crypto_coin_bought === 0){
                 total = total + data.BuyRef.amount_bought_usd;
             }else{
                 total = total + (data.BuyRef.price_from_buying * data.BuyRef.Crypto_coin_bought)
             }
+            console.log(total)
         })
     }
 
@@ -70,13 +70,13 @@ export default function ProfitLoss() {
         <>  
             <div className='tamount-tracker-container' style={tamount_tracker_container}>
                 <div className='tamount-invested-container' style={tamount_invested_container}>
-                    <p className='tamount-invested-main'> NET AMOUNT INVESTED</p>
+                    <p className='tamount-invested-main'> NET AMOUNT INVESTED(USD)</p>
     <h1 className='tamount-invested-value' style={tamount_invested}>{
         total.toFixed(3)
-    }(USD)</h1>
+    }</h1>
                 </div>
                 <div className='profit-loss-container' style={profit_loss_container}>
-                    <p className='tamount-invested-main'> NET PROFIT/LOSS</p>   
+                    <p className='tamount-invested-main'> NET PROFIT/LOSS(USD)</p>   
                     <h1 className='profit-loss-state' style={profit_loss_state}> {gain_loss.toFixed(3)} </h1>
                 </div>  
             </div>

@@ -27,7 +27,10 @@ export default function WalletIndex(props) {
                     <ProfitLoss/>
                     <CryptoList selectedpass={selected}/>    
                 </div>
-                    <SellIndex SelectedCoinData={state}/>
+                {
+                    state.coin_click_ontracker?<SellIndex SelectedCoinData={state}/>:''
+                }
+                    {/* <SellIndex SelectedCoinData={state}/> */}
             </div>
             {/* <GraphTracking userdata={state.UserHasData}/> */}
         </>

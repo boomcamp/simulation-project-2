@@ -12,7 +12,6 @@ export default function CryptoList(props) {
 
     const [state, setState] = useState();
 
-
     const selected = (data) =>{
         // alert(data);
     }
@@ -38,7 +37,7 @@ export default function CryptoList(props) {
             setState(data)
             donesignal = true
         })()
-    },[])
+    },[state])
 
 
     // const ExpandUserTransactionsData = (data) => {
@@ -83,12 +82,31 @@ export default function CryptoList(props) {
                 {
                     isBuying?<SearchForBuy toggle={()=>toggle()} selectedpass={selected}/>:''
                 }
+                <div className='cryptocoin-container'  style={cryptocoinContainer} data-transactionId={props.transactionId} data-index={props.coinid} onClick={props.selectedpass}>
+                    <div className='cryptocoin-name' style={{marginLeft: '10px', textAlign:'center'}} data-transactionId={props.transactionId} data-index={props.coinid}>INDEX(PERCETAGE GAIN)</div>
+                </div>
                 {
+
                     state?state.map((coin)=>(<InvestmentTracker transactionId={coin.transaction_id} index={coin[0].symbol}  percentage={coin[0].price_change_percentage_24h.toFixed(2)} selectedpass={props.selectedpass} coinid={coin[0].id}/>)):''
                 }
+                
             </div>
         </div>
     )
+}
+
+const cryptocoinContainer={
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    // flexDirection: 'column',
+    margin: '10px',
+    padding: '10px 0',
+    border: '1px #032440 solid',
+    cursor: 'pointer',
+    ':hover' : {
+        border: '1px white solid',
+    }
 }
 
 const buybtn = {

@@ -59,11 +59,11 @@ export default function PastTransactions(props) {
                                 </div>
 
                                 <div className='cryptocoin-price-date-sold' style={{width:'100px'}} data-transactionId={props.transactionId} data-index={props.coinid}>
-                                    {coin.price_from_date_sold.toFixed(2)}
+                                    {coin.price_from_date_sold}
                                 </div>
 
                                 <div className='cryptocoin-price-date-sold' style={{width:'100px'}} data-transactionId={props.transactionId} data-index={props.coinid}>
-                                    {coin.net_amount_gain_loss.toFixed(2)}
+                                    {coin.net_amount_gain_loss}
                                 </div>
 
                                 <div className='gen-profit-loss'  data-transactionId={props.transactionId} style={coin.net_amount_gain_loss<0?loss:profit} data-index={props.coinid}>

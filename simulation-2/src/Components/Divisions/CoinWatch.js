@@ -44,7 +44,7 @@ export default function CoinWatch(props) {
                     }
                 },
                 { title: '1H', field: 'onehour', type: 'numeric', render: rowdata=> {
-                    return <span style={rowdata.onehour>0?{color:'green'}:{color:'#F20C1F'}}> {rowdata.onehour.c(2)+'%'}</span>
+                    return <span style={rowdata.onehour>0?{color:'green'}:{color:'#F20C1F'}}> {rowdata.onehour.toFixed(2)+'%'}</span>
                 }},
                 { title: '24H', field: 'oneday', type: 'numeric', render: rowdata=> {
                     return <span style={rowdata.oneday>0?{color:'green'}:{color:'#F20C1F'}}> {rowdata.oneday.toFixed(2)+'%'}</span>
