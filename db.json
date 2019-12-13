@@ -1,3 +1,50 @@
 {
-  "transactions": []
+  "wallet":[
+    {
+      "id": 1,
+      "amount": 500000
+    }
+  ],
+  "transactions": [
+    {
+      "date": "12/12/2019 15:38:48",
+      "image": "https://assets.coingecko.com/coins/images/1/large/bitcoin.png?1547033579",
+      "amount": "1",
+      "sum": 7158.39,
+      "symbol": "btc",
+      "idname": "bitcoin",
+      "current": 7158.39,
+      "id": 1
+    },
+    {
+      "date": "12/12/2019 15:41:29",
+      "image": "https://assets.coingecko.com/coins/images/1/large/bitcoin.png?1547033579",
+      "amount": "6",
+      "sum": 42950.340000000004,
+      "symbol": "btc",
+      "idname": "bitcoin",
+      "current": 7158.39,
+      "id": 2
+    },
+    {
+      "date": "12/12/2019 16:33:4",
+      "image": "https://assets.coingecko.com/coins/images/279/large/ethereum.png?1547034048",
+      "amount": "1",
+      "sum": 141.35,
+      "symbol": "eth",
+      "idname": "ethereum",
+      "current": 141.35,
+      "id": 3
+    },
+    {
+      "date": "12/12/2019 17:24:12",
+      "image": "https://assets.coingecko.com/coins/images/1/large/bitcoin.png?1547033579",
+      "amount": "1",
+      "sum": 7141.28,
+      "symbol": "btc",
+      "idname": "bitcoin",
+      "current": 7141.28,
+      "id": 4
+    }
+  ]
 }

@@ -1,29 +1,18 @@
 import React, { Component } from "react";
-import axios from "axios";
-import { Pagination } from "semantic-ui-react";
 import MaterialTable from "material-table";
-import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
-import Typography from "@material-ui/core/Typography";
-import Grid from "@material-ui/core/Grid";
-import "semantic-ui-css/semantic.min.css";
-import Details from "./details";
-import AppBarComponent from "./common-components/AppBar";
+import Moment from "moment";
+import axios from "axios";
+import Button from "@material-ui/core/Button";
+import Sell from "./sell";
 var commaNumber = require("comma-number");
-export default class Homepage extends Component {
+export default class Investment extends Component {
   constructor(props) {
     super(props);
+
     this.state = {
-      chartArr: [],
-      id: null,
-      image: "",
-      currentprice: "",
-      loading: true,
-      open: false,
-      data: [],
-      url:
-        "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&page=1&per_page=25",
-      activePage: 1,
+      info: "",
+      url: "http://localhost:4000/transactions",
+      openModal: false,
       columns: [
         {
           title: "Coin logo",
@@ -44,13 +33,12 @@ export default class Homepage extends Component {
               src={rowData.image}
               style={{ width: 30, cursor: "pointer" }}
               alt=""
-              onClick={() => this.handleClick(rowData)}
             />
           )
         },
         {
           title: "Name",
-          field: "name",
+          field: "idname",
 
           cellStyle: {
             textAlign: "center"
@@ -69,15 +57,14 @@ export default class Homepage extends Component {
                 color: "black",
                 cursor: "pointer"
               }}
-              onClick={() => this.handleClick(rowData)}
             >
-              {rowData.name}
+              {rowData.idname}
             </span>
           )
         },
         {
-          title: "Symbol",
-          field: "symbol",
+          title: "Price",
+          field: "current",
 
           cellStyle: {
             textAlign: "center"
@@ -88,6 +75,7 @@ export default class Homepage extends Component {
             color: "white",
             fontSize: "15px"
           },
+
           render: rowData => (
             <span
               style={{
@@ -95,15 +83,14 @@ export default class Homepage extends Component {
                 color: "black",
                 cursor: "pointer"
               }}
-              onClick={() => this.handleClick(rowData)}
             >
-              {rowData.symbol}
+              ${commaNumber(rowData.current) + " " + rowData.symbol}
             </span>
           )
         },
         {
-          title: "Market Cap",
-          field: "market_cap",
+          title: "Amount",
+          field: "amount",
 
           cellStyle: {
             textAlign: "center"
@@ -114,28 +101,22 @@ export default class Homepage extends Component {
             color: "white",
             fontSize: "15px"
           },
-          render: rowData => <span>${commaNumber(rowData.market_cap)}</span>
-        },
-        {
-          title: "Circulating Supply",
-          field: "circulating_supply",
 
-          cellStyle: {
-            textAlign: "center"
-          },
-          headerStyle: {
-            backgroundColor: "#01579b",
-            textAlign: "center",
-            color: "white",
-            fontSize: "15px"
-          },
           render: rowData => (
-            <span>{commaNumber(rowData.circulating_supply)}</span>
+            <span
+              style={{
+                textDecoration: "none",
+                color: "black",
+                cursor: "pointer"
+              }}
+            >
+              {rowData.amount}
+            </span>
           )
         },
         {
-          title: "Current Price",
-          field: "current_price",
+          title: "Total USD",
+          field: "sum",
 
           cellStyle: {
             textAlign: "center"
@@ -146,61 +127,117 @@ export default class Homepage extends Component {
             color: "white",
             fontSize: "15px"
           },
-          render: rowData => <span>${commaNumber(rowData.current_price)}</span>
+
+          render: rowData => (
+            <span
+              style={{
+                textDecoration: "none",
+                color: "black",
+                cursor: "pointer"
+              }}
+            >
+              ${commaNumber(rowData.sum)}
+            </span>
+          )
+        },
+        {
+          title: "Date",
+          field: "date",
+
+          cellStyle: {
+            textAlign: "center"
+          },
+          headerStyle: {
+            backgroundColor: "#01579b",
+            textAlign: "center",
+            color: "white",
+            fontSize: "15px"
+          },
+
+          render: rowData => (
+            <span
+              style={{
+                textDecoration: "none",
+                color: "black",
+                cursor: "pointer"
+              }}
+            >
+              {Moment(rowData.date).format("LLLL")}
+            </span>
+          )
+        },
+
+        {
+          title: "Sell",
+          field: "sell",
+
+          cellStyle: {
+            textAlign: "center"
+          },
+          headerStyle: {
+            backgroundColor: "#01579b",
+            textAlign: "center",
+            color: "white",
+            fontSize: "15px"
+          },
+
+          render: rowData => (
+            <span
+              style={{
+                textDecoration: "none",
+                color: "black",
+                cursor: "pointer"
+              }}
+            >
+           
+              <Button
+                variant="contained"
+                color="secondary"
+                onClick={(e) => this.handleOpenSell(rowData)}
+              >
+                Sell
+              </Button>
+            </span>
+          )
         }
       ]
     };
   }
   componentDidMount = () => {
-    axios.get(this.state.url).then(response => {
-      this.setState({
-        data: response.data
-      });
-    });
-
     axios
-      .get( `http://localhost:4000/wallet`)
-      .then(res =>{
-        res.data.map(amounts =>{
-      localStorage.setItem("wallet", amounts.amount)
-        })
-      })
-  };
-
-  componentDidUpdate = () => {
-    axios.get(this.state.url).then(response => {
-      this.setState({
-        data: response.data
+      .get(`${this.state.url}/?idname=${localStorage.getItem("id")}`)
+      .then(response => {
+        this.setState({
+          data: response.data
+        });
       });
-    });
   };
 
-  handleOnChange = (e, pageInfo) => {
+  // componentDidUpdate = () => {
+  //   axios.get(this.state.url).then(response => {
+  //     this.setState({
+  //       data: response.data
+  //     });
+  //   });
+  // };
+  handleOpenSell = (e) => {
+
+   this.setState({
+     info: e
+   })
+    console.log("open");
     this.setState({
-      activePage: pageInfo.activePage,
-      url:
-        `${this.state.url}` +
-        `&per_page=25&page=${pageInfo.activePage.toString()}`
+      openModal: true
     });
   };
-  handleClick = e => {
-    
-    this.setState({ open: true, id: e });
-    localStorage.setItem("id", e.id);
-    localStorage.setItem("symbol", e.symbol);
-  };
-
-  handleClose = () => {
-    this.setState({ open: false });
-    
+  handleCloseSell = () => {
+    console.log("close");
+    this.setState({ openModal: false });
   };
 
   render() {
-
     return (
       <React.Fragment>
-        <AppBarComponent activePage={this.state.activePage} />
-
         <MaterialTable
           options={{
             paging: false
@@ -212,21 +249,7 @@ export default class Homepage extends Component {
           columns={this.state.columns}
           data={this.state.data}
         />
-        <Grid container justify="flex-end">
-          <Pagination
-            style={{
-              position: "fixed",
-              bottom: 0
-            }}
-            activePage={this.state.activePage}
-            onPageChange={this.handleOnChange}
-            totalPages={248}
-            ellipsisItem={null}
-          />
-        </Grid>
-        
-        <Details open={this.state.open} close={this.handleClose} image={this.state.image} id={this.state.id} />
-       
+        <Sell info={this.state.info} openModal={this.state.openModal} close={this.handleCloseSell} />
       </React.Fragment>
     );
   }
