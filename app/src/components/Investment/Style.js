@@ -155,7 +155,7 @@ const Span2 = styled.span`
   font-size: 16px;
 `;
 const Img = styled.img`
-  width: 30px;
+  height: 30px;
   margin: 0 10px 0 0;
 `;
 const Fresh = styled.span`
@@ -175,6 +175,8 @@ const ImgCont = styled.div`
   width: 30px;
   display: flex;
   justify-content: center;
+  align-content: center;
+  align-items: center;
 `;
 const arrow = {
   margin: "-3px 0 0 5px"

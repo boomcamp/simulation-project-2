@@ -8,6 +8,14 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Axios from "axios";
 import { Div } from "./components/AppStyle";
+
+const tempDate = new Intl.DateTimeFormat("en-US", {
+  year: "numeric",
+  month: "short",
+  day: "2-digit",
+  hour: "2-digit",
+  minute: "2-digit"
+}).format(Date.now());
 export default class App extends React.Component {
   constructor() {
     super();
@@ -39,7 +47,6 @@ export default class App extends React.Component {
     };
   }
   handleClickOpen = val => {
-    console.log(val);
     this.setState({
       open: true,
       currentTransaction: val
@@ -56,9 +63,11 @@ export default class App extends React.Component {
       let sum = res.data.map(x => x.profit).reduce((a, b) => a + b, 0);
       const temp = res.data.map(x => {
         axios
-          .get(`https://api.coingecko.com/api/v3/coins/${x.crypto.id}`)
+          .get(
+            `https://api.coingecko.com/api/v3/simple/price?ids=${x.crypto.id}&vs_currencies=usd`
+          )
           .then(res => {
-            x["currentPrice"] = res.data.market_data.current_price.usd;
+            x["currentPrice"] = res.data[x.crypto.id].usd;
           });
         return x;
       });
@@ -156,11 +165,11 @@ export default class App extends React.Component {
         }
       });
   };
-  handleOnChange = (val, action) => {
+  handleOnChange = (val, action, data) => {
     if (action === "money") {
       this.setState({
         moneyValue: val,
-        cryptoValue: val / this.state.currentPrice
+        cryptoValue: Number((val / this.state.currentPrice).toFixed(9))
       });
     } else if (action === "crypto") {
       this.setState({
@@ -171,6 +180,19 @@ export default class App extends React.Component {
       this.setState({
         sellingAmount: val
       });
+      if (data) {
+        if (data.amount < val) {
+          toast.info(
+            `Only ${data.amount} ${data.crypto.id} left on this investment!`,
+            {
+              position: toast.POSITION.TOP_CENTER
+            }
+          );
+          this.setState({
+            sellingAmount: data.amount - data.amountSold
+          });
+        }
+      }
     }
   };
   handleSubmitInvest = e => {
@@ -187,19 +209,22 @@ export default class App extends React.Component {
         };
         Axios.post("http://localhost:4000/transactions", {
           crypto: obj,
-          amount: this.state.cryptoValue,
+          amount: Number(this.state.cryptoValue.toFixed(9)),
           price: this.state.currentPrice,
           amountSold: 0,
-          profit: 0
+          profit: 0,
+          dateSold: ""
         })
           .then(() => {
             this.setState({ moneyValue: "", cryptoValue: "" });
             Axios.get("http://localhost:4000/transactions").then(res => {
               const temp = res.data.map(x => {
                 axios
-                  .get(`https://api.coingecko.com/api/v3/coins/${x.crypto.id}`)
+                  .get(
+                    `https://api.coingecko.com/api/v3/simple/price?ids=${x.crypto.id}&vs_currencies=usd`
+                  )
                   .then(res => {
-                    x["currentPrice"] = res.data.market_data.current_price.usd;
+                    x["currentPrice"] = res.data[x.crypto.id].usd;
                   });
                 return x;
               });
@@ -229,13 +254,13 @@ export default class App extends React.Component {
   };
   handleSubmitSell = (e, data) => {
     e.preventDefault();
-    console.log(data);
     const temp =
       this.state.sellingAmount * data.currentPrice -
       this.state.sellingAmount * data.price;
     Axios.patch(`http://localhost:4000/transactions/${data.id}`, {
       amountSold: this.state.sellingAmount + data.amountSold,
-      profit: temp + data.profit
+      profit: temp + data.profit,
+      dateSold: tempDate
     })
       .then(() => {
         this.setState({ open: false });
@@ -258,7 +283,7 @@ export default class App extends React.Component {
             this.setState({ loading: false });
           }, 1000);
         });
-        toast.info("Investment Successful!", {
+        toast.info("Sold Successfully!", {
           position: toast.POSITION.TOP_CENTER
         });
       })
@@ -268,6 +293,22 @@ export default class App extends React.Component {
         })
       );
   };
+  // handleUpdate = () => {
+  //   setInterval(() => {
+  //     const temp = this.state.transList.map(x => {
+  //       axios
+  //         .get(`https://api.coingecko.com/api/v3/coins/${x.crypto.id}`)
+  //         .then(res => {
+  //           x["currentPrice"] = res.data.market_data.current_price.usd;
+  //         });
+  //       return x;
+  //     });
+  //     console.log(temp, "try");
+  //     this.setState({
+  //       transList: temp
+  //     });
+  //   }, 5 * 1000);
+  // };
   render() {
     return (
       <HashRouter>
@@ -297,6 +338,8 @@ export default class App extends React.Component {
             open={this.state.open}
             totalProfit={this.state.totalProfit}
             currentTransaction={this.state.currentTransaction}
+            sellingAmount={this.state.sellingAmount}
+            handleUpdate={this.handleUpdate}
           />
         </Div>
       </HashRouter>

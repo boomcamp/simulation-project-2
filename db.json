@@ -6,11 +6,38 @@
         "img": "https://assets.coingecko.com/coins/images/1/large/bitcoin.png?1547033579",
         "unit": "btc"
       },
-      "amount": 20,
-      "price": 7133.64,
-      "amountSold": 20,
-      "profit": -19.380000000021028,
+      "amount": 9,
+      "price": 7210.56,
+      "amountSold": 9,
+      "profit": 0,
+      "dateSold": "Dec 13, 2019, 11:08 AM",
       "id": 1
+    },
+    {
+      "crypto": {
+        "id": "bitcoin",
+        "img": "https://assets.coingecko.com/coins/images/1/large/bitcoin.png?1547033579",
+        "unit": "btc"
+      },
+      "amount": 99,
+      "price": 7210.56,
+      "amountSold": 99,
+      "profit": 0,
+      "dateSold": "Dec 13, 2019, 11:10 AM",
+      "id": 2
+    },
+    {
+      "crypto": {
+        "id": "bitcoin",
+        "img": "https://assets.coingecko.com/coins/images/1/large/bitcoin.png?1547033579",
+        "unit": "btc"
+      },
+      "amount": 99,
+      "price": 7213.9,
+      "amountSold": 75,
+      "profit": 353.69999999998254,
+      "dateSold": "Dec 13, 2019, 01:14 PM",
+      "id": 3
     },
     {
       "crypto": {
@@ -18,11 +45,12 @@
         "img": "https://assets.coingecko.com/coins/images/279/large/ethereum.png?1547034048",
         "unit": "eth"
       },
-      "amount": 12,
-      "price": 141.59,
-      "amountSold": 12,
-      "profit": 12.720000000000255,
-      "id": 2
+      "amount": 99,
+      "price": 144.55,
+      "amountSold": 0,
+      "profit": 0,
+      "dateSold": "",
+      "id": 4
     },
     {
       "crypto": {
@@ -30,11 +58,25 @@
         "img": "https://assets.coingecko.com/coins/images/2/large/litecoin.png?1547033580",
         "unit": "ltc"
       },
-      "amount": 28.016643550624135,
-      "price": 43.26,
-      "amountSold": 28,
-      "profit": 3.0799999999999272,
-      "id": 3
+      "amount": 99,
+      "price": 43.79,
+      "amountSold": 0,
+      "profit": 0,
+      "dateSold": "",
+      "id": 5
+    },
+    {
+      "crypto": {
+        "id": "bitcoin-cash",
+        "img": "https://assets.coingecko.com/coins/images/780/large/bitcoin_cash.png?1547034541",
+        "unit": "bch"
+      },
+      "amount": 99,
+      "price": 207.15,
+      "amountSold": 99,
+      "profit": 0.9899999999979627,
+      "dateSold": "Dec 13, 2019, 11:32 AM",
+      "id": 6
     }
   ]
 }

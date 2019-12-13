@@ -20,15 +20,17 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
+import { table2 } from "./Data";
+import Tabs from "react-bootstrap/Tabs";
+import Tab from "react-bootstrap/Tab";
 export default class Table extends Component {
   constructor() {
     super();
     this.state = {
-      data: [],
       columns: [
         {
           title: "Coin",
-          field: "crypto",
+          field: "crypto.id",
           render: rowData => (
             <CoinName>
               <ImgCont>
@@ -39,23 +41,12 @@ export default class Table extends Component {
           )
         },
         {
-          title: "Amount Bought",
+          title: "Total Investment",
           field: "amount",
           render: rowData => (
             <React.Fragment>
               <Span2>
                 {rowData.amount ? Number(rowData.amount.toFixed(9)) : 0}{" "}
-                {rowData.crypto.unit ? rowData.crypto.unit : ""}
-              </Span2>
-            </React.Fragment>
-          )
-        },
-        {
-          title: "Amount Left",
-          render: rowData => (
-            <React.Fragment>
-              <Span2>
-                {Number((rowData.amount - rowData.amountSold).toFixed(9))}{" "}
                 {rowData.crypto.unit ? rowData.crypto.unit : ""}
               </Span2>
             </React.Fragment>
@@ -100,13 +91,14 @@ export default class Table extends Component {
           )
         },
         {
-          title: "Amount Sold",
-          field: "amountSold",
+          title: "Investment Left",
           render: rowData => (
-            <Span2>
-              {rowData.amountSold ? Number(rowData.amountSold.toFixed(9)) : 0}{" "}
-              {rowData.crypto.unit ? rowData.crypto.unit : ""}
-            </Span2>
+            <React.Fragment>
+              <Span2>
+                {Number((rowData.amount - rowData.amountSold).toFixed(9))}{" "}
+                {rowData.crypto.unit ? rowData.crypto.unit : ""}
+              </Span2>
+            </React.Fragment>
           )
         },
         {
@@ -140,6 +132,9 @@ export default class Table extends Component {
       ]
     };
   }
+  // componentDidUpdate() {
+  //   this.props.handleUpdate();
+  // }
   render() {
     const {
       transList,
@@ -148,19 +143,45 @@ export default class Table extends Component {
       handleOnChange,
       handleSubmitSell,
       handleClose,
-      currentTransaction
+      currentTransaction,
+      sellingAmount
     } = this.props;
     const data = currentTransaction;
-    console.log(transList.filter(x => x.price !== x.currentPrice));
+
     return (
       <React.Fragment>
         <TableCont>
-          <MaterialTable
-            title="List of Investments"
-            columns={this.state.columns}
-            data={transList.reverse()}
-            isLoading={loading}
-          />
+          <Tabs
+            defaultActiveKey="investments"
+            transition={false}
+            id="noanim-tab-example"
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              fontSize: "20px"
+            }}
+          >
+            <Tab eventKey="investments" title="Investments">
+              <MaterialTable
+                title="List of Investments"
+                columns={this.state.columns}
+                data={transList
+                  .reverse()
+                  .filter(x => x.amount !== x.amountSold)}
+                isLoading={loading}
+              />
+            </Tab>
+            <Tab eventKey="log" title="Transaction Logs">
+              <MaterialTable
+                title="Recent Investments"
+                columns={table2}
+                data={transList
+                  .reverse()
+                  .filter(x => x.amount === x.amountSold)}
+                isLoading={loading}
+              />
+            </Tab>
+          </Tabs>
         </TableCont>
         {data ? (
           <Dialog open={open} onClose={() => handleClose()}>
@@ -177,13 +198,16 @@ export default class Table extends Component {
                   fullWidth
                   type="number"
                   variant="outlined"
+                  value={sellingAmount}
                   inputProps={{
                     min: 0,
                     max: data.amount - data.amountSold,
                     step: ".000000001"
                   }}
                   required
-                  onChange={e => handleOnChange(+e.target.value, "sell")}
+                  onChange={e =>
+                    handleOnChange(+e.target.value, "sell", currentTransaction)
+                  }
                 />
               </DialogContent>
               <DialogActions>

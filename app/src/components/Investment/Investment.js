@@ -50,7 +50,9 @@ export default class Investment extends React.Component {
       handleClose,
       open,
       totalProfit,
-      currentTransaction
+      currentTransaction,
+      sellingAmount,
+      handleUpdate
     } = this.props;
     const cryptoList2 = cryptoList.map(x => {
       return { value: x.id, label: x.name, unit: x.symbol };
@@ -67,23 +69,33 @@ export default class Investment extends React.Component {
             handleClose={handleClose}
             open={open}
             currentTransaction={currentTransaction}
+            sellingAmount={sellingAmount}
+            handleUpdate={handleUpdate}
           />
         </Left>
         <Right>
           <Tracking>
             {lastTrans ? (
               <React.Fragment>
-                <History>Last Transation Made:</History>
+                <History>Last Investment:</History>
                 <Label>
                   {lastTrans.crypto ? lastTrans.crypto.id : ""} :
-                  <ValueBox>
-                    {lastTrans.amount ? lastTrans.amount.toFixed(6) : ""}
+                  <ValueBox style={{ textTransform: "uppercase" }}>
+                    {lastTrans.amount
+                      ? Number(lastTrans.amount.toFixed(6))
+                      : ""}{" "}
+                    {lastTrans.crypto ? lastTrans.crypto.unit : ""}
                   </ValueBox>
                 </Label>
-                <Value>
+                <Value style={{ margin: "0 0 10px 0" }}>
                   Price : <ValueBox>${lastTrans.price}</ValueBox>
                 </Value>
-                <History style={{ margin: "20px 0 10px 0" }}>
+                <History
+                  style={{
+                    padding: "20px 0 10px 0",
+                    borderTop: "2px solid gray"
+                  }}
+                >
                   <Label style={{ padding: "0px" }}>
                     Total Profit/Loss:{" "}
                     <ValueBox

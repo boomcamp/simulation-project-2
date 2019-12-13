@@ -130,6 +130,8 @@ export default function SideNav(props) {
           open={props.open}
           totalProfit={props.totalProfit}
           currentTransaction={props.currentTransaction}
+          sellingAmount={props.sellingAmount}
+          handleUpdate={props.handleUpdate}
         />
       </main>
     </React.Fragment>
