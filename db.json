@@ -1,13 +1,50 @@
 {
   "transactions": [
     {
+      "coinName": "Litecoin",
+      "price": 43.64,
+      "invested": 0,
+      "coinId": "litecoin",
+      "profit": 155,
+      "logo": "https://assets.coingecko.com/coins/images/2/small/litecoin.png?1547033580",
+      "id": 3
+    },
+    {
+      "coinName": "Bitcoin Cash",
+      "price": 207.39,
+      "invested": 4000,
+      "coinId": "bitcoin-cash",
+      "profit": 1710,
+      "logo": "https://assets.coingecko.com/coins/images/780/small/bitcoin_cash.png?1547034541",
+      "id": 4
+    },
+    {
+      "coinName": "Tether",
+      "price": 0.999888,
+      "invested": 0,
+      "coinId": "tether",
+      "profit": 0.1008000000000493,
+      "logo": "https://assets.coingecko.com/coins/images/325/small/tether.png?1547034089",
+      "id": 5,
+      "amountSold": 0
+    },
+    {
       "coinName": "Bitcoin",
-      "price": 7140.5,
-      "invested": 50,
+      "price": 7211.93,
+      "invested": 1400,
       "coinId": "bitcoin",
-      "profit": 0,
+      "profit": 1149,
       "logo": "https://assets.coingecko.com/coins/images/1/small/bitcoin.png?1547033579",
-      "id": 1
+      "id": 6
+    },
+    {
+      "coinName": "XRP",
+      "price": 0.217659,
+      "invested": 1000,
+      "coinId": "ripple",
+      "profit": 0,
+      "logo": "https://assets.coingecko.com/coins/images/44/small/xrp.png?1564480400",
+      "id": 7
     }
   ]
 }
