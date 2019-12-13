@@ -6,7 +6,7 @@ import Title from '../tools/Title'
 import axios from 'axios'
 import { withSnackbar } from 'notistack';
 
-function CryptoSell({maxSell, coin, current_price, coinId, closeFn, enqueueSnackbar,}) {
+function CryptoSell({maxSell, img, coin, current_price, coinId, closeFn, enqueueSnackbar, refreshTableFn, walletFn}) {
     const [value, setValue] = useState({ cash: 0, coin: 0});
 
     const handleMaxSell = () => {
@@ -26,6 +26,7 @@ function CryptoSell({maxSell, coin, current_price, coinId, closeFn, enqueueSnack
     }
 
     const handleSell = () => {
+        let wallet;
         if(value.cash !== 0){
             axios
                 .patch(`http://localhost:4000/transactions/${coinId}`, {
@@ -40,22 +41,32 @@ function CryptoSell({maxSell, coin, current_price, coinId, closeFn, enqueueSnack
                                 .post(`http://localhost:4000/wallet`, {
                                     amount: res.data.amount += value.cash*current_price
                                 })
-                                .then(res => {
+                                .then(res => { 
                                     console.log(res.data)
+                                    wallet = res.data.amount += value.cash*current_price;
+                                    walletFn(wallet);
                                 })
                         })
-                  
+                    if(res.data.amountBuy === 0){
+                        axios
+                            .delete(`http://localhost:4000/transactions/${res.data.id}`)
+                            .then(res => console.log(res.data) )
+                    }
                 })
             closeFn();
-            enqueueSnackbar("Successfully Sold", {variant: 'success', autoHideDuration: 1000});
+            enqueueSnackbar("Successfully Sold", {variant: 'success', autoHideDuration: 2000});
+            refreshTableFn();
         }
     }
 
     return (
         <div style={{textAlign:`center`, display:`flex`, flexDirection:`column`}}>
             <Title>Sell Cryptocurrency</Title>
-            <h3>{coin.name} <i>({coin.sym.toUpperCase()})</i></h3>
-            <h3>${maxSell}</h3>
+            <div style={{marginTop:`8px`}}>
+                <img src={img} alt="" width="50"/>
+                <h3 style={{margin:`0`}}> {coin.name} <i>({coin.sym.toUpperCase()})</i> </h3>
+            </div>
+            <p style={{margin:`8px 0`}}> <b>Amount Invested:</b> ${Math.round(maxSell * 100) / 100}</p>
 
             <TextField
                 label="Amount"

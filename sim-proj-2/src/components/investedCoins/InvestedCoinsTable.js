@@ -25,7 +25,7 @@ const useStyles = makeStyles(theme => ({
     },
   }));
 
-export default function InvestedCoinsTable({investedCoin}) { 
+export default function InvestedCoinsTable({walletFn, tableRefFn}) { 
     const tableRef = createRef();
     const classes = useStyles();
     const [open, setOpen] = useState(false);
@@ -33,7 +33,7 @@ export default function InvestedCoinsTable({investedCoin}) {
     const [sellCoin, setSellCoin] = useState({  coin:{name: "", sym: ""}, 
                                                 amountBuy: 0
                                             })
-    const [state, setState] = useState({
+    const [state] = useState({
         columns: [
             {   title:"",
                 render: rowData => (
@@ -51,18 +51,23 @@ export default function InvestedCoinsTable({investedCoin}) {
                             </div>
                         )
             },
-            { title: 'Current Price', field: 'current_price', cellStyle: {color: `#428bca`},
+            { title: 'Current Price', field: 'current_price', cellStyle: {color: `#428bca`, textAlign:`center`}, headerStyle:{textAlign:`center`},
                 render: rowData => (
                             <div>
                                 <p>${rowData.current_price}</p>
                             </div>
                 )
             },
-            { title: 'Amount Invested', field: 'amountBuy',
+            { title: 'Amount Invested (USD)', field: 'amountBuy', headerStyle:{textAlign:`center`}, cellStyle:{textAlign:`center`},
                 render: rowData => (
                         <div>
                             <p>${Math.round(rowData.amountBuy * 100) / 100}</p>
                         </div>
+                )
+            },
+            { title: "Amount Invested (Coin)", headerStyle:{textAlign:`center`}, cellStyle:{textAlign:`center`},
+                render: rowData => (
+                    <div>{(rowData.amountBuy/rowData.current_price).toFixed(2)} {rowData.coin.sym.toUpperCase()}</div>
                 )
             },
             { title: 'Profit/Loss', field: 'profitOrLoss', type:'numeric',
@@ -79,68 +84,72 @@ export default function InvestedCoinsTable({investedCoin}) {
     });
 
     useEffect(() => {
-        let isCancelled=false
+        tableRefFn(tableRef)
+        return () => {  };
+    }, [tableRefFn, tableRef])
 
-        if(investedCoin){
-            investedCoin.map(x => {
-                return axios
-                    .get(`https://api.coingecko.com/api/v3/coins/${x.coinId}?tickers=false&market_data=true&community_data=false&developer_data=false&sparkline=false`)
-                    .then(res => {
-                        let profitLoss;
-                        profitLoss = (res.data.market_data.current_price.usd * x.amountBuy) - (x.coinPrice * x.amountBuy)
-                        x.profitOrLoss = profitLoss;
-                        // console.log(x.coinId, profitLoss)
-                    })
-            })
-            // investedCoin.push({coin: {name:"Total:z ", sym: ""}, current_price: "", amountBuy:"", profitOrLoss: 0})
-            setTimeout(()=>{
-                if(!isCancelled){
-                    setState(prevData => {return {...prevData, data: investedCoin}})
-                    setLoading(false)
-                }
-            }, 2000)
-        }
+    const handleRefreshTable = () => {
+        tableRef.current && tableRef.current.onQueryChange()
+    }
 
-        return () => { isCancelled=true };
-
-    }, [investedCoin])
-
-    const headerStyle={ textAlign: `left`, 
-                        color: `white`, 
-                        backgroundColor: `#3f51b5`, 
-                        padding: `30px`,
-                        margin: `0`}
+    // const headerStyle={ textAlign: `left`, 
+    //                     color: `white`, 
+    //                     backgroundColor: `#3f51b5`, 
+    //                     padding: `30px`,
+    //                     margin: `0`}
+    
     return (
         <React.Fragment>
             <MaterialTable
-                // components={{
-                //     Toolbar: props => ( <div>
-                //                             <h2 className="tableHeader" style={headerStyle}>Invested Cryptocurrency Coins</h2>
-                //                             {/* <p>1234</p> */}
-                //                         </div>),
-                //     }}
+                title="Investment Tracker"
+                components={{
+                    // Toolbar: props => ( <div>
+                    //                         <h2 className="tableHeader" style={headerStyle}>Invested Cryptocurrency Coins</h2>
+                    //                         {/* <p>1234</p> */}
+                    //                     </div>),
+                    }}
                 columns={state.columns}
-                data={state.data}
-                // data = {query =>
-                //     new Promise((resolve, reject) => {
-                //             setTimeout(()=>{
-                //                 resolve({
-                //                     data: investedCoin,
-                //                     page: 1,
-                //                     totalCount: 4,
-                //                 })
-                //             }, 1000)
+                // data={state.data}
+                data = {query =>
+                    new Promise((resolve, reject) => {
+                        axios.get(`http://localhost:4000/transactions`)
+                            .then(trans => {
+                                // var temp=[];
+                                    trans.data.map(x => {
+                                        return axios
+                                            .get(`https://api.coingecko.com/api/v3/coins/${x.coinId}?tickers=false&market_data=true&community_data=false&developer_data=false&sparkline=false`)
+                                            .then(res => {
+                                                // x.img = res.data.image.large
+                                                // x.coin = {name: res.data.name, sym: res.data.symbol}
+                                                x.current_price = res.data.market_data.current_price.usd
+                                                x.profitOrLoss = (res.data.market_data.current_price.usd * x.amountBuy) - (x.coinPrice * x.amountBuy)
+                                                // temp.push(res.data)
+                                                axios.patch(`http://localhost:4000/transactions/${x.id}`,{ 
+                                                    "profitOrLoss": (res.data.market_data.current_price.usd * x.amountBuy) - (x.coinPrice * x.amountBuy)
+                                                })
 
-                //     }) 
-                // }
+                                                setTimeout(()=> {
+                                                    resolve({
+                                                        data: trans.data,
+                                                        page: query.page,
+                                                        totalCount: trans.data.length,
+                                                    })
+                                                    setLoading(false)
+                                                }, 1000)
+                                            })
+                                    })
+                            })                            
+                    })
+                }
                 tableRef={tableRef}
                 options={{
-                    pageSizeOptions: [5,10,20,50,100],
+                    // pageSize: 10,
                     headerStyle: {
-                    fontWeight: `bold`,
-                    textTransform:'uppercase'
+                        fontWeight: `bold`,
+                        textTransform:'uppercase',
                     },
                     loadingType: "linear",
+                    search:false
                 }}
                 isLoading={loading}
                 actions={[
@@ -150,16 +159,13 @@ export default function InvestedCoinsTable({investedCoin}) {
                         onClick: (e, rowData) => {
                             setOpen(true); 
                             setSellCoin(rowData)
-                            // setState(prevData => {
-
-                            // })
                         }
                     },
                     {
                         icon: 'refresh',
                         tooltip: 'Refresh Data',
                         isFreeAction: true,
-                        onClick: () => (console.log(tableRef)) //tableRef.current && tableRef.current.onQueryChange(),
+                        onClick: () => {handleRefreshTable()} //tableRef.current && tableRef.current.onQueryChange(), //(console.log(tableRef))
                     }
                 ]}
             />
@@ -180,10 +186,13 @@ export default function InvestedCoinsTable({investedCoin}) {
                     <div className={classes.paper}>
                         {/* {sellCoin.coin.name}  */}
                         <CryptoSell maxSell={Number(sellCoin.amountBuy)}
+                                    img={sellCoin.img}
                                     coin={sellCoin.coin}
                                     current_price = {sellCoin.current_price}
                                     closeFn={() => setOpen(false)}
                                     coinId={sellCoin.id}
+                                    refreshTableFn={handleRefreshTable}
+                                    walletFn={walletFn}
                                     />
                     </div>
                 </Fade>

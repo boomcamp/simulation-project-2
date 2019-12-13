@@ -73,7 +73,7 @@ export default function CryptoCoins() {
   useEffect(() => {
     let isCancelled = false;
     axios
-      .get(`https://api.coingecko.com/api/v3/coins/markets?vs_currency=USD&per_page=600&page=1&sparkline=true&price_change_percentage=1h%2C24h%2C7d`)
+      .get(`https://api.coingecko.com/api/v3/coins/markets?vs_currency=USD&per_page=250&page=1&sparkline=true&price_change_percentage=1h%2C24h%2C7d`)
       .then(res => {
         let temp=[]
           res.data.map(coin => { 

@@ -4,14 +4,12 @@ import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import axios from 'axios'
-import {Redirect} from 'react-router-dom'
 import { withSnackbar } from 'notistack';
 
 import Title from './tools/Title'
 // import ProfilePic from '../assest/download.jpeg'
 
-function CryptoBuy({closeFn, enqueueSnackbar}) {
-    const [redirect, setRedirect] = useState(false);
+function CryptoBuy({enqueueSnackbar, boughtFn}) {
     const [amount, setAmount] = useState({ cash: 0, cryptoCoin: 0});
     const [coinName, setCoinName] = useState("")
     const [coins, setCoins] = useState([]);
@@ -24,8 +22,8 @@ function CryptoBuy({closeFn, enqueueSnackbar}) {
             .then(res => {
                 let temp=[]
                 res.data.map(coin => { return temp.push({ id: coin.id,
-                                                          // img: coin.image, 
-                                                          // value: {name: coin.name, sym: coin.symbol},
+                                                          img: coin.image, 
+                                                          value: {name: coin.name, sym: coin.symbol},
                                                           price: coin.current_price,                                                          
                                                           label: `${coin.name} (${coin.symbol.toUpperCase()})`
                                                         }) 
@@ -44,17 +42,20 @@ function CryptoBuy({closeFn, enqueueSnackbar}) {
       if(amount.cash > 0 && state){
         axios
           .post(`http://localhost:4000/transactions`, {
-            coinId: state.id,
-            // coinImage: state.img,
             // coinName: state.value,
+            coinId: state.id,
+            img: state.img,
+            coin: {name: state.value.name, sym: state.value.sym},
+            current_price: "n/a",
             amountBuy: amount.cash,
             coinPrice: state.price,
-            // profitOrLoss: (state.price * amount.cash) - (state.price * amount.cash)
+            profitOrLoss: (state.price * amount.cash) - (state.price * amount.cash)
           })
           .then(res => {console.log(res)
-            setRedirect(true);
-            closeFn();
-            enqueueSnackbar("Successfully Invested", {variant: 'success', autoHideDuration: 1000});
+            setAmount({cash: 0, cryptoCoin: 0})
+            setState("")
+            boughtFn()
+            enqueueSnackbar("Successfully Invested", {variant: 'success', autoHideDuration: 2000});
           })
       }
     }
@@ -66,11 +67,8 @@ function CryptoBuy({closeFn, enqueueSnackbar}) {
         setAmount({cash: (state.price*money), cryptoCoin: money})
     }
 
-    if(redirect) 
-      return <Redirect to="/investment-tracker" />
-
     return (
-      <div style={{textAlign: `center`, display:`flex`, flexDirection:`column`}}>
+      <div style={{textAlign: `center`, display:`flex`, flexDirection:`column`, padding:`50px`, margin:`30px 0`}}>
           <Title>Buy Cryptocurrency</Title>
           <Select 
               placeholder="Cryptocurrency to Invest"
