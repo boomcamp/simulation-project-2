@@ -1,3 +1,60 @@
 {
-  "transactions": []
+  "transactions": [
+    {
+      "id": "ed4b2e85b5adc7462e9d2f27a17916803325482c9cfb25077e2bbb940914cb7a",
+      "coinRef": {
+        "id": "bitcoin"
+      },
+      "BuyRef": {
+        "price_from_buying": 7216.25,
+        "amount_bought_usd": 64926.89,
+        "Crypto_coin_bought": 9
+      },
+      "timeRef": "2019-12-13T09:28:56.186Z"
+    },
+    {
+      "id": "876171632dd1a44a3c5ac24858cfeb87336146e68482a5238fe48e0852dde1d7",
+      "coinRef": {
+        "id": "10m-token"
+      },
+      "BuyRef": {
+        "price_from_buying": 0.00088701,
+        "amount_bought_usd": 0,
+        "Crypto_coin_bought": 0
+      },
+      "timeRef": "2019-12-13T09:32:06.054Z"
+    }
+  ],
+  "selltransactions": [
+    {
+      "id": "b425213cc188e3235e1207fa826159e977c369fbea480bc6c69b8c50a48d68d6",
+      "transaction_ref_id": "ed4b2e85b5adc7462e9d2f27a17916803325482c9cfb25077e2bbb940914cb7a",
+      "number_of_ccoin_sold": "10",
+      "price_from_date_sold": 7217.1,
+      "net_amount_gain_loss": -8.5,
+      "current_coin_possesion": 10,
+      "coin_id": "bitcoin",
+      "timeRef": "2019-12-13T09:31:27.354Z"
+    },
+    {
+      "id": "ab2eeecd30bcea737ff9ff945ba1389583254e0cd0aa1d01f4e074501f120f02",
+      "transaction_ref_id": "ed4b2e85b5adc7462e9d2f27a17916803325482c9cfb25077e2bbb940914cb7a",
+      "number_of_ccoin_sold": "1",
+      "price_from_date_sold": 7227.11,
+      "net_amount_gain_loss": -10.859999999999673,
+      "current_coin_possesion": 9,
+      "coin_id": "bitcoin",
+      "timeRef": "2019-12-13T09:47:09.207Z"
+    },
+    {
+      "id": "b099800e02ad92cc2909fff8916451d82d28e1a5c690787947d77118aa62000e",
+      "transaction_ref_id": "876171632dd1a44a3c5ac24858cfeb87336146e68482a5238fe48e0852dde1d7",
+      "number_of_ccoin_sold": 11273.830058285701,
+      "price_from_date_sold": 0.00088701,
+      "net_amount_gain_loss": 0,
+      "current_coin_possesion": 0,
+      "coin_id": "10m-token",
+      "timeRef": "2019-12-13T09:50:13.517Z"
+    }
+  ]
 }
