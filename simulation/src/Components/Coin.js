@@ -25,8 +25,6 @@ import Breadcrumbs from '@material-ui/core/Breadcrumbs';
 import Link from '@material-ui/core/Link';
 import "react-toastify/dist/ReactToastify.css";
 
-import Nav from './Nav'
-
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
@@ -112,9 +110,7 @@ export default function Coin(props) {
   const classes = useStyles();
   const [data, setData] = useState([]);
   const [value, setValue] = useState('');
-  const [usd, setUsd] = useState('')
-  const [balance, setBalance] = useState('1000000')
-  const [compute, setCompute] = useState('1000000')
+  const [usd, setUsd] = useState('0')
   const [validate, setValidate] = useState('')
   const [state, setState] = React.useState({
     data: []
@@ -146,19 +142,13 @@ export default function Coin(props) {
       });
   }
   
-  localStorage.setItem('wallet', compute);  
+
 
   const submitBuy = e =>{
 
     let date = new Date();
     let newDate = date.toLocaleString()
 
-    let currentBal= balance
-    let computed = currentBal - usd
-    setCompute(computed) 
-    
-
-    console.log(computed);
     let data = {
       rank: state.data.market_cap_rank,
       image: state.data.image.large,
@@ -166,6 +156,10 @@ export default function Coin(props) {
       coinQuantity: value+ " " +state.data.symbol,
       totalAmount: usd,
       date: newDate,
+      currentPrice: state.data.market_data.current_price.usd,
+      coinId: state.data.id,
+      status: 'Not Yet Sold', 
+      mOT: 'buy'
     }
 
     if (value <= 0|| value === " "){
@@ -179,8 +173,8 @@ export default function Coin(props) {
       
     })
     .then( response =>  {
-
-      setBalance(localStorage.getItem('wallet'))
+      setValue('')
+      setUsd('0')
       Notify()
       handleClose()
       
@@ -202,6 +196,7 @@ export default function Coin(props) {
         ...state,
         data: response.data 
       })
+   
     })
     .catch(err=>{
       console.log('err');
@@ -260,11 +255,8 @@ export default function Coin(props) {
                 <Link color="inherit" href="/">
                   Back
                 </Link>
-
-                <h5>wallet: {balance}</h5>
                 
-                
-              </Breadcrumbs>
+                </Breadcrumbs>
                   <div className={classes.wrap}>
                     <div className={classes.title}>
                       <img className src={state.data.image ? state.data.image.large : null} alt={state.data.image ? state.data.image.large : null} style={{width: 60, height:60, marginRight:5}}/> 
@@ -603,14 +595,14 @@ export default function Coin(props) {
                       helperText={validate}
                      />
                     <h3 style={{margin: 'auto 50px auto'}}>=</h3>
-                    <TextField
-                      id="standard-number"
-                      label="Amount"
-                      value={usd}
-                      InputProps={{
-                        startAdornment: <InputAdornment position="start">$</InputAdornment>,
-                      }}
-                    />
+                    <NumberFormat 
+                          style={{marginTop: '15px'}}
+                          value={usd} 
+                          displayType={'text'} 
+                          thousandSeparator={true} 
+                          prefix={'$'} 
+                          decimalScale='2' 
+                        />
                     </div>
                     </DialogContentText>
                   </DialogContent>

@@ -1,139 +1,147 @@
 {
   "transactions": [
     {
-      "rank": 2,
-      "image": "https://assets.coingecko.com/coins/images/279/large/ethereum.png?1547034048",
-      "coinName": "Ethereum",
-      "coinQuantity": "3 eth",
-      "totalAmount": 426.75,
-      "date": "12/12/2019, 2:17:02 PM",
+      "rank": 1,
+      "image": "https://assets.coingecko.com/coins/images/1/large/bitcoin.png?1547033579",
+      "coinName": "Bitcoin",
+      "coinQuantity": "2 btc",
+      "totalAmount": 14435.22,
+      "date": "12/13/2019, 1:37:24 PM",
+      "currentPrice": 7217.61,
+      "coinId": "bitcoin",
+      "status": "Not Yet Sold", 
+      "mOT": "buy",
       "id": 1
-    },
-    {
-      "rank": 1,
-      "image": "https://assets.coingecko.com/coins/images/1/large/bitcoin.png?1547033579",
-      "coinName": "Bitcoin",
-      "coinQuantity": "2 btc",
-      "totalAmount": 14324.3,
-      "date": "12/12/2019, 2:58:11 PM",
-      "id": 2
-    },
-    {
-      "rank": 8,
-      "image": "https://assets.coingecko.com/coins/images/825/large/binance-coin-logo.png?1547034615",
-      "coinName": "Binance Coin",
-      "coinQuantity": "3 bnb",
-      "totalAmount": 43.5,
-      "date": "12/12/2019, 2:58:28 PM",
-      "id": 3
-    },
-    {
-      "rank": 1,
-      "image": "https://assets.coingecko.com/coins/images/1/large/bitcoin.png?1547033579",
-      "coinName": "Bitcoin",
-      "coinQuantity": "1 btc",
-      "totalAmount": 7157,
-      "date": "12/12/2019, 3:47:33 PM",
-      "id": 4
-    },
-    {
-      "rank": 1,
-      "image": "https://assets.coingecko.com/coins/images/1/large/bitcoin.png?1547033579",
-      "coinName": "Bitcoin",
-      "coinQuantity": "2 btc",
-      "totalAmount": 14314,
-      "date": "12/12/2019, 3:47:36 PM",
-      "id": 5
-    },
-    {
-      "rank": 1,
-      "image": "https://assets.coingecko.com/coins/images/1/large/bitcoin.png?1547033579",
-      "coinName": "Bitcoin",
-      "coinQuantity": "1 btc",
-      "totalAmount": 7156.55,
-      "date": "12/12/2019, 3:56:09 PM",
-      "id": 6
-    },
-    {
-      "rank": 1,
-      "image": "https://assets.coingecko.com/coins/images/1/large/bitcoin.png?1547033579",
-      "coinName": "Bitcoin",
-      "coinQuantity": "2 btc",
-      "totalAmount": 14313.1,
-      "date": "12/12/2019, 3:56:16 PM",
-      "id": 7
-    },
-    {
-      "rank": 1,
-      "image": "https://assets.coingecko.com/coins/images/1/large/bitcoin.png?1547033579",
-      "coinName": "Bitcoin",
-      "coinQuantity": "2 btc",
-      "totalAmount": 14249.82,
-      "date": "12/12/2019, 4:36:07 PM",
-      "id": 8
-    },
-    {
-      "rank": 2,
-      "image": "https://assets.coingecko.com/coins/images/279/large/ethereum.png?1547034048",
-      "coinName": "Ethereum",
-      "coinQuantity": "1 eth",
-      "totalAmount": 141.31,
-      "date": "12/12/2019, 4:36:27 PM",
-      "id": 9
-    },
-    {
-      "rank": 2,
-      "image": "https://assets.coingecko.com/coins/images/279/large/ethereum.png?1547034048",
-      "coinName": "Ethereum",
-      "coinQuantity": "2 eth",
-      "totalAmount": 282.62,
-      "date": "12/12/2019, 4:36:33 PM",
-      "id": 10
-    },
-    {
-      "rank": 4,
-      "image": "https://assets.coingecko.com/coins/images/325/large/tether.png?1547034089",
-      "coinName": "Tether",
-      "coinQuantity": "1 usdt",
-      "totalAmount": 0.999287,
-      "date": "12/12/2019, 4:36:49 PM",
-      "id": 11
-    },
-    {
-      "rank": 4,
-      "image": "https://assets.coingecko.com/coins/images/325/large/tether.png?1547034089",
-      "coinName": "Tether",
-      "coinQuantity": "1 usdt",
-      "totalAmount": 0.999287,
-      "date": "12/12/2019, 4:37:31 PM",
-      "id": 12
-    },
-    {
-      "rank": 1,
-      "image": "https://assets.coingecko.com/coins/images/1/large/bitcoin.png?1547033579",
-      "coinName": "Bitcoin",
-      "coinQuantity": "2 btc",
-      "totalAmount": 14394.78,
-      "date": "12/13/2019, 9:21:41 AM",
-      "id": 13
-    },
-    {
-      "rank": 1,
-      "image": "https://assets.coingecko.com/coins/images/1/large/bitcoin.png?1547033579",
-      "coinName": "Bitcoin",
-      "coinQuantity": "3 btc",
-      "totalAmount": 21592.170000000002,
-      "date": "12/13/2019, 9:21:45 AM",
-      "id": 14
     },
     {
       "rank": 4,
       "image": "https://assets.coingecko.com/coins/images/325/large/tether.png?1547034089",
       "coinName": "Tether",
       "coinQuantity": "2 usdt",
-      "totalAmount": 1.999378,
-      "date": "12/13/2019, 9:23:01 AM",
-      "id": 15
+      "totalAmount": 1.998994,
+      "date": "12/13/2019, 1:54:43 PM",
+      "currentPrice": 0.999497,
+      "coinId": "tether",
+      "status": "Not Yet Sold", 
+      "mOT": "buy",
+      "id": 2
+    },
+    {
+      "rank": 4,
+      "image": "https://assets.coingecko.com/coins/images/325/large/tether.png?1547034089",
+      "coinName": "Tether",
+      "coinQuantity": "3 usdt",
+      "totalAmount": 2.998491,
+      "date": "12/13/2019, 1:54:47 PM",
+      "currentPrice": 0.999497,
+      "coinId": "tether",
+      "status": "Not Yet Sold", 
+      "mOT": "buy",
+      "id": 3
+    },
+    {
+      "rank": 9,
+      "image": "https://assets.coingecko.com/coins/images/6799/large/BSV.png?1558947902",
+      "coinName": "Bitcoin SV",
+      "coinQuantity": "5 bsv",
+      "totalAmount": 462.45,
+      "date": "12/13/2019, 1:54:59 PM",
+      "currentPrice": 92.49,
+      "coinId": "bitcoin-cash-sv",
+      "status": "Not Yet Sold", 
+      "mOT": "buy",
+      "id": 4
+    },
+    {
+      "rank": 2,
+      "image": "https://assets.coingecko.com/coins/images/279/large/ethereum.png?1547034048",
+      "coinName": "Ethereum",
+      "coinQuantity": "5 eth",
+      "totalAmount": 722.55,
+      "date": "12/13/2019, 3:28:12 PM",
+      "currentPrice": 144.51,
+      "coinId": "ethereum",
+      "status": "Not Yet Sold", 
+      "mOT": "buy",
+      "id": 5
+    },
+    {
+      "rank": 3,
+      "image": "https://assets.coingecko.com/coins/images/44/large/xrp.png?1564480400",
+      "coinName": "XRP",
+      "coinQuantity": "9 xrp",
+      "totalAmount": 1.964223,
+      "date": "12/13/2019, 3:28:24 PM",
+      "currentPrice": 0.218247,
+      "coinId": "ripple",
+      "status": "Not Yet Sold", 
+      "mOT": "buy",
+      "id": 6
+    },
+    {
+      "rank": 5,
+      "image": "https://assets.coingecko.com/coins/images/780/large/bitcoin_cash.png?1547034541",
+      "coinName": "Bitcoin Cash",
+      "coinQuantity": "50 bch",
+      "totalAmount": 10379.5,
+      "date": "12/13/2019, 3:28:35 PM",
+      "currentPrice": 207.59,
+      "coinId": "bitcoin-cash",
+      "status": "Not Yet Sold", 
+      "mOT": "buy",
+      "id": 7
+    },
+    {
+      "rank": 10,
+      "image": "https://assets.coingecko.com/coins/images/976/large/Tezos-logo.png?1547034862",
+      "coinName": "Tezos",
+      "coinQuantity": "152 xtz",
+      "totalAmount": 267.52,
+      "date": "12/13/2019, 3:28:48 PM",
+      "currentPrice": 1.76,
+      "coinId": "tezos",
+      "status": "Not Yet Sold", 
+      "mOT": "buy",
+      "id": 8
+    },
+    {
+      "rank": 16,
+      "image": "https://assets.coingecko.com/coins/images/1481/large/cosmos_hub.png?1555657960",
+      "coinName": "Cosmos",
+      "coinQuantity": "66 atom",
+      "totalAmount": 272.58,
+      "date": "12/13/2019, 4:01:55 PM",
+      "currentPrice": 4.13,
+      "coinId": "cosmos",
+      "status": "Not Yet Sold", 
+      "mOT": "buy",
+      "id": 9
+    },
+    {
+      "rank": 9,
+      "image": "https://assets.coingecko.com/coins/images/6799/large/BSV.png?1558947902",
+      "coinName": "Bitcoin SV",
+      "coinQuantity": "2 bsv",
+      "totalAmount": 185.42,
+      "date": "12/13/2019, 4:11:58 PM",
+      "currentPrice": 92.71,
+      "coinId": "bitcoin-cash-sv",
+      "status": "Not Yet Sold", 
+      "mOT": "buy",
+      "id": 10
+    },
+    {
+      "rank": 5,
+      "image": "https://assets.coingecko.com/coins/images/780/large/bitcoin_cash.png?1547034541",
+      "coinName": "Bitcoin Cash",
+      "coinQuantity": "4 bch",
+      "totalAmount": 830.12,
+      "date": "12/13/2019, 4:12:05 PM",
+      "currentPrice": 207.53,
+      "coinId": "bitcoin-cash",
+      "status": "Not Yet Sold", 
+      "mOT": "buy",
+      "id": 11
     }
   ]
 }
