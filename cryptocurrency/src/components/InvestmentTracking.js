@@ -1,16 +1,7 @@
 import React, { Component } from 'react'
 import axios from 'axios'
 import MaterialTable from 'material-table';
-import {Grid,Button,ButtonGroup} from '@material-ui/core';
-import Avatar from '@material-ui/core/Avatar';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemAvatar from '@material-ui/core/ListItemAvatar';
-import ListItemText from '@material-ui/core/ListItemText';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import Dialog from '@material-ui/core/Dialog';
-import PersonIcon from '@material-ui/icons/Person';
-import AddIcon from '@material-ui/icons/Add';
+import { Grid,Button,ButtonGroup } from '@material-ui/core';
  
 export class InvestmentTracking extends Component {
 
@@ -32,12 +23,13 @@ export class InvestmentTracking extends Component {
                   render: rowData => <span style = {{color:rowData.price_change_percentage_24h > 0? 'green' : 'red' }}>{rowData.price_change_percentage_24h}  </span> // condition
                 },
 
-                { title: 'Current Price', field: 'current_price' },
+                { title: 'Current Price', field: 'current_price',
+                  render: rowPrice => <span style= {{color:'blue'}}>{rowPrice.current_price}</span>},
                 
                 { title: 'Actions', field: '', 
                   render: rowData => 
-                  
-                  <Grid item>
+
+                  <Grid item> {console.log(rowData)}
                   <ButtonGroup variant="contained" color="primary" aria-label="full-width contained primary button group">
                   <Button onClick = {()=>this.handleClick(rowData)}>Buy</Button>
                   </ButtonGroup>
@@ -45,10 +37,8 @@ export class InvestmentTracking extends Component {
                 },
           ],
           data: [],
-          elems: [],
         }
     }
-
     componentDidMount(){
         axios
         .get(`https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd`, { 
@@ -59,53 +49,18 @@ export class InvestmentTracking extends Component {
             })
         })
     }
-
     handleClick=(e)=>{
-     console.log(e)
-     axios
-     .post(`http://localhost:4000/transactions`,
-      {
-       logo: e.logo,   
-       name: e.name, 
-       current_price: e.current_price
-      }
-     )
-     .then(resp =>{
-     console.log(resp)
-       })
+        console.log(e)
+        localStorage.setItem('id_test',e.id);
+        
+        this.props.history.push('/transactions/')
+  
     } 
 
     render() {
         return (
-
+           
             <React.Fragment>
-            
-                <Dialog >
-        <DialogTitle id="simple-dialog-title">Set backup account</DialogTitle>
-        <List>
-            {/* {emails.map(email => ( */}
-            <ListItem >
-                <ListItemAvatar>
-                <Avatar>
-                    <PersonIcon />
-                </Avatar>
-                </ListItemAvatar>
-                <ListItemText  />
-            </ListItem>
-            {/* ))} */}
-
-            <ListItem>
-            <ListItemAvatar>
-                <Avatar>
-                <AddIcon />
-                </Avatar>
-            </ListItemAvatar>
-            <ListItemText primary="add account" />
-            </ListItem>
-        </List>
-        </Dialog>
-
-
             <div className='list'>
             <MaterialTable
         
@@ -116,6 +71,7 @@ export class InvestmentTracking extends Component {
             </div>
 
             </React.Fragment>
+            
         )
     }
 }

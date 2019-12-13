@@ -1,68 +1,69 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+#######################################################
+-------------------------------------------------------
+Project : Simulation Project 2
+-------------------------------------------------------
+Title : Cryptocurrency
+-------------------------------------------------------
+Summary:
+-------------------------------------------------------
 
-## Available Scripts
+Cryptocurrency is an internet-based medium of exchange which uses cryptographical functions to conduct
+financial transactions. Cryptocurrencies leverage blockchain technology to gain decentralization, 
+transparency, and immutability.
 
-In the project directory, you can run:
+--------------------------------------------------------
+Dependencies:
+--------------------------------------------------------
 
-### `npm start`
+* @material-ui/core": "^4.7.0",
+* @material-ui/icons": "^4.5.1",
+* axios": "^0.19.0",
+* material-table": "^1.54.2",
+* react": "^16.12.0",
+* react-dom": "^16.12.0",
+* react-router-dom": "^5.1.2",
+* react-scripts": "3.2.0",
+* recharts": "^2.0.0-beta.1"
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+--------------------------------------------------------
+Components :
+--------------------------------------------------------
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+1. Coins List
+2. Coin Details
+3. Investment Tracking
+4. Transactions 
+5. History
+6. Charts
 
-### `npm test`
+---------------------------------------------------------
+Details / Instructions:
+---------------------------------------------------------
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+1. Coins List -   Display all the list of the coins on the API (Application Programming Interface) with an 
+                  icon of 'visibility' that needs to be clicked to move to another link( Coin Details ).
 
-### `npm run build`
+2. Coin Details - Display every details on a specific coin that has been clicked by the user on the Coins
+                  List, it includes the ( Charts ) which determine the changes of the value in 24hrs, 1week,
+                  1month, 6months, 1year, and max (all time).
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+3. Investment Tracking - Includes all the list of the coins which you can buy, by click the BUY button then
+                  it will link you to the Transactions Page.
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+4. Transactions - Display the details on a specific coin that has been clicked which you can choose the quantity
+                  that multiplies the value of the current coin. then, click the BUY button to store the data and
+                  values of the coin on the database.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+5. History -      Display every details of the Transactions that has been made. Includes the Name, Price, Total 
+                  Value and the Balance ( default balance of 1000000 stored on the localStorage, subtracted to the
+                  Total Value of the coin that has been bought ) of the coin.
 
-### `npm run eject`
+6. Charts - Included on the Coin Details Page.
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+-----------------------------------------------------------
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Note:
 
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+Investment, Profit and Loss unfinished.
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+############################################################

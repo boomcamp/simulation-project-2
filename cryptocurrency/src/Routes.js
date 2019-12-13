@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import './App.css';
-import { Button, Grid, ButtonGroup } from '@material-ui/core';
+import { Button } from '@material-ui/core';
 
 function Routes() {
 
@@ -24,11 +24,13 @@ function Routes() {
             <Button variant='contained'> Investment Tracking </Button>
             </Link>
 
-        
-
+            <Link style={navstyle} to = '/history'>
+            <Button variant='contained'>History</Button>  
+            </Link>
+            
         </ul>
         
     </nav>        
   ); 
 }
-export default Routes;
+export default Routes;  
