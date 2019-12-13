@@ -36,7 +36,7 @@ export class home extends Component {
     }
     render() {
         return (
-            <MDBContainer ><br /><br /><br /><br />
+            <MDBContainer className="container-height"><br /><br /><br /><br />
                 <MDBRow>
                     <MDBCol sm="12">
                         <Pagination

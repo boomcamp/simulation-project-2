@@ -18,7 +18,7 @@ code {
   background-color: #e6ee9c;
 }
 .CoinInfo{
-  margin-top: 6%;
+  margin-top: 4%;
 }
 .pagination a {
   color: black;
@@ -28,3 +28,16 @@ code {
   border: 1px solid #ddd;
   box-shadow: 1px 2px 10px -4px #000000;
 } 
+.converter-padding{
+  padding: 2%;
+}
+.description-box-height{
+  height: 500px;
+  padding: 2%;
+}
+.container-height{
+  min-height: 1100px
+}
+.converter-icon-padding-modal{
+  padding-left: 50%
+}

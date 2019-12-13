@@ -1,3 +1,43 @@
 {
-  "transactions": []
+  "transactions": [
+    {
+      "mode": "buy",
+      "name": "bitcoin",
+      "symbol": "btc",
+      "price": [
+        14447.38
+      ],
+      "value": "2",
+      "CoinBalance": "2",
+      "Purchasedprice": 7223.69,
+      "DatePurchased": "Date: 12/13/2019 Time: 17:16",
+      "id": 1
+    },
+    {
+      "mode": "buy",
+      "name": "bitcoin",
+      "symbol": "btc",
+      "price": [
+        28894.76
+      ],
+      "value": "4",
+      "CoinBalance": "4",
+      "Purchasedprice": 7223.69,
+      "DatePurchased": "Date: 12/13/2019 Time: 17:16",
+      "id": 2
+    },
+    {
+      "mode": "buy",
+      "name": "ethereum",
+      "symbol": "eth",
+      "price": [
+        432.06000000000006
+      ],
+      "value": "3",
+      "CoinBalance": "3",
+      "Purchasedprice": 144.02,
+      "DatePurchased": "Date: 12/13/2019 Time: 17:23",
+      "id": 3
+    }
+  ]
 }

@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { MDBNavbar, MDBNavbarBrand, MDBNavbarNav, MDBNavItem, MDBNavLink, MDBNavbarToggler, MDBCollapse,  MDBFormInline } from "mdbreact";
+import { MDBNavbar, MDBNavbarBrand, MDBNavbarNav, MDBNavItem, MDBNavLink, MDBNavbarToggler, MDBCollapse } from "mdbreact";
 export class Nav extends Component {
     constructor(){
         super();
@@ -23,14 +23,8 @@ export class Nav extends Component {
                             <MDBNavItem>
                                 <MDBNavLink to="/">Home</MDBNavLink>
                             </MDBNavItem>
-                        </MDBNavbarNav>
-                        <MDBNavbarNav right>
                             <MDBNavItem>
-                                <MDBFormInline waves>
-                                    <div className="md-form my-0">
-                                        <input className="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search" />
-                                    </div>
-                                </MDBFormInline>
+                                <MDBNavLink to="/investment">Investment</MDBNavLink>
                             </MDBNavItem>
                         </MDBNavbarNav>
                     </MDBCollapse>
