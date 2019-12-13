@@ -38,9 +38,9 @@ import {
   Table,
   days,
   Buttons,
-  Amount
+  Amount,
+  BackContainer
 } from "../Details/Data";
-import { Divider } from "semantic-ui-react";
 
 export default class Details extends React.Component {
   constructor() {
@@ -163,7 +163,7 @@ export default class Details extends React.Component {
       minute: "2-digit"
     }).format(Date.now());
     const coinDetails = {
-      coin: this.props.match.params.id,
+      coinId: this.props.match.params.id,
       price: this.state.current_price,
       image: this.state.logo,
       name: this.state.details.name,
@@ -171,7 +171,6 @@ export default class Details extends React.Component {
     };
     const Obj = {
       date: tempDate,
-      invested: this.state.cryptValue,
       amount: this.state.amountValue,
       amountSold: 0,
       currency: this.props.currency.value,
@@ -193,8 +192,18 @@ export default class Details extends React.Component {
       });
   };
   render() {
+    console.log(this.props);
     return (
       <MainDiv>
+        <BackContainer>
+          <Button
+            variant="outlined"
+            style={{ width: "100px" }}
+            onClick={this.props.history.goBack}
+          >
+            Back
+          </Button>
+        </BackContainer>
         <Container>
           <Logo>
             <img
@@ -345,16 +354,6 @@ export default class Details extends React.Component {
               {this.state.details.name}
             </DialogTitle>
             <DialogContent>
-              <select
-                className="custom-select"
-                style={{ width: "500px", height: "42px" }}
-              >
-                <option value="10">Payment Method</option>
-                <option value="10">Visa</option>
-                <option value="50">MasterCard</option>
-                <option value="100">Bank Transfer</option>
-              </select>
-              <Divider />
               <Typography
                 variant="h6"
                 component="h6"

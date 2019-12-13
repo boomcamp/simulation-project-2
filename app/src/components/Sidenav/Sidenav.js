@@ -17,8 +17,6 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import HomeOutlinedIcon from "@material-ui/icons/HomeOutlined";
-import ShoppingCartOutlinedIcon from "@material-ui/icons/ShoppingCartOutlined";
-import RestorePageOutlinedIcon from "@material-ui/icons/RestorePageOutlined";
 import ViewListOutlinedIcon from "@material-ui/icons/ViewListOutlined";
 import Routes from "../../routes";
 
@@ -81,12 +79,7 @@ class Sidenav extends React.Component {
           </div>
           <Divider />
           <List>
-            {[
-              "Home",
-              "Investment Tracking",
-              "Buy / Sell",
-              "Transaction Logs"
-            ].map((text, index) => (
+            {["Home", "Investment Tracking"].map((text, index) => (
               <ListItem button key={text}>
                 <ListItemIcon>
                   {index === 0 ? (
@@ -97,15 +90,19 @@ class Sidenav extends React.Component {
                     <Link to={"/investments"} style={{ color: "grey" }}>
                       <ViewListOutlinedIcon />
                     </Link>
-                  ) : index === 2 ? (
-                    <ShoppingCartOutlinedIcon />
-                  ) : index === 3 ? (
-                    <RestorePageOutlinedIcon />
                   ) : (
                     ""
                   )}
                 </ListItemIcon>
-                <ListItemText primary={text} />
+                {index === 0 ? (
+                  <Link to={"/"} style={{ color: "grey" }}>
+                    <ListItemText primary={text} />
+                  </Link>
+                ) : (
+                  <Link to={"/investments"} style={{ color: "grey" }}>
+                    <ListItemText primary={text} />
+                  </Link>
+                )}
               </ListItem>
             ))}
           </List>

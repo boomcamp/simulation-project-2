@@ -2,7 +2,6 @@ import styled from "styled-components";
 
 const MainDiv = styled.div`
   display: flex;
-  justify-content: center;
   flex-wrap: wrap;
   width: 100%;
 `;
@@ -51,6 +50,12 @@ const Table = styled.div`
   padding-left: 30px;
 `;
 
+const BackContainer = styled.div`
+  display: flex;
+  margin-right: 4%;
+  margin-left: 4%;
+`;
+
 const days = [
   { name: "24h", value: 1 },
   { name: "7d", value: 7 },
@@ -77,5 +82,6 @@ export {
   Table,
   days,
   Buttons,
-  Amount
+  Amount,
+  BackContainer
 };

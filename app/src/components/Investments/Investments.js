@@ -1,5 +1,7 @@
 import React from "react";
+import axios from "axios";
 import MaterialTable from "material-table";
+import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
@@ -9,49 +11,35 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import TextField from "@material-ui/core/TextField";
 import Typography from "@material-ui/core/Typography";
 import { MDBIcon } from "mdbreact";
-import styled from "styled-components";
-import axios from "axios";
-
-const MainDiv = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-`;
-const Table = styled.div`
-  width: 70%;
-`;
-const BuySell = styled.div`
-  width: 28%;
-  height: 200px;
-  background-color: white;
-`;
-const Img = styled.img`
-  height: 30px;
-  padding-right: 20px;
-`;
-const Green = styled.div`
-  color: green;
-`;
-const Red = styled.div`
-  color: red;
-`;
-
+import {
+  investColumn,
+  Title,
+  Total,
+  MainDiv,
+  Table,
+  BuySell,
+  Img,
+  Green,
+  Red,
+  Container
+} from "./Data";
 export default class Investments extends React.Component {
   constructor() {
     super();
     this.state = {
       activeItem: "1",
-      loading: true,
       data: [],
       toggleModal: false,
       columns: [
         {
           title: "Coin",
-          field: "coin",
+          field: "details.name",
           render: rowData => (
             <React.Fragment>
-              <Img src={rowData.details.image} alt="" />
-              {rowData.details.name}
+              <Link to={`details/${rowData.details.coinId}`}>
+                <Img src={rowData.details.image} alt="" />
+                {rowData.details.name}
+              </Link>
             </React.Fragment>
           )
         },
@@ -115,7 +103,7 @@ export default class Investments extends React.Component {
           )
         },
         {
-          title: "Profit/Loss Total",
+          title: "Estimated Profit/Loss",
           field: "profit",
           render: rowData => (
             <React.Fragment>
@@ -144,15 +132,13 @@ export default class Investments extends React.Component {
           )
         },
         {
-          title: "Amount Sold",
+          title: "Profit/Loss",
           field: "amountSold",
           render: rowData => (
-            <React.Fragment>$ {rowData.amountSold.toFixed(3)}</React.Fragment>
+            <React.Fragment>
+              $ {parseFloat(rowData.amountSold.toFixed(3))}
+            </React.Fragment>
           )
-        },
-        {
-          title: "Date Invested",
-          field: "date"
         },
         {
           title: "Actions",
@@ -179,18 +165,24 @@ export default class Investments extends React.Component {
     }
   };
   componentDidMount = () => {
+    this.setState({ loading: true });
     axios.get(`http://localhost:4000/transactions`).then(response => {
       const tempData = response.data.map(e => {
         axios
-          .get(`https://api.coingecko.com/api/v3/coins/${e.details.coin}`)
+          .get(
+            `https://api.coingecko.com/api/v3/simple/price?ids=${e.details.coinId}&vs_currencies=usd`
+          )
           .then(response => {
-            e.current_price = response.data.market_data.current_price.usd;
+            e.current_price = response.data[e.details.coinId].usd;
           });
         return e;
       });
       let sum = response.data.map(x => x.amountSold).reduce((a, b) => a + b, 0);
-      this.setState({ data: tempData, totalAmount: sum });
-      setTimeout(() => this.setState({ loading: false }), 500);
+      this.setState({
+        data: tempData,
+        totalAmount: sum
+      });
+      setTimeout(() => this.setState({ loading: false }), 1000);
     });
   };
 
@@ -211,12 +203,34 @@ export default class Investments extends React.Component {
     axios
       .patch(`http://localhost:4000/transactions/${data.id}`, {
         amountSold:
-          data.current_price * this.state.amountSell -
-          data.details.price * this.state.amountSell,
+          data.amountSold +
+          (data.current_price * this.state.amountSell -
+            data.details.price * this.state.amountSell),
         amount: data.amount - this.state.amountSell
       })
-      .then(toast.success("Success!"));
-    setTimeout(() => this.setState({ loading: false }), 500);
+      .then(() =>
+        axios.get(`http://localhost:4000/transactions`).then(response => {
+          const tempData = response.data.map(e => {
+            axios
+              .get(
+                `https://api.coingecko.com/api/v3/simple/price?ids=${e.details.coinId}&vs_currencies=usd`
+              )
+              .then(response => {
+                e.current_price = response.data[e.details.coinId].usd;
+              });
+            return e;
+          });
+          let sum = response.data
+            .map(x => x.amountSold)
+            .reduce((a, b) => a + b, 0);
+          this.setState({
+            data: tempData,
+            totalAmount: sum
+          });
+          toast.success("Successfully Sold!");
+          setTimeout(() => this.setState({ loading: false }), 500);
+        })
+      );
   };
   render() {
     return (
@@ -256,9 +270,7 @@ export default class Investments extends React.Component {
                   style={{ textTransform: "uppercase", width: "300px" }}
                   inputProps={{
                     min: 0,
-                    max:
-                      this.state.currentData.amount -
-                      this.state.currentData.amountSold,
+                    max: this.state.currentData.amount,
                     step: ".000000001"
                   }}
                   onChange={e => this.handleChange(e.target.value)}
@@ -279,37 +291,43 @@ export default class Investments extends React.Component {
         )}
 
         <Table>
+          <div style={{ paddingBottom: "20px" }}>
+            <MaterialTable
+              title="Investment Tracking"
+              columns={this.state.columns}
+              data={this.state.data.filter(x => x.amount !== 0)}
+              isLoading={this.state.loading}
+            />
+          </div>
           <MaterialTable
-            title="Investment Tracking"
-            columns={this.state.columns}
-            data={this.state.data}
+            title="Transaction Logs"
+            columns={investColumn}
+            data={this.state.data.filter(x => x.amount === 0).reverse()}
             isLoading={this.state.loading}
             options={{
-              pageSizeOptions: [10, 15, 20],
-              pageSize: 10
+              pageSizeOptions: [3, 5, 10],
+              pageSize: 3
             }}
           />
         </Table>
-        <BuySell>
-          <Typography
-            variant="h4"
-            component="h6"
-            style={{ paddingBottom: "50px", color: "darkviolet" }}
-          >
-            Total Profit/Loss
-          </Typography>
-          <Typography
-            variant="h1"
-            component="h6"
-            style={{
-              paddingBottom: "10px",
-              color: "black",
-              textAlign: "center"
-            }}
-          >
-            $ {parseFloat(this.state.totalAmount).toFixed(5)}
-          </Typography>
-        </BuySell>
+        <Container>
+          <BuySell>
+            <Title>
+              <h4 style={{ fontWeight: "bold" }}>Total Profit/Loss</h4>
+            </Title>
+            <Total>
+              {this.state.totalAmount > 0 ? (
+                <Green>
+                  <h3>${parseFloat(this.state.totalAmount).toFixed(3)}</h3>
+                </Green>
+              ) : (
+                <Red>
+                  <h3>${parseFloat(this.state.totalAmount).toFixed(3)}</h3>
+                </Red>
+              )}{" "}
+            </Total>
+          </BuySell>
+        </Container>
       </MainDiv>
     );
   }
