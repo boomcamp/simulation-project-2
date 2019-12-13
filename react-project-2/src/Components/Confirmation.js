@@ -62,7 +62,6 @@ export default function AcccessibleTable(props) {
    };
 
    const confirm = () => {
-      setDone(true);
       if (props.amount) {
          Axios.post("http://localhost:4000/transactions", {
             coinID: id,
@@ -78,6 +77,7 @@ export default function AcccessibleTable(props) {
          }).catch(error => {
             console.log(error.response.data);
          });
+         setDone(true);
       }
    };
 

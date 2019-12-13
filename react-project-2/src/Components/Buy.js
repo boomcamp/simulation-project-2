@@ -159,11 +159,10 @@ export default function AcccessibleTable(props) {
                      alt="coin"
                   />
                   <h3 style={{ textTransform: "uppercase" }}>{symbol}</h3>
-                  <p>
-                     <span style={{ textTransform: "uppercase" }}>
-                        {Math.round(price.usd * 10000) / 10000}
-                     </span>
-                  </p>
+
+                  <span style={{ textTransform: "uppercase" }}>
+                     {Math.round(price.usd * 10000) / 10000}
+                  </span>
 
                   <div className={classes.div} style={{ marginBottom: "0vh" }}>
                      <Typography>
@@ -269,7 +268,11 @@ export default function AcccessibleTable(props) {
                      />
                   </Paper>
 
-                  <img src={checkout} className={classes.buysell} />
+                  <img
+                     src={checkout}
+                     className={classes.buysell}
+                     alt="checkout"
+                  />
                </div>
             </div>
          </div>

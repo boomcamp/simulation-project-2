@@ -3,15 +3,12 @@ import Axios from "axios";
 import { useParams } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import InputAdornment from "@material-ui/core/InputAdornment";
-import Paper from "@material-ui/core/Paper";
 import { Typography } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import AccountBalanceWalletIcon from "@material-ui/icons/AccountBalanceWallet";
 import TextField from "@material-ui/core/TextField";
-import SwapHorizIcon from "@material-ui/icons/SwapHoriz";
 import pic from "../assets/images/im.jpg";
 import Fade from "@material-ui/core/Fade";
-import { prototype } from "stream";
 
 const useStyles = makeStyles(theme => ({
    buysell: {
@@ -119,6 +116,7 @@ export default function AcccessibleTable(props) {
             console.log(newVal.coinQuantity);
             if (newVal.transaction === "buy")
                initBalance += newVal.coinQuantity;
+            else initBalance -= newVal.coinQuantity;
          });
          setBalance(initBalance);
       });

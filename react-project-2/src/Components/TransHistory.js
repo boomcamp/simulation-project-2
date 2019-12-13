@@ -102,12 +102,6 @@ export default function InvestmentTracking() {
       });
    }, [id]);
 
-   useEffect(() => {
-      Axios.get(`http://localhost:4000/transactions`).then(response => {
-         setTrans(response.data);
-      });
-   }, [id]);
-
    const [state, setState] = React.useState({
       left: false
    });
@@ -190,14 +184,14 @@ export default function InvestmentTracking() {
                </div>
                <div className="weatherInfo">
                   <div className="temperature">
-                     <img src={Com} style={{ width: "3vw" }} />
+                     <img src={Com} style={{ width: "3vw" }} alt="" />
                   </div>
                   <div className="description">
-                     <div className="weatherCondition">TOTAL</div>
+                     <div className="weatherCondition">Total Transactions</div>
                   </div>
                </div>
                <div className="date" style={{ fontSize: "24px" }}>
-                  BOUGHT
+                  BUY
                </div>
             </article>
 
@@ -207,13 +201,13 @@ export default function InvestmentTracking() {
                </div>
                <div className="weatherInfo">
                   <div className="temperature">
-                     <img src={Sell} style={{ width: "3vw" }} />
+                     <img src={Sell} style={{ width: "3vw" }} alt="" />
                   </div>
                   <div className="description">
-                     <div className="weatherCondition">TOTAL</div>
+                     <div className="weatherCondition">Total Transactions</div>
                   </div>
                </div>
-               <div className="date">SOLD</div>
+               <div className="date">SELL</div>
             </article>
 
             <article className="widget2">
@@ -222,7 +216,7 @@ export default function InvestmentTracking() {
                </div>
                <div className="weatherInfo">
                   <div className="temperature">
-                     <img src={Buy} style={{ width: "3vw" }} />
+                     <img src={Buy} style={{ width: "3vw" }} alt="" />
                   </div>
                   <div className="description">
                      <div className="weatherCondition">Total Transactions</div>
@@ -233,13 +227,17 @@ export default function InvestmentTracking() {
          </div>
          <div className={classes.table}>
             <MaterialTable
-               title="Invested Coins"
+               title="All Transactions"
                columns={[
                   {
                      title: "Logo",
                      render: rowData => (
                         <Link to={`/coin-history/${rowData.coinID}`}>
-                           <img src={rowData.image} className={classes.image} />
+                           <img
+                              src={rowData.image}
+                              className={classes.image}
+                              alt=""
+                           />
                         </Link>
                      )
                   },
@@ -279,14 +277,14 @@ export default function InvestmentTracking() {
                   },
 
                   {
-                     title: "Total Cost",
+                     title: "Price Bought / Sold",
                      render: rowData => (
                         <span>${Math.round(rowData.amount * 100) / 100}</span>
                      ),
                      type: "numeric"
                   },
                   {
-                     title: "Market Value",
+                     title: "Total Payment (+Trans fee)",
                      render: rowData => (
                         <span>
                            ${Math.round(rowData.totalAmount * 1000) / 1000}
@@ -297,13 +295,27 @@ export default function InvestmentTracking() {
                   {
                      title: "Transaction",
                      render: rowData => (
-                        <span
-                           style={{
-                              textTransform: "uppercase",
-                              color: "purple"
-                           }}
-                        >
-                           {rowData.transaction}
+                        <span>
+                           {rowData.transaction === "buy" ? (
+                              <p
+                                 style={{
+                                    textTransform: "uppercase",
+                                    color: "purple"
+                                 }}
+                              >
+                                 {" "}
+                                 {rowData.transaction}
+                              </p>
+                           ) : (
+                              <p
+                                 style={{
+                                    textTransform: "uppercase",
+                                    color: "blue"
+                                 }}
+                              >
+                                 {rowData.transaction}
+                              </p>
+                           )}
                         </span>
                      )
                   },
@@ -318,7 +330,8 @@ export default function InvestmentTracking() {
                ]}
                data={trans}
                options={{
-                  paging: false
+                  paging: false,
+                  search: false
                }}
             />
          </div>

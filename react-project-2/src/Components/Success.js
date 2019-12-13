@@ -77,7 +77,7 @@ export default function Success(props) {
       <Grow in>
          <div className={classes.con}>
             <div className={classes.confirm}>
-               <img src={got} className={classes.gif} />
+               <img src={got} className={classes.gif} alt="" />
                <Typography className={classes.successful}>
                   Successfully purchased{" "}
                   <span className={classes.name}>{data.name}</span> !
@@ -96,7 +96,7 @@ export default function Success(props) {
                >
                   Buy More
                </Button>
-               <Link to="/transaction-history">
+               <Link to={`/coin-history/${id}`}>
                   <p className={classes.dash}>Go to Dashboard</p>
                </Link>
             </div>

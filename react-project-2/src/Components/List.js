@@ -209,7 +209,8 @@ export default function List() {
                   ]}
                   data={data}
                   options={{
-                     paging: false
+                     paging: false,
+                     search: false
                   }}
                />
             )}
@@ -219,7 +220,7 @@ export default function List() {
                style={{ width: "0vw" }}
                activePage={pagi}
                onPageChange={onChange}
-               totalPages={629}
+               totalPages={631}
             />
          </Paper>
       </div>

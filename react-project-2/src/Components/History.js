@@ -1,11 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import MaterialTable from "material-table";
-import {
-   makeStyles,
-   createMuiTheme,
-   MuiThemeProvider
-} from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
 import Axios from "axios";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
@@ -58,12 +54,6 @@ const useStyles = makeStyles(theme => ({
    }
 }));
 
-// const theme = createMuiTheme({
-//    palette: {
-//       primary: { main: "purple" }
-//    }
-// });
-
 export default function InvestmentTracking() {
    const classes = useStyles();
    const [data, setData] = React.useState([]);
@@ -80,6 +70,7 @@ export default function InvestmentTracking() {
       Axios.get(`https://api.coingecko.com/api/v3/coins/${id}`).then(
          response => {
             setData(response.data.name + "'s Transaction History");
+            setImg(response.data.image.thumb);
          }
       );
    }, [id]);
@@ -88,7 +79,6 @@ export default function InvestmentTracking() {
       Axios.get(`http://localhost:4000/transactions`).then(response => {
          let buyData = response.data.filter(data => data.transaction === "buy");
          let coins = [...buyData.map(el => el.coinID)].toString();
-         // setState({ ...state, data: buyData });
          const pricesWs = new WebSocket(
             `wss://ws.coincap.io/prices?assets=${coins}`
          );
@@ -97,7 +87,6 @@ export default function InvestmentTracking() {
                coinList[e] = JSON.parse(msg.data)[`${e}`];
                setCoinLs(coinList);
                setTrans({ ...trans, data: buyData });
-               // console.log(coinList);
             });
          };
          setTrans(
@@ -122,7 +111,6 @@ export default function InvestmentTracking() {
                return val.coinID === id && val.transaction === "sell";
             }).length
          );
-         setImg(response.data.image);
       });
    }, [id]);
 
@@ -195,7 +183,9 @@ export default function InvestmentTracking() {
                </IconButton>
                <Typography variant="h6" className={classes.title}>
                   {data}
-                  <img src={img} />
+                  <Link to={`/coin-details/${id}`}>
+                     <img src={img} alt="" style={{ marginLeft: "5px" }} />
+                  </Link>
                </Typography>
             </Toolbar>
          </AppBar>
@@ -209,14 +199,14 @@ export default function InvestmentTracking() {
                </div>
                <div className="weatherInfo">
                   <div className="temperature">
-                     <img src={Com} style={{ width: "3vw" }} />
+                     <img src={Com} style={{ width: "3vw" }} alt="" />
                   </div>
                   <div className="description">
-                     <div className="weatherCondition">TOTAL</div>
+                     <div className="weatherCondition">Total Transactions</div>
                   </div>
                </div>
                <div className="date" style={{ fontSize: "24px" }}>
-                  BOUGHT
+                  BUY
                </div>
             </article>
 
@@ -226,13 +216,13 @@ export default function InvestmentTracking() {
                </div>
                <div className="weatherInfo">
                   <div className="temperature">
-                     <img src={Sell} style={{ width: "3vw" }} />
+                     <img src={Sell} style={{ width: "3vw" }} alt="" />
                   </div>
                   <div className="description">
-                     <div className="weatherCondition">TOTAL</div>
+                     <div className="weatherCondition">Total Transactions</div>
                   </div>
                </div>
-               <div className="date">SOLD</div>
+               <div className="date">SELL</div>
             </article>
 
             <article className="widget2">
@@ -243,7 +233,7 @@ export default function InvestmentTracking() {
                   <div className="weatherCondition1">Profit / Loss</div>
                </div>
                <div className="date1">
-                  <img src={Buy} style={{ width: "3vw" }} />
+                  <img src={Buy} style={{ width: "3vw" }} alt="" />
                </div>
             </article>
          </div>
@@ -279,14 +269,14 @@ export default function InvestmentTracking() {
                   },
 
                   {
-                     title: "Total Cost",
+                     title: "Price Bought / Sold",
                      render: rowData => (
                         <span>${Math.round(rowData.amount * 100) / 100}</span>
                      ),
                      type: "numeric"
                   },
                   {
-                     title: "Market Value",
+                     title: "Total Payment (+Trans fee)",
                      render: rowData => (
                         <span>
                            ${Math.round(rowData.totalAmount * 1000) / 1000}
@@ -297,12 +287,27 @@ export default function InvestmentTracking() {
                   {
                      title: "Transaction",
                      render: rowData => (
-                        <span
-                           style={{
-                              textTransform: "uppercase"
-                           }}
-                        >
-                           {rowData.transaction}
+                        <span>
+                           {rowData.transaction === "buy" ? (
+                              <p
+                                 style={{
+                                    textTransform: "uppercase",
+                                    color: "purple"
+                                 }}
+                              >
+                                 {" "}
+                                 {rowData.transaction}
+                              </p>
+                           ) : (
+                              <p
+                                 style={{
+                                    textTransform: "uppercase",
+                                    color: "blue"
+                                 }}
+                              >
+                                 {rowData.transaction}
+                              </p>
+                           )}
                         </span>
                      )
                   },
@@ -314,7 +319,7 @@ export default function InvestmentTracking() {
                      }
                   },
                   {
-                     title: "Profit",
+                     title: "Est. Profit",
                      type: "numeric",
                      render: rowData => {
                         var profitVal =
@@ -334,7 +339,7 @@ export default function InvestmentTracking() {
                      }
                   },
                   {
-                     title: "% Profit",
+                     title: "Est. Profit %",
                      type: "numeric",
                      render: rowData => {
                         var profitPercent =
@@ -356,7 +361,8 @@ export default function InvestmentTracking() {
                ]}
                data={trans}
                options={{
-                  paging: false
+                  paging: false,
+                  search: false
                }}
             />
          </div>

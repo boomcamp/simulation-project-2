@@ -6,7 +6,6 @@ import {
    YAxis,
    Tooltip,
    Legend,
-   ResponsiveContainer,
    ComposedChart,
    Bar
 } from "recharts";
@@ -118,56 +117,56 @@ export default function TabChart({ tab }) {
                className={classes.circle}
             />
          ) : (
-            <ResponsiveContainer width={750} height={320}>
-               <ComposedChart
-                  data={HistoricalPrice}
-                  margin={{
-                     top: 30,
-                     right: 20,
-                     bottom: 45,
-                     left: 70
-                  }}
-                  padding={0}
-               >
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <YAxis
-                     type="number"
-                     dataKey="price"
-                     domain={["auto", "auto"]}
-                     padding={{ bottom: 60 }}
-                  ></YAxis>
-                  <YAxis
-                     dataKey="volume"
-                     yAxisId="left"
-                     tickLine={true}
-                     axisLine={false}
-                     orientation="right"
-                     domain={[dataMin => 0, dataMax => dataMax * 4]}
-                     padding={{ bottom: 0 }}
-                  ></YAxis>
+            <ComposedChart
+               data={HistoricalPrice}
+               margin={{
+                  top: 30,
+                  right: 20,
+                  bottom: 45,
+                  left: 70
+               }}
+               padding={0}
+               width={750}
+               height={320}
+            >
+               <CartesianGrid strokeDasharray="3 3" />
+               <YAxis
+                  type="number"
+                  dataKey="price"
+                  domain={["auto", "auto"]}
+                  padding={{ bottom: 60 }}
+               ></YAxis>
+               <YAxis
+                  dataKey="volume"
+                  yAxisId="left"
+                  tickLine={true}
+                  axisLine={false}
+                  orientation="right"
+                  domain={[dataMin => 0, dataMax => dataMax * 4]}
+                  padding={{ bottom: 0 }}
+               ></YAxis>
 
-                  <XAxis dataKey="date" tick={<CustomizedAxisTick />} />
+               <XAxis dataKey="date" tick={<CustomizedAxisTick />} />
 
-                  <Tooltip content={<CustomTooltip />} />
+               <Tooltip content={<CustomTooltip />} />
 
-                  <Legend />
+               <Legend />
 
-                  <Line
-                     type="monotone"
-                     dataKey="price"
-                     stroke="#653e7d"
-                     dot={false}
-                     strokeWidth="2"
-                  />
+               <Line
+                  type="monotone"
+                  dataKey="price"
+                  stroke="#653e7d"
+                  dot={false}
+                  strokeWidth="2"
+               />
 
-                  <Bar
-                     dataKey="volume"
-                     yAxisId="left"
-                     fill="#19326e"
-                     domain={["auto", "auto"]}
-                  />
-               </ComposedChart>
-            </ResponsiveContainer>
+               <Bar
+                  dataKey="volume"
+                  yAxisId="left"
+                  fill="#19326e"
+                  domain={["auto", "auto"]}
+               />
+            </ComposedChart>
          )}
       </div>
    );

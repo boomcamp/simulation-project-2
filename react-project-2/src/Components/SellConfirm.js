@@ -4,9 +4,8 @@ import { useParams } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import { Typography } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
-import AccountBalanceIcon from "@material-ui/icons/AccountBalance";
 import Grow from "@material-ui/core/Grow";
-import Success from "./Success";
+import SellSuccess from "./SellSuccess";
 
 const useStyles = makeStyles(theme => ({
    second: {
@@ -41,6 +40,7 @@ export default function AcccessibleTable(props) {
    const [done, setDone] = React.useState(false);
    const [image, setImage] = React.useState(false);
    const [name, setName] = React.useState(false);
+   const [profitOrLoss, setProfitOrLoss] = React.useState(0);
 
    let { id } = useParams();
 
@@ -75,6 +75,7 @@ export default function AcccessibleTable(props) {
             currentCoinPrice: price.usd,
             transaction: "sell",
             timestamp: new Date().getTime()
+            // profitOrLoss: profitOrLoss
          }).catch(error => {
             console.log(error.response.data);
          });
@@ -83,9 +84,9 @@ export default function AcccessibleTable(props) {
 
    if (done) {
       return (
-         <Success
+         <SellSuccess
             buyMore={succ}
-            confirmAct={props.can}
+            confirmSell={props.can}
             handleDisplay={props.handleDisplay}
          />
       );

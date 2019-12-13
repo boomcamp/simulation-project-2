@@ -176,6 +176,7 @@ export default function AcccessibleTable(props) {
    const confirmAct = val => {
       setConfirmBy(val);
    };
+
    const confirmSell = val => {
       setConfirmBy(false);
       setSellCon(val);
@@ -283,10 +284,10 @@ export default function AcccessibleTable(props) {
                   {data.name} Details
                </Link>
 
-               <Link aria-current="page" className={classes.link}>
+               <Typography className={classes.link}>
                   <img src={shop} className={classes.shop} alt="shop" />
                   <span>Buy / Sell {data.name} </span>
-               </Link>
+               </Typography>
             </Breadcrumbs>
          </Paper>
 
