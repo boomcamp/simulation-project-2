@@ -1,12 +1,14 @@
 {
-  "transactions": [
+  "wallet": [
     {
-      "name": "Bitcoin",
-      "price": 7230.53,
-      "quantity": "7",
-      "transaction": "buy",
-      "id": 4
+      "id": 1,
+      "amount": 978193.8123410002
     },
+    {
+      "id": 2
+    }
+  ],
+  "transactions": [
     {
       "name": "Tezos",
       "price": 1.49,
@@ -44,20 +46,100 @@
       "id": 9
     },
     {
-      "name": "Bitcoin",
-      "price": 7132.41,
-      "totalPrice": 35662.05,
-      "quantity": "5",
+      "name": "Ethereum",
+      "price": 144.42,
+      "totalPrice": 144.42,
+      "quantity": "1",
       "transaction": "buy",
       "id": 10
     },
     {
-      "name": "Bitcoin",
-      "price": 7156.23,
-      "totalPrice": 57249.84,
-      "quantity": "8",
+      "name": "Ethereum",
+      "price": 144.42,
+      "totalPrice": 1299.78,
+      "quantity": "9",
       "transaction": "buy",
       "id": 11
+    },
+    {
+      "name": "Ethereum",
+      "price": 144.42,
+      "totalPrice": 1299.78,
+      "quantity": "9",
+      "transaction": "buy",
+      "id": 12
+    },
+    {
+      "name": "Ethereum",
+      "price": 144.42,
+      "totalPrice": 1299.78,
+      "quantity": "9",
+      "transaction": "buy",
+      "id": 13
+    },
+    {
+      "name": "Monero",
+      "price": 53.08,
+      "totalPrice": 53.08,
+      "quantity": "1",
+      "transaction": "buy",
+      "id": 14
+    },
+    {
+      "name": "Bitcoin",
+      "price": 7211.03,
+      "totalPrice": 7211.03,
+      "quantity": "1",
+      "transaction": "buy",
+      "id": 15
+    },
+    {
+      "name": "Bitcoin",
+      "price": 7217.1,
+      "totalPrice": 7217.1,
+      "quantity": "1",
+      "transaction": "buy",
+      "id": 16
+    },
+    {
+      "name": "Bitcoin",
+      "price": 7230.49,
+      "totalPrice": 7230.49,
+      "quantity": "1",
+      "transaction": "Sell",
+      "id": 17
+    },
+    {
+      "name": "Bitcoin",
+      "price": 7230.49,
+      "totalPrice": 7230.49,
+      "quantity": "1",
+      "transaction": "Sell",
+      "id": 18
+    },
+    {
+      "name": "XRP",
+      "price": 0.217659,
+      "totalPrice": 0.217659,
+      "quantity": "1",
+      "transaction": "buy",
+      "id": 19
+    },
+    {
+      "name": "XRP",
+      "price": 0.217659,
+      "totalPrice": 0.217659,
+      "quantity": "1",
+      "transaction": "Sell",
+      "id": 20
+    },
+    {
+      "name": "Bitcoin",
+      "price": 7227.5,
+      "totalPrice": 28910,
+      "quantity": "4",
+      "transaction": "Sell",
+      "id": 21
     }
   ]
 }

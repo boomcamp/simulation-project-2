@@ -10,13 +10,13 @@ import {
   Table,
   Grid,
   Button,
-  Icon,
   Header,
   Image,
   Modal,
   Input
 } from "semantic-ui-react";
 import Sell from "./sell";
+import { message } from "antd";
 
 const useStyles = theme => ({
   root: {
@@ -61,7 +61,7 @@ const useStyles = theme => ({
     marginLeft: theme.spacing(38)
   }
 });
-var z = [];
+// var z = [];
 class coins extends Component {
   constructor(props) {
     super(props);
@@ -75,7 +75,10 @@ class coins extends Component {
       open: false,
       totalcoin: "",
       totalCoins: [],
-      sellaction: false
+      sellaction: false,
+      wallet: [],
+      prevWallet: [],
+      disableButton: true
     };
   }
 
@@ -104,20 +107,37 @@ class coins extends Component {
       .then(
         axios.get("http://localhost:4000/transactions").then(res => {
           res.data.map(item => {
-            if (item.name == coinName) {
+            if (item.name === coinName) {
               this.setState({
                 totalCoins: this.state.totalCoins.concat(
                   parseInt(item.quantity)
                 )
               });
             }
+            // console.log(item.totalPrice);
           });
         })
       )
       .catch(err => console.log(err));
   }
 
-  handleClick = e => {
+  changeAmountValue(e) {
+    let totalwallet = this.state.wallet - this.state.price;
+    // console.log(totalwallet);
+    this.setState({
+      wallet: totalwallet
+    });
+  }
+
+  handlePurchaseClick = e => {
+    axios.get(`http://localhost:4000/wallet`).then(res => {
+      let { amount } = res.data[0];
+      this.setState({
+        wallet: amount,
+        prevWallet: amount
+      });
+    });
+
     axios
       .get(
         `https://api.coingecko.com/api/v3/coins/${this.props.match.params.id}/market_chart?vs_currency=usd&days=${e}`
@@ -132,42 +152,77 @@ class coins extends Component {
         this.setState({ chartData: arr });
       });
   };
+
   handleChange = e => {
-    if (e < 10) {
-      this.setState({
-        price: this.state.details.market_data.current_price.usd * e,
-        quantity: e
-      });
+    this.setState({ disableButton: false });
+    if (e.target.value) {
+      if (e.target.value < 10) {
+        let totalwallet = this.state.wallet - this.state.price;
+        this.setState(
+          {
+            price:
+              this.state.details.market_data.current_price.usd * e.target.value,
+            quantity: e.target.value,
+            wallet: totalwallet
+          },
+          () => {
+            this.changeAmountValue();
+          }
+        );
+      } else {
+        return false;
+      }
     } else {
-      return false;
+      this.setState(
+        {
+          price:
+            this.state.details.market_data.current_price.usd * e.target.value,
+          quantity: e.target.value,
+          wallet: this.state.prevWallet
+        },
+        () => {
+          this.changeAmountValue();
+        }
+      );
     }
   };
+
   onClick = e => {
-    axios({
-      method: `post`,
-      url: `http://localhost:4000/transactions`,
-      data: {
-        name: this.state.details.name,
-        price: this.state.details.market_data.current_price.usd,
-        totalPrice: this.state.price,
-        quantity: this.state.quantity,
-        transaction: "buy"
-      }
-    }).then(res => {});
-    alert("Successfully buy");
+    if (this.state.wallet >= this.state.details.market_data.current_price.usd) {
+      axios({
+        method: `post`,
+        url: `http://localhost:4000/transactions`,
+        data: {
+          name: this.state.details.name,
+          price: this.state.details.market_data.current_price.usd,
+          totalPrice: this.state.price,
+          quantity: this.state.quantity,
+          transaction: "buy"
+        }
+      }).then(res => {
+        console.log(res);
+        axios
+          .patch(`http://localhost:4000/wallet/1`, {
+            amount: this.state.wallet
+          })
+          .then(response => {
+            console.log(response);
+          });
+        message.success("Transaction complete");
+        this.setState({ quantity: "", disableButton: true });
+      });
+    } else {
+      message.error("Not enough wallet balance");
+    }
   };
-
-  handleClickOpen = () => {
-    this.state.open(true);
-  };
-
-  // handlesellOpen = () => {
-  //   this.setState({ sellaction: true });
-  // };
-  // handlesellDis = () => {
-  //   this.setState({ sellaction: false });
-  // };
+  closeModal() {
+    this.setState({
+      quantity: "",
+      disableButton: true
+    });
+  }
   render() {
+    console.log(this.state.wallet);
     var total = this.state.totalCoins.reduce((a, b) => a + b, 0);
 
     const { classes } = this.props;
@@ -255,11 +310,15 @@ class coins extends Component {
                 <Modal
                   size="large"
                   trigger={
-                    <Button color="teal" onClick={e => this.handleClick()}>
+                    <Button
+                      color="teal"
+                      onClick={e => this.handlePurchaseClick()}
+                    >
                       Purchase
                     </Button>
                   }
                   centered={true}
+                  onClose={() => this.closeModal()}
                   closeIcon
                 >
                   <Modal.Header>
@@ -291,20 +350,23 @@ class coins extends Component {
                       </Header>
                       <Input
                         placeholder="Quantity"
-                        onChange={e => this.handleChange(e.target.value)}
+                        onChange={e => this.handleChange(e)}
                         min="1"
                         value={this.state.quantity}
                       />
                       <Button
                         color="teal"
                         labelPosition="right"
+                        disabled={this.state.disableButton}
                         icon="cart"
                         content="Buy"
                         onClick={e => this.onClick()}
                       ></Button>
                     </Modal.Description>
                     <Modal.Description>
-                      <Typography variant="h5">Item</Typography>
+                      <Typography variant="h5">
+                        Wallet: {formatter.format(this.state.wallet)}
+                      </Typography>
                       <div className="ui clearing divider"></div>
 
                       <Typography variant="h6">
@@ -334,18 +396,29 @@ class coins extends Component {
                     </Modal.Description>
                   </Modal.Content>
                 </Modal>
-                <Modal>
-                  {/* {total ? (
-                    <Button onClick={this.handlesellOpen()}> Sell </Button>
-                  ) : (
-                    <Button onClick={this.handlesellDis()}></Button>
-                  )} */}
+                <Modal
+                  trigger={
+                    total ? (
+                      <Button color="teal" onClick={e => this.handleSellClick}>
+                        Sell
+                      </Button>
+                    ) : null
+                  }
+                  size="tiny "
+                  closeIcon
+                >
+                  <Modal.Content>
+                    <Sell
+                      total={total}
+                      details={this.state.details}
+                      quantity={this.state.quantity}
+                      price={this.state.price}
+                      wallets={this.state.wallet}
+                    />
+                  </Modal.Content>
                 </Modal>
               </Grid.Column>
-              <Grid.Column>
-                {" "}
-                <Sell />{" "}
-              </Grid.Column>
+              <Grid.Column></Grid.Column>
             </Grid>
 
             <div className="ui clearing divider"></div>

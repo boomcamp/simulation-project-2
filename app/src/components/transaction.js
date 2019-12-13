@@ -3,7 +3,6 @@ import { Table } from "semantic-ui-react";
 import axios from "axios";
 import { classes } from "istanbul-lib-coverage";
 import { withStyles } from "@material-ui/styles";
-import Paper from "@material-ui/core/Paper";
 import { Typography } from "@material-ui/core";
 
 const useStyles = theme => ({
