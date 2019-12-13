@@ -15,14 +15,14 @@ export default function SellIndex(props) {
                 <Transactionable CoinData={props.SelectedCoinData?props.SelectedCoinData:'bitcoin'}/>
                 <div className='transaction-history-title' style={mainText}>Transaction History</div>
             {/* Past Transaction History */}
-                <PastTransactions/>
+                <PastTransactions CoinData={props.SelectedCoinData?props.SelectedCoinData:'bitcoin'}/>
         </div>
     )
 }
 
 const sellIndexContainerStyle = {
     // width: '500px',
-    height: '500px',
+    // height: '500px',
     background: 'rgb(20, 57, 89)',
     marginTop: '20px'
 }

@@ -1,4 +1,14 @@
 import React, { useEffect, useState } from 'react'
+import { withStyles, makeStyles } from '@material-ui/core/styles';
+import Slider from '@material-ui/core/Slider';
+import Typography from '@material-ui/core/Typography';
+import FormControl from '@material-ui/core/FormControl';
+import OutlinedInput from '@material-ui/core/OutlinedInput';
+import InputLabel from '@material-ui/core/InputLabel';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import Axios from 'axios';
+import { sha256 } from 'js-sha256';
+
 
 export default function Transactionable(props) {
 
@@ -25,6 +35,7 @@ export default function Transactionable(props) {
                 oneyear: coin[0].price_change_percentage_1y_in_currency,
                 currentPrice: coin[0].current_price
             })
+            
             console.log(coin);
             // console.log(props.CoinData.transaction_id)
             const transactiondata = await fetch(`http://localhost:4000/transactions/${props.CoinData.transaction_id}`)
@@ -32,12 +43,9 @@ export default function Transactionable(props) {
             setTransactionState({
                 id: data.id,
                 coinRef: data.coinRef,
-                buyref:{
+                BuyRef:{
                     ...data.BuyRef
                 },
-                // price_from_buying: data.price_from_buying,
-                // amount_bought_usd: data.amount_bought_usd,
-                // crypto_bougth: data.BuyRef.Crypto_coin_bought,
                 timeRef: data.timeRef 
             });  
         })()
@@ -54,16 +62,75 @@ export default function Transactionable(props) {
     }
 
     const profit_loss_amount = (buyamunt, coinnum) => {
-        return(buyamunt * coinnum) - (state.currentPrice * coinnum);
+        return (state.currentPrice * coinnum) - (buyamunt * coinnum);
     }
 
     const profit_loss_percentage = (buyamunt, coinnum) => {
-        return(buyamunt * coinnum)/(state.currentPrice * coinnum);
+        return (buyamunt * coinnum) / (state.currentPrice * coinnum);
     }
 
     const net_amount_bought = (buyamunt, coinnum) => {
-        return(buyamunt * coinnum);
+        return (buyamunt * coinnum);
     }
+
+    const sell_coin = () => {
+
+        // if coin possession - coin sold is 0 then delete
+
+        // else
+        Axios.post(`http://localhost:4000/selltransactions`,{
+            id: sha256(new Date()+transactionState.BuyRef.amount_bought_usd+state.currentPrice+coin+transactionState.BuyRef.price_from_buying),
+            transaction_ref_id: transactionState.id,
+            number_of_ccoin_sold: coin,
+            price_from_date_sold: state.currentPrice,
+            net_amount_gain_loss: (transactionState.BuyRef.price_from_buying * coin) - (state.currentPrice * coin),
+            current_coin_possesion: transactionState.BuyRef.Crypto_coin_bought - coin,
+            coin_id:props.CoinData.coin_click_ontracker,
+            timeRef: new Date()
+        })
+        .then(data=>{
+            transactionState.BuyRef.Crypto_coin_bought = transactionState.BuyRef.Crypto_coin_bought - coin;
+            transactionState.BuyRef.amount_bought_usd = transactionState.BuyRef.amount_bought_usd - amount
+
+            Axios.put(`http://localhost:4000/transactions/${transactionState.id}`,{
+                ...transactionState
+            })
+            .then(data=>{
+                console.log(data)
+            })
+            .catch(e=>{
+                console.log(e)
+            })
+        })
+        .catch(e=>{
+            console.log(e)
+        })
+    }
+
+    const classes = useStyles();
+
+    const [amount, setAmount] = React.useState();
+    const [coin, setCoin] = React.useState();
+    const [coinValue, setCoinValue] = React.useState();
+
+    const changeValue = (value, type) => {
+        setCoinValue(state.currentPrice)
+        if(value < 0 ||type === 'amount'){
+            let net_amount = state.currentPrice * transactionState.BuyRef.Crypto_coin_bought
+            if(value > net_amount){
+                setAmount(net_amount)
+            }else{
+                setCoin(value / coinValue)
+            }
+        }
+        if(type === 'coin'){
+            if(value < 0 || value > parseInt(transactionState.BuyRef.Crypto_coin_bought)){
+                setCoin(transactionState.BuyRef.Crypto_coin_bought)
+            }else{
+                setAmount(value * coinValue)
+            }
+        }
+      }
 
     return (
         // console.log(conso)
@@ -73,11 +140,7 @@ export default function Transactionable(props) {
                 {state?<div className='coin-details-container' style={mainText}>
 
                 {/* <div style={{position:'absolute',background:state?`url(${state.image}) no-repeat`:'', width: '200px', height:'200px',zIndex:'0', backgroundSize:'cover', opacity: '0.3'}}/> */}
-
-
                     <div className='coin-name'>{state.name}</div>
-
-
                     <div className='current-coin-status-containers' style={coin_stats_style}>
                         <div className='coin-status hour'>
                             <div className='coin-time-ref'>
@@ -142,14 +205,13 @@ export default function Transactionable(props) {
                     </div>
                 </div>:console.log('none')}
             {/* Display Current Coin and Investment History */}
-
                 {
                     // console.log(transactionState?transactionState.buyref.Crypto_coin_bought:'')
                     transactionState?<div className="coin-current-investment-status-container">
                         <div className="coin-investment-summary" style={investmentStatsStlye}>
                             <div className="coin-status-container" style={{margin:'20px'}}>
                                 <div className="title-main-coin" >COIN</div>
-                                <div className="coin-number">{transactionState?transactionState.buyref.Crypto_coin_bought:''}</div>
+                                <div className="coin-number">{transactionState?transactionState.BuyRef.Crypto_coin_bought:''}</div>
                             </div>
                             <div>
                                 <div className="title-main-buy">CURRENT VALUE(USD)</div>
@@ -157,35 +219,84 @@ export default function Transactionable(props) {
                             </div>
                             <div>
                                 <div className="title-main-buy">BOUGHT VALUE(USD)</div>
-                                <div className="coin-number">{transactionState?transactionState.buyref.price_from_buying:''}</div>
+                                <div className="coin-number">{transactionState?transactionState.BuyRef.price_from_buying:''}</div>
                             </div>
                             <div style={{margin:'20px'}}>
                                 <div className="title-main-buy">NET AMOUNT BOUGHT(USD)</div>
-                                <div className="coin-number">{net_amount_bought(transactionState?transactionState.buyref.price_from_buying:'',transactionState?transactionState.buyref.Crypto_coin_bought:'')}</div>
+                                <div className="coin-number">{net_amount_bought(transactionState?transactionState.BuyRef.price_from_buying:'',transactionState?transactionState.BuyRef.Crypto_coin_bought:'')}</div>
                             </div>
                             <div style={{margin:'20px'}}>
                                 <div className="title-main-buy">PROFIT/LOSS(%)</div>
-                                <div className="coin-number">{profit_loss_percentage(transactionState?transactionState.buyref.price_from_buying:'',transactionState?transactionState.buyref.Crypto_coin_bought:'').toFixed(2) }</div>
+                                <div className="coin-number">{profit_loss_percentage(transactionState?transactionState.BuyRef.price_from_buying:'',transactionState?transactionState.BuyRef.Crypto_coin_bought:'').toFixed(2) }</div>
                             </div>
                             <div style={{margin:'20px'}}>
                                 <div className="title-main-buy">PROFIT/LOSS(USD)</div>
-                                <div className="coin-number">{profit_loss_amount(transactionState?transactionState.buyref.price_from_buying:'',transactionState?transactionState.buyref.Crypto_coin_bought:'').toFixed(3) }</div>
+                                <div className="coin-number">{profit_loss_amount(transactionState?transactionState.BuyRef.price_from_buying:'',transactionState?transactionState.BuyRef.Crypto_coin_bought:'').toFixed(3) }</div>
                             </div>
-                            
                         </div>
-
-                        <div className='buy-action-btn' style={sellbtn}>SELL COIN</div>
-                        
+                       
                     </div>:''
-
-                    
                 }
-                
-
             {/* Add Action Buttons for Sell */}
+
+            <div className='buy-action-btn' onClick={()=>sell_coin()} style={sellbtn}>SELL COIN</div>
+
+            <FormControl fullWidth className={classes.margin} variant="outlined" style={{margin:'10px', width: '318px'}}>
+                <InputLabel htmlFor="outlined-adornment-amount">Amount</InputLabel>
+                <OutlinedInput
+                id="outlined-adornment-amount"
+                value={amount}
+                onChange={(e)=>{
+                    setAmount(e.target.value)
+                    changeValue(e.target.value,'amount')
+                }}
+                startAdornment={<InputAdornment position="start">$</InputAdornment>}
+                labelWidth={60}
+                type='number'
+                defaultValue={0}
+                onKeyUp={(e)=>{
+                    setAmount(e.target.value)
+                    changeValue(e.target.value,'amount')
+                }}
+                />
+            </FormControl>
+
+            <FormControl fullWidth className={classes.margin} variant="outlined" style={{margin:'10px', width: '318px'}}>
+                <InputLabel htmlFor="outlined-adornment-amount">Coin</InputLabel>
+                <OutlinedInput
+                id="outlined-adornment-amount"
+                value={coin}
+                onChange={(e)=>{
+                    setCoin(e.target.value)
+                    changeValue(e.target.value,'coin')
+                }}
+                startAdornment={<InputAdornment position="start">C</InputAdornment>}
+                labelWidth={60}
+                type='number'
+                defaultValue={0}
+                onKeyUp={(e)=>{
+                    setCoin(e.target.value)
+                    changeValue(e.target.value,'coin')
+                }}
+                />
+            </FormControl>
         </div>
     )
-}
+};
+
+const useStyles = makeStyles(theme => ({
+    root: {
+      '& .PrivateNotchedOutline-root-110.MuiOutlinedInput-notchedOutline, .MuiFormLabel-root, .MuiInputLabel-root,.MuiInputLabel-formControl,.MuiInputLabel-animated,.MuiInputLabel-outlined': {
+        borderColor: 'rgb(3, 36, 64)',
+        color: 'white!important'
+      },
+      '& .MuiOutlinedInput-root.Mui-focused .PrivateNotchedOutline-root-110.MuiOutlinedInput-notchedOutline':{
+        borderColor: 'white',
+        color: 'white!important'
+      }
+    },
+  }));
+
 
 const sellbtn = {
     color: 'white',

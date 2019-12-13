@@ -144,7 +144,7 @@ export default function SearchForBuy(props) {
       />
 
         <FormControl fullWidth className={classes.margin} variant="outlined" style={{margin:'10px', width: '318px'}}>
-          <InputLabel htmlFor="outlined-adornment-amount">Amount</InputLabel>
+          <InputLabel   htmlFor="outlined-adornment-amount">Amount</InputLabel>
           <OutlinedInput
             id="outlined-adornment-amount"
             value={amount}
@@ -179,6 +179,10 @@ export default function SearchForBuy(props) {
       
       </>
     );
+}
+
+const inputStyle = {
+  color:'white'
 }
 
 const useStyles = makeStyles(theme => ({

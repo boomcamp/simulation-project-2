@@ -23,13 +23,17 @@ export default function CryptoList(props) {
         (async()=>{
             const responce = await fetch('http://localhost:4000/transactions')
             const coinlist = await responce.json();
-            for(let coin of coinlist){
-                const coinmarketdata = await fetch(`https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=${coin.coinRef.id}&order=market_cap_desc&per_page=100&page=1&sparkline=false`)
+            if(coinlist){
+                for(let coin of coinlist){
+                    if(typeof coin.coinRef !== 'undefined' && coin.BuyRef.Crypto_coin_bought){
 
-                const coindata = await coinmarketdata.json()
-
-                data.push({...coindata, transaction_id:coin.id})
-
+                        const coinmarketdata = await fetch(`https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=${coin.coinRef.id}&order=market_cap_desc&per_page=100&page=1&sparkline=false`)
+    
+                        const coindata = await coinmarketdata.json()
+                        
+                        data.push({...coindata, transaction_id:coin.id})
+                    }
+                }
             }
             setState(data)
             donesignal = true
@@ -37,26 +41,26 @@ export default function CryptoList(props) {
     },[])
 
 
-    const ExpandUserTransactionsData = (data) => {
+    // const ExpandUserTransactionsData = (data) => {
 
-        let datastate = [];
+    //     let datastate = [];
 
-        data.map(coin=>{
-            GetDetail(coin.coinRef.id)
-            .then(data=>{
-                datastate.push({
-                    symbol: data.data[0].symbol,
-                    priceChangePercentage: data.data[0].price_change_percentage_24h
-                })
-            })
-            .catch(e=>{
-                console.log(e)
-            })
-        })
-        setState(datastate)
-        donesignal = true;
-        return
-    }
+    //     data.map(coin=>{
+    //         GetDetail(coin.coinRef.id)
+    //         .then(data=>{
+    //             datastate.push({
+    //                 symbol: data.data[0].symbol,
+    //                 priceChangePercentage: data.data[0].price_change_percentage_24h
+    //             })
+    //         })
+    //         .catch(e=>{
+    //             console.log(e)
+    //         })
+    //     })
+    //     setState(datastate)
+    //     donesignal = true;
+    //     return
+    // }
 
     const [isBuying, setBuying] = useState(false)
     const [toggleInvest, setInvest] = useState(true)
