@@ -236,7 +236,7 @@ export default class investmentTrack extends React.Component {
             }}
             title="List of Investments"
             columns={this.state.columns}
-            data={this.state.data}
+            data={this.state.data.filter(x => x.invested !== 0)}
             options={{
               paging: false,
               search: false

@@ -13,10 +13,10 @@
     {
       "coinName": "Ethereum",
       "price": 143.86,
-      "invested": 20,
-      "amountSold": 80,
+      "invested": 0,
+      "amountSold": 100,
       "coinId": "ethereum",
-      "profit": 17.949999999999477,
+      "profit": 25.549999999999386,
       "image": "https://assets.coingecko.com/coins/images/279/small/ethereum.png?1547034048",
       "id": 3
     },
