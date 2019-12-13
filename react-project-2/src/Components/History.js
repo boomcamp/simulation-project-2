@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import MaterialTable from "material-table";
-import { makeStyles } from "@material-ui/core/styles";
+import {
+   makeStyles,
+   createMuiTheme,
+   MuiThemeProvider
+} from "@material-ui/core/styles";
 import Axios from "axios";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
-import Button from "@material-ui/core/Button";
 import IconButton from "@material-ui/core/IconButton";
 import MenuIcon from "@material-ui/icons/Menu";
 import Drawer from "@material-ui/core/Drawer";
@@ -55,12 +58,19 @@ const useStyles = makeStyles(theme => ({
    }
 }));
 
+// const theme = createMuiTheme({
+//    palette: {
+//       primary: { main: "purple" }
+//    }
+// });
+
 export default function InvestmentTracking() {
    const classes = useStyles();
    const [data, setData] = React.useState([]);
    const [trans, setTrans] = React.useState([]);
    const [buyLength, setBuyLength] = React.useState(0);
    const [sellLength, setSellLength] = React.useState(0);
+   const [img, setImg] = React.useState([]);
 
    let { id } = useParams();
    let coinList = {};
@@ -112,6 +122,7 @@ export default function InvestmentTracking() {
                return val.coinID === id && val.transaction === "sell";
             }).length
          );
+         setImg(response.data.image);
       });
    }, [id]);
 
@@ -184,6 +195,7 @@ export default function InvestmentTracking() {
                </IconButton>
                <Typography variant="h6" className={classes.title}>
                   {data}
+                  <img src={img} />
                </Typography>
             </Toolbar>
          </AppBar>
@@ -203,12 +215,14 @@ export default function InvestmentTracking() {
                      <div className="weatherCondition">TOTAL</div>
                   </div>
                </div>
-               <div className="date">BUY</div>
+               <div className="date" style={{ fontSize: "24px" }}>
+                  BOUGHT
+               </div>
             </article>
 
             <article className="widget1">
                <div className="weatherIcon">
-                  <h1>0</h1>
+                  <h1>{sellLength}</h1>
                </div>
                <div className="weatherInfo">
                   <div className="temperature">
@@ -218,7 +232,7 @@ export default function InvestmentTracking() {
                      <div className="weatherCondition">TOTAL</div>
                   </div>
                </div>
-               <div className="date">SELL</div>
+               <div className="date">SOLD</div>
             </article>
 
             <article className="widget2">
@@ -285,8 +299,7 @@ export default function InvestmentTracking() {
                      render: rowData => (
                         <span
                            style={{
-                              textTransform: "uppercase",
-                              color: "purple"
+                              textTransform: "uppercase"
                            }}
                         >
                            {rowData.transaction}

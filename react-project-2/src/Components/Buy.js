@@ -161,10 +161,7 @@ export default function AcccessibleTable(props) {
                   <h3 style={{ textTransform: "uppercase" }}>{symbol}</h3>
                   <p>
                      <span style={{ textTransform: "uppercase" }}>
-                        {symbol} ={" "}
-                        {circulatingFormat(
-                           Math.round(price.usd * 10000) / 10000
-                        )}
+                        {Math.round(price.usd * 10000) / 10000}
                      </span>
                   </p>
 

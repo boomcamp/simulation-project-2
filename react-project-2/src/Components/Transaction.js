@@ -17,6 +17,7 @@ import Sell from "./Sell";
 import Confirm from "./Confirmation";
 import bitcoin from "../assets/images/bitcoin1.png";
 import Fade from "@material-ui/core/Fade";
+import SellConfirm from "./SellConfirm";
 
 function TabPanel(props) {
    const { children, value, index, ...other } = props;
@@ -144,6 +145,9 @@ export default function AcccessibleTable(props) {
    const [coin, setCoin] = React.useState("");
    const [amount, setAmount] = React.useState("");
    const [display, setDisplay] = React.useState(true);
+   const [sellCon, setSellCon] = React.useState(false);
+   const [sellQuantity, setSellQuantity] = React.useState(0);
+   const [coinDiff, setCoinDiff] = React.useState(0);
 
    const [value, setValue] = React.useState(0);
 
@@ -165,12 +169,25 @@ export default function AcccessibleTable(props) {
       );
    }, [id]);
 
+   let cons;
+   let disp;
+   let sellConfirm;
+
    const confirmAct = val => {
       setConfirmBy(val);
    };
+   const confirmSell = val => {
+      setConfirmBy(false);
+      setSellCon(val);
+   };
 
-   let cons;
-   let disp;
+   const handleSellQuantity = val => {
+      setSellQuantity(val);
+   };
+
+   const handleCoinDifference = val => {
+      setCoinDiff(val);
+   };
 
    const trans = val => {
       setCoin(val);
@@ -199,6 +216,21 @@ export default function AcccessibleTable(props) {
             handleAmount={handleAmount}
             handleDisplay={handleDisplay}
             handleZero={handleZero}
+         />
+      );
+   }
+
+   if (sellCon) {
+      sellConfirm = (
+         <SellConfirm
+            can={confirmSell}
+            amount={amount}
+            coin={coin}
+            handleAmount={handleAmount}
+            handleDisplay={handleDisplay}
+            handleZero={handleZero}
+            sellQuantity={sellQuantity}
+            coinDiff={coinDiff}
          />
       );
    }
@@ -259,7 +291,7 @@ export default function AcccessibleTable(props) {
          </Paper>
 
          {cons}
-
+         {sellConfirm}
          {disp}
 
          <div className={classes.root}>
@@ -283,7 +315,13 @@ export default function AcccessibleTable(props) {
                />
             </TabPanel>
             <TabPanel value={value} index={1}>
-               <Sell />
+               <Sell
+                  confirmSell={confirmSell}
+                  handleSellQuantity={handleSellQuantity}
+                  handleAmount={handleAmount}
+                  handleDisplay={handleDisplay}
+                  handleCoinDifference={handleCoinDifference}
+               />
             </TabPanel>
          </div>
       </div>

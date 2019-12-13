@@ -11,11 +11,12 @@ import TextField from "@material-ui/core/TextField";
 import SwapHorizIcon from "@material-ui/icons/SwapHoriz";
 import pic from "../assets/images/im.jpg";
 import Fade from "@material-ui/core/Fade";
+import { prototype } from "stream";
 
 const useStyles = makeStyles(theme => ({
    buysell: {
       width: "21vw",
-      height: "30vh",
+      height: "29vh",
       margin: "0vh 0vw 0vh 0.5vw",
       zIndex: 3000
    },
@@ -75,8 +76,9 @@ const useStyles = makeStyles(theme => ({
    },
    textfield: {
       background: "white",
-      width: "8vw",
-      marginTop: "2vh"
+      width: "22vw",
+      marginTop: "0.7vh",
+      height: "0.5vh"
    }
 }));
 
@@ -89,6 +91,8 @@ export default function AcccessibleTable(props) {
    const [balance, setBalance] = React.useState([]);
    const [coin, setCoin] = useState("");
    const [amount, setAmount] = useState("");
+   const [earn, setEarn] = useState("");
+   const [error, setError] = useState(false);
    //    const [cancel, setCancel] = useState(false);
 
    let { id } = useParams();
@@ -125,7 +129,7 @@ export default function AcccessibleTable(props) {
    };
 
    const handleBuy = () => {
-      props.confirm(true);
+      props.confirmSell(true);
       props.handleDisplay(false);
    };
 
@@ -198,10 +202,7 @@ export default function AcccessibleTable(props) {
                   <h3 style={{ textTransform: "uppercase" }}>{symbol}</h3>
                   <p>
                      <span style={{ textTransform: "uppercase" }}>
-                        {symbol} ={" "}
-                        {circulatingFormat(
-                           Math.round(price.usd * 10000) / 10000
-                        )}
+                        {symbol} = {Math.round(price.usd * 10000) / 10000}
                      </span>
                   </p>
 
@@ -210,7 +211,7 @@ export default function AcccessibleTable(props) {
                         <span style={{ textTransform: "uppercase" }}>
                            {data.symbol}{" "}
                         </span>
-                        Total:
+                        Quantity:
                      </Typography>
                      <Typography className={classes.buy}>
                         {Math.round(amount * 1000) / 1000}
@@ -218,9 +219,9 @@ export default function AcccessibleTable(props) {
                   </div>
 
                   <div className={classes.div} style={{ marginBottom: "2vh" }}>
-                     <Typography>Total:</Typography>
+                     <Typography>Total Earnings:</Typography>
                      <Typography className={classes.buy}>
-                        ${circulatingFormat(Math.round(coin * 1000) / 1000)}
+                        ${circulatingFormat(Math.round(earn * 1000) / 1000)}
                      </Typography>
                   </div>
 
@@ -240,14 +241,14 @@ export default function AcccessibleTable(props) {
                      fontSize: "12px"
                   }}
                >
-                  Amount:
+                  Quantity:
                </p>
                <div className={classes.buysell}>
-                  <Paper
+                  <div
                      className={classes.buysell}
                      style={{
                         height: "6vh",
-                        marginBottom: "2vh",
+                        marginBottom: "3vh",
                         marginTop: "2vh",
                         background: "white",
                         display: "flex",
@@ -257,45 +258,24 @@ export default function AcccessibleTable(props) {
                   >
                      <TextField
                         id="outlined-number"
-                        type="number"
-                        ant="outlined"
-                        style={{ width: "8vw", paddingTop: "2vh" }}
-                        value={coin}
-                        onChange={e => {
-                           if (e.target.value > -1) {
-                              var net =
-                                 +e.target.value -
-                                 (+e.target.value + -e.target.value * 0.01) *
-                                    0.01;
-                              setAmount(net / price.usd);
-                              setCoin(e.target.value);
-                              props.amo(e.target.value);
-                              props.handleAmount(net / price.usd);
-                           }
-                        }}
-                        InputProps={{
-                           startAdornment: (
-                              <InputAdornment position="start">
-                                 &#36;
-                              </InputAdornment>
-                           )
-                        }}
-                     />
-                     <SwapHorizIcon
-                        style={{ marginLeft: "20px", marginRight: "20px" }}
-                     />
-                     <TextField
-                        id="outlined-number"
                         ant="outlined"
                         type="number"
-                        style={{ width: "8vw", margin: "2vw, 2vw, 2vw, 2vw" }}
+                        error={error}
+                        helperText={error ? "Not enough balance" : ""}
+                        className={classes.textfield}
                         value={amount}
+                        variant="outlined"
                         onChange={e => {
-                           if (e.target.value > -1) {
-                              setCoin(e.target.value * price.usd);
+                           if (e.target.value > balance) {
+                              setError(true);
+                           } else {
                               setAmount(e.target.value);
-                              props.handleAmount(e.target.value);
-                              props.amo(e.target.value * price.usd);
+                              props.handleSellQuantity(e.target.value);
+                              props.handleCoinDifference(
+                                 balance - e.target.value
+                              );
+                              setEarn(e.target.value * price.usd);
+                              setError(false);
                            }
                         }}
                         InputProps={{
@@ -306,7 +286,7 @@ export default function AcccessibleTable(props) {
                            )
                         }}
                      />
-                  </Paper>
+                  </div>
 
                   <img src={pic} className={classes.buysell} />
                </div>

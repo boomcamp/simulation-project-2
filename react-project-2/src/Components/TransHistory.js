@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import MaterialTable from "material-table";
 import { makeStyles } from "@material-ui/core/styles";
@@ -66,8 +66,6 @@ export default function InvestmentTracking() {
    const [buyLength, setBuyLength] = React.useState(0);
    const [sellLength, setSellLength] = React.useState(0);
    let { id } = useParams();
-   let coinList = {};
-   const [coinLs, setCoinLs] = useState({});
 
    useEffect(() => {
       Axios.get(`https://api.coingecko.com/api/v3/coins/${id}`).then(
@@ -198,7 +196,9 @@ export default function InvestmentTracking() {
                      <div className="weatherCondition">TOTAL</div>
                   </div>
                </div>
-               <div className="date">BUY</div>
+               <div className="date" style={{ fontSize: "24px" }}>
+                  BOUGHT
+               </div>
             </article>
 
             <article className="widget1">
@@ -213,7 +213,7 @@ export default function InvestmentTracking() {
                      <div className="weatherCondition">TOTAL</div>
                   </div>
                </div>
-               <div className="date">SELL</div>
+               <div className="date">SOLD</div>
             </article>
 
             <article className="widget2">

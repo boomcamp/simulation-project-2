@@ -63,17 +63,17 @@ export default function AcccessibleTable(props) {
 
    const confirm = () => {
       setDone(true);
-      if (props.amount) {
+      if (props.sellQuantity) {
          Axios.post("http://localhost:4000/transactions", {
             coinID: id,
             name: name,
             coin: symbol,
-            coinQuantity: props.amount,
-            amount: props.coin - +((props.coin - +(props.coin * 0.01)) * 0.01),
-            totalAmount: props.coin,
+            coinQuantity: props.sellQuantity,
+            amount: props.sellQuantity * price.usd,
+            totalAmount: props.sellQuantity * price.usd,
             image: image,
             currentCoinPrice: price.usd,
-            transaction: "buy",
+            transaction: "sell",
             timestamp: new Date().getTime()
          }).catch(error => {
             console.log(error.response.data);
@@ -90,6 +90,12 @@ export default function AcccessibleTable(props) {
          />
       );
    }
+
+   const formatter = new Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency: "USD",
+      minimumFractionDigits: 2
+   });
 
    const circulatingFormat = num => {
       return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
@@ -111,12 +117,12 @@ export default function AcccessibleTable(props) {
                      color: "gray"
                   }}
                >
-                  YOU ARE BUYING
+                  YOU ARE SELLING
                </p>
                <Typography
                   style={{ fontSize: "48px", color: "rgb(105, 63, 126)" }}
                >
-                  {Math.round(props.amount * 1000) / 1000}{" "}
+                  {Math.round(props.sellQuantity * 1000) / 1000}{" "}
                   <span style={{ textTransform: "uppercase" }}>{symbol}</span>
                </Typography>
                <p style={{ color: "gray" }}>
@@ -124,74 +130,46 @@ export default function AcccessibleTable(props) {
                   <span style={{ textTransform: "uppercase" }}>{symbol}</span>
                </p>
                <hr style={{ border: "1px solid gray", width: "20vw" }} />
-               <p
-                  style={{
-                     display: "flex",
-                     alignItems: "center",
-                     marginLeft: "5vw"
-                  }}
-               >
-                  <AccountBalanceIcon
-                     style={{
-                        marginRight: "10px",
-                        width: "30px",
-                        background: "gray",
-                        height: "30px",
-                        borderRadius: "20px",
-                        padding: "5px"
-                     }}
-                  />
+               <p>
                   <div
                      style={{
-                        display: "flex",
-                        flexDirection: "column",
-                        marginTop: "0px"
+                        marginTop: "0 auto"
                      }}
                   >
-                     <p>Payment Method</p>
+                     <p>Earnings:</p>
                      <p
                         style={{
                            fontSize: "18px",
                            fontWeight: "bold",
-                           marginLeft: "7px",
                            marginBottom: "15px"
                         }}
                      >
-                        Bank Account
+                        {circulatingFormat(
+                           formatter.format(props.sellQuantity * price.usd)
+                        )}
                      </p>
                   </div>
                </p>
                <hr style={{ border: "1px solid gray", width: "20vw" }} />
                <div style={{ textAlign: "justify", marginLeft: "7.5vw" }}>
                   <p>
-                     {Math.round(props.amount * 1000) / 1000}
+                     New
                      <span
                         style={{
                            textTransform: "uppercase",
+                           paddingRight: "2px",
                            paddingLeft: "2px"
                         }}
                      >
                         {symbol}
                      </span>
+                     Balance
                      <span style={{ letterSpacing: "7px" }}>
-                        ...........................
+                        ..................
                      </span>
-                     ${" "}
-                     {props.coin -
-                        +((props.coin - +(props.coin * 0.01)) * 0.01)}
+                     {Math.round(props.coinDiff * 10000) / 10000}
                   </p>
-                  <p>
-                     Transaction Fee (1%)
-                     <span style={{ letterSpacing: "7px" }}>
-                        .......................
-                     </span>
-                     ${" "}
-                     {circulatingFormat(
-                        Math.round(
-                           (props.coin - +(props.coin * 0.01)) * 0.01 * 1000
-                        ) / 1000
-                     )}
-                  </p>
+
                   <p
                      style={{
                         fontSize: "16px",
@@ -199,11 +177,13 @@ export default function AcccessibleTable(props) {
                         color: "rgb(105, 63, 126)"
                      }}
                   >
-                     Total
+                     Total Earnings
                      <span style={{ letterSpacing: "7px" }}>
-                        ...........................
+                        ..................
                      </span>
-                     ${circulatingFormat(props.coin)}
+                     {circulatingFormat(
+                        formatter.format(props.sellQuantity * price.usd)
+                     )}
                   </p>
                </div>
             </div>
@@ -218,7 +198,7 @@ export default function AcccessibleTable(props) {
                   style={{ width: "10vw", height: "5vh", marginTop: "3vh" }}
                   onClick={confirm}
                >
-                  Confirm Buy
+                  Confirm Sell
                </Button>
                <p className={classes.cancel} onClick={handleFunc}>
                   Cancel Transaction
