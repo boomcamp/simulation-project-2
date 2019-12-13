@@ -15,6 +15,8 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
+import Tabs from "@material-ui/core/Tabs";
+import Tab from "@material-ui/core/Tab";
 
 import Header from "./Header";
 
@@ -83,6 +85,7 @@ function App() {
         });
         setState({ ...state, data: filteredTrans });
 
+        //CALCULATE COIN TOTAL
         let result = response.data.reduce((c, v) => {
           const num = parseFloat(v.coinBalance);
           c[v.coinName] = (c[v.coinName] || 0) + num;
@@ -91,11 +94,18 @@ function App() {
 
         let newData = [];
 
-        // console.log(result);
+        
         for (var key in result) {
           newData.push({ coinName: key, totalValue: result[key] });
         }
         setTotalInvestment(newData);
+        // END CALCULATE COIN TOTAL
+
+        //CALCULATE INVESTMENTS
+          
+        console.log(response.data);
+
+
       })
       .catch(err => console.log(err));
   };
@@ -179,7 +189,7 @@ function App() {
       mode: "sell",
       status: "sold",
       coinBalance: 0,
-      amountBalance: 0
+      amountBalance: percentage.totalAmount
     };
     axios({
       method: "POST",
@@ -193,7 +203,8 @@ function App() {
           coinBalance: 0,
           status: "sold",
           priceSold: percentage.priceAfter,
-          amountBalance: percentage.totalAmount,
+          amountBalance: 0,
+          amountSold: percentage.totalAmount,
           dateSold: today,
           coinID: selected.coinID,
           value: parseFloat(selected.value),
@@ -218,6 +229,14 @@ function App() {
       })
       .catch(err => console.log(err));
   };
+
+  //HANDLE TABS
+  const [value, setValue] = React.useState(0);
+
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
+
   return (
     <>
       <Header />
@@ -244,12 +263,21 @@ function App() {
               display: hidden ? "none" : null
             }}
           >
-            <Grid item xs={12}>
+            <Grid item xs={12} >
               <Typography variant="h6" gutterBottom>
-                My Coin Wallet
+                My Wallet
               </Typography>
+              <Tabs
+                value={value}
+                indicatorColor="primary"
+                textColor="primary"
+                onChange={handleChange}
+              >
+                <Tab label="Coins" />
+                <Tab label="Investment" />
+              </Tabs>
             </Grid>
-            <Grid container spacing={1}>
+            <Grid container spacing={1} style={{ marginTop: "1%" }}>
               <Grid item xs={4}>
                 <Typography
                   variant="h7"
@@ -279,6 +307,28 @@ function App() {
                   </Grid>
                 </Grid>
               ))}
+            </Grid>
+            <Grid container spacing={2} style={{ marginTop: "1%" }}>
+              <Grid
+                item
+                xs={4}
+                style={{ display: "flex", justifyContent: "flex-start" }}
+              >
+                Total Amount Invested:
+              </Grid>
+              <Grid item xs={6}>
+                On Progress
+              </Grid>
+              <Grid
+                item
+                xs={4}
+                style={{ display: "flex", justifyContent: "flex-start" }}
+              >
+                Total Invested Balance:
+              </Grid>
+              <Grid item xs={6}>
+                On Progress
+              </Grid>
             </Grid>
           </Grid>
           {/* END COIN BALANCE */}
@@ -466,7 +516,11 @@ function App() {
                   <Typography variant="h6" gutterBottom>
                     COIN HAS BEEN SOLD
                   </Typography>
-                  <Grid container spacing={2} style={{ marginTop: "1%", marginBottom: "1%" }}>
+                  <Grid
+                    container
+                    spacing={2}
+                    style={{ marginTop: "1%", marginBottom: "1%" }}
+                  >
                     <Grid
                       item
                       xs={4}
@@ -475,7 +529,7 @@ function App() {
                       Amount Received:
                     </Grid>
                     <Grid item xs={6}>
-                      ${selected.amountBalance}
+                      ${selected.amountSold}
                     </Grid>
                     <Grid
                       item
