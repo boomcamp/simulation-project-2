@@ -7,7 +7,7 @@
       "paymentMethod": "Bank",
       "price": 7143.98,
       "coinCountT": 4.199339863773415,
-      "coinCountU": 4.199339863773415,
+      "coinCountU": 3.1993398637734147,
       "investment": 30000,
       "id": 3
     },
@@ -24,14 +24,30 @@
     },
     {
       "coin": "Bitcoin",
-      "date": "Dec 12, 2019, 05:01:40 PM",
+      "date": "Dec 13, 2019, 11:46:16 AM",
       "transaction": "Sell",
-      "Deposit": "Bank",
-      "profit": 0,
-      "loss": 3,
+      "deposit": "Bank",
+      "profit": 83,
+      "loss": 0,
       "coinCountSell": "1",
-      "amount": 7140.01,
+      "amount": 7226.55,
       "id": 5
+    },
+    {
+      "coin": "Bitcoin",
+      "date": "Dec 13, 2019, 01:25:26 PM",
+      "transaction": "Sell",
+      "deposit": "Bank",
+      "profit": 73,
+      "loss": 0,
+      "coinCountSell": "1",
+      "amount": 7216.52,
+      "id": 6
     }
-  ]
+  ],
+  "wallet": {
+    "name": "Balance",
+    "money": 50000,
+    "id": 1
+  }
 }

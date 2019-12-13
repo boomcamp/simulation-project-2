@@ -6,6 +6,7 @@ import ButtonTabs from "../Tabs/Tabs";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import BuyModal from "../Modal/BuyModal";
 import SellModal from "../Modal/SellModal";
+import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 
 const Main = styled.div`
   display: flex;
@@ -102,6 +103,18 @@ export default function CoinDetails({ match, history }) {
         </Loading>
       ) : (
         <Main>
+          <Btn
+            style={{
+              marginLeft: "80%",
+              padding: "20 0",
+              width: 60,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center"
+            }}
+          >
+            <ArrowBackIcon onClick={() => history.push("/")} />
+          </Btn>
           <Container>
             <img
               style={{ margin: "20px 20px", width: "15%" }}
@@ -171,7 +184,6 @@ export default function CoinDetails({ match, history }) {
                 <Btn onClick={() => setOpenSell(true)} id="sell">
                   Sell
                 </Btn>
-                <Btn onClick={() => history.push("/")}>Back</Btn>
               </div>
             </Details>
           </Container>

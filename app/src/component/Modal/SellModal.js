@@ -76,6 +76,7 @@ export default function SellModal({ setOpenSell, openSell, details }) {
   const [wallet, setWallet] = useState(0);
   const [profit, setProfit] = useState(0);
   const [loss, setLoss] = useState(0);
+  const [coinUpdate, setCoinUpdate] = useState(0);
 
   const fullScreen = useMediaQuery(theme.breakpoints.down("sm"));
 
@@ -109,11 +110,14 @@ export default function SellModal({ setOpenSell, openSell, details }) {
   }, []);
 
   const addTransaction = () => {
+    Axios.patch(`http://localhost:4000/transactions/${wallet.id}`, {
+      coinCountU: coinUpdate
+    });
     Axios.post(`http://localhost:4000/transactions`, {
       coin: details.localization.en,
       date: today,
       transaction: "Sell",
-      Deposit: payment,
+      deposit: payment,
       profit: profit,
       loss: loss,
       coinCountSell: coins,
@@ -242,6 +246,7 @@ export default function SellModal({ setOpenSell, openSell, details }) {
                 value={coins}
                 onChange={e => {
                   setCoins(e.target.value);
+                  setCoinUpdate(wallet.coinCountT - e.target.value);
                   setAmount(
                     e.target.value * details.market_data.current_price.usd
                   );
@@ -251,9 +256,9 @@ export default function SellModal({ setOpenSell, openSell, details }) {
                   const Investment = Math.ceil(e.target.value * wallet.price);
 
                   if (Investment < CurrentPrice) {
-                    setProfit(Investment - CurrentPrice);
+                    setProfit(CurrentPrice - Investment);
                   } else {
-                    setLoss(Investment - CurrentPrice);
+                    setLoss(CurrentPrice - Investment);
                   }
                 }}
                 endAdornment={

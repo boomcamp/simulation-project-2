@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
@@ -72,6 +72,7 @@ export default function BuyModal({ setOpenBuy, openBuy, details }) {
   const classes = useStyles();
   const [payment, setPayment] = useState("Bank");
   const [values, setValues] = useState(0);
+  const [balance, setBalance] = useState({});
 
   const fullScreen = useMediaQuery(theme.breakpoints.down("sm"));
 
@@ -100,8 +101,16 @@ export default function BuyModal({ setOpenBuy, openBuy, details }) {
   const handleChangePayment = event => {
     setPayment(event.target.value);
   };
+  useEffect(() => {
+    axios.get(`http://localhost:4000/wallet`).then(res => {
+      setBalance(res.data);
+    });
+  }, []);
 
   const addTransaction = () => {
+    axios.patch(`http://localhost:4000/wallet`, {
+      money: balance.money - parseInt(values)
+    });
     axios
       .post(`http://localhost:4000/transactions`, {
         coin: details.localization.en,

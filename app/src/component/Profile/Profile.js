@@ -1,20 +1,14 @@
 import React, { useState, useEffect } from "react";
 import Typography from "@material-ui/core/Typography";
 import Layout from "../Layout/Layout";
-import styled from "styled-components";
 import { makeStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
 import CardActionArea from "@material-ui/core/CardActionArea";
-import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
-import CardMedia from "@material-ui/core/CardMedia";
-import Button from "@material-ui/core/Button";
 import Divider from "@material-ui/core/Divider";
+import Paper from "@material-ui/core/Paper";
+import Tabs from "../Profile/CoinTabs";
 import Axios from "axios";
-
-function preventDefault(event) {
-  event.preventDefault();
-}
 
 const useStyles = makeStyles({
   depositContext: {
@@ -28,21 +22,41 @@ const useStyles = makeStyles({
     height: 140
   },
   root: {
-    marginTop: 10
+    width: "100%",
+    backgroundColor: "white",
+    height: "80vh"
+  },
+  table: {
+    maxWidth: "95%"
   }
+});
+
+const usd = new Intl.NumberFormat("en-US", {
+  style: "currency",
+  currency: "USD"
 });
 
 function Profile() {
   const classes = useStyles();
   const [data, setData] = useState([]);
+  const [balance, setBalance] = useState({});
 
   useEffect(() => {
     Axios.get(`http://localhost:4000/transactions`).then(res => {
       setData([...res.data]);
-      console.log(...res.data);
+    });
+    Axios.get(`http://localhost:4000/wallet`).then(res => {
+      setBalance(res.data);
     });
   }, []);
 
+  const totalCal = (details, type, key) => {
+    let total = 0;
+    details.map(d => {
+      d.transaction === type && (total += d[key]);
+    });
+    return usd.format(total);
+  };
   return (
     <Layout>
       <div
@@ -64,16 +78,9 @@ function Profile() {
               </Typography>
             </CardContent>
           </CardActionArea>
-          {data.map((prof, i) => (
-            <Typography
-              key={i}
-              className={classes.root}
-              align="center"
-              variant="h1"
-            >
-              {prof.profit}
-            </Typography>
-          ))}
+          <Typography style={{ margin: 10 }} align="center" variant="h1">
+            {data ? totalCal(data, "Sell", "profit") : null}
+          </Typography>
         </Card>
         <Card className={classes.card}>
           <CardActionArea>
@@ -88,8 +95,8 @@ function Profile() {
               </Typography>
             </CardContent>
           </CardActionArea>
-          <Typography className={classes.root} align="center" variant="h1">
-            {data.loss}
+          <Typography style={{ margin: 10 }} align="center" variant="h1">
+            {usd.format(balance.money)}
           </Typography>
         </Card>
         <Card className={classes.card}>
@@ -105,19 +112,25 @@ function Profile() {
               </Typography>
             </CardContent>
           </CardActionArea>
-          {data.map((prof, i) => (
-            <Typography
-              key={i}
-              className={classes.root}
-              align="center"
-              variant="h1"
-            >
-              {prof.loss}
-            </Typography>
-          ))}
+          <Typography style={{ margin: 10 }} align="center" variant="h1">
+            {data ? totalCal(data, "Sell", "loss") : null}
+          </Typography>
         </Card>
       </div>
-      <Divider className={classes.root} variant="middle" />
+      <Divider style={{ margin: 10 }} variant="middle" />
+      <Paper className={classes.root}>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            height: "80vh"
+          }}
+        >
+          <div style={{ display: "flex", flexDirection: "column" }}>
+            <Tabs rows={data} setRows={setData} />
+          </div>
+        </div>
+      </Paper>
     </Layout>
   );
 }
