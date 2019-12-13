@@ -1,9 +1,9 @@
 import React, {useEffect} from 'react';
 import MaterialTable from 'material-table';
-import NavBar from './tools/NavBar'
+// import NavBar from './tools/NavBar'
 import axios from 'axios'
 
-export default function MaterialTableDemo() {
+export default function TransactionHistory() {
     const [state, setState] = React.useState({
         columns: [
             {   title:"",
@@ -51,19 +51,19 @@ export default function MaterialTableDemo() {
 
         return () => { isCancelled=true };
     }, [])
-    const headerStyle={ textAlign: `left`, 
-                    color: `white`, 
-                    backgroundColor: `#3f51b5`, 
-                    padding: `30px`,
-                    margin: `0`}
+    // const headerStyle={ textAlign: `left`, 
+    //                 color: `white`, 
+    //                 backgroundColor: `#3f51b5`, 
+    //                 padding: `30px`,
+    //                 margin: `0`}
   return (
-    <div style={{display:`flex`}}>
-        <NavBar />
+    //<div style={{display:`flex`}}>
+    //     <NavBar />
 
         <MaterialTable
             style={{
-                width:`50%`,
-                margin:`180px auto`
+                // width:`50%`,
+                // margin:`180px auto`
             }}
             // components={{
             //     Toolbar: props => (<h2 className="tableHeader" style={headerStyle}>Transaction History</h2> ),
@@ -79,6 +79,6 @@ export default function MaterialTableDemo() {
             columns={state.columns}
             data={state.data}
         />
-    </div>
+    // </div>
   );
 }

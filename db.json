@@ -10,7 +10,7 @@
       "current_price": "n/a",
       "amountBuy": 0.999603,
       "coinPrice": 0.999603,
-      "profitOrLoss": 0.0003968423910000185,
+      "profitOrLoss": -0.00017992854000004055,
       "id": 1
     },
     {
@@ -23,7 +23,7 @@
       "current_price": "n/a",
       "amountBuy": 33.37599999999999,
       "coinPrice": 4.1,
-      "profitOrLoss": 1.3350400000000207,
+      "profitOrLoss": 1.0012800000000084,
       "id": 2
     },
     {
@@ -36,7 +36,7 @@
       "current_price": "n/a",
       "amountBuy": 3614.51,
       "coinPrice": 7229.02,
-      "profitOrLoss": -25771.456299997866,
+      "profitOrLoss": -40374.07669999823,
       "id": 3
     },
     {
@@ -49,7 +49,7 @@
       "current_price": "n/a",
       "amountBuy": 50.15,
       "coinPrice": 50.16,
-      "profitOrLoss": 5.516500000000178,
+      "profitOrLoss": 4.513500000000022,
       "id": 4
     },
     {
@@ -62,7 +62,7 @@
       "current_price": "n/a",
       "amountBuy": 0.026745203999999995,
       "coinPrice": 0.0022067,
-      "profitOrLoss": -4.5734298839998286e-8,
+      "profitOrLoss": -8.558465279999243e-8,
       "id": 5
     },
     {
@@ -75,7 +75,7 @@
       "current_price": "n/a",
       "amountBuy": 1.1142448716999998,
       "coinPrice": 0.00655059,
-      "profitOrLoss": -0.00008638740490290141,
+      "profitOrLoss": -0.00006947316775049537,
       "id": 6
     }
   ],
