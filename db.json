@@ -1,3 +1,135 @@
 {
-  "transactions": []
+  "mywallet": {
+    "amount": 10000,
+    "id": 1
+  },
+  "transactions": [
+    {
+      "totalAmount": 14427.98,
+      "usdAmount": 7213.99,
+      "cryptoAmount": 2,
+      "cryptoImage": "https://assets.coingecko.com/coins/images/1/small/bitcoin.png?1547033579",
+      "name": "Bitcoin",
+      "date": "13/12/2019 11:21:23",
+      "id": 86
+    },
+    {
+      "totalAmount": 289.1,
+      "usdAmount": 144.55,
+      "cryptoAmount": 2,
+      "cryptoImage": "https://assets.coingecko.com/coins/images/279/small/ethereum.png?1547034048",
+      "name": "Ethereum",
+      "date": "13/12/2019 11:24:9",
+      "id": 87
+    },
+    {
+      "totalAmount": 0.437726,
+      "usdAmount": 0.218863,
+      "cryptoAmount": 2,
+      "cryptoImage": "https://assets.coingecko.com/coins/images/44/small/xrp.png?1564480400",
+      "name": "XRP",
+      "date": "13/12/2019 11:29:51",
+      "id": 88
+    },
+    {
+      "totalAmount": 3,
+      "usdAmount": 1,
+      "cryptoAmount": 3,
+      "cryptoImage": "https://assets.coingecko.com/coins/images/325/small/tether.png?1547034089",
+      "name": "Tether",
+      "date": "13/12/2019 11:31:25",
+      "symbol": "usdt",
+      "id": 89
+    },
+    {
+      "totalAmount": 289.36,
+      "usdAmount": 144.68,
+      "cryptoAmount": 2,
+      "cryptoImage": "https://assets.coingecko.com/coins/images/279/small/ethereum.png?1547034048",
+      "name": "Ethereum",
+      "date": "13/12/2019 11:39:36",
+      "symbol": "eth",
+      "id": 90
+    },
+    {
+      "totalAmount": 14439.3,
+      "usdAmount": 7219.65,
+      "cryptoAmount": 2,
+      "cryptoImage": "https://assets.coingecko.com/coins/images/1/small/bitcoin.png?1547033579",
+      "name": "Bitcoin",
+      "date": "13/12/2019 11:39:55",
+      "symbol": "btc",
+      "id": 91
+    },
+    {
+      "totalAmount": 621.66,
+      "usdAmount": 207.22,
+      "cryptoAmount": 3,
+      "cryptoImage": "https://assets.coingecko.com/coins/images/780/small/bitcoin_cash.png?1547034541",
+      "name": "Bitcoin Cash",
+      "date": "13/12/2019 11:40:16",
+      "symbol": "bch",
+      "id": 92
+    },
+    {
+      "totalAmount": 289.48,
+      "usdAmount": 144.74,
+      "cryptoAmount": 2,
+      "cryptoImage": "https://assets.coingecko.com/coins/images/279/small/ethereum.png?1547034048",
+      "name": "Ethereum",
+      "date": "13/12/2019 11:51:19",
+      "symbol": "eth",
+      "id": 93
+    },
+    {
+      "totalAmount": 28905.48,
+      "usdAmount": 7226.37,
+      "cryptoAmount": 4,
+      "cryptoImage": "https://assets.coingecko.com/coins/images/1/small/bitcoin.png?1547033579",
+      "name": "Bitcoin",
+      "date": "13/12/2019 11:53:57",
+      "symbol": "btc",
+      "id": 94
+    },
+    {
+      "totalAmount": 5,
+      "usdAmount": 1,
+      "cryptoAmount": 5,
+      "cryptoImage": "https://assets.coingecko.com/coins/images/325/small/tether.png?1547034089",
+      "name": "Tether",
+      "date": "13/12/2019 11:56:57",
+      "symbol": "usdt",
+      "id": 95
+    },
+    {
+      "totalAmount": 7216.49,
+      "usdAmount": 7216.49,
+      "cryptoAmount": 1,
+      "cryptoImage": "https://assets.coingecko.com/coins/images/1/small/bitcoin.png?1547033579",
+      "name": "Bitcoin",
+      "date": "13/12/2019 13:22:33",
+      "symbol": "btc",
+      "id": 96
+    },
+    {
+      "totalAmount": 57762.4,
+      "usdAmount": 7220.3,
+      "cryptoAmount": 8,
+      "cryptoImage": "https://assets.coingecko.com/coins/images/1/small/bitcoin.png?1547033579",
+      "name": "Bitcoin",
+      "date": "13/12/2019 15:20:27",
+      "symbol": "btc",
+      "id": 97
+    },
+    {
+      "totalAmount": 5.16,
+      "usdAmount": 1.72,
+      "cryptoAmount": 3,
+      "cryptoImage": "https://assets.coingecko.com/coins/images/976/small/Tezos-logo.png?1547034862",
+      "name": "Tezos",
+      "date": "13/12/2019 16:39:46",
+      "symbol": "xtz",
+      "id": 98
+    }
+  ]
 }

@@ -50,8 +50,19 @@
   padding-top: 10px;
 }
 .collapse {
-  font-weight: bold;
+  /* font-weight: bold;
+  display: flex;
+  flex-wrap: wrap; */
+
 }
 .details{
   font-weight: bold;
+}
+/* transaction */
+.transactionContainer{
+  padding-left: 50px;
+  margin-top: 10px;
+  justify-content: space-around;
+  display: flex;
+
 }

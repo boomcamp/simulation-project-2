@@ -12,10 +12,11 @@ export default class Details extends Component {
   }
 
   render() {
-    console.log(this.props)
+   //
+    // console.log(this.props)
     return (
         <div className='details'> 
-      
+        
           <Descriptions
             style={{ textAlign: "center" ,fontWeight:'bold'}}
             bordered

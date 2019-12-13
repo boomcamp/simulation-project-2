@@ -41,7 +41,7 @@ export default class CoinChart extends Component {
       `https://api.coingecko.com/api/v3/coins/${this.props.id.id}/market_chart?vs_currency=usd&days=1
         `
     ).then(res => {
-      console.log(res);
+     // console.log(res);
       let results = res.data.prices.map(el => {
         return {
           date: new Date(el[0]).toLocaleDateString("en-US", options),
@@ -68,7 +68,7 @@ export default class CoinChart extends Component {
       `https://api.coingecko.com/api/v3/coins/${this.props.id.id}/market_chart?vs_currency=usd&days=${e}
       `
     ).then(res => {
-      console.log(res);
+      //console.log(res);
       let results = res.data.prices.map(el => {
         return {
           date: new Date(el[0]).toLocaleDateString("en-US", options),
@@ -80,7 +80,7 @@ export default class CoinChart extends Component {
   };
 
   render() {
-    console.log(this.state.data);
+    //console.log(this.state.data);
     return (
       <div className="mainContainer">
         <div>{/* <Homepage/> */}</div>
