@@ -29,7 +29,7 @@ body {
   border-radius: 10px;
   width: 75%;
   margin-top: 50px;
-  margin-left: 100px;
+  margin-left: 50px;
 }
 
 .detail-cont {
@@ -75,11 +75,17 @@ body {
   margin-left: 10px;
   border: 3px solid lightgray;
   border-radius: 10px;
-  height: 300px;
-  width: 300px;
+  height: 250px;
+  width: 430px;
   padding-top: 10px;
-  padding-left: 10px;
+  padding-left: 20px;
   font-size: 25px;
+}
+
+.total {
+  font-size: 30px;
+  padding-top: 40px;
+  padding-left: 10px;
 }
 
 .upcase {
@@ -143,6 +149,10 @@ body {
 .r {
   display: flex;
   flex-direction: row;
+}
+
+.right {
+  margin-right: 50px;
 }
 
 @font-face {

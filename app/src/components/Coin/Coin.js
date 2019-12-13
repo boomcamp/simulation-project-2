@@ -21,10 +21,10 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import TextField from "@material-ui/core/TextField";
 import SyncAltIcon from "@material-ui/icons/SyncAlt";
 import AccountBalanceIcon from "@material-ui/icons/AccountBalance";
-import MonetizationOnIcon from "@material-ui/icons/MonetizationOn";
 import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
 import Divider from "@material-ui/core/Divider";
-import { toast } from "react-toastify";
+import { message } from "antd";
+import "antd/dist/antd.css";
 import "../../App.css";
 
 const day = [
@@ -55,11 +55,11 @@ export default class Coindetail extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      data: [],
       columns: [],
       toggle: false,
       val: "",
-      usd: ""
+      usd: "",
+      data: []
     };
   }
 
@@ -152,7 +152,8 @@ export default class Coindetail extends React.Component {
       profit: 0,
       logo: this.state.small
     });
-    toast("Investment Successful !");
+    this.setState({ toggle: false, val: "", usd: "" });
+    message.info("Investment Successful!", 1);
   };
 
   render() {
@@ -204,14 +205,6 @@ export default class Coindetail extends React.Component {
               >
                 <ShoppingCartIcon />
                 Buy
-              </Button>{" "}
-              <Button
-                variant="contained"
-                color="secondary"
-                style={{ width: 100 }}
-                onClick={this.handleClickOpen}
-              >
-                <MonetizationOnIcon /> sell
               </Button>
               <Dialog
                 open={this.state.toggle}

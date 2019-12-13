@@ -12,13 +12,10 @@ export default class Header extends React.Component {
             <div className="title-text">Cryptocurrency</div>
           </Link>
         </MDBNavbarBrand>
-        <div>
+        <div className="right">
           <Link to={"/investment"}>
             <Button color="primary">Investment Tracking</Button>
-          </Link>{" "}
-          {/* <Link to="/"> */}
-          <Button color="primary">Transaction Logs</Button>
-          {/* </Link> */}
+          </Link>
         </div>
       </MDBNavbar>
     );
