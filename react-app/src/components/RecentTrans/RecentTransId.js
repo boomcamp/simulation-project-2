@@ -44,7 +44,7 @@ const useStyles = makeStyles(theme => ({
     margin: "30px auto",
     display: "flex",
     flexDirection: "row",
-    justifyContent: "space-between"
+    justifyContent: "space-evenly"
   },
   root: {
     display: "flex"
@@ -77,22 +77,21 @@ export default function BuySell(props) {
     axios.get(`http://localhost:4000/transactions`).then(response => {
       setBuyLength(
         response.data.filter(val => {
-          return val.transaction === "Buy";
+          return val.coinId === id && val.transaction === "Buy";
         }).length
       );
       setSellLength(
         response.data.filter(val => {
-          return val.transaction === "Sell";
+          return val.coinId === id && val.transaction === "Sell";
         }).length
       );
       setTransaction(
         response.data.filter(val => {
-          return val.transaction;
+          return val.coinId === id && val.transaction;
         }).length
       );
     });
   }, [id]);
-
   return (
     <div>
       <div

@@ -18,6 +18,7 @@ import MonetizationOnOutlinedIcon from "@material-ui/icons/MonetizationOnOutline
 import SwapHorizIcon from "@material-ui/icons/SwapHoriz";
 import Buy from "../Buy/Buy";
 import Sell from "../Sell/Sell";
+import Swal from "sweetalert2";
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -111,7 +112,6 @@ const useStyles = makeStyles(theme => ({
 
 export default function BuySell(props) {
   const classes = useStyles();
-  const [loader, setLoader] = useState(false);
   const { id } = useParams();
   const [data, setData] = useState([]);
   const [price, setPrice] = useState([]);
@@ -119,35 +119,77 @@ export default function BuySell(props) {
   const [image, setImage] = useState([]);
   const [coin, setCoin] = useState(null);
   const [amount, setAmount] = useState(0);
-  const [sellCoin, setSellCoin] = useState(null);
+  const [sellCoin, setSellCoin] = useState(0);
   const [sellAmount, setSellAmount] = useState(0);
+  const [profitOrLoss, setProfitOrLoss] = useState(0);
   const [buyBtn, setBuyBtn] = useState(false);
   const [sellBtn, setSellBtn] = useState(false);
-  const [balance, setBalance] = useState(false);
+  const [balance, setBalance] = useState();
+  const [error, setError] = useState(false);
+  const [newBalance, setNewBalance] = useState(false);
 
   useEffect(() => {
-    setLoader(true);
     axios.get(`https://api.coingecko.com/api/v3/coins/${id}`).then(response => {
       setData(response.data);
       setPrice(response.data.market_data.current_price.usd);
       setSymbol(response.data.symbol);
       setImage(response.data.image.small);
-      // console.log(response.data);
     });
   }, [id]);
 
+  let totalSellAmount = sellCoin * +price;
+
   useEffect(() => {
-    axios.get(`http://localhost:4000/transactions`).then(response => {
-      let initBalance = 0;
-      let fArray = response.data.filter(val => {
-        return val.coinId === id;
+    axios
+      .get(`http://localhost:4000/transactions`)
+      .then(response => {
+        let initBalance = 0;
+        let fArray = response.data.filter(val => {
+          return val.coinId === id;
+        });
+        fArray.forEach(newVal => {
+          console.log(newVal.coinQuantity);
+          if (newVal.transaction === "Buy") initBalance += newVal.coinQuantity;
+          else {
+            initBalance -= newVal.coinQuantity;
+          }
+        });
+        setBalance(initBalance.toFixed(6));
+        return axios.get(`http://localhost:4000/transactions?coinId=${id}`);
+      })
+      .then(response => {
+        console.log(response);
+        let aCurrentCointPrice = 0;
+        let count = 0;
+        var stat = true;
+        var statChecker = true;
+        let array = response.data.reverse();
+        array.map((x, i) => {
+          if (x.transaction === "Buy" && stat) {
+            statChecker = false;
+            aCurrentCointPrice += x.currentCoinPrice;
+            count++;
+          } else if (x.transaction === "Sell") {
+            if (!statChecker) {
+              stat = false;
+            }
+          }
+          return x;
+        });
+
+        console.log(price, aCurrentCointPrice, count);
+        console.log(
+          ((price - aCurrentCointPrice / count) /
+            (aCurrentCointPrice / count)) *
+            100
+        );
+        setProfitOrLoss(
+          ((price - aCurrentCointPrice / count) /
+            (aCurrentCointPrice / count)) *
+            100
+        );
       });
-      fArray.forEach(newVal => {
-        if (newVal.transaction === "buy") initBalance += newVal.coinQuantity;
-        setBalance(newVal.coinQuantity);
-      });
-    });
-  }, [id]);
+  }, [id, price]);
 
   const formatter = new Intl.NumberFormat("en-US", {
     style: "currency",
@@ -178,8 +220,27 @@ export default function BuySell(props) {
   let sell;
 
   if (sellBtn) {
-    sell = <Sell amount={amount} coin={coin} cancel={handleSell} />;
+    if (balance <= 0 || error === true) {
+      Swal.fire({
+        icon: "error",
+        title: `Unable to Sell ${data.name}`,
+        text: `Insufficient ${data.name} Shares`
+      });
+    } else {
+      sell = (
+        <Sell
+          sellAmount={sellAmount}
+          sellCoin={sellCoin}
+          newBalance={newBalance}
+          balance={balance}
+          cancel={handleSell}
+          setSellAmount={setSellAmount}
+          setSellCoin={setSellCoin}
+        />
+      );
+    }
   }
+
   return (
     <div>
       <div className={classes.root}>
@@ -312,7 +373,7 @@ export default function BuySell(props) {
                   </span>
                 </div>
                 <div className={classes.subtitleDiv}>
-                  <span className={classes.subtitle}>Total Amount:</span>
+                  <span className={classes.subtitle}> Amount:</span>
                   <span className={classes.value}>
                     {formatter.format(coin)}
                   </span>
@@ -342,44 +403,32 @@ export default function BuySell(props) {
               >
                 <div className={classes.inputDiv}>
                   <TextField
-                    label="Amount"
                     id="outlined-start-adornment"
-                    InputProps={{
-                      startAdornment: (
-                        <InputAdornment position="start">&#36;</InputAdornment>
-                      )
-                    }}
-                    variant="outlined"
-                    value={sellCoin}
-                    type="number"
-                    onChange={e => {
-                      setSellAmount(e.target.value / price);
-                      setSellCoin(e.target.value);
-                    }}
-                  />
-                </div>
-                <div style={{ marginTop: 26 }}>
-                  <SwapHorizIcon />
-                </div>
-                <div className={classes.inputDiv}>
-                  <TextField
-                    id="outlined-start-adornment"
+                    label="Quantity"
+                    error={error}
+                    helperText={error ? "Not Enough Balance" : ""}
                     InputProps={{
                       endAdornment: (
-                        <InputAdornment
-                          style={{ textTransform: "uppercase" }}
-                          position="start"
-                        >
-                          {symbol}
+                        <InputAdornment position="start">
+                          {props.symbol}
                         </InputAdornment>
                       )
                     }}
                     variant="outlined"
                     type="number"
-                    value={sellAmount}
+                    value={sellCoin}
                     onChange={e => {
-                      setSellCoin(e.target.value * price);
-                      setSellAmount(e.target.value);
+                      if (+e.target.value > +balance) {
+                        setError(true);
+                      } else {
+                        setSellAmount(props.price * +e.target.value);
+                        // setSoldQuantity(e.target.value);
+                        setNewBalance(+balance - +e.target.value);
+                        setError(false);
+                      }
+                      if (e.target.value > -1) {
+                        setSellCoin(+e.target.value);
+                      }
                     }}
                   />
                 </div>
@@ -387,20 +436,17 @@ export default function BuySell(props) {
               <Paper style={{ paddingBottom: 20 }}>
                 <div className={classes.subtitleDiv}>
                   <span className={classes.subtitle}>
-                    Current
                     <p style={{ textTransform: "uppercase" }}>
                       {"\xa0" + data.symbol + "\xa0"}
                     </p>{" "}
-                    Price:
+                    Quantity:
                   </span>
-                  <span className={classes.value}>
-                    {formatter.format(price)}
-                  </span>
+                  <span className={classes.value}>{sellCoin}</span>
                 </div>
                 <div className={classes.subtitleDiv}>
                   <span className={classes.subtitle}>
                     <p style={{ textTransform: "uppercase" }}>
-                      Current {data.symbol} Balance
+                      Current {data.symbol} Shares
                     </p>
                   </span>
                   <span className={classes.value}>{balance}</span>
@@ -408,7 +454,7 @@ export default function BuySell(props) {
                 <div className={classes.subtitleDiv}>
                   <span className={classes.subtitle}>Total:</span>
                   <span className={classes.value}>
-                    {formatter.format(coin)}
+                    {formatter.format(totalSellAmount)}
                   </span>
                 </div>
                 <Button

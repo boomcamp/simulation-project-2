@@ -2,52 +2,72 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Button, Paper, Typography } from "@material-ui/core";
 import "semantic-ui-css/semantic.min.css";
-import { NavLink, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import AccountBalanceIcon from "@material-ui/icons/AccountBalance";
 import CreditCardIcon from "@material-ui/icons/CreditCard";
+import Swal from "sweetalert2";
 
 export default function BuySell(props) {
-  const [loader, setLoader] = useState(false);
   const { id } = useParams();
   const [data, setData] = useState([]);
   const [price, setPrice] = useState([]);
   const [symbol, setSymbol] = useState([]);
   const [image, setImage] = useState([]);
-  const [balance, setBalance] = useState([]);
+  const [coinId, setCoinId] = useState([]);
 
-  let coinval = props.coin;
-  let coinfee = props.coin * 0.1;
-  let totalfee = +coinval + +coinfee;
-
-  useEffect(() => {
-    setLoader(true);
-    axios.get(`https://api.coingecko.com/api/v3/coins/${id}`).then(response => {
-      setData(response.data);
-      setPrice(response.data.market_data.current_price.usd);
-      setSymbol(response.data.symbol);
-      setImage(response.data.image.small);
-      // console.log(response.data);
-    });
-  }, [id]);
+  let totalfee = +props.sellCoin * +price;
+  let coinQuantity = props.sellCoin;
 
   const formatter = new Intl.NumberFormat("en-US", {
     style: "currency",
     currency: "USD",
     minimumFractionDigits: 2
   });
+
   useEffect(() => {
-    axios.get(`http/localhost:4000/transactions`).then(response => {
-      let initBalance = 0;
-      let fArray = response.data.filter(val => {
-        return val.coinId === id;
-      });
-      fArray.forEach(newVal => {
-        console.log(newVal.coinQuantity);
-        if (newVal.transaction === "buy") initBalance += newVal.coinQuantity;
-      });
-      setBalance(initBalance);
+    axios.get(`https://api.coingecko.com/api/v3/coins/${id}`).then(response => {
+      setData(response.data);
+      setPrice(response.data.market_data.current_price.usd);
+      setSymbol(response.data.symbol);
+      setCoinId(response.data.id);
+      setImage(response.data.image.small);
     });
   }, [id]);
+
+  const handleSellConfirm = val => {
+    if (coinQuantity) {
+      axios
+        .post("http://localhost:4000/transactions", {
+          name: data.name,
+          coin: symbol,
+          img: image,
+          coinId: coinId,
+          currentPrice: price,
+          coinQuantity: coinQuantity,
+          totalAmount: totalfee,
+          transaction: "Sell",
+          timestamp: new Date().getTime()
+        })
+        .then(() => {
+          props.cancel(false);
+          props.setSellAmount(0);
+          props.setSellCoin(0);
+          Swal.fire({
+            icon: "success",
+            title: `Succesfully sold ${data.name}`,
+            footer: `<a href=/investment-tracking>View Dashboard</a>`
+          });
+        })
+        .catch(e => console.log(e.response));
+    } else {
+      props.cancel(false);
+      Swal.fire({
+        icon: "error",
+        title: `Unable to Sell ${data.name}`,
+        text: "Empty Transaction"
+      });
+    }
+  };
 
   return (
     <Paper
@@ -79,7 +99,7 @@ export default function BuySell(props) {
                 fontWeight: "bold"
               }}
             >
-              {Math.round(props.amount * 10000) / 10000} {data.symbol}
+              {Math.round(props.sellCoin * 10000) / 10000} {data.symbol}
             </span>
             <span style={{ padding: "10px 0px 10px 0px" }}>
               @ {formatter.format(price)} per{" "}
@@ -149,10 +169,10 @@ export default function BuySell(props) {
                   }}
                 >
                   <span style={{ textTransform: "uppercase" }}>
-                    {Math.round(props.amount * 10000) / 10000} {data.symbol}
+                    {Math.round(props.sellCoin * 10000) / 10000} {data.symbol}
                   </span>
                   <span style={{ textTransform: "uppercase" }}>
-                    Coin Base Fee
+                    Updated {data.name} Shares
                   </span>
                   <span
                     style={{
@@ -161,7 +181,7 @@ export default function BuySell(props) {
                       fontSize: 18
                     }}
                   >
-                    Total
+                    Total Earnings
                   </span>
                 </div>
               </div>
@@ -190,13 +210,18 @@ export default function BuySell(props) {
                     <Button
                       variant="contained"
                       style={{ backgroundColor: "#6fc5d5" }}
+                      onClick={handleSellConfirm}
                     >
-                      Confirm Buy
+                      Confirm Sell
                     </Button>
                     <Button
                       variant="contained"
                       style={{ backgroundColor: "#6fc5d5" }}
-                      onClick={() => props.cancel(false)}
+                      onClick={() => {
+                        props.cancel(false);
+                        props.setSellAmount(0);
+                        props.setSellCoin(0);
+                      }}
                     >
                       Cancel
                     </Button>
@@ -212,8 +237,8 @@ export default function BuySell(props) {
                     justifyContent: "space-evenly"
                   }}
                 >
-                  <span>{formatter.format(coinval)}</span>
-                  <span>{formatter.format(coinfee)}</span>
+                  <span>{formatter.format(totalfee)}</span>
+                  <span>{formatter.format(props.balance)}</span>
                   <span style={{ fontWeight: "bold", fontSize: 18 }}>
                     {formatter.format(totalfee)}
                   </span>

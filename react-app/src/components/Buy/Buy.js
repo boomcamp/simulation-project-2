@@ -2,13 +2,12 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Button, Paper, Typography } from "@material-ui/core";
 import "semantic-ui-css/semantic.min.css";
-import { NavLink, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import AccountBalanceIcon from "@material-ui/icons/AccountBalance";
 import CreditCardIcon from "@material-ui/icons/CreditCard";
 import Swal from "sweetalert2";
 
 export default function BuySell(props) {
-  const [loader, setLoader] = useState(false);
   const { id } = useParams();
   const [data, setData] = useState([]);
   const [price, setPrice] = useState([]);
@@ -22,14 +21,12 @@ export default function BuySell(props) {
   let coinQuantity = (props.amount * 10000) / 10000;
 
   useEffect(() => {
-    setLoader(true);
     axios.get(`https://api.coingecko.com/api/v3/coins/${id}`).then(response => {
       setData(response.data);
       setPrice(response.data.market_data.current_price.usd);
       setSymbol(response.data.symbol);
       setCoinId(response.data.id);
       setImage(response.data.image.small);
-      // console.log(response.data);
     });
   }, [id]);
   const formatter = new Intl.NumberFormat("en-US", {
@@ -63,7 +60,13 @@ export default function BuySell(props) {
             footer: `<a href=/investment-tracking>View Dashboard</a>`
           });
         })
-        .catch(e => console.log(e.response.data));
+        .catch(e =>
+          Swal.fire({
+            icon: "error",
+            title: `Unable to Buy ${data.name}`,
+            text: e.response.data
+          })
+        );
     } else {
       props.cancel(false);
       Swal.fire({

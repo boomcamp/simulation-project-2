@@ -1,14 +1,11 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import MaterialTable from "material-table";
-import CoinListAppBar from "../AppBar/CoinListAppBar";
 import "semantic-ui-css/semantic.min.css";
-import { Pagination } from "semantic-ui-react";
 import { makeStyles } from "@material-ui/core/styles";
 import TrendingUpOutlinedIcon from "@material-ui/icons/TrendingUpOutlined";
 import MonetizationOnOutlinedIcon from "@material-ui/icons/MonetizationOnOutlined";
 import HistoryTable from "../HistoryTable/HistoryTable";
-import RecentTrans from "../RecentTrans/RecentTrans";
+import RecentTransId from "../RecentTrans/RecentTransId";
 
 import { NavLink, useParams } from "react-router-dom";
 import {
@@ -82,21 +79,10 @@ const useStyles = makeStyles(theme => ({
 export default function MaterialTableDemo() {
   const classes = useStyles();
   const { id } = useParams();
-  const [loader, setLoader] = useState(false);
   const [data, setData] = React.useState([]);
-  const [Page, setPage] = React.useState(1);
   const [image, setImage] = useState([]);
 
-  const formatter = new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: "USD",
-    minimumFractionDigits: 2
-  });
-  const circulatingFormat = num => {
-    return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
-  };
   useEffect(() => {
-    setLoader(true);
     axios.get(`https://api.coingecko.com/api/v3/coins/${id}`).then(response => {
       setData(response.data);
       setImage(response.data.image.small);
@@ -130,7 +116,7 @@ export default function MaterialTableDemo() {
       </div>
       <div>
         <Box style={{ marginLeft: "41%" }}>
-          <p className={classes.para}>Transaction History</p>
+          <p className={classes.para}>{data.name} Transaction History</p>
         </Box>
       </div>
       <div style={{ overflow: "scroll" }}>
@@ -138,12 +124,13 @@ export default function MaterialTableDemo() {
           <Paper style={{ height: "100%" }}>
             <Paper className={classes.topTitle}>
               <Typography className={classes.typoTitle}>
-                <img src={image}></img>
+                <img src={image} alt="img"></img>
               </Typography>
             </Paper>
             <HistoryTable />
           </Paper>
         </Paper>
+        <RecentTransId />
       </div>
     </div>
   );

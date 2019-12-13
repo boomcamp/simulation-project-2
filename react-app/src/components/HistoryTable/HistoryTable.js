@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import axios from "axios";
 import MaterialTable from "material-table";
-import { NavLink, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 export default function MaterialTableDemo() {
   const { id } = useParams();
@@ -16,6 +16,16 @@ export default function MaterialTableDemo() {
     axios.get(`http://localhost:4000/transactions`).then(response => {
       let buyData = response.data.filter(data => data.coinId === id);
       let coins = [...buyData.map(el => el.coinId)].toString();
+      response.data.filter(val => {
+        val.timestamp = new Intl.DateTimeFormat("en-US", {
+          year: "numeric",
+          month: "short",
+          day: "2-digit",
+          hour: "2-digit",
+          minute: "2-digit"
+        }).format(val.timestamp);
+        return val.coinID === id;
+      });
 
       const pricesWs = new WebSocket(
         `wss://ws.coincap.io/prices?assets=${coins}`
@@ -35,6 +45,7 @@ export default function MaterialTableDemo() {
       <MaterialTable
         style={{
           minHeight: "50vh",
+          maxHeight: "50vh",
           padding: "0px 20px 20px 20px",
           borderRadius: "0px",
           boxShadow: "none"
@@ -42,7 +53,7 @@ export default function MaterialTableDemo() {
         title=""
         columns={[
           {
-            title: "Date",
+            title: "Date of Transaction",
             headerStyle: {
               height: 10,
               fontWeight: "bold"
@@ -53,7 +64,8 @@ export default function MaterialTableDemo() {
                   {rowData.timestamp}
                 </p>
               </div>
-            )
+            ),
+            type: "text"
           },
           {
             title: "Transaction",
@@ -62,32 +74,20 @@ export default function MaterialTableDemo() {
               fontWeight: "bold"
             },
             render: rowData => (
-              <div>
-                <p style={{ textTransform: "uppercase" }}>
-                  {rowData.transaction}
-                </p>
-              </div>
-            )
+              <p style={{ textTransform: "uppercase" }}>
+                {rowData.transaction}
+              </p>
+            ),
+            type: "text"
           },
           {
-            title: "Last Price",
-            headerStyle: {
-              height: 10,
-              fontWeight: "bold"
-            },
-            field: "",
-            render: rowData => {
-              return <p>{"$" + (+coinLs[rowData.coinId]).toFixed(4)}</p>;
-            }
-          },
-          {
-            title: "Average Price",
+            title: "Price Bought",
             headerStyle: {
               height: 10,
               fontWeight: "bold"
             },
             render: rowData => {
-              return <p>{"$" + rowData.currentPrice.toFixed(4)}</p>;
+              return <p>{"$" + rowData.currentPrice.toFixed(2)}</p>;
             },
             type: "numeric"
           },
@@ -116,74 +116,13 @@ export default function MaterialTableDemo() {
             render: rowData => {
               return <p>{"$" + rowData.totalAmount.toFixed(2)}</p>;
             }
-          },
-          {
-            title: "Market Value",
-            headerStyle: {
-              height: 10,
-              fontWeight: "bold"
-            },
-
-            type: "numeric",
-            render: rowData => {
-              var profit =
-                +rowData.totalAmount *
-                (+(
-                  parseInt(-1, 10) +
-                  (+coinLs[rowData.coinId] - +rowData.currentPrice) /
-                    +rowData.currentPrice
-                ) /
-                  100);
-              return <p>{"$" + (+rowData.totalAmount - -profit).toFixed(2)}</p>;
-            }
-          },
-          {
-            title: "Est. Profit",
-            headerStyle: {
-              height: 10,
-              fontWeight: "bold"
-            },
-            type: "numeric",
-            render: rowData => {
-              var profitVal =
-                +rowData.totalAmount *
-                (+(
-                  parseInt(-1, 10) +
-                  (+coinLs[rowData.coinId] - +rowData.currentPrice) /
-                    +rowData.currentPrice
-                ) /
-                  100);
-              return (
-                <p className={profitVal > 0 ? "green" : "red"}>
-                  {profitVal.toFixed(2)}
-                </p>
-              );
-            }
-          },
-          {
-            title: "% Profit",
-            headerStyle: {
-              height: 10,
-              fontWeight: "bold"
-            },
-            type: "numeric",
-            render: rowData => {
-              var profitPercent =
-                parseInt(-1, 10) +
-                (+coinLs[rowData.coinId] - +rowData.currentPrice) /
-                  +rowData.currentPrice;
-              return (
-                <p className={profitPercent > 0 ? "green" : "red"}>
-                  {profitPercent.toFixed(4)}%
-                </p>
-              );
-            }
           }
         ]}
         data={state.data}
         editable={{}}
         options={{
-          paging: false
+          paging: false,
+          search: false
         }}
       />
     </div>
