@@ -1,4 +1,4 @@
-import React from 'react';
+import React ,{ useState, useEffect }from 'react';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -25,8 +25,24 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
-export default function ButtonAppBar() {
+
+
+
+
+export default function ButtonAppBar(props) {
   const classes = useStyles();
+  // const [curbal, setCurbal] = useState('20000')
+
+ 
+  // localStorage.setItem('wallet', curbal);
+
+
+  // let usd = props.usd;
+  // let wallet = localStorage.getItem('wallet');
+  // let computed = wallet-usd 
+  // console.log(computed)
+  // setCurbal(computed)
+
 
   return (
     <div className={classes.root}>
@@ -34,18 +50,21 @@ export default function ButtonAppBar() {
         <Toolbar>
       
           <Typography variant="h6" className={classes.title}>
-            Simulation Project I
+            Simulation Project I 
           </Typography>
+
           <Button color="inherit">
             <Link to="/" className={classes.uline}> 
               Home
             </Link>
           </Button>
+
           <Button color="inherit">
            <Link to="/invest" className={classes.uline}>
               Track Investment
             </Link>
           </Button>
+
         </Toolbar>
       </AppBar>
     </div>

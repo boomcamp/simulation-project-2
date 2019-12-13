@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
@@ -25,7 +25,7 @@ import Breadcrumbs from '@material-ui/core/Breadcrumbs';
 import Link from '@material-ui/core/Link';
 import "react-toastify/dist/ReactToastify.css";
 
-import Nav from './Nav'
+// import Nav from './Nav'
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -107,25 +107,27 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
-export default function Coin(props) {
+export default function Coin({
+   updateWallet, 
+   handleModal, 
+   wallet, 
+   render24hrs, 
+   state, 
+   data
+  }) {
+  
+
   const [open, setOpen] = React.useState(false);
   const classes = useStyles();
-  const [data, setData] = useState([]);
+  // const [data, setData] = useState([]);
   const [value, setValue] = useState('');
+  
+  //amount
   const [usd, setUsd] = useState('')
-  const [balance, setBalance] = useState('1000000')
-  const [compute, setCompute] = useState('1000000')
+  
   const [validate, setValidate] = useState('')
-  const [state, setState] = React.useState({
-    data: []
-  });
-
-  useEffect(() => {
-    submitUserData()
-    render24hrs('1')
-  },[]);
-
-
+  
+ 
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -146,19 +148,18 @@ export default function Coin(props) {
       });
   }
   
-  localStorage.setItem('wallet', compute);  
+
 
   const submitBuy = e =>{
 
     let date = new Date();
     let newDate = date.toLocaleString()
 
-    let currentBal= balance
+    let currentBal= wallet
     let computed = currentBal - usd
-    setCompute(computed) 
     
+    //console.log(computed);
 
-    console.log(computed);
     let data = {
       rank: state.data.market_cap_rank,
       image: state.data.image.large,
@@ -172,41 +173,28 @@ export default function Coin(props) {
       setValidate('Please enter a Quantity')
     }
     else{
-    axios({
-      method: 'post',
-      url: 'http://localhost:4000/transactions',
-      data: data,
-      
-    })
-    .then( response =>  {
+      axios({
+        method: 'post',
+        url: 'http://localhost:4000/transactions',
+        data: data,
+        
+      })
+      .then( response =>  {
+        
+        updateWallet(computed)
 
-      setBalance(localStorage.getItem('wallet'))
-      Notify()
-      handleClose()
-      
-    })
- 
-    .catch(err=>console.log(err))
-  }
+        //setItem to the locaStorage every click of confirm. Get the total deduction and set to the localStorage 
+        //localStorage.setItem('wallet', computed)
+        
+        Notify()
+        handleClose()
+        
+      })
+      .catch(err=>console.log(err))
+    }
   
 }
 
-
-  const submitUserData = () =>{
-    axios({
-      method: 'get',
-      url: `https://api.coingecko.com/api/v3/coins/${props.id}?tickers=true&market_data=true&community_data=true&developer_data=true&sparkline=true`
-    })
-    .then( response =>  {
-      setState({
-        ...state,
-        data: response.data 
-      })
-    })
-    .catch(err=>{
-      console.log('err');
-    })
-  }
 
 
   const convert = e => {
@@ -219,23 +207,11 @@ export default function Coin(props) {
     render24hrs(e.target.value)
   };
 
-  const render24hrs = (e) =>{
-    axios({
-      method: 'get',
-      url: `https://api.coingecko.com/api/v3/coins/${props.id}/market_chart?vs_currency=usd&days=${e}`
-    })
-    .then( response =>  {
-     var laogan = []
-     response.data.prices.map((db) => laogan.push({x:db[0],y:db[1]}))
-     setData(laogan)
-    })
-    .catch(err=>{
-      console.log('err');
-    })
-  } 
+
 
     return (    
     <>
+    {/* <Nav usd={usd}/> */}
     <CssBaseline />
     <ToastContainer
       position="bottom-right"
@@ -257,11 +233,11 @@ export default function Coin(props) {
               <Paper className={classes.paper}>
               <Breadcrumbs aria-label="breadcrumb">
                 
-                <Link color="inherit" href="/">
+                <Link color="inherit" onClick={handleModal()}>
                   Back
                 </Link>
 
-                <h5>wallet: {balance}</h5>
+                <h5>wallet: {wallet}</h5>
                 
                 
               </Breadcrumbs>

@@ -24,8 +24,18 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 export default function MaterialTableDemo() {
+  //initial wallet value
+  const [wallet, setWallet] = useState(100000)
+  
+  //Coin Data
+  const [coinData, setCoinData] = React.useState({
+    data: []
+  });
+  //Graph Data
+  const [data, setData] = useState([]);
+
   const classes = useStyles();
-  const [coin, setCoin] = useState(false)
+  const [modal, setModal] = useState(false)
   const [id, setid] = useState("")
   const [state, setState] = React.useState({
     columns: [
@@ -154,10 +164,10 @@ export default function MaterialTableDemo() {
     data: []
   });
 
+  // Home Mounting Data
   useEffect(() => {
     submitUserData()
   },[]);
-
   const submitUserData = () =>{
     axios({
       method: 'get',
@@ -175,10 +185,53 @@ export default function MaterialTableDemo() {
     })
   }
  
+  //Get the data after click
   const toggle = (e) => {
-    setCoin(true)
     setid(e.target.id)
+    
+  //getting the data of coin selected 
+  axios({
+    method: 'get',
+    url: `https://api.coingecko.com/api/v3/coins/${e.target.id}?tickers=true&market_data=true&community_data=true&developer_data=true&sparkline=true`
+  })
+  .then( response =>  {
+    setCoinData({
+      ...coinData,
+      data: response.data 
+    })
+  })
+  .catch(err=>{
+    console.log('err');
+  })   
+
+  //Handle the modal status
+    setModal(!modal)
+    
   }
+
+
+  //Method that change the value of the wallet
+   const updateWallet = (deductedValue) => {
+       setWallet(prevState => prevState - deductedValue)
+   }
+   //Handle Modal Status
+   const handleModal = () => { setModal(!modal) }
+
+   //Graph
+   const render24hrs = (e) =>{
+    axios({
+      method: 'get',
+      url: `https://api.coingecko.com/api/v3/coins/${id}/market_chart?vs_currency=usd&days=${e}`
+    })
+    .then( response =>  {
+     var laogan = []
+     response.data.prices.map((db) => laogan.push({x:db[0],y:db[1]}))
+     setData(laogan)
+    })
+    .catch(err=>{
+      console.log('err');
+    })
+   } 
 
   return (
     <React.Fragment>
@@ -186,7 +239,7 @@ export default function MaterialTableDemo() {
       <Nav/> 
       <br/>
       <CssBaseline />
-        <Container maxWidth="xl" style={{display: coin ? "none" : null}}>
+        <Container maxWidth="xl" style={{display: modal ? "none" : null}}>
             <MaterialTable
             title="Home"
             columns={state.columns}
@@ -201,7 +254,15 @@ export default function MaterialTableDemo() {
             }}
             />
           </Container>
-        {coin ? <Coin id={id}/> : null }  
+        {modal ? <Coin 
+                  wallet={wallet} 
+                  updateWallet={updateWallet} 
+                  handleModal={handleModal} 
+                  render24hrs={render24hrs}
+                  state={coinData}
+                  data={data}
+                  /> 
+         : null }  
     </React.Fragment>   
   );
 }
