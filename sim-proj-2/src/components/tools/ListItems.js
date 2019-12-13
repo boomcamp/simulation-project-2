@@ -5,7 +5,7 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import TrackChanges from '@material-ui/icons/TrackChanges';
-// import AttachMoney from '@material-ui/icons/AttachMoney';
+import History from '@material-ui/icons/History';
 // import { makeStyles } from '@material-ui/core/styles';
 // import Modal from '@material-ui/core/Modal';
 // import Backdrop from '@material-ui/core/Backdrop';
@@ -58,14 +58,16 @@ export default function ListItems() {
           </ListItem>
         </Link>
         
-        {/* <ListItem button onClick={() => setOpen(true)}>
-          <ListItemIcon title="Buy Cryptocurrency">
-            <AttachMoney style={{color:`green`}}/>
-          </ListItemIcon>
-          <ListItemText primary="Buy Cryptocurrency" />
-        </ListItem>
+        <Link to="/transaction-history" style={{color:`black`, textDecoration:`none`}}>
+          <ListItem button>
+            <ListItemIcon title="Transaction History">
+              <History />
+            </ListItemIcon>
+            <ListItemText primary="Transaction History" />
+          </ListItem>
+        </Link>
 
-        <Modal
+        {/* <Modal
           aria-labelledby="transition-modal-title"
           aria-describedby="transition-modal-description"
           className={classes.modal}
@@ -82,7 +84,7 @@ export default function ListItems() {
               <CryptoBuy closeFn={()=> setOpen(false)} />
             </div>
           </Fade>
-        </Modal> */}
+        </Modal>  */}
 
         {/* <ListSubheader inset>Saved reports</ListSubheader>
         <ListItem button>

@@ -6,7 +6,7 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import axios from 'axios'
 import { withSnackbar } from 'notistack';
 
-import Title from './tools/Title'
+import Title from '../tools/Title'
 // import ProfilePic from '../assest/download.jpeg'
 
 function CryptoBuy({enqueueSnackbar, boughtFn}) {

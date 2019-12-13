@@ -47,6 +47,14 @@ function CryptoSell({maxSell, img, coin, current_price, coinId, closeFn, enqueue
                                     walletFn(wallet);
                                 })
                         })
+                    axios
+                        .post(`http://localhost:4000/coinsold`, {
+                            "coin": res.data.coin,
+                            "img": res.data.img,
+                            "amountSold": value.cash,
+                            "current_price": current_price
+                        })
+
                     if(res.data.amountBuy === 0){
                         axios
                             .delete(`http://localhost:4000/transactions/${res.data.id}`)

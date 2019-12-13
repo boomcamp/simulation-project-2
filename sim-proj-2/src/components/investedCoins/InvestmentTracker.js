@@ -6,7 +6,8 @@ import NavBar from '../tools/NavBar'
 import InvestedCoinsTable from './InvestedCoinsTable'
 import axios from 'axios'
 import Logo from '../../assest/logo.gif'
-import CryptoBuy from '../CryptoBuy'
+import CryptoBuy from './CryptoBuy'
+// import TransactionHistory from '../TransactionHistory'
 
 // import Copyright from '../tools/Copyright'
 // import Box from '@material-ui/core/Box';
@@ -43,6 +44,10 @@ export default function InvestmentTracker() {
                         <Paper>
                             <CryptoBuy boughtFn={() => tempTableRef.current && tempTableRef.current.onQueryChange()} />
                         </Paper>
+{/* 
+                        <Paper>
+                            <TransactionHistory />
+                        </Paper> */}
                     </Grid>
 
                     <Grid item xs={8} >

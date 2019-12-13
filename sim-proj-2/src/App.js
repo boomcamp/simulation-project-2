@@ -4,6 +4,7 @@ import {BrowserRouter, Switch, Route} from 'react-router-dom'
 
 import DashBoard from "./components/Dashboard";
 import InvestmentTracker from './components/investedCoins/InvestmentTracker'
+import TransactionHistory from './components/TransactionHistory'
 
 export default function App() {
     return (
@@ -12,6 +13,7 @@ export default function App() {
                 <Switch>
                     <Route exact path="/" component={DashBoard}/>
                     <Route path="/investment-tracker" component={InvestmentTracker}/>
+                    <Route path="/transaction-history" component={TransactionHistory}/>
                 </Switch>
             </BrowserRouter>
         </SnackbarProvider>
