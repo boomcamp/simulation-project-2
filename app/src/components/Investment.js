@@ -1,10 +1,17 @@
 import React, { useEffect, useState } from "react";
 import Axios from "axios";
+import clsx from "clsx";
 import { makeStyles, createMuiTheme, MuiThemeProvider } from "@material-ui/core/styles";
 import { useParams } from "react-router-dom";
 import MaterialTable from "material-table";
 import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
+import CheckCircleIcon from "@material-ui/icons/CheckCircle";
+import CloseIcon from "@material-ui/icons/Close";
+import { green } from "@material-ui/core/colors";
+import IconButton from "@material-ui/core/IconButton";
+import Snackbar from "@material-ui/core/Snackbar";
+import SnackbarContent from "@material-ui/core/SnackbarContent";
 
 const useStyles = makeStyles(theme => ({
 	root: {
@@ -32,6 +39,51 @@ const theme = createMuiTheme({
 	}
 });
 
+const variantIcon = {
+	success: CheckCircleIcon
+};
+
+const useStyles1 = makeStyles(theme => ({
+	success: {
+		backgroundColor: green[600]
+	},
+	icon: {
+		fontSize: 20
+	},
+	iconVariant: {
+		opacity: 0.9,
+		marginRight: theme.spacing(1)
+	},
+	message: {
+		display: "flex",
+		alignItems: "center"
+	}
+}));
+
+function MySnackbarContentWrapper(props) {
+	const classes = useStyles1();
+	const { className, message, onClose, variant, ...other } = props;
+	const Icon = variantIcon[variant];
+
+	return (
+		<SnackbarContent
+			className={clsx(classes["success"], className)}
+			aria-describedby="client-snackbar"
+			message={
+				<span id="client-snackbar" className={classes.message}>
+					<Icon className={clsx(classes.icon, classes.iconVariant)} />
+					{message}
+				</span>
+			}
+			action={[
+				<IconButton key="close" aria-label="close" color="inherit" onClick={onClose}>
+					<CloseIcon className={classes.icon} />
+				</IconButton>
+			]}
+			{...other}
+		/>
+	);
+}
 export default function Investment() {
 	let { id } = useParams();
 	const classes = useStyles();
@@ -41,27 +93,38 @@ export default function Investment() {
 		columns: [
 			{ title: "#", field: "rowData.tableData.id", type: "numeric", render: rowData => rowData.tableData.id + 1 },
 			{
-				title: "Quantity Bought/Sold",
+				title: "Bought | Sold",
 				field: "coinQuantity",
 				type: "numeric",
 				render: rowData => (
 					<MuiThemeProvider theme={theme}>
 						<Typography variant="subtitle2" color={rowData.transaction === "buy" ? "primary" : "error"}>
 							{rowData.coinQuantity}
-							{console.log(rowData.tableData.id)}
 						</Typography>
 					</MuiThemeProvider>
 				)
 			},
-			{ title: "Amount Cost/Earned", field: "Amount", type: "numeric", render: rowData => formatter.format(rowData.Amount) },
+			{ title: "Cost | Earned", field: "Amount", type: "numeric", render: rowData => formatter.format(rowData.Amount) },
 			{
-				title: "Total Amount Paid/Earned",
+				title: "Total Paid(+Trans Fee) | Earned",
 				field: "totalAmount",
 				type: "numeric",
 				render: rowData => formatter.format(rowData.totalAmount)
 			},
 			{
-				title: "Coin Price Bought / Sell",
+				title: "Percentage Profit or Loss",
+				field: "totalAmount",
+				type: "numeric",
+				render: rowData => (
+					<MuiThemeProvider theme={theme}>
+						<Typography variant="h6" color={rowData.profitOrLoss < 0 ? "error" : "primary"}>
+							{Math.round(rowData.profitOrLoss * 10000) / 10000} %
+						</Typography>
+					</MuiThemeProvider>
+				)
+			},
+			{
+				title: "Bought | Sell",
 				field: "currentCoinPrice",
 				type: "numeric",
 				render: rowData => formatter.format(rowData.currentCoinPrice)
@@ -81,6 +144,18 @@ export default function Investment() {
 		],
 		data: []
 	});
+
+	const [open, setOpen] = useState(false);
+
+	const handleClose = (event, reason) => {
+		if (reason === "clickaway") {
+			return;
+		}
+
+		setOpen(false);
+		sessionStorage.removeItem("success");
+	};
+
 	useEffect(() => {
 		Axios.get(`https://api.coingecko.com/api/v3/coins/${id}`)
 			.then(response => {
@@ -106,10 +181,23 @@ export default function Investment() {
 				})
 			);
 		});
+
+		sessionStorage.getItem("success") ? setOpen(true) : setOpen(false);
 	}, [id]);
 
 	return (
 		<Container className={classes.root} fixed>
+			<Snackbar
+				anchorOrigin={{
+					vertical: "bottom",
+					horizontal: "right"
+				}}
+				open={open}
+				autoHideDuration={4000}
+				onClose={handleClose}
+			>
+				<MySnackbarContentWrapper onClose={handleClose} variant="success" message="Transaction Done!" />
+			</Snackbar>
 			<MaterialTable title={coin} columns={state.columns} data={transactions} />
 		</Container>
 	);

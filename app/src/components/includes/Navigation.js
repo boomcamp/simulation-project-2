@@ -54,7 +54,7 @@ const theme = createMuiTheme({
 export default function Navigation() {
 	let history = useHistory();
 	const classes = useStyles();
-	const [state, setState] = React.useState({
+	const [state, setState] = useState({
 		top: false,
 		left: false,
 		bottom: false,

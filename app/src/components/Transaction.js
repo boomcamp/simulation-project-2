@@ -54,10 +54,11 @@ export default function Transaction(props) {
 				totalAmount: coin,
 				currentCoinPrice: props.price,
 				transaction: "buy",
-				timestamp: new Date().getTime()
+				timestamp: new Date().getTime(),
+				profitOrLoss: 0
 			})
 				.then(response => {
-					sessionStorage.setItem("success", "success");
+					sessionStorage.setItem("success", true);
 
 					history.push(`/coin/invested/${props.id}`);
 				})

@@ -14,6 +14,7 @@ import TextField from "@material-ui/core/TextField";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import Button from "@material-ui/core/Button";
 import Slide from "@material-ui/core/Slide";
+import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles(theme => ({
 	root: {
@@ -34,6 +35,7 @@ const useStyles = makeStyles(theme => ({
 	}
 }));
 export default function Transaction(props) {
+	let history = useHistory();
 	let { id } = useParams();
 	const classes = useStyles();
 	const [coin, setCoin] = useState("");
@@ -42,23 +44,51 @@ export default function Transaction(props) {
 	const [balance, setBalance] = useState(0);
 	const [error, setError] = useState(false);
 	const [newBalance, setNewBalance] = useState(0);
+	const [profitOrLoss, setProfitOrLoss] = useState(0);
 
 	useEffect(() => {
-		Axios.get(`http://localhost:4000/transactions`).then(response => {
-			let initBalance = 0;
-			let fArray = response.data.filter(val => {
-				return val.coinId === id;
+		Axios.get(`http://localhost:4000/transactions`)
+			.then(response => {
+				let initBalance = 0;
+				let fArray = response.data.filter(val => {
+					return val.coinId === id;
+				});
+				fArray.forEach(newVal => {
+					if (newVal.transaction === "buy") {
+						initBalance += newVal.coinQuantity;
+					} else {
+						initBalance -= newVal.coinQuantity;
+					}
+				});
+				setBalance(initBalance);
+				return Axios.get(`http://localhost:4000/transactions?coinId=${id}`);
+			})
+			.then(response => {
+				let aCurrentCointPrice = 0;
+				let count = 0;
+				var stat = true;
+				var statChecker = true;
+				let array = response.data.reverse();
+				console.log(response.data);
+				array.map((x, i) => {
+					if (x.transaction === "buy" && stat) {
+						statChecker = false;
+						aCurrentCointPrice += x.currentCoinPrice;
+						count++;
+					} else if (x.transaction === "sell") {
+						if (!statChecker) {
+							stat = false;
+						}
+					}
+					return x;
+				});
+
+				//console.log(aCost, cQuantity);
+				console.log(props.price, aCurrentCointPrice, count);
+				console.log(((props.price - aCurrentCointPrice / count) / (aCurrentCointPrice / count)) * 100);
+				setProfitOrLoss(((props.price - aCurrentCointPrice / count) / (aCurrentCointPrice / count)) * 100);
 			});
-			fArray.forEach(newVal => {
-				if (newVal.transaction === "buy") {
-					initBalance += newVal.coinQuantity;
-				} else {
-					initBalance -= newVal.coinQuantity;
-				}
-			});
-			setBalance(initBalance);
-		});
-	}, [id]);
+	}, [id, props.price]);
 	const confirmBuy = () => {
 		if (!error) {
 			Axios.post("http://localhost:4000/transactions", {
@@ -70,12 +100,16 @@ export default function Transaction(props) {
 				totalAmount: amount,
 				currentCoinPrice: props.price,
 				transaction: "sell",
-				timestamp: new Date().getTime()
-			}).catch(error => {
-				console.log(error.response.data);
-			});
-
-			console.log(props.id, props.name, props.img.small, soldQuantity, amount, amount, props.price);
+				timestamp: new Date().getTime(),
+				profitOrLoss: profitOrLoss
+			})
+				.then(response => {
+					sessionStorage.setItem("success", true);
+					history.push(`/coin/invested/${props.id}`);
+				})
+				.catch(error => {
+					console.log(error.response.data);
+				});
 		}
 	};
 	return (
