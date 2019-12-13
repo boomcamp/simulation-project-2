@@ -116,22 +116,6 @@ export default function SideNav(props) {
           currencies={props.currencies}
           cryptoList={props.cryptoList}
           crypto={props.crypto}
-          handleCrypto={props.handleCrypto}
-          currentPrice={props.currentPrice}
-          cryptoValue={props.cryptoValue}
-          moneyValue={props.moneyValue}
-          handleOnChange={props.handleOnChange}
-          handleSubmitInvest={props.handleSubmitInvest}
-          lastTrans={props.lastTrans}
-          transList={props.transList}
-          handleSubmitSell={props.handleSubmitSell}
-          handleClickOpen={props.handleClickOpen}
-          handleClose={props.handleClose}
-          open={props.open}
-          totalProfit={props.totalProfit}
-          currentTransaction={props.currentTransaction}
-          sellingAmount={props.sellingAmount}
-          handleUpdate={props.handleUpdate}
         />
       </main>
     </React.Fragment>

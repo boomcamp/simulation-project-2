@@ -34,9 +34,9 @@
       },
       "amount": 99,
       "price": 7213.9,
-      "amountSold": 75,
-      "profit": 353.69999999998254,
-      "dateSold": "Dec 13, 2019, 01:14 PM",
+      "amountSold": 99,
+      "profit": 737.460000000021,
+      "dateSold": "Dec 13, 2019, 03:32 PM",
       "id": 3
     },
     {
@@ -60,9 +60,9 @@
       },
       "amount": 99,
       "price": 43.79,
-      "amountSold": 0,
-      "profit": 0,
-      "dateSold": "",
+      "amountSold": 99,
+      "profit": -7.209999999999923,
+      "dateSold": "Dec 13, 2019, 05:04 PM",
       "id": 5
     },
     {
@@ -77,6 +77,97 @@
       "profit": 0.9899999999979627,
       "dateSold": "Dec 13, 2019, 11:32 AM",
       "id": 6
+    },
+    {
+      "crypto": {
+        "id": "bitcoin",
+        "img": "https://assets.coingecko.com/coins/images/1/large/bitcoin.png?1547033579",
+        "unit": "btc"
+      },
+      "amount": 99,
+      "price": 7216.63,
+      "amountSold": 99,
+      "profit": 993.4200000000055,
+      "dateSold": "Dec 13, 2019, 05:18 PM",
+      "id": 7
+    },
+    {
+      "crypto": {
+        "id": "bitcoin",
+        "img": "https://assets.coingecko.com/coins/images/1/large/bitcoin.png?1547033579",
+        "unit": "btc"
+      },
+      "amount": 999,
+      "price": 43.66,
+      "amountSold": 999,
+      "profit": 7172428.77,
+      "dateSold": "Dec 13, 2019, 05:18 PM",
+      "id": 8
+    },
+    {
+      "crypto": {
+        "id": "ethereum",
+        "img": "https://assets.coingecko.com/coins/images/279/large/ethereum.png?1547034048",
+        "unit": "eth"
+      },
+      "amount": 50142.206156198,
+      "price": 143.92,
+      "amountSold": 0,
+      "profit": 0,
+      "dateSold": "",
+      "id": 9
+    },
+    {
+      "crypto": {
+        "id": "litecoin",
+        "img": "https://assets.coingecko.com/coins/images/2/large/litecoin.png?1547033580",
+        "unit": "ltc"
+      },
+      "amount": 999,
+      "price": 43.66,
+      "amountSold": 0,
+      "profit": 0,
+      "dateSold": "",
+      "id": 10
+    },
+    {
+      "crypto": {
+        "id": "bitcoin",
+        "img": "https://assets.coingecko.com/coins/images/1/large/bitcoin.png?1547033579",
+        "unit": "btc"
+      },
+      "amount": 999,
+      "price": 7223.69,
+      "amountSold": 0,
+      "profit": 0,
+      "dateSold": "",
+      "id": 11
+    },
+    {
+      "crypto": {
+        "id": "cardano",
+        "img": "https://assets.coingecko.com/coins/images/975/large/cardano.png?1547034860",
+        "unit": "ada"
+      },
+      "amount": 2726.756378769,
+      "price": 0.03667361,
+      "amountSold": 1010,
+      "profit": 0.006999999999997897,
+      "dateSold": "Dec 13, 2019, 05:18 PM",
+      "id": 12
+    },
+    {
+      "crypto": {
+        "id": "10m-token",
+        "img": "https://assets.coingecko.com/coins/images/1045/large/10mt.jpg?1547034980",
+        "unit": "10mt"
+      },
+      "amount": 1127383.00582857,
+      "price": 0.00088701,
+      "amountSold": 2000,
+      "profit": 0,
+      "dateSold": "Dec 13, 2019, 05:18 PM",
+      "id": 13
     }
   ]
 }

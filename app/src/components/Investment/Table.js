@@ -132,9 +132,7 @@ export default class Table extends Component {
       ]
     };
   }
-  // componentDidUpdate() {
-  //   this.props.handleUpdate();
-  // }
+
   render() {
     const {
       transList,
@@ -171,7 +169,7 @@ export default class Table extends Component {
                 isLoading={loading}
               />
             </Tab>
-            <Tab eventKey="log" title="Transaction Logs">
+            <Tab eventKey="log" title="Transaction Log">
               <MaterialTable
                 title="Recent Investments"
                 columns={table2}

@@ -15,23 +15,7 @@ export default class Routes extends React.Component {
       handlePagination,
       currencies,
       crypto,
-      cryptoList,
-      handleCrypto,
-      currentPrice,
-      cryptoValue,
-      moneyValue,
-      handleOnChange,
-      handleSubmitInvest,
-      lastTrans,
-      transList,
-      handleSubmitSell,
-      handleClickOpen,
-      handleClose,
-      open,
-      totalProfit,
-      currentTransaction,
-      sellingAmount,
-      handleUpdate
+      cryptoList
     } = this.props;
     return (
       <Switch>
@@ -63,23 +47,6 @@ export default class Routes extends React.Component {
               crypto={crypto}
               cryptoList={cryptoList}
               currencies={currencies}
-              handleCrypto={handleCrypto}
-              currentPrice={currentPrice}
-              cryptoValue={cryptoValue}
-              moneyValue={moneyValue}
-              handleOnChange={handleOnChange}
-              handleSubmitInvest={handleSubmitInvest}
-              lastTrans={lastTrans}
-              transList={transList}
-              loading={loading}
-              handleSubmitSell={handleSubmitSell}
-              handleClickOpen={handleClickOpen}
-              handleClose={handleClose}
-              open={open}
-              totalProfit={totalProfit}
-              currentTransaction={currentTransaction}
-              sellingAmount={sellingAmount}
-              handleUpdate={handleUpdate}
             />
           )}
         />
