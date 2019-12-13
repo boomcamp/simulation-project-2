@@ -27,7 +27,10 @@ export default class Routes extends React.Component {
           path="/"
         />
         <Route component={ChartInfo} path="/chartInfo/:id" />
-        <Route component={InvestmentTrack} path="/investmentTrack" />
+        <Route
+          render={props => <InvestmentTrack {...props} />}
+          path="/investmentTrack"
+        />
       </Switch>
     );
   }

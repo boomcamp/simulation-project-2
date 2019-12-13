@@ -81,7 +81,10 @@ export default class coinDetails extends React.Component {
         {
           title: "Price",
           field: "current_price",
-          cellStyle: rowData => ({ color: "purple", fontSize: 15 })
+          cellStyle: rowData => ({ color: "purple", fontSize: 15 }),
+          render: rowData => (
+            <React.Fragment>${rowData.current_price}</React.Fragment>
+          )
         },
         {
           title: "1hr",

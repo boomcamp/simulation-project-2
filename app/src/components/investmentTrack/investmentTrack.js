@@ -29,6 +29,13 @@ const Div = styled.div`
   margin-bottom: 10px;
 `;
 
+const Red = styled.p`
+  color: red;
+`;
+const Green = styled.p`
+  color: green;
+`;
+
 export default class investmentTrack extends React.Component {
   constructor(props) {
     super(props);
@@ -46,40 +53,65 @@ export default class investmentTrack extends React.Component {
                 alt=""
                 className="resize"
                 style={{
-                  height: 30,
-                  width: 30,
-                  paddingTop: 10,
-                  marginRight: 5
+                  height: 25,
+                  width: 25
                 }}
               />
-              {rowData.coinName}
+              <div
+                style={{
+                  marginLeft: 35,
+                  marginTop: -25,
+                  fontWeight: "bold"
+                }}
+              >
+                {rowData.coinName}
+              </div>
             </div>
-          ),
-          cellStyle: rowData => ({
-            fontWeight: "bold",
-            fontSize: 15
-          })
+          )
         },
         {
-          title: "Price before investing",
+          title: "Price before Investing",
           field: "price",
-          render: rowData => <React.Fragment>${rowData.price}</React.Fragment>
+          render: rowData => <React.Fragment>${rowData.price}</React.Fragment>,
+          cellStyle: rowData => ({ color: "purple" })
+        },
+        {
+          title: "Current Price",
+          field: "current_price",
+          render: rowData => (
+            <React.Fragment>${rowData.current_price}</React.Fragment>
+          ),
+          cellStyle: rowData => ({ color: "darkgreen" })
         },
         {
           title: "Invested Amount",
           field: "invested",
           render: rowData => (
             <React.Fragment>$ {rowData.invested}</React.Fragment>
-          )
+          ),
+          cellStyle: rowData => ({ color: "darkblue" })
         },
         {
           title: "Sold Amount",
           field: "amountSold",
           render: rowData => (
             <React.Fragment>$ {rowData.amountSold}</React.Fragment>
+          ),
+          cellStyle: rowData => ({ color: "red" })
+        },
+        {
+          title: "Profit/Loss",
+          field: "profit",
+          render: rowData => (
+            <React.Fragment>
+              {rowData.profit < 0 ? (
+                <Red>${Number(rowData.profit.toFixed(3))}</Red>
+              ) : (
+                <Green>${Number(rowData.profit.toFixed(3))}</Green>
+              )}
+            </React.Fragment>
           )
         },
-        { title: "Profit/Loss", field: "profit" },
         {
           title: "Sell Coin",
           render: rowData => (
@@ -91,7 +123,7 @@ export default class investmentTrack extends React.Component {
                 }}
                 variant="outlined"
                 color="primary"
-                onClick={this.handleClickOpen}
+                onClick={() => this.handleClickOpen(rowData)}
               >
                 Sell
               </Button>
@@ -100,17 +132,35 @@ export default class investmentTrack extends React.Component {
         }
       ],
       data: [],
-      toggleModal: false
+      toggleModal: false,
+      currentData: {}
     };
   }
 
-  componentDidMount = () => {
-    axios.get("http://localhost:4000/transactions").then(response => {
-      this.setState({ data: response.data });
+  fetchData = () => {
+    axios.get(`http://localhost:4000/transactions`).then(response => {
+      const initialData = response.data.map(e => {
+        axios
+          .get(
+            `https://api.coingecko.com/api/v3/simple/price?ids=${e.coinId}&vs_currencies=usd`
+          )
+          .then(response => {
+            e.current_price = response.data[e.coinId].usd;
+          });
+        return e;
+      });
+      console.log(initialData);
+      let sum = response.data.map(x => x.amountSold).reduce((a, b) => a + b, 0);
+      this.setState({ data: initialData, totalResult: sum });
     });
   };
-  handleClickOpen = () => {
-    this.setState({ toggleModal: true });
+
+  componentDidMount = () => {
+    this.fetchData();
+  };
+
+  handleClickOpen = val => {
+    this.setState({ toggleModal: true, currentData: val });
   };
 
   handleClose = () => {
@@ -118,20 +168,24 @@ export default class investmentTrack extends React.Component {
   };
 
   sellChange = val => {
-    this.setState({ sellAmount: val });
-    console.log(val);
+    this.setState({ amountSold: val });
   };
 
   sellHandler = (e, data) => {
     e.preventDefault();
     axios
       .patch(`http://localhost:4000/transactions/${data.id}`, {
-        amountSold:
-          data.current_price * this.state.sellAmount -
-          data.price * this.state.sellAmount,
-        amount: data.amount - this.state.sellAmount
+        amountSold: this.state.amountSold + data.amountSold,
+        profit:
+          data.profit +
+          (this.state.amountSold * data.current_price -
+            this.state.amountSold * data.price),
+        invested: data.invested - this.state.amountSold
       })
-      .then(toast.success("SUCCESS!!"));
+      .then(() => {
+        this.fetchData();
+        toast.info("SUCCESS!");
+      });
   };
 
   render() {
@@ -145,28 +199,33 @@ export default class investmentTrack extends React.Component {
             aria-labelledby="alert-dialog-title"
             aria-describedby="alert-dialog-description"
           >
-            <form onSubmit={e => this.sellHandler(e)}>
-              <DialogTitle id="alert-dialog-title">{"Amount"}</DialogTitle>
+            {this.state.currentData ? (
+              <form onSubmit={e => this.sellHandler(e, this.state.currentData)}>
+                <DialogTitle id="alert-dialog-title">{"Amount"}</DialogTitle>
 
-              <DialogContent>
-                <TextField
-                  label="USD"
-                  margin="normal"
-                  value={this.state.usd}
-                  variant="outlined"
-                  onChange={e => this.sellChange(e.target.value)}
-                />
-              </DialogContent>
-              <DialogActions>
-                <Button type="submit" color="primary" onClick={this.notify}>
-                  Sell
-                </Button>
+                <DialogContent>
+                  <TextField
+                    label="USD"
+                    margin="normal"
+                    value={this.state.usd}
+                    variant="outlined"
+                    onChange={e => this.sellChange(+e.target.value)}
+                    required
+                  />
+                </DialogContent>
+                <DialogActions>
+                  <Button type="submit" color="primary" onClick={this.notify}>
+                    Sell
+                  </Button>
 
-                <Button onClick={this.handleClose} color="primary">
-                  Close
-                </Button>
-              </DialogActions>
-            </form>
+                  <Button onClick={this.handleClose} color="primary">
+                    Close
+                  </Button>
+                </DialogActions>
+              </form>
+            ) : (
+              ""
+            )}
           </Dialog>
         </div>
         <div>
@@ -178,7 +237,6 @@ export default class investmentTrack extends React.Component {
             title="List of Investments"
             columns={this.state.columns}
             data={this.state.data}
-            onRowClick={(evt, selectedRow) => this.setState({ selectedRow })}
             options={{
               paging: false,
               search: false
@@ -198,7 +256,22 @@ export default class investmentTrack extends React.Component {
                 fontSize: 20
               }}
             >
-              TOTAL PROFIT:
+              TOTAL PROFIT/LOSS:
+              <div
+                style={{
+                  textAlign: "center",
+                  marginTop: 120,
+                  marginLeft: 120
+                }}
+              >
+                {this.state.totalResult < 0 ? (
+                  <Red>${parseFloat(this.state.totalResult).toFixed(3)}</Red>
+                ) : (
+                  <Green>
+                    ${parseFloat(this.state.totalResult).toFixed(3)}
+                  </Green>
+                )}
+              </div>
             </span>
           </Div>
         </div>

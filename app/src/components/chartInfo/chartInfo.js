@@ -76,6 +76,11 @@ const Div = styled.div`
   display: flex;
 `;
 
+const Back = styled.button`
+  border: transparent;
+  margin-left: 60px;
+`;
+
 const days = [
   { name: "24 hours", value: 1 },
   { name: "1 Week", value: 7 },
@@ -192,21 +197,29 @@ export default class chartInfo extends React.Component {
 
   investHandler = e => {
     e.preventDefault();
-    axios.post("http://localhost:4000/transactions", {
-      coinName: this.state.details.name,
-      price: this.state.details.market_data.current_price.usd,
-      invested: this.state.usd,
-      amountSold: 0,
-      coinId: this.state.details.id,
-      profit: 0,
-      image: this.state.image
-    });
-    toast.success("Investment Successful !");
+    axios
+      .post("http://localhost:4000/transactions", {
+        coinName: this.state.details.name,
+        price: this.state.details.market_data.current_price.usd,
+        invested: this.state.usd,
+        amountSold: 0,
+        coinId: this.state.details.id,
+        profit: 0,
+        image: this.state.image
+      })
+      .then(() =>
+        toast.success(
+          "Investment Successful ! Go to Investment Tracking for details!"
+        )
+      )
+      .catch(err => toast.error(err.response.data));
   };
 
   render() {
     return (
       <MainDiv>
+        <Back onClick={() => this.props.history.goBack()}>Back</Back>
+
         <ToastContainer />
         <Name>{this.state.details ? this.state.details.name : ""}</Name>
         <Rank>
@@ -231,6 +244,7 @@ export default class chartInfo extends React.Component {
                   label="USD"
                   margin="normal"
                   value={this.state.usd}
+                  required
                   variant="outlined"
                   onChange={e => this.currencyChange(+e.target.value, "usd")}
                 />
