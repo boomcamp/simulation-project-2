@@ -1,73 +1,62 @@
 import React, { useState, useEffect } from 'react';
 import Axios from 'axios';
-import { makeStyles, Divider, Paper, Button } from '@material-ui/core';
-
-import TextField from '@material-ui/core/TextField';
-import Autocomplete from '@material-ui/lab/Autocomplete';
+import {
+	TextField,
+	Button,
+	makeStyles,
+	Divider,
+	Paper
+} from '@material-ui/core';
+import SellReceipt from './SellReceipt';
 
 export default function SellTransaction(props) {
 	const classes = useStyles();
-	const [result, setResult] = useState({});
-	const [coin, setCoin] = useState(0);
+	const [receipt, setReceipt] = useState(false);
 	const [wallet, setWallet] = useState(0);
-	const [myCoin, setMyCoin] = useState([]);
-	const [quantity, setQuantity] = useState(0);
 	const [amount, setAmount] = useState(0);
+	const [quantity, setQuantity] = useState(0);
+	const [coinQuantity, setCoinQuantity] = useState(0);
 
 	useEffect(() => {
-		Axios.get(`http://localhost:4000/transactions/`).then(res => {
-			let unique = [];
-			let uniqueCoin = [];
-			res.data.map(item => {
-				if (unique.indexOf(item.coin) === -1) {
-					unique.push(item.coin);
-					uniqueCoin.push({
-						id: item.id,
-						coin: item.coin,
-						image: item.image
-					});
-				}
-			});
-			setMyCoin(uniqueCoin);
-			setCoin(res.data);
+		Axios.get('http://localhost:4000/transactions/').then(res => {
 			let money = res.data[res.data.length - 1];
 			money ? setWallet(money.wallet) : setWallet(1000000);
+			let qBuy = 0;
+			let qSell = 0;
+			res.data.forEach(item => {
+				if (props.coin.name === item.coin) {
+					if (item.transaction === 'Buy') {
+						qBuy = qBuy + item.quantity;
+					} else if (item.transaction === 'Sell') {
+						qSell = qSell + item.quantity;
+					}
+				}
+			});
+			return setCoinQuantity(qBuy - qSell);
 		});
-	}, []);
+	}, [wallet, props.coin.name]);
 
 	const formatter = new Intl.NumberFormat('en-US', {
 		style: 'currency',
 		currency: 'USD',
 		minimumFractionDigits: 2
 	});
-	const handleChange = e => {
-		let val = e.target.innerText;
-		if (val) {
-			console.log(e.target.innerText);
-			let quantity = 0;
-			coin.map(row => {
-				if (val === row.coin) {
-					quantity = quantity + row.quantity;
-				}
-			});
-			setResult({
-				...result,
-				name: val,
-				quantity: quantity,
-				price: props.coin.market_data.current_price.usd
-			});
-			console.log(quantity);
-		} else {
-			setResult({});
-		}
-	};
-	const handleQuantity = e => {
-		if (e.target.value >= 0 && e.target.value <= result.quantity) {
+
+	const handleAQuantity = e => {
+		if (e.target.value >= 0 && e.target.value <= coinQuantity) {
+			let convert = props.coin.market_data.current_price.usd * e.target.value;
+			let trans = convert * 0.1;
+
+			setAmount(convert + trans);
 			setQuantity(e.target.value);
 		}
 	};
-	const handleSell = () => {
+
+	const handleSell = e => {
+		e.preventDefault();
+
 		if (quantity > 0) {
+			setReceipt(true);
 			Axios({
 				method: 'post',
 				url: 'http://localhost:4000/transactions/',
@@ -85,7 +74,8 @@ export default function SellTransaction(props) {
 					setAmount(0);
 					setQuantity(0);
 					setWallet(wallet + amount);
-					alert('Buy Success!');
+					alert('Sell Success!');
+					setReceipt(false);
 				})
 				.catch(err => {
 					console.log(err);
@@ -98,59 +88,48 @@ export default function SellTransaction(props) {
 				<center>
 					<h2>Sell Transaction</h2>
 					<h1>$ Wallet : {formatter.format(wallet)}</h1>
+					<h2>{props.coin.name}</h2>
+					<h2>Price : {props.coin.market_data.current_price.usd}</h2>
+					<h2>Quantity : {coinQuantity}</h2>
 				</center>
 				<Divider />
-				<div className={classes.form} noValidate autoComplete="off">
-					<Autocomplete
-						id="combo-box-demo"
-						options={myCoin}
-						getOptionLabel={option => option.coin}
-						style={{ width: 300, marginRight: 20 }}
-						renderOption={option => (
-							<React.Fragment>
-								<img src={option.image} className={classes.imgCoin} alt="" />
-								{option.coin}
-							</React.Fragment>
-						)}
-						renderInput={params => (
-							<TextField
-								{...params}
-								label="Choose a coin"
-								variant="outlined"
-								fullWidth
-							/>
-						)}
-						onChange={e => handleChange(e)}
-					/>
+				<form className={classes.form} noValidate autoComplete="off">
 					<TextField
 						id="outlined-number"
 						label="Quantity"
 						type="number"
-						style={{ marginRight: 20 }}
 						InputLabelProps={{
 							shrink: true
 						}}
 						variant="outlined"
 						value={quantity}
-						onChange={e => handleQuantity(e)}
+						onChange={e => handleAQuantity(e)}
+					/>
+					<TextField
+						id="outlined-number"
+						label="Amount"
+						type="text"
+						InputLabelProps={{
+							shrink: true
+						}}
+						InputProps={{
+							readOnly: true
+						}}
+						variant="outlined"
+						value={formatter.format(amount)}
 					/>
 					<Button
 						variant="contained"
 						color="secondary"
 						width="100%"
-						onClick={() => handleSell()}
+						onClick={e => handleSell(e)}
 					>
 						Sell
 					</Button>
-				</div>
+				</form>
 				<Divider />
-				{result.name ? (
-					<React.Fragment>
-						<Divider />
-						<h1>Coin: {result.name}</h1>
-						<h1>Quantity: {result.quantity}</h1>
-						<h1>Price: {result.price}</h1>
-					</React.Fragment>
+				{receipt ? (
+					<SellReceipt coin={props.coin} amount={amount} quantity={quantity} />
 				) : null}
 			</Paper>
 		</React.Fragment>
@@ -158,33 +137,13 @@ export default function SellTransaction(props) {
 }
 
 const useStyles = makeStyles(theme => ({
-	table: {
-		minWidth: 650
-	},
 	form: {
 		margin: 50,
 		display: 'flex',
-		justifyContent: 'center ',
-		alignContent: 'center',
-		flexFlow: 'row'
+		justifyContent: 'space-evenly',
+		alignContent: 'center'
 	},
 	paper_child: {
-		width: '100%',
-		display: 'flex',
-		justifyContent: 'center ',
-		alignContent: 'center',
-		flexFlow: 'column'
-	},
-	option: {
-		fontSize: 15,
-		'& > span': {
-			marginRight: 10,
-			fontSize: 18
-		}
-	},
-	imgCoin: {
-		width: 20,
-		height: 20,
-		marginRight: 20
+		width: '50%'
 	}
 }));

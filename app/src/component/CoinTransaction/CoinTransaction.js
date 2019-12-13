@@ -18,15 +18,17 @@ import Divider from '@material-ui/core/Divider';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
 import AllInboxIcon from '@material-ui/icons/AllInbox';
+import TrendingDownIcon from '@material-ui/icons/TrendingDown';
 
 import HistoryTransaction from './HistoryTransaction/HistoryTransaction';
 import BuyTransaction from './BuyTransaction/BuyTransaction';
 import SellTransaction from './SellTransaction/SellTransaction';
+import TrackTransaction from './TrackTransaction/TrackTransaction';
 import { Header } from './../../layout';
 
 export default function CoinTransaction(props) {
 	const classes = useStyles();
-	const [selectedIndex, setSelectedIndex] = React.useState('buy');
+	const [selectedIndex, setSelectedIndex] = React.useState('track');
 	const [coin, setCoin] = useState({});
 
 	useEffect(() => {
@@ -35,7 +37,7 @@ export default function CoinTransaction(props) {
 		).then(res => {
 			setCoin(res.data);
 		});
-	}, []);
+	}, [props.match.params.id]);
 
 	const handleListItemClick = (event, index) => {
 		setSelectedIndex(index);
@@ -60,6 +62,16 @@ export default function CoinTransaction(props) {
 						<Paper className={classes.paper}>
 							<div className={classes.root}>
 								<List component="nav" aria-label="main mailbox folders">
+									<ListItem
+										button
+										selected={selectedIndex === 'track'}
+										onClick={event => handleListItemClick(event, 'track')}
+									>
+										<ListItemIcon>
+											<TrendingDownIcon />
+										</ListItemIcon>
+										<ListItemText primary="Track Investment" />
+									</ListItem>
 									<ListItem
 										button
 										selected={selectedIndex === 'buy'}
@@ -101,9 +113,11 @@ export default function CoinTransaction(props) {
 							{selectedIndex === 'buy' ? (
 								<BuyTransaction coin={coin} />
 							) : selectedIndex === 'history' ? (
-								<HistoryTransaction />
+								<HistoryTransaction coin={coin} />
 							) : selectedIndex === 'sell' ? (
 								<SellTransaction coin={coin} />
+							) : selectedIndex === 'track' ? (
+								<TrackTransaction coin={coin} />
 							) : null}
 						</Paper>
 					</Grid>

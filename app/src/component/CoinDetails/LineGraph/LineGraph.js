@@ -29,7 +29,7 @@ export default function LineGraph(props) {
 			setdata(array);
 			setLoading(true);
 		});
-	}, [props.days]);
+	}, [props.days, props.id]);
 
 	if (loading) {
 		return (

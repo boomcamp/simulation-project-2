@@ -21,7 +21,7 @@ export default function CoinDetails(props) {
 			setCoin(res.data);
 			setLoading(true);
 		});
-	}, []);
+	}, [props.match.params.id]);
 
 	const handleChange = (event, newAlignment) => {
 		setAlignment(newAlignment);
