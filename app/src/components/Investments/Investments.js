@@ -21,14 +21,25 @@ import {
   Img,
   Green,
   Red,
+  BuyStyle,
   Container
 } from "./Data";
+import Buy from "../Buy/Buy";
 export default class Investments extends React.Component {
   constructor() {
     super();
     this.state = {
       activeItem: "1",
+      amountValue: "",
+      cryptValue: "",
       data: [],
+      coin: {
+        label: "Bitcoin (btc)",
+        value: "bitcoin",
+        name: "Bitcoin",
+        symbol: "btc"
+      },
+      allCoins: [],
       toggleModal: false,
       columns: [
         {
@@ -93,14 +104,7 @@ export default class Investments extends React.Component {
         {
           title: "Amount Invested",
           field: "amount",
-          render: rowData => (
-            <React.Fragment>
-              ${" "}
-              {rowData.amount.toLocaleString(undefined, {
-                maximumFractionDigits: 2
-              })}
-            </React.Fragment>
-          )
+          render: rowData => <React.Fragment>$ {rowData.amount}</React.Fragment>
         },
         {
           title: "Estimated Profit/Loss",
@@ -165,6 +169,10 @@ export default class Investments extends React.Component {
     }
   };
   componentDidMount = () => {
+    this.fetchdata();
+  };
+
+  fetchdata = () => {
     this.setState({ loading: true });
     axios.get(`http://localhost:4000/transactions`).then(response => {
       const tempData = response.data.map(e => {
@@ -184,7 +192,54 @@ export default class Investments extends React.Component {
       });
       setTimeout(() => this.setState({ loading: false }), 1000);
     });
+
+    axios
+      .get(
+        `https://api.coingecko.com/api/v3/coins/list
+  `
+      )
+      .then(response => this.setState({ allCoins: response.data }));
+    axios
+      .get(
+        `https://api.coingecko.com/api/v3/coins/bitcoin
+    `
+      )
+      .then(response => {
+        this.setState({
+          coinId: response.data.id,
+          price: response.data.market_data.current_price.usd,
+          image: response.data.image.large,
+          name: response.data.name,
+          symbol: response.data.symbol
+        });
+      });
   };
+
+  componentDidUpdate() {
+    if (this.state.updateLoading === true) {
+      console.log("did");
+      axios.get(`http://localhost:4000/transactions`).then(response => {
+        let tempData = response.data.map(e => {
+          axios
+            .get(
+              `https://api.coingecko.com/api/v3/simple/price?ids=${e.details.coinId}&vs_currencies=usd`
+            )
+            .then(response => {
+              e.current_price = response.data[e.details.coinId].usd;
+            });
+          return e;
+        });
+        let sum = response.data
+          .map(x => x.amountSold)
+          .reduce((a, b) => a + b, 0);
+        this.setState({
+          data: tempData,
+          totalAmount: sum
+        });
+        setTimeout(() => this.setState({ updateLoading: false }), 1000);
+      });
+    }
+  }
 
   handleClickOpen = val => {
     this.setState({ toggleModal: true, currentData: val });
@@ -197,8 +252,81 @@ export default class Investments extends React.Component {
   handleChange = val => {
     this.setState({ amountSell: val });
   };
-  handleSell = (e, data) => {
+  handleCoins = val => {
+    this.setState({
+      coin: Object.assign({}, val)
+    });
+    axios
+      .get(`https://api.coingecko.com/api/v3/coins/${val.value}`)
+      .then(response => {
+        this.setState({
+          coinId: response.data.id,
+          price: response.data.market_data.current_price.usd,
+          image: response.data.image.large,
+          name: response.data.name,
+          symbol: response.data.symbol
+        });
+      });
+    console.log(this.state.coinDetails);
+  };
+
+  handleAmount = (val, option) => {
+    const crypt =
+      option === "amount" ? val / this.state.price : val * this.state.price;
+    option === "amount"
+      ? this.setState({
+          cryptValue: crypt,
+          amountValue: val
+        })
+      : this.setState({
+          amountValue: crypt,
+          cryptValue: val
+        });
+  };
+
+  handleInvest = e => {
+    e.preventDefault();
+    this.setState({ updateLoading: true });
     this.setState({ loading: true });
+    const tempDate = new Intl.DateTimeFormat("en-US", {
+      year: "numeric",
+      month: "short",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit"
+    }).format(Date.now());
+    const coinDetails = {
+      coinId: this.state.coinId,
+      price: this.state.price,
+      image: this.state.image,
+      name: this.state.name,
+      symbol: this.state.symbol
+    };
+    const Obj = {
+      date: tempDate,
+      amount: this.state.amountValue,
+      amountSold: 0,
+      currency: "usd",
+      details: coinDetails
+    };
+    axios
+      .post(`http://localhost:4000/transactions`, Obj)
+      .then(() => {
+        toast.success(
+          "$ " +
+            Number(Math.round(this.state.amountValue + "e2") + "e-2") +
+            " successfully invested in " +
+            this.state.name
+        );
+      })
+      .catch(() => {
+        toast.error("Try again later!");
+      });
+    setTimeout(() => this.setState({ loading: false }), 1000);
+  };
+
+  handleSell = (e, data) => {
+    this.setState({ loading: true, toggleModal: false });
     e.preventDefault();
     axios
       .patch(`http://localhost:4000/transactions/${data.id}`, {
@@ -228,7 +356,7 @@ export default class Investments extends React.Component {
             totalAmount: sum
           });
           toast.success("Successfully Sold!");
-          setTimeout(() => this.setState({ loading: false }), 500);
+          setTimeout(() => this.setState({ loading: false }), 1000);
         })
       );
   };
@@ -327,6 +455,20 @@ export default class Investments extends React.Component {
               )}{" "}
             </Total>
           </BuySell>
+          <BuyStyle>
+            <Title>
+              <h4 style={{ fontWeight: "bold" }}>Invest Here</h4>
+            </Title>
+            <Buy
+              allCoins={this.state.allCoins}
+              coin={this.state.coin}
+              handleCoins={this.handleCoins}
+              handleAmount={this.handleAmount}
+              amountValue={this.state.amountValue}
+              cryptValue={this.state.cryptValue}
+              handleInvest={this.handleInvest}
+            />
+          </BuyStyle>
         </Container>
       </MainDiv>
     );

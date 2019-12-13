@@ -279,13 +279,10 @@ export default class Details extends React.Component {
             <Buttons>
               <MDBBtn
                 color="info"
-                style={{ width: "150px", height: "47px" }}
+                style={{ width: "400px", height: "47px" }}
                 onClick={this.handleClickOpen}
               >
                 <MDBIcon icon="money-bill" className="mr-1" /> Buy
-              </MDBBtn>
-              <MDBBtn color="danger" style={{ width: "150px", height: "47px" }}>
-                <MDBIcon icon="exchange-alt" className="ml-1" /> Sell
               </MDBBtn>
             </Buttons>
             <MDBTable>

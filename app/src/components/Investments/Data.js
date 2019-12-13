@@ -48,11 +48,11 @@ const Red = styled.div`
   color: red;
 `;
 
-const Buy = styled.div`
+const BuyStyle = styled.div`
   margin-top: 50px;
-  height: 500px;
+  height: 350px;
   width: 100%;
-  padding: 50px;
+  padding: 20px;
   background-color: white;
 `;
 
@@ -139,6 +139,6 @@ export {
   Img,
   Green,
   Red,
-  Buy,
+  BuyStyle,
   Container
 };
