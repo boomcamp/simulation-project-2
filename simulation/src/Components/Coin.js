@@ -15,7 +15,6 @@ import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Slide from '@material-ui/core/Slide';
 import InputAdornment from '@material-ui/core/InputAdornment';
@@ -331,7 +330,9 @@ export default function Coin(props) {
                     <div className={classes.table}>
                       <h3>Price Changes</h3>  
                       <table border='1'>
-                        
+                       
+                        <thead></thead>
+                        <tbody>
                         <tr>
                           <th>1h</th>
                           <th>24h</th>
@@ -403,6 +404,7 @@ export default function Coin(props) {
                             />
                           </td>
                         </tr>
+                        </tbody>
                       </table>
                       
                     </div>
@@ -411,6 +413,10 @@ export default function Coin(props) {
                       <h3>Quick Stats</h3>
                       <hr/>
                       <table>
+                        <thead>
+                          
+                        </thead>
+                        <tbody>
                         <tr style={{ textAlign: 'left'}}>
                           <td>Bitcoin Price</td>
                           <td></td>
@@ -503,6 +509,7 @@ export default function Coin(props) {
                             />
                           </td>
                         </tr>
+                        </tbody>
                       </table>
                     </div>
                   </div>
@@ -581,7 +588,7 @@ export default function Coin(props) {
                 >
                   <DialogTitle id="alert-dialog-slide-title">{`Buy ${state.data.id}?`}</DialogTitle>
                   <DialogContent>
-                    <DialogContentText id="alert-dialog-slide-description">
+                   
                     <div className={classes.modal}>
                     <TextField
                       value={value}
@@ -604,7 +611,7 @@ export default function Coin(props) {
                           decimalScale='2' 
                         />
                     </div>
-                    </DialogContentText>
+                
                   </DialogContent>
                   <DialogActions>
                     <Button onClick={handleClose} color="secondary" variant="contained">

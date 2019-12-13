@@ -9,7 +9,7 @@
       "date": "12/13/2019, 1:37:24 PM",
       "currentPrice": 7217.61,
       "coinId": "bitcoin",
-      "status": "Not Yet Sold", 
+      "status": "Not Yet Sold",
       "mOT": "buy",
       "id": 1
     },
@@ -22,7 +22,7 @@
       "date": "12/13/2019, 1:54:43 PM",
       "currentPrice": 0.999497,
       "coinId": "tether",
-      "status": "Not Yet Sold", 
+      "status": "Not Yet Sold",
       "mOT": "buy",
       "id": 2
     },
@@ -35,7 +35,7 @@
       "date": "12/13/2019, 1:54:47 PM",
       "currentPrice": 0.999497,
       "coinId": "tether",
-      "status": "Not Yet Sold", 
+      "status": "Not Yet Sold",
       "mOT": "buy",
       "id": 3
     },
@@ -48,7 +48,7 @@
       "date": "12/13/2019, 1:54:59 PM",
       "currentPrice": 92.49,
       "coinId": "bitcoin-cash-sv",
-      "status": "Not Yet Sold", 
+      "status": "Not Yet Sold",
       "mOT": "buy",
       "id": 4
     },
@@ -61,7 +61,7 @@
       "date": "12/13/2019, 3:28:12 PM",
       "currentPrice": 144.51,
       "coinId": "ethereum",
-      "status": "Not Yet Sold", 
+      "status": "Not Yet Sold",
       "mOT": "buy",
       "id": 5
     },
@@ -74,7 +74,7 @@
       "date": "12/13/2019, 3:28:24 PM",
       "currentPrice": 0.218247,
       "coinId": "ripple",
-      "status": "Not Yet Sold", 
+      "status": "Not Yet Sold",
       "mOT": "buy",
       "id": 6
     },
@@ -87,7 +87,7 @@
       "date": "12/13/2019, 3:28:35 PM",
       "currentPrice": 207.59,
       "coinId": "bitcoin-cash",
-      "status": "Not Yet Sold", 
+      "status": "Not Yet Sold",
       "mOT": "buy",
       "id": 7
     },
@@ -100,7 +100,7 @@
       "date": "12/13/2019, 3:28:48 PM",
       "currentPrice": 1.76,
       "coinId": "tezos",
-      "status": "Not Yet Sold", 
+      "status": "Not Yet Sold",
       "mOT": "buy",
       "id": 8
     },
@@ -113,7 +113,7 @@
       "date": "12/13/2019, 4:01:55 PM",
       "currentPrice": 4.13,
       "coinId": "cosmos",
-      "status": "Not Yet Sold", 
+      "status": "Not Yet Sold",
       "mOT": "buy",
       "id": 9
     },
@@ -126,7 +126,7 @@
       "date": "12/13/2019, 4:11:58 PM",
       "currentPrice": 92.71,
       "coinId": "bitcoin-cash-sv",
-      "status": "Not Yet Sold", 
+      "status": "Not Yet Sold",
       "mOT": "buy",
       "id": 10
     },
@@ -139,9 +139,48 @@
       "date": "12/13/2019, 4:12:05 PM",
       "currentPrice": 207.53,
       "coinId": "bitcoin-cash",
-      "status": "Not Yet Sold", 
+      "status": "Not Yet Sold",
       "mOT": "buy",
       "id": 11
+    },
+    {
+      "rank": 5,
+      "image": "https://assets.coingecko.com/coins/images/780/large/bitcoin_cash.png?1547034541",
+      "coinName": "Bitcoin Cash",
+      "coinQuantity": "3 bch",
+      "totalAmount": 623.76,
+      "date": "12/13/2019, 5:12:41 PM",
+      "currentPrice": 207.92,
+      "coinId": "bitcoin-cash",
+      "status": "Not Yet Sold",
+      "mOT": "buy",
+      "id": 12
+    },
+    {
+      "rank": 1,
+      "image": "https://assets.coingecko.com/coins/images/1/large/bitcoin.png?1547033579",
+      "coinName": "Bitcoin",
+      "coinQuantity": "2 btc",
+      "totalAmount": 14443.6,
+      "date": "12/13/2019, 5:35:59 PM",
+      "currentPrice": 7221.8,
+      "coinId": "bitcoin",
+      "status": "Not Yet Sold",
+      "mOT": "buy",
+      "id": 13
+    },
+    {
+      "rank": 1,
+      "image": "https://assets.coingecko.com/coins/images/1/large/bitcoin.png?1547033579",
+      "coinName": "Bitcoin",
+      "coinQuantity": "4 btc",
+      "totalAmount": 28887.2,
+      "date": "12/13/2019, 5:36:30 PM",
+      "currentPrice": 7221.8,
+      "coinId": "bitcoin",
+      "status": "Not Yet Sold",
+      "mOT": "buy",
+      "id": 14
     }
   ]
 }

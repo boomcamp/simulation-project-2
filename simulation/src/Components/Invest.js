@@ -8,10 +8,9 @@ import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Slide from '@material-ui/core/Slide';
-import { makeStyles, createStyles, Theme } from '@material-ui/core/styles'; 
+
 
 import Nav from './Nav';
 
@@ -19,23 +18,11 @@ const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
 
-    inDepth:{
-      
-      "&:hover":{
-        color:'blue',
-        fontSize: '20px'
-      }
-    }
-
-  }),
-);
 
 
 export default function MaterialTableDemo() {
-  const classes = useStyles();
+  const [disabled, setDissabled] = React.useState(false);
   const [sell, setSell] = React.useState({})
   const [price, setPrice] = React.useState('')
   const [data, setData] = React.useState({});
@@ -53,10 +40,7 @@ export default function MaterialTableDemo() {
           textAlign: 'right',
         }
       },
-      {
-        title: 'Coin Name',
-        render: row => <span className={classes.inDepth} id={row.id} onClick={e => handleClickOpen(e, row.coinId)} > {row.coinName} </span>
-      },
+      {title: 'Coin Name', field: 'coinName'},
       { title: 'Quantity', field: 'coinQuantity' },
       {
         title: 'Total Amount', field: 'totalAmount',
@@ -71,7 +55,9 @@ export default function MaterialTableDemo() {
       },
       { title: 'Date', field: 'date' },
       { title: 'Status', field: 'status' },
-      
+      { title: 'Action',
+        render: row =>  <Button onClick={e => handleClickOpen(row.id, row.coinId)} variant="contained" color="primary" disabled={disabled}> sell </Button>
+      },
 
     ],
     data: [],
@@ -123,9 +109,17 @@ export default function MaterialTableDemo() {
 
   }
 
-  const handleClickOpen = (e, coin) => {
+  const doSell = () => {
+    setDissabled(true)
+    setOpen(false);
+    
+  }
+
+  console.log(disabled)
+  const handleClickOpen = (id, coin) => {
     setOpen(true);
-    coinModal(e.target.id, coin)
+    coinModal(id, coin)
+ 
 
 
   };
@@ -166,8 +160,15 @@ export default function MaterialTableDemo() {
       >
         <DialogTitle id="alert-dialog-slide-title"><img src={data.image} alt={data.id} style={{ width: 40, borderRadius: '50%' }} />{data.coinName}</DialogTitle>
         <DialogContent>
-          <DialogContentText id="alert-dialog-slide-description">
+   
             <table>
+              <thead>
+                <tr>
+                </tr>
+              </thead>
+
+              <tbody>
+              
               <tr style={{ textAlign: 'left' }}>
 
               </tr>
@@ -249,15 +250,18 @@ export default function MaterialTableDemo() {
                 </td>
                 
               </tr>
+              </tbody>
+              <tfoot>
+              </tfoot>
             </table>
 
-          </DialogContentText>
+         
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose} color="primary">
+          <Button onClick={handleClose} variant="contained" color="secondary">
             Cancel
             </Button>
-          <Button onClick={handleClose} color="primary">
+          <Button onClick={doSell} variant="contained" color="primary">
             Sell
             </Button>
         </DialogActions>
