@@ -4,6 +4,7 @@ import { Loader } from 'rsuite';
 import MaterialTable from 'material-table';
 import axios from 'axios';
 import moment from 'moment';
+import numeral from 'numeral'
 
 const useStyles = makeStyles(theme => ({
     background: {
@@ -57,9 +58,10 @@ export default function Tracking() {
         ],
     });
     const [isLoading, setIsLoading] = useState(true)
-    const [trans, setTrans] = useState([])
+    const [trans, setTrans] = useState('')
     const [time, setTime] = useState('')
     const [date, setDate] = useState('')
+    // const [open]
 
     useEffect(() => {
         var times = moment()
@@ -77,11 +79,12 @@ export default function Tracking() {
             .then(data => {
                 setTrans(data.data)
                 setIsLoading(false)
+                console.log(data)
             })
             .catch(e => console.log(e))
     }, [])
 
-
+    console.log(typeof trans, "here")
     return (
         <div className={classes.background}>
             {isLoading ?
@@ -109,7 +112,7 @@ export default function Tracking() {
                             {
                                 icon: 'save',
                                 tooltip: 'Sell',
-                                onClick: (event, rowData) => alert("You saved " + rowData.name)
+                                // onClick: (event, rowData) =>/
                             }
                         ]
                     }
@@ -119,11 +122,9 @@ export default function Tracking() {
                                 setTimeout(() => {
                                     resolve();
                                     if (oldData) {
-                                        setState(prevState => {
-                                            const data = [...prevState.data];
-                                            data[data.indexOf(oldData)] = newData;
-                                            return { ...prevState, data };
-                                        });
+                                        const data = [...trans];
+                                        data[trans.indexOf(oldData)] = newData;
+                                        setTrans(data);
                                     }
                                 }, 600);
 
@@ -143,7 +144,7 @@ export default function Tracking() {
                                             url: `/transactions/${newData.id}`
                                         })
                                             .then(e => {
-                                                let a = parseInt(e.data.amount) / parseInt(e.data.priceBought)
+                                                const newVal = parseInt(e.data.amount) / parseInt(e.data.priceBought)
 
                                                 axios({
                                                     method: 'patch',
@@ -152,7 +153,7 @@ export default function Tracking() {
                                                         date: date,
                                                         time: time,
                                                         amount: newData.amount,
-                                                        value: a.toFixed(3)
+                                                        value: newVal
                                                     }
                                                 })
                                             })
@@ -164,19 +165,19 @@ export default function Tracking() {
                             new Promise(resolve => {
                                 setTimeout(() => {
                                     resolve();
-                                    setState(prevState => {
-                                        const data = [...prevState.trans];
-                                        data.splice(data.indexOf(oldData), 1);
-                                        return { ...prevState, data };
-                                    });
+                                    const data = [...trans];
+                                    data.splice(data.indexOf(oldData), 1);
+                                    setTrans(data);
+
+                                    axios({
+                                        method: 'delete',
+                                        url: `/transactions/${oldData.id}`,
+                                    })
+                                        .then(e => console.log(e.data))
+                                        .catch(e => console.log(e));
                                 }, 600);
 
-                                axios({
-                                    method: 'delete',
-                                    url: `/transactions/${oldData.id}`,
-                                })
-                                    .then(e => console.log(e.data))
-                                    .catch(e => console.log(e))
+
                             }),
                     }}
                 />
