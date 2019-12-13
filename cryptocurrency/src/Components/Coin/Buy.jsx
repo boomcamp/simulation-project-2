@@ -56,7 +56,10 @@ function Buy(props) {
           coinSymbol: coinSymbol,
           coinImage: coinImage,
           cryptoCurrencyPrice: parseInt(coinPrice),
-          transactionDate: transactionDate
+          transactionDate: transactionDate,
+          earned: 0,
+          sellPrice: 0,
+          sellPricePerCoin: 0
         }
     })
   } 
@@ -76,6 +79,8 @@ function Buy(props) {
     }else{
       localStorage.setItem('wallet', JSON.stringify(wallet));
     }
+    
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
   const buyCryptocurrencyFn = (value) => {
     if(exchangeVal === '' || exchangeVal <= 0){
@@ -124,6 +129,7 @@ function Buy(props) {
         // }
         setOpen(false);
         toast.success(`Success! You Bought ${transactionData.data.cryptoCurrencyQty} ${coinName}`);
+        setExchangeVal(0)
       })
       .catch(error => toast.error("Transaction Error, Please Try Again"))
     } 

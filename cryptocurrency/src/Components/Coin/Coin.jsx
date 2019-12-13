@@ -20,8 +20,6 @@ import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
 import ToggleButton from '@material-ui/lab/ToggleButton';
 import Chart from './Chart';
 import Buy from './Buy';
-//import Sell from './Sell';
-
 
 function Coin(props) {
   const useStyles = makeStyles(theme => ({
@@ -183,7 +181,6 @@ function Coin(props) {
                   <li><span>All-Time Low: </span> <NumberFormat decimalScale={2} value={(coinData.data.market_data) && coinData.data.market_data.atl.usd} displayType={'text'} thousandSeparator={true} prefix={'$'} /></li>
                   <li className={classes.buysellBtn}>
                     <Buy coinID={props.match.params.coin} coinSymbol={coinData.data.symbol} coinImage={(coinData.data.image) && coinData.data.image.small} coinName={coinData.data.name} coinSym={coinData.data.symbol} coinPrice={(coinData.data.market_data) && coinData.data.market_data.current_price.usd} />
-                    {/* <Sell oinID={props.match.params.coin} coinName={coinData.data.name} coinSym={coinData.data.symbol} coinPrice={(coinData.data.market_data) && coinData.data.market_data.current_price.usd} /> */}
                   </li>
                 </ul>
               </Grid>      
