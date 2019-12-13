@@ -96,6 +96,7 @@ function Home() {
   const [hidden, setHidden] = useState(false);
   const [time24h, setTime24h] = useState([]);
   const [value, setValue] = useState(false);
+  
   // HANDLE DIALOG
   const [open, setOpen] = React.useState(false);
   const handleClickOpen = () => {
@@ -316,43 +317,62 @@ function Home() {
   };
 
   const handleUsd = e => {
+    if(e.target.value > 0){
+      setValidate(true)
+    }else{
+      setValidate(false)
+    }
     var btc = e.target.value / selected.market_data.current_price.usd;
     setInput({ usd: e.target.value, btc: btc });
   };
 
   const handleCoin = e => {
+    if(e.target.value > 0){
+      setValidate(true)
+    }else{
+      setValidate(false)
+    }
     var usd = e.target.value * selected.market_data.current_price.usd;
     setInput({ usd: usd, btc: e.target.value });
   };
 
+  const [validate, setValidate] = React.useState(false);
+
   const confirmFn = e => {
     e.preventDefault();
-    console.log(input.btc);
-
-    handleClose();
-    let today = `${new Date().toDateString()},  ${new Date().toLocaleTimeString()}`;
-    let data = {
-      coinID: selected.id,
-      value: parseFloat(input.btc),
-      date: today,
-      coinName: selected.name,
-      symbol: selected.symbol,
-      image: selected.image,
-      amount: input.usd,
-      priceBefore: selected.market_data.current_price.usd,
-      coinBalance: parseFloat(input.btc)
-    };
-    axios({
-      method: "POST",
-      url: `http://localhost:4000/transactions`,
-      data: data
-    })
-      .then(response => {
-        setInput({ usd: "", btc: "" });
-        handleClickSnack();
-        console.log(response);
+    
+    console.log(validate)
+    if (validate === false) {
+      setValidate(false)
+    } else {
+      handleClose();
+      let today = `${new Date().toDateString()},  ${new Date().toLocaleTimeString()}`;
+      let data = {
+        coinID: selected.id,
+        value: parseFloat(input.btc),
+        date: today,
+        coinName: selected.name,
+        symbol: selected.symbol,
+        image: selected.image,
+        amount: input.usd,
+        priceBefore: selected.market_data.current_price.usd,
+        coinBalance: parseFloat(input.btc),
+        mode: "buy",
+        status: "not sold",
+        amountBalance: input.usd
+      };
+      axios({
+        method: "POST",
+        url: `http://localhost:4000/transactions`,
+        data: data
       })
-      .catch(err => console.log(err));
+        .then(response => {
+          setInput({ usd: "", btc: "" });
+          handleClickSnack();
+          console.log(response);
+        })
+        .catch(err => console.log(err));
+    }
   };
 
   const goBackFn = () => {
@@ -547,6 +567,8 @@ function Home() {
                   <Grid container spacing={1}>
                     <Grid item xs={5} zeroMinWidth>
                       <TextField
+                        color={validate ? "primary" : "secondary"}
+                        helperText={validate ? null : "Value must be > 0"}
                         required
                         type="number"
                         id="outlined-basic"
@@ -555,6 +577,7 @@ function Home() {
                         value={input.usd}
                         onChange={e => handleUsd(e)}
                         InputProps={{
+                          inputProps: { min: 0, step: "any" },
                           startAdornment: (
                             <InputAdornment position="start">$</InputAdornment>
                           )
@@ -578,6 +601,8 @@ function Home() {
                     <Grid item xs={6} zeroMinWidth>
                       <TextField
                         required
+                        color={validate ? "primary" : "secondary"}
+                        helperText={validate ? null : "Value must be > 0"}
                         type="number"
                         id="outlined-basic"
                         label="Coin"
@@ -585,8 +610,11 @@ function Home() {
                         value={input.btc}
                         onChange={e => handleCoin(e)}
                         InputProps={{
+                          inputProps: { min: 0, step: "any" },
                           endAdornment: (
-                            <InputAdornment position="end">{selected.symbol}</InputAdornment>
+                            <InputAdornment position="end">
+                              {selected.symbol}
+                            </InputAdornment>
                           )
                         }}
                       />
