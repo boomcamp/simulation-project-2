@@ -28,5 +28,6 @@ Joseph Azores
 
 ## Acknowledgements
 
+- [React JS](https://reactjs.org/)
 - [Coingecko API](https://www.coingecko.com/api/documentations/v3)
 - [Visual Studio Code](https://code.visualstudio.com/)
