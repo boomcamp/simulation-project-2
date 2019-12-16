@@ -11,7 +11,7 @@
   },
   "devDependencies": {},
   "scripts": {
-    "server": "json-server -p 4000 db.json"
+    "server": "json-server -p 4001 db.json"
   },
   "author": "",
   "license": "ISC"

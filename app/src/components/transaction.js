@@ -19,10 +19,10 @@ class transaction extends Component {
     };
   }
 
-  componentDidMount() {
+  componentDidMount(i) {
     axios({
       method: `get`,
-      url: `http://localhost:4000/transactions`,
+      url: `http://localhost:4001/transactions`,
       data: this.state
     }).then(res => {
       this.setState({ name: res.data });
@@ -30,13 +30,12 @@ class transaction extends Component {
   }
 
   render() {
-    // console.log(this.state.name ? this.state.name : null);
     return (
       <React.Fragment>
         <Table celled striped>
           <Table.Header className={classes.table}>
             <Table.Row className={classes.head}>
-              <Table.HeaderCell colSpan="4">
+              <Table.HeaderCell colSpan="5">
                 <Typography variant="h4"> Historical Transaction</Typography>
               </Table.HeaderCell>
             </Table.Row>
@@ -51,6 +50,9 @@ class transaction extends Component {
                 <b>Coin price</b>
               </Table.Cell>
               <Table.Cell>
+                <b>Total Price</b>
+              </Table.Cell>
+              <Table.Cell>
                 <b>Transaction</b>
               </Table.Cell>
             </Table.Row>
@@ -58,10 +60,11 @@ class transaction extends Component {
 
           <Table.Body>
             {this.state.name.map(x => (
-              <Table.Row>
+              <Table.Row key={x.id}>
                 <Table.Cell>{x.name}</Table.Cell>
-                <Table.Cell>{x.quantity}</Table.Cell>
+                <Table.Cell>{Math.abs(x.quantity)}</Table.Cell>
                 <Table.Cell>{x.price}</Table.Cell>
+                <Table.Cell>{x.totalPrice}</Table.Cell>
                 <Table.Cell>{x.transaction}</Table.Cell>
               </Table.Row>
             ))}

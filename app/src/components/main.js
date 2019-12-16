@@ -29,10 +29,6 @@ const useStyles = theme => ({
   },
   row: {
     color: "white"
-  },
-  table: {
-    // marginLeft: theme.spacing(18),
-    // maxWidth: 1450
   }
 });
 class main extends Component {
@@ -73,7 +69,6 @@ class main extends Component {
       );
   }
   handleClick = id => {
-    console.log(id);
     this.setState({
       redirect: false,
       id: id.id

@@ -2,144 +2,89 @@
   "wallet": [
     {
       "id": 1,
-      "amount": 978193.8123410002
-    },
-    {
-      "id": 2
+      "amount": 920965.3758342903
     }
   ],
   "transactions": [
     {
-      "name": "Tezos",
-      "price": 1.49,
+      "name": "Bitcoin",
+      "price": 7083.69,
+      "totalPrice": 7083.69,
+      "quantity": "1",
+      "transaction": "buy",
+      "id": 1
+    },
+    {
+      "name": "Bitcoin",
+      "price": 7083.69,
+      "totalPrice": 7083.69,
+      "quantity": -1,
+      "transaction": "sell",
+      "id": 2
+    },
+    {
+      "name": "Ethereum",
+      "price": 141.25,
+      "totalPrice": 282.5,
+      "quantity": "2",
+      "transaction": "buy",
+      "id": 3
+    },
+    {
+      "name": "Ethereum",
+      "price": 141.25,
+      "totalPrice": 282.5,
+      "quantity": 2,
+      "transaction": "sell",
+      "id": 4
+    },
+    {
+      "name": "Bitcoin",
+      "price": 7060.9,
+      "totalPrice": 7060.9,
       "quantity": "1",
       "transaction": "buy",
       "id": 5
     },
     {
-      "name": "Tezos",
-      "price": 1.49,
-      "quantity": "5",
+      "name": "Ethereum",
+      "price": 140.98,
+      "totalPrice": 140.98,
+      "quantity": "1",
       "transaction": "buy",
       "id": 6
     },
     {
       "name": "Ethereum",
-      "price": 145.98,
-      "quantity": "2",
+      "price": 140.93,
+      "totalPrice": 140.93,
+      "quantity": "1",
       "transaction": "buy",
       "id": 7
     },
     {
-      "name": "Ethereum",
-      "price": 145.75,
-      "quantity": "1",
-      "transaction": "buy",
+      "name": "Bitcoin",
+      "price": 7057.75,
+      "totalPrice": 7057.75,
+      "quantity": -1,
+      "transaction": "sell",
       "id": 8
     },
     {
-      "name": "Ethereum",
-      "price": 145.76,
-      "totalPrice": 728.8,
-      "quantity": "5",
+      "name": "Stellar",
+      "price": 0.050378,
+      "totalPrice": 0.050378,
+      "quantity": "1",
       "transaction": "buy",
       "id": 9
     },
     {
-      "name": "Ethereum",
-      "price": 144.42,
-      "totalPrice": 144.42,
-      "quantity": "1",
-      "transaction": "buy",
+      "name": "Stellar",
+      "price": 0.050378,
+      "totalPrice": 0.050378,
+      "quantity": -1,
+      "transaction": "sell",
       "id": 10
-    },
-    {
-      "name": "Ethereum",
-      "price": 144.42,
-      "totalPrice": 1299.78,
-      "quantity": "9",
-      "transaction": "buy",
-      "id": 11
-    },
-    {
-      "name": "Ethereum",
-      "price": 144.42,
-      "totalPrice": 1299.78,
-      "quantity": "9",
-      "transaction": "buy",
-      "id": 12
-    },
-    {
-      "name": "Ethereum",
-      "price": 144.42,
-      "totalPrice": 1299.78,
-      "quantity": "9",
-      "transaction": "buy",
-      "id": 13
-    },
-    {
-      "name": "Monero",
-      "price": 53.08,
-      "totalPrice": 53.08,
-      "quantity": "1",
-      "transaction": "buy",
-      "id": 14
-    },
-    {
-      "name": "Bitcoin",
-      "price": 7211.03,
-      "totalPrice": 7211.03,
-      "quantity": "1",
-      "transaction": "buy",
-      "id": 15
-    },
-    {
-      "name": "Bitcoin",
-      "price": 7217.1,
-      "totalPrice": 7217.1,
-      "quantity": "1",
-      "transaction": "buy",
-      "id": 16
-    },
-    {
-      "name": "Bitcoin",
-      "price": 7230.49,
-      "totalPrice": 7230.49,
-      "quantity": "1",
-      "transaction": "Sell",
-      "id": 17
-    },
-    {
-      "name": "Bitcoin",
-      "price": 7230.49,
-      "totalPrice": 7230.49,
-      "quantity": "1",
-      "transaction": "Sell",
-      "id": 18
-    },
-    {
-      "name": "XRP",
-      "price": 0.217659,
-      "totalPrice": 0.217659,
-      "quantity": "1",
-      "transaction": "buy",
-      "id": 19
-    },
-    {
-      "name": "XRP",
-      "price": 0.217659,
-      "totalPrice": 0.217659,
-      "quantity": "1",
-      "transaction": "Sell",
-      "id": 20
-    },
-    {
-      "name": "Bitcoin",
-      "price": 7227.5,
-      "totalPrice": 28910,
-      "quantity": "4",
-      "transaction": "Sell",
-      "id": 21
     }
   ]
 }

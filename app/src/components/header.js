@@ -93,6 +93,7 @@ class header extends Component {
                   Historical Transaction
                 </Typography>
               </Link>
+              <Typography>></Typography>
             </Toolbar>
           </AppBar>
         </React.Fragment>

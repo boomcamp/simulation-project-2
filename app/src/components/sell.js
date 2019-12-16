@@ -18,12 +18,12 @@ class modal extends Component {
 
     this.state = {
       quantity: "",
-      totalprice: null,
+      totalprice: 0,
       wallet: null
     };
   }
   componentDidMount() {
-    axios.get(`http://localhost:4000/wallet/1`).then(response => {
+    axios.get(`http://localhost:4001/wallet/1`).then(response => {
       this.setState({
         wallet: response.data.amount
       });
@@ -44,7 +44,7 @@ class modal extends Component {
     var total = this.state.wallet - this.state.totalprice;
 
     axios
-      .patch(`http://localhost:4000/wallet/1`, {
+      .patch(`http://localhost:4001/wallet/1`, {
         amount: total
       })
       .then(res => {
@@ -56,16 +56,15 @@ class modal extends Component {
   handleSellClick = () => {
     axios({
       method: `post`,
-      url: `http://localhost:4000/transactions`,
+      url: `http://localhost:4001/transactions`,
       data: {
         name: this.props.details.name,
         price: this.props.details.market_data.current_price.usd,
         totalPrice: this.state.totalprice,
-        quantity: this.state.quantity,
-        transaction: "Sell"
+        quantity: -this.state.quantity,
+        transaction: "sell"
       }
     });
-
     this.setState({
       quantity: "",
       totalprice: ""
@@ -79,13 +78,9 @@ class modal extends Component {
       currency: "USD",
       minimumFractionDigits: 2
     });
-    console.log(this.props);
     return (
       <React.Fragment>
         <Modal.Header>
-          <Typography variant="h4">
-            {this.props.details.name}({this.props.details.symbol})
-          </Typography>
           <Typography variant="h4">
             Wallet: {formatter.format(this.state.wallet)}
           </Typography>
@@ -101,6 +96,9 @@ class modal extends Component {
                   src={this.props.details.image.large}
                   alt="/"
                 />
+                <Typography variant="h4">
+                  {this.props.details.name}({this.props.details.symbol})
+                </Typography>
               </Grid.Column>
               <Grid.Column>
                 {" "}
