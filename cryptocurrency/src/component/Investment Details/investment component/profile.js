@@ -10,7 +10,7 @@ export class profile extends Component {
                     <MDBCardImage className="img-fluid" src="https://coda.newjobs.com/api/imagesproxy/ms/cms/content30/images/cryptocurrency.jpg" waves />
                     <MDBCardBody>
                         <MDBRow>
-                            <Wallet CoinData={this.props.InvestmentData}/>
+                            <Wallet />
                             <SellingHistoyModal />
                         </MDBRow>
                     </MDBCardBody>

@@ -36,3 +36,4 @@
  History of Sold Coin:
 
 - Viewing of Sold Coin details like GAIN PROFIT and LOSS PROFIT
+

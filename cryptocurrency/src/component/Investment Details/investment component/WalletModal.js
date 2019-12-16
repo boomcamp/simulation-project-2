@@ -6,27 +6,37 @@ export class WalletModal extends Component {
         super();
         this.state = {
             modal: false,
-            WalletData: []
+            WalletData: [],
         }
     }
     toggle = () => {
         this.setState({
             modal: !this.state.modal
         });
+
     }
     componentDidMount() {
         axios.get(`http://localhost:4000/transactions`).then(response => {
-            let result = response.data.reduce((c, v, data) => {
-                const num = parseFloat(v.CoinBalance)
-                c[v.name] = (c[v.mode], c[v.name] || 0) + num;
-                return c;
-            }, {});
-            let newData = []
-            for (var key in result) {
-                newData.push({ coin: key, totalValue: result[key] })
-            }
-            this.setState({ WalletData: newData,  })
+            const data = []
+            response.data.forEach(function (d) {
+                if(d.mode === 'buy'){
+                    data.push(d)
+                }
+            });
+            this.getSum(data)
         });
+    }
+    getSum(data){
+        let result = data.reduce((c, v) => {
+            const num = parseFloat(v.CoinBalance)
+            c[v.name] = (c[v.name] || 0) + num;
+            return c;
+        }, {});
+        let newData = []
+        for (var key in result) {
+            newData.push({ coin: key, totalValue: result[key] })
+        }
+        this.setState({ WalletData: newData})
     }
     render() {
         return (
@@ -44,11 +54,12 @@ export class WalletModal extends Component {
                             </MDBTableHead>
                             <MDBTableBody>
                                 {this.state.WalletData.map(walletData => (
-                                    <tr key={walletData.coin}>
-                                        <td>{walletData.coin}</td>
-                                        <td>{walletData.totalValue}</td>
-                                    </tr>
-                                        
+                                    walletData.coin !== "" ?
+                                        <tr key={walletData.coin}>
+                                            <td>{walletData.coin}</td>
+                                            <td>{walletData.totalValue}</td>
+                                        </tr>
+                                        : null
                                 ))}
                             </MDBTableBody>
                         </MDBTable>
