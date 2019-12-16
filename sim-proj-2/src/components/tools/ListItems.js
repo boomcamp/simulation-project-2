@@ -5,7 +5,7 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import TrackChanges from '@material-ui/icons/TrackChanges';
-import History from '@material-ui/icons/History';
+// import History from '@material-ui/icons/History';
 // import { makeStyles } from '@material-ui/core/styles';
 // import Modal from '@material-ui/core/Modal';
 // import Backdrop from '@material-ui/core/Backdrop';
@@ -58,14 +58,14 @@ export default function ListItems() {
           </ListItem>
         </Link>
         
-        <Link to="/transaction-history" style={{color:`black`, textDecoration:`none`}}>
+        {/* <Link to="/transaction-history" style={{color:`black`, textDecoration:`none`}}>
           <ListItem button>
             <ListItemIcon title="Transaction History">
               <History />
             </ListItemIcon>
             <ListItemText primary="Transaction History" />
           </ListItem>
-        </Link>
+        </Link> */}
 
         {/* <Modal
           aria-labelledby="transition-modal-title"

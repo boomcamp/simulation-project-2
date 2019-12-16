@@ -29,7 +29,6 @@ export default function InvestedCoinsTable({walletFn, tableRefFn}) {
     const tableRef = createRef();
     const classes = useStyles();
     const [open, setOpen] = useState(false);
-    const [loading, setLoading] = useState(true)
     const [sellCoin, setSellCoin] = useState({  coin:{name: "", sym: ""}, 
                                                 amountBuy: 0
                                             })
@@ -85,7 +84,7 @@ export default function InvestedCoinsTable({walletFn, tableRefFn}) {
 
     useEffect(() => {
         tableRefFn(tableRef)
-        return () => {  };
+        return () => { };
     }, [tableRefFn, tableRef])
 
     const handleRefreshTable = () => {
@@ -134,12 +133,11 @@ export default function InvestedCoinsTable({walletFn, tableRefFn}) {
                                                         page: query.page,
                                                         totalCount: trans.data.length,
                                                     })
-                                                    setLoading(false)
-                                                }, 1000)
+                                                }, 100) 
                                             })
                                     })
-                            })                            
-                    })
+                            })                     
+                    }) 
                 }
                 tableRef={tableRef}
                 options={{
@@ -151,7 +149,6 @@ export default function InvestedCoinsTable({walletFn, tableRefFn}) {
                     loadingType: "linear",
                     search:false
                 }}
-                isLoading={loading}
                 actions={[
                     {
                         icon: () => <Sell style={{color:`red`}}/>,

@@ -10,7 +10,7 @@
       "current_price": "n/a",
       "amountBuy": 0.999603,
       "coinPrice": 0.999603,
-      "profitOrLoss": -0.00017992854000004055,
+      "profitOrLoss": -0.0003048789149999731,
       "id": 1
     },
     {
@@ -23,7 +23,7 @@
       "current_price": "n/a",
       "amountBuy": 33.37599999999999,
       "coinPrice": 4.1,
-      "profitOrLoss": 1.0012800000000084,
+      "profitOrLoss": 9.345280000000002,
       "id": 2
     },
     {
@@ -36,7 +36,7 @@
       "current_price": "n/a",
       "amountBuy": 3614.51,
       "coinPrice": 7229.02,
-      "profitOrLoss": -40374.07669999823,
+      "profitOrLoss": -508055.5256000012,
       "id": 3
     },
     {
@@ -47,9 +47,9 @@
         "sym": "dash"
       },
       "current_price": "n/a",
-      "amountBuy": 50.15,
+      "amountBuy": 50.12,
       "coinPrice": 50.16,
-      "profitOrLoss": 4.513500000000022,
+      "profitOrLoss": -8.019199999999728,
       "id": 4
     },
     {
@@ -62,7 +62,7 @@
       "current_price": "n/a",
       "amountBuy": 0.026745203999999995,
       "coinPrice": 0.0022067,
-      "profitOrLoss": -8.558465279999243e-8,
+      "profitOrLoss": -0.0000017389731640799966,
       "id": 5
     },
     {
@@ -75,12 +75,12 @@
       "current_price": "n/a",
       "amountBuy": 1.1142448716999998,
       "coinPrice": 0.00655059,
-      "profitOrLoss": -0.00006947316775049537,
+      "profitOrLoss": -0.0011712384968874546,
       "id": 6
     }
   ],
   "wallet": {
-    "amount": 64.74739827399999
+    "amount": 66.247098274
   },
   "coinSold": [
     {
@@ -102,6 +102,16 @@
       "amountSold": "13",
       "current_price": 4.14,
       "id": 2
+    },
+    {
+      "coin": {
+        "name": "Dash",
+        "sym": "dash"
+      },
+      "img": "https://assets.coingecko.com/coins/images/19/large/dash-logo.png?1548385930",
+      "amountSold": "0.03",
+      "current_price": 49.99,
+      "id": 3
     }
   ]
 }

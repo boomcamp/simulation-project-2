@@ -79,8 +79,8 @@ export default function InvestmentTracker() {
                         <Paper>
                             <CryptoBuy boughtFn={() => tempTableRef.current && tempTableRef.current.onQueryChange()} />
                         </Paper>
-{/* 
-                        <Paper>
+
+                        {/* <Paper>
                             <TransactionHistory />
                         </Paper> */}
                     </Grid>
@@ -91,7 +91,7 @@ export default function InvestmentTracker() {
 
                         <AppBar position="static">
                             <Tabs value={value} onChange={(event, newValue) => setValue(newValue)} aria-label="transaction_history-invesment">
-                                <Tab value="one" label="Investment Tracker"wrapped {...a11yProps('one')}
+                                <Tab value="one" label="Investment Tracker" wrapped {...a11yProps('one')}
                                 />
                                 <Tab value="two" label="Transaction History" {...a11yProps('two')} />
                             </Tabs>
