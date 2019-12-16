@@ -35,8 +35,8 @@
 
 ## Acknowledgements
 - [Coingecko API](https://www.coingecko.com/en/api)
-- [Stack Overflow]([https://stackoverflow.com/](https://stackoverflow.com/))
-- [Coingecko]([https://www.coingecko.com/en](https://www.coingecko.com/en))
+- [Stack Overflow](https://stackoverflow.com/))
+- [Coingecko](https://www.coingecko.com/en)
 - [Windows Visual Studio](https://code.visualstudio.com)
 
 
