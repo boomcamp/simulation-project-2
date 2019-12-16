@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import axios from "axios";
 import MaterialTable from "material-table";
 import { useParams } from "react-router-dom";
+import { Typography } from "@material-ui/core";
 
 export default function MaterialTableDemo() {
   const { id } = useParams();
@@ -40,6 +41,7 @@ export default function MaterialTableDemo() {
       };
     });
   }, [id]);
+
   return (
     <div style={{ overflowY: "scroll" }}>
       <MaterialTable
@@ -81,13 +83,13 @@ export default function MaterialTableDemo() {
             type: "text"
           },
           {
-            title: "Price Bought",
+            title: "Price Bought or Sold (USD)",
             headerStyle: {
               height: 10,
               fontWeight: "bold"
             },
             render: rowData => {
-              return <p>{"$" + rowData.currentPrice.toFixed(2)}</p>;
+              return <p>{rowData.currentPrice.toFixed(2)}</p>;
             },
             type: "numeric"
           },
@@ -107,15 +109,60 @@ export default function MaterialTableDemo() {
             }
           },
           {
-            title: "Total Cost",
+            title: "Total Cost (USD)",
             headerStyle: {
               height: 10,
               fontWeight: "bold"
             },
             type: "numeric",
             render: rowData => {
-              return <p>{"$" + rowData.totalAmount.toFixed(2)}</p>;
+              return <p>{rowData.totalAmount.toFixed(2)}</p>;
             }
+          },
+          {
+            title: "Percentage Profit or Loss",
+            headerStyle: {
+              height: 10,
+              fontWeight: "bold"
+            },
+            field: "totalAmount",
+            type: "numeric",
+            render: rowData =>
+              rowData.profitOrLoss || rowData.profitOrLoss === 0 ? (
+                <Typography
+                  variant="h6"
+                  color={rowData.profitOrLoss < 0 ? "error" : "primary"}
+                >
+                  {Math.round(rowData.profitOrLoss * 10000) / 10000} %
+                </Typography>
+              ) : (
+                <Typography variant="h6">-----</Typography>
+              )
+          },
+          {
+            title: "Profit or Loss (USD)",
+            headerStyle: {
+              height: 10,
+              fontWeight: "bold"
+            },
+            field: "totalAmount",
+            type: "numeric",
+            render: rowData =>
+              rowData.profitOrLoss || rowData.profitOrLoss === 0 ? (
+                <Typography
+                  variant="h6"
+                  color={rowData.profitOrLoss < 0 ? "error" : "primary"}
+                >
+                  {Math.round(
+                    (rowData.profitOrLoss / 100) *
+                      rowData.buyPrice *
+                      rowData.coinQuantity *
+                      10000
+                  ) / 10000}
+                </Typography>
+              ) : (
+                <Typography variant="h6">-----</Typography>
+              )
           }
         ]}
         data={state.data}

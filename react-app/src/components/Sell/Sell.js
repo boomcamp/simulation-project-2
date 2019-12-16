@@ -10,10 +10,12 @@ import Swal from "sweetalert2";
 export default function BuySell(props) {
   const { id } = useParams();
   const [data, setData] = useState([]);
-  const [price, setPrice] = useState([]);
-  const [symbol, setSymbol] = useState([]);
-  const [image, setImage] = useState([]);
-  const [coinId, setCoinId] = useState([]);
+  const [price, setPrice] = useState(0);
+  const [symbol, setSymbol] = useState(0);
+  const [image, setImage] = useState(0);
+  const [coinId, setCoinId] = useState(0);
+  const [profitOrLoss, setProfitOrLoss] = useState(0);
+  const [buyPrice, setBuyPrice] = useState(0);
 
   let totalfee = +props.sellCoin * +price;
   let coinQuantity = props.sellCoin;
@@ -25,14 +27,40 @@ export default function BuySell(props) {
   });
 
   useEffect(() => {
-    axios.get(`https://api.coingecko.com/api/v3/coins/${id}`).then(response => {
-      setData(response.data);
-      setPrice(response.data.market_data.current_price.usd);
-      setSymbol(response.data.symbol);
-      setCoinId(response.data.id);
-      setImage(response.data.image.small);
-    });
-  }, [id]);
+    axios
+      .get(`https://api.coingecko.com/api/v3/coins/${id}`)
+      .then(response => {
+        setData(response.data);
+        setPrice(response.data.market_data.current_price.usd);
+        setSymbol(response.data.symbol);
+        setCoinId(response.data.id);
+        setImage(response.data.image.small);
+        return axios.get(`http://localhost:4000/transactions?coinId=${id}`);
+      })
+      .then(response => {
+        let aCurrentCointPrice = 0;
+        let count = 0;
+        var stat = true;
+        var statChecker = true;
+        let array = response.data.reverse();
+        array.map((x, i) => {
+          if (x.transaction === "Buy" && stat) {
+            statChecker = false;
+            aCurrentCointPrice += x.currentPrice;
+            count++;
+          } else if (x.transaction === "Sell") {
+            if (!statChecker) stat = false;
+          }
+          return x;
+        });
+        setProfitOrLoss(
+          ((price - aCurrentCointPrice / count) /
+            (aCurrentCointPrice / count)) *
+            100
+        );
+        setBuyPrice(aCurrentCointPrice / count);
+      });
+  }, [id, price]);
 
   const handleSellConfirm = val => {
     if (coinQuantity) {
@@ -46,6 +74,8 @@ export default function BuySell(props) {
           coinQuantity: coinQuantity,
           totalAmount: totalfee,
           transaction: "Sell",
+          profitOrLoss: profitOrLoss,
+          buyPrice: buyPrice,
           timestamp: new Date().getTime()
         })
         .then(() => {

@@ -133,24 +133,24 @@ export default function MaterialTableDemo() {
             )
           },
           {
-            title: "Last Price",
+            title: "Last Price (USD)",
             headerStyle: {
               height: 10,
               fontWeight: "bold"
             },
             field: "",
             render: rowData => {
-              return <p>{"$" + (+coinLs[rowData.coinId]).toFixed(4)}</p>;
+              return <p>{(+coinLs[rowData.coinId]).toFixed(4)}</p>;
             }
           },
           {
-            title: "Average Price",
+            title: "Average Price (USD)",
             headerStyle: {
               height: 10,
               fontWeight: "bold"
             },
             render: rowData => {
-              return <p>{"$" + rowData.currentPrice.toFixed(4)}</p>;
+              return <p>rowData.currentPrice.toFixed(4)}</p>;
             },
             type: "numeric"
           },
@@ -170,14 +170,14 @@ export default function MaterialTableDemo() {
             }
           },
           {
-            title: "Total Cost",
+            title: "Total Cost (USD)",
             headerStyle: {
               height: 10,
               fontWeight: "bold"
             },
             type: "numeric",
             render: rowData => {
-              return <p>{"$" + rowData.totalAmount.toFixed(2)}</p>;
+              return <p>{rowData.totalAmount.toFixed(2)}</p>;
             }
           },
           {
@@ -203,7 +203,7 @@ export default function MaterialTableDemo() {
             }
           },
           {
-            title: "Est. Profit",
+            title: "Est. Profit (USD)",
             headerStyle: {
               height: 10,
               fontWeight: "bold"

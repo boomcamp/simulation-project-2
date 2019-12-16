@@ -117,11 +117,10 @@ export default function BuySell(props) {
   const [price, setPrice] = useState([]);
   const [symbol, setSymbol] = useState([]);
   const [image, setImage] = useState([]);
-  const [coin, setCoin] = useState(null);
+  const [coin, setCoin] = useState(0);
   const [amount, setAmount] = useState(0);
   const [sellCoin, setSellCoin] = useState(0);
   const [sellAmount, setSellAmount] = useState(0);
-  const [profitOrLoss, setProfitOrLoss] = useState(0);
   const [buyBtn, setBuyBtn] = useState(false);
   const [sellBtn, setSellBtn] = useState(false);
   const [balance, setBalance] = useState();
@@ -140,56 +139,20 @@ export default function BuySell(props) {
   let totalSellAmount = sellCoin * +price;
 
   useEffect(() => {
-    axios
-      .get(`http://localhost:4000/transactions`)
-      .then(response => {
-        let initBalance = 0;
-        let fArray = response.data.filter(val => {
-          return val.coinId === id;
-        });
-        fArray.forEach(newVal => {
-          console.log(newVal.coinQuantity);
-          if (newVal.transaction === "Buy") initBalance += newVal.coinQuantity;
-          else {
-            initBalance -= newVal.coinQuantity;
-          }
-        });
-        setBalance(initBalance.toFixed(6));
-        return axios.get(`http://localhost:4000/transactions?coinId=${id}`);
-      })
-      .then(response => {
-        console.log(response);
-        let aCurrentCointPrice = 0;
-        let count = 0;
-        var stat = true;
-        var statChecker = true;
-        let array = response.data.reverse();
-        array.map((x, i) => {
-          if (x.transaction === "Buy" && stat) {
-            statChecker = false;
-            aCurrentCointPrice += x.currentCoinPrice;
-            count++;
-          } else if (x.transaction === "Sell") {
-            if (!statChecker) {
-              stat = false;
-            }
-          }
-          return x;
-        });
-
-        console.log(price, aCurrentCointPrice, count);
-        console.log(
-          ((price - aCurrentCointPrice / count) /
-            (aCurrentCointPrice / count)) *
-            100
-        );
-        setProfitOrLoss(
-          ((price - aCurrentCointPrice / count) /
-            (aCurrentCointPrice / count)) *
-            100
-        );
+    axios.get(`http://localhost:4000/transactions`).then(response => {
+      let initBalance = 0;
+      let fArray = response.data.filter(val => {
+        return val.coinId === id;
       });
-  }, [id, price]);
+      fArray.forEach(newVal => {
+        if (newVal.transaction === "Buy") initBalance += newVal.coinQuantity;
+        else {
+          initBalance -= newVal.coinQuantity;
+        }
+      });
+      setBalance(initBalance.toFixed(6));
+    });
+  });
 
   const formatter = new Intl.NumberFormat("en-US", {
     style: "currency",
@@ -422,7 +385,6 @@ export default function BuySell(props) {
                         setError(true);
                       } else {
                         setSellAmount(props.price * +e.target.value);
-                        // setSoldQuantity(e.target.value);
                         setNewBalance(+balance - +e.target.value);
                         setError(false);
                       }
@@ -452,7 +414,7 @@ export default function BuySell(props) {
                   <span className={classes.value}>{balance}</span>
                 </div>
                 <div className={classes.subtitleDiv}>
-                  <span className={classes.subtitle}>Total:</span>
+                  <span className={classes.subtitle}>Total Earnings:</span>
                   <span className={classes.value}>
                     {formatter.format(totalSellAmount)}
                   </span>

@@ -7,7 +7,7 @@ import { useParams } from "react-router-dom";
 
 const useStyles = makeStyles(theme => ({
   paper: {
-    width: "30%",
+    width: "23%",
     height: "100%",
     color: "white",
     borderRadius: 10
@@ -39,7 +39,7 @@ const useStyles = makeStyles(theme => ({
     justifyContent: "center"
   },
   mainCon: {
-    width: "80%",
+    width: "90%",
     height: "20vh",
     margin: "30px auto",
     display: "flex",
@@ -72,9 +72,29 @@ export default function BuySell(props) {
   const [buyLength, setBuyLength] = useState([]);
   const [sellLength, setSellLength] = useState([]);
   const [transaction, setTransaction] = useState([]);
+  const [data, setData] = useState([]);
+  const [balance, setBalance] = useState([]);
+
+  useEffect(() => {
+    axios.get(`https://api.coingecko.com/api/v3/coins/${id}`).then(response => {
+      setData(response.data);
+    });
+  }, [id]);
 
   useEffect(() => {
     axios.get(`http://localhost:4000/transactions`).then(response => {
+      let initBalance = 0;
+      let fArray = response.data.filter(val => {
+        return val.coinId === id;
+      });
+      fArray.forEach(newVal => {
+        if (newVal.transaction === "Buy") initBalance += newVal.coinQuantity;
+        else {
+          initBalance -= newVal.coinQuantity;
+        }
+      });
+      setBalance(initBalance.toFixed(2));
+
       setBuyLength(
         response.data.filter(val => {
           return val.coinId === id && val.transaction === "Buy";
@@ -106,9 +126,9 @@ export default function BuySell(props) {
               <Typography className={classes.typoTitle}>Bought</Typography>
             </Paper>
             <Paper style={{ height: "80%", fontSize: 100 }}>
-              <p style={{ color: "black", fontSize: "9vh" }}>
+              <p style={{ color: "black", fontSize: "7vh" }}>
                 {buyLength}
-                <p style={{ fontSize: 20 }}>Transactions</p>
+                <p style={{ fontSize: 24 }}>Transactions</p>
               </p>
             </Paper>
           </Paper>
@@ -117,9 +137,9 @@ export default function BuySell(props) {
               <Typography className={classes.typoTitle}>Sold</Typography>
             </Paper>
             <Paper style={{ height: "80%" }}>
-              <p style={{ color: "black", fontSize: "9vh" }}>
+              <p style={{ color: "black", fontSize: "7vh" }}>
                 {sellLength}
-                <p style={{ fontSize: 20 }}>Transactions</p>
+                <p style={{ fontSize: 24 }}>Transactions</p>
               </p>
             </Paper>
           </Paper>
@@ -130,9 +150,22 @@ export default function BuySell(props) {
               </Typography>
             </Paper>
             <Paper style={{ height: "80%" }}>
-              <p style={{ color: "black", fontSize: "9vh" }}>
+              <p style={{ color: "black", fontSize: "7vh" }}>
                 {transaction}
-                <p style={{ fontSize: 20 }}>Transactions</p>
+                <p style={{ fontSize: 24 }}>Transactions</p>
+              </p>
+            </Paper>
+          </Paper>{" "}
+          <Paper className={classes.paper}>
+            <Paper className={classes.topTitle}>
+              <Typography className={classes.typoTitle}>
+                {data.name} Balance
+              </Typography>
+            </Paper>
+            <Paper style={{ height: "80%" }}>
+              <p style={{ color: "black", fontSize: "7vh" }}>
+                {balance}
+                <p style={{ fontSize: 20 }}>{data.name}</p>
               </p>
             </Paper>
           </Paper>
