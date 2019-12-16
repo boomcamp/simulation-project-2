@@ -3,7 +3,7 @@ import axios from 'axios'
 import MaterialTable from 'material-table';
 import { Grid,Button,ButtonGroup } from '@material-ui/core';
  
-export class InvestmentTracking extends Component {
+export default class InvestmentTracking extends Component {
 
     constructor(props) {
         super(props)
@@ -31,7 +31,7 @@ export class InvestmentTracking extends Component {
 
                   <Grid item> {console.log(rowData)}
                   <ButtonGroup variant="contained" color="primary" aria-label="full-width contained primary button group">
-                  <Button onClick = {()=>this.handleClick(rowData)}>Buy</Button>
+                  <Button onClick = {()=>this.handleClick(rowData)}>Buy/Sell</Button>
                   </ButtonGroup>
                   </Grid>
                 },
@@ -75,5 +75,3 @@ export class InvestmentTracking extends Component {
         )
     }
 }
-
-export default InvestmentTracking

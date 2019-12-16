@@ -3,7 +3,10 @@ import axios from 'axios'
 import MaterialTable from 'material-table';
 
 export default class InvestmentTracking extends Component {
-
+    getProfitLoss = (profit, i) => {
+      return i
+      
+    }
     constructor(props) {
         super(props)
     
@@ -19,38 +22,20 @@ export default class InvestmentTracking extends Component {
                  field: 'current_price',
                   render: rowData => <span style={{color:'navy'}}>{ rowData.current_price }</span> },
                 { title: 'Total Value', field: 'total_value'},
-                { title: 'Profit', field: 'profit',
-                  render: rowProfit => <span style={{color:'green'}}>{ rowProfit.profit }</span>},
-                { title: 'Loss', field: 'loss',
-                  render: rowLoss => <span style={{color:'red'}}>{ rowLoss.loss }</span>},
-
+                 { title: 'Profit/Loss', field: 'profit_loss',
+                   render: (rowProfit, index) => <span style={{color:'green'}}>{ this.getProfitLoss(rowProfit.current_price, index) }</span>},
+  
                 { title: 'Account Balance', field: 'balance',
                   render: rowBal => <span style={{color:'blue'}}>{rowBal.balance}</span>
-                }
+                },
+                { title: 'Transactions', field: 'transactions'}
           ],
           data: [],
         }
+        console.log(this.state.columns, "adata ")
     }
 
     componentDidMount(){
-    //     axios.get("http://localhost:4000/transactions").then(res => {
-    //      console.log(res.data);
-    //     let result = res.data.reduce((c, v) => {
-            
-    //     c[v.name] = (c[v.name] || 0) + num;
-    //     return c;
-    //   }, {});
-    //   let newData = [];
-    //   let init = 0;
-    //   console.log(result);
-    //   for (var key in result) {
-    //     newData.push({ id: init++, name: key, current_price: result[key] });
-    //   }
-    //   console.log(newData)
-    //   this.setState({
-    //     data: newData
-    //   });
-    // });
         axios
         .get(`http://localhost:4000/transactions`, { 
         })
@@ -75,34 +60,14 @@ export default class InvestmentTracking extends Component {
             <div className='list'>
             <MaterialTable
         
-            title = "Investment Tracking"
+            title = "History"
             columns = {this.state.columns}
             data = {this.state.data}
             />
             </div>
-
+            
             </React.Fragment>
 
         )
     }
 }
-
-// componentDidMount() {
-//     axios.get("http://localhost:4000/transactions").then(res => {
-//       // console.log(res.data);
-//       let result = res.data.reduce((c, v) => {
-//         const num = parseFloat(v.coinBalance);
-//         c[v.name] = (c[v.name] || 0) + num;
-//         return c;
-//       }, {});
-//       let newData = [];
-//       let init = 0;
-//       // console.log(result);
-//       for (var key in result) {
-//         newData.push({ id: init++, name: key, amount: result[key] });
-//       }
-//       this.setState({
-//         coins: newData
-//       });
-//     });
-//   }

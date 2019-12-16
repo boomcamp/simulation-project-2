@@ -3,8 +3,13 @@ import TextField from '@material-ui/core/TextField';
 import { Button } from '@material-ui/core';
 import '../App.css';
 import axios from 'axios';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
 
-export class Transactions extends Component {
+export default class Transactions extends Component {
   constructor(props) {
     super(props)
 
@@ -12,7 +17,10 @@ export class Transactions extends Component {
       coins: [],
       totalVal: 0,
       getBal: [],
-      quantity: 0
+      open: false,
+      disabled: true,
+      quantity : 0,
+      getPrice : []
     }
   }
   componentDidMount() {
@@ -28,6 +36,18 @@ export class Transactions extends Component {
         })
         return response
       })
+      .then(getdata => {
+        console.log(getdata)
+        axios
+        .get(`http://localhost:4000/transactions`,{
+        })
+        .then(getprice=>{
+          console.log(getprice.data)
+          this.setState({
+            getPrice : getprice.data
+          })
+        })
+      })
   }
 
   handleClickBuy = (e) => {
@@ -35,29 +55,42 @@ export class Transactions extends Component {
     axios
       .post(`http://localhost:4000/transactions`,
         {
+          transactions : 'BUY',
           name: e.name,
           current_price: e.market_data.current_price.usd,
           total_value: this.state.totalVal.toFixed(3),
           balance : localStorage.getItem('balance') - this.state.totalVal.toFixed(3), // Balance - Total value
-          loss : parseInt(defaultNum) - parseInt(localStorage.getItem('balance')) - parseInt(this.state.totalVal.toFixed(3)),
+          profit_loss : parseInt(defaultNum) - parseInt(localStorage.getItem('balance')) - parseInt(this.state.totalVal.toFixed(3)),
         })
       .then(resp => {
         console.log(resp)
         let lsBalance = localStorage.getItem('balance')               // 1,000,000
         let deducted = lsBalance - this.state.totalVal.toFixed(3)     // 1,000,000 - total value
-        localStorage.setItem("balance", deducted)                     // set value of 1,000,000 - total value
+        localStorage.setItem("balance", deducted) // set value of 1,000,000 - total value
+    
+        this.setState({
+          openBuy : false,
+          totalVal : 0,
+          disabled : true
+        })
+
       })
   }
 
   handleClickSell = (e) => {
+    
     let defaultNum = 1000000
     axios
     .post(`http://localhost:4000/transactions`,{
+    
+    transactions : 'SELL',
     name : e.name,
     current_price : e.market_data.current_price.usd,
     total_value : this.state.totalVal.toFixed(3),
     balance : parseInt(localStorage.getItem('balance')) + parseInt(this.state.totalVal.toFixed(3)), 
-    profit : parseInt(defaultNum) - parseInt(localStorage.getItem('balance')) + parseInt(this.state.totalVal.toFixed(3)),
+    profit : parseInt(defaultNum) - parseInt(localStorage.getItem('balance')) - parseInt(this.state.totalVal.toFixed(3))
+
+
   })
     .then(responde=>{
       console.log(responde)
@@ -65,16 +98,53 @@ export class Transactions extends Component {
       let val = this.state.totalVal.toFixed(3)
       let added = parseInt(lsBalance) + parseInt(val)
       localStorage.setItem('balance', added)
+
+      this.setState({
+        openSell : false,
+        totalVal : 0,
+        disabled : true
+      })
+      
     })
   }
 
   handleOnChange = (e) =>{
-    console.log(e)
+    if(e.target.value){
+      this.setState({
+        totalVal: this.state.coins.market_data.current_price.usd * e.target.value,
+        disabled: false
+      })
+    }
+    else{
+      this.setState({
+        disabled: true
+      })
+    }
+  }
 
+  handleClickOpenBuy=()=>{
     this.setState({
-      totalVal: this.state.coins.market_data.current_price.usd * e.target.value,
+      openBuy : true
     })
   }
+ 
+  handleClickOpenSell=()=>{
+    this.setState({
+      openSell : true
+    })
+  }
+
+  handleClickCloseBuy=()=>{
+    this.setState ({
+      openBuy : false
+    })
+  }
+  handleClickCloseSell=()=>{
+    this.setState ({
+      openSell : false
+    })
+  }
+
   render() {
     return (
       <React.Fragment>
@@ -105,11 +175,11 @@ export class Transactions extends Component {
           }}
           variant="outlined"
           value={ this.state.value }
-          onChange= { this.handleOnChange }
-
+          onChange= { (e) => this.handleOnChange(e) }
+          required
         />
-        <Button className='btn' variant='contained' color='primary' onClick={()=>this.handleClickBuy(this.state.coins)}>Buy</Button>
-        <Button className='btn' variant='contained' color='primary' onClick={()=>this.handleClickSell(this.state.coins)}>Sell</Button>
+        <Button className='btn' variant='contained' disabled={this.state.disabled} color='primary' onClick={()=>this.handleClickOpenBuy()}>Buy</Button>
+        <Button className='btn' variant='contained' disabled={this.state.disabled} color='primary' onClick={()=>this.handleClickOpenSell()}>Sell</Button>
           {
             this.state.coins.market_data ? 
           <p>
@@ -119,10 +189,55 @@ export class Transactions extends Component {
           </p>
           :null
         }
+        <Dialog
+        open={this.state.openBuy}
+        onClose={this.handleClickCloseBuy}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">{"Transactions"}</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Are you sure you want to Buy?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={this.handleClickCloseBuy} color="primary">
+            Disagree
+          </Button>
+          <Button onClick={() => this.handleClickBuy(this.state.coins)} color="primary" autoFocus>
+            Agree
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+
+
+      <Dialog
+        open={this.state.openSell}
+        onClose={this.handleClickCloseSell}
+        aria-labelledby="alert-dialog-title2"
+        aria-describedby="alert-dialog-description2"
+      >
+        <DialogTitle id="alert-dialog-title2">{"Transactions"}</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description2">
+            ARe you sure you want to Sell?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={this.handleClickCloseSell} color="primary">
+            Disagree
+          </Button>
+          <Button onClick={() => this.handleClickSell(this.state.coins)} color="primary" autoFocus>
+            Agree
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+
         </div>
       </React.Fragment>
     )
   }
 }
-
-export default Transactions
