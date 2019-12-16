@@ -7,7 +7,7 @@ import InvestedCoinsTable from './InvestedCoinsTable'
 import axios from 'axios'
 import Logo from '../../assest/logo.gif'
 import CryptoBuy from './CryptoBuy'
-import TransactionHistory from '../TransactionHistory'
+import TransactionHistory from './TransactionHistory'
 
 import PropTypes from 'prop-types';
 import AppBar from '@material-ui/core/AppBar';
@@ -89,7 +89,7 @@ export default function InvestmentTracker() {
                         {/* <InvestedCoinsTable walletFn={(wallet) => setProfitLoss(wallet)}
                                             tableRefFn={(tableRef) => tempTableRef = tableRef }/> */}
 
-                        <AppBar position="static">
+                        <AppBar position="static" style={{cursor:`pointer`}}>
                             <Tabs value={value} onChange={(event, newValue) => setValue(newValue)} aria-label="transaction_history-invesment">
                                 <Tab value="one" label="Investment Tracker" wrapped {...a11yProps('one')}
                                 />

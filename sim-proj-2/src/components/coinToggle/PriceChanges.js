@@ -3,7 +3,7 @@ import '../../App.css'
 
 export default function ChangesTable({percentage}) {
     return (
-        <table className="price_change_percentage">
+        <table className="price_change_percentage" style={{marginLeft:`170px`}}>
             <thead>
               <tr style={{background:`#6a6d6b`}}>
                 <th className="day"> 1H </th>

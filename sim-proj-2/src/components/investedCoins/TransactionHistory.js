@@ -1,10 +1,10 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import MaterialTable from 'material-table';
-// import NavBar from './tools/NavBar'
 import axios from 'axios'
 
 export default function TransactionHistory() {
-    const [state, setState] = React.useState({
+    const [loading, setLoading] = useState(true)
+    const [state, setState] = useState({
         columns: [
             {   title:"",
                 render: rowData => (
@@ -14,11 +14,25 @@ export default function TransactionHistory() {
                 headerStyle:{padding:`0`},
                 sorting:false
             },
-            {title: 'Coin', field: 'coin.name', 
+                {title: 'Coin', field: 'coin.name', 
                 render: rowData => (
                     <div>
                         <b>{rowData.coin.name}</b> 
                         <i> ({rowData.coin.sym.toUpperCase()})</i>
+                    </div>
+                )
+            },
+            {title: 'Date Sold', field: 'dateSold', 
+                render: rowData => (
+                    <div>
+                        <p>{rowData.dateSold}</p>
+                    </div>
+                )
+            },
+            {title: 'Bought Value', field: 'current_price', headerStyle:{textAlign:`center`}, cellStyle: {color: `#428bca`, textAlign:`center`},
+                render: rowData => (
+                    <div>
+                        <p>${rowData.current_price}</p>
                     </div>
                 )
             },
@@ -44,30 +58,17 @@ export default function TransactionHistory() {
         axios
             .get(`http://localhost:4000/coinsold`)
             .then(res => {
-                // console.log(res.data)
-                if(!isCancelled)
+                if(!isCancelled){
                     setState(prevData => { return {...prevData, data: res.data} })
+                    setLoading(false)
+                }
             })
 
         return () => { isCancelled=true };
     }, [])
-    // const headerStyle={ textAlign: `left`, 
-    //                 color: `white`, 
-    //                 backgroundColor: `#3f51b5`, 
-    //                 padding: `30px`,
-    //                 margin: `0`}
-  return (
-    //<div style={{display:`flex`}}>
-    //     <NavBar />
 
+  return (
         <MaterialTable
-            style={{
-                // width:`50%`,
-                // margin:`180px auto`
-            }}
-            // components={{
-            //     Toolbar: props => (<h2 className="tableHeader" style={headerStyle}>Transaction History</h2> ),
-            // }}
             options={{
                 headerStyle: {
                     fontWeight: `bold`,
@@ -78,7 +79,7 @@ export default function TransactionHistory() {
             title="Transaction History"
             columns={state.columns}
             data={state.data}
+            isLoading={loading}
         />
-    // </div>
   );
 }

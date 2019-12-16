@@ -110,18 +110,17 @@ export default function CryptoCoins() {
 
   return (
     <MaterialTable
-      style={{marginTop:`80px`}}    
       columns={state.columns}
       data={state.data}
       title={null}
       options={{
         pageSizeOptions: [5,10,20,50,100],
-        pageSize: 10,
+        pageSize: 20,
         headerStyle: {
           fontWeight: `bold`,
           textTransform:'uppercase'
         },
-        loadingType: "linear"
+        // loadingType: "linear"  
       }}
       detailPanel={rowData => {
         return <CryptoToggle id={rowData.id} 

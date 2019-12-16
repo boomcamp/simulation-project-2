@@ -89,26 +89,12 @@ export default function InvestedCoinsTable({walletFn, tableRefFn}) {
 
     const handleRefreshTable = () => {
         tableRef.current && tableRef.current.onQueryChange()
-    }
-
-    // const headerStyle={ textAlign: `left`, 
-    //                     color: `white`, 
-    //                     backgroundColor: `#3f51b5`, 
-    //                     padding: `30px`,
-    //                     margin: `0`}
-    
+    }    
     return (
         <React.Fragment>
             <MaterialTable
                 title="Investment Tracker"
-                components={{
-                    // Toolbar: props => ( <div>
-                    //                         <h2 className="tableHeader" style={headerStyle}>Invested Cryptocurrency Coins</h2>
-                    //                         {/* <p>1234</p> */}
-                    //                     </div>),
-                    }}
                 columns={state.columns}
-                // data={state.data}
                 data = {query =>
                     new Promise((resolve, reject) => {
                         axios.get(`http://localhost:4000/transactions`)
@@ -133,7 +119,7 @@ export default function InvestedCoinsTable({walletFn, tableRefFn}) {
                                                         page: query.page,
                                                         totalCount: trans.data.length,
                                                     })
-                                                }, 100) 
+                                                }, 2000) 
                                             })
                                     })
                             })                     
@@ -162,7 +148,7 @@ export default function InvestedCoinsTable({walletFn, tableRefFn}) {
                         icon: 'refresh',
                         tooltip: 'Refresh Data',
                         isFreeAction: true,
-                        onClick: () => {handleRefreshTable()} //tableRef.current && tableRef.current.onQueryChange(), //(console.log(tableRef))
+                        onClick: () => {handleRefreshTable()}
                     }
                 ]}
             />
@@ -181,7 +167,6 @@ export default function InvestedCoinsTable({walletFn, tableRefFn}) {
             >
                 <Fade in={open}>
                     <div className={classes.paper}>
-                        {/* {sellCoin.coin.name}  */}
                         <CryptoSell maxSell={Number(sellCoin.amountBuy)}
                                     img={sellCoin.img}
                                     coin={sellCoin.coin}

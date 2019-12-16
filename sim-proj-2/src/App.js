@@ -4,7 +4,7 @@ import {BrowserRouter, Switch, Route} from 'react-router-dom'
 
 import DashBoard from "./components/Dashboard";
 import InvestmentTracker from './components/investedCoins/InvestmentTracker'
-import TransactionHistory from './components/TransactionHistory'
+import TransactionHistory from './components/investedCoins/TransactionHistory'
 
 export default function App() {
     return (

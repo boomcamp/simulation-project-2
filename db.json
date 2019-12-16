@@ -10,7 +10,7 @@
       "current_price": "n/a",
       "amountBuy": 0.999603,
       "coinPrice": 0.999603,
-      "profitOrLoss": -0.0003048789149999731,
+      "profitOrLoss": 0.0003968423910000185,
       "id": 1
     },
     {
@@ -21,9 +21,9 @@
         "sym": "atom"
       },
       "current_price": "n/a",
-      "amountBuy": 33.37599999999999,
+      "amountBuy": 33.27599999999999,
       "coinPrice": 4.1,
-      "profitOrLoss": 9.345280000000002,
+      "profitOrLoss": 4.325880000000012,
       "id": 2
     },
     {
@@ -36,7 +36,7 @@
       "current_price": "n/a",
       "amountBuy": 3614.51,
       "coinPrice": 7229.02,
-      "profitOrLoss": -508055.5256000012,
+      "profitOrLoss": -587394.0200999975,
       "id": 3
     },
     {
@@ -49,7 +49,7 @@
       "current_price": "n/a",
       "amountBuy": 50.12,
       "coinPrice": 50.16,
-      "profitOrLoss": -8.019199999999728,
+      "profitOrLoss": -43.103200000000015,
       "id": 4
     },
     {
@@ -62,7 +62,7 @@
       "current_price": "n/a",
       "amountBuy": 0.026745203999999995,
       "coinPrice": 0.0022067,
-      "profitOrLoss": -0.0000017389731640799966,
+      "profitOrLoss": -0.000001215302069760001,
       "id": 5
     },
     {
@@ -75,12 +75,12 @@
       "current_price": "n/a",
       "amountBuy": 1.1142448716999998,
       "coinPrice": 0.00655059,
-      "profitOrLoss": -0.0011712384968874546,
+      "profitOrLoss": -0.0012473637065219985,
       "id": 6
     }
   ],
   "wallet": {
-    "amount": 66.247098274
+    "amount": 66.664098274
   },
   "coinSold": [
     {
@@ -91,6 +91,7 @@
       "img": "https://assets.coingecko.com/coins/images/19/large/dash-logo.png?1548385930",
       "amountSold": "0.01",
       "current_price": 50.21,
+      "dateSold": "2019/12/13",
       "id": 1
     },
     {
@@ -101,6 +102,7 @@
       "img": "https://assets.coingecko.com/coins/images/1481/large/cosmos_hub.png?1555657960",
       "amountSold": "13",
       "current_price": 4.14,
+      "dateSold": "2019/12/13",
       "id": 2
     },
     {
@@ -111,7 +113,19 @@
       "img": "https://assets.coingecko.com/coins/images/19/large/dash-logo.png?1548385930",
       "amountSold": "0.03",
       "current_price": 49.99,
+      "dateSold": "2019/12/13",
       "id": 3
+    },
+    {
+      "coin": {
+        "name": "Cosmos",
+        "sym": "atom"
+      },
+      "img": "https://assets.coingecko.com/coins/images/1481/large/cosmos_hub.png?1555657960",
+      "amountSold": "0.1",
+      "current_price": 4.17,
+      "dateSold": "2019/12/16",
+      "id": 4
     }
   ]
 }

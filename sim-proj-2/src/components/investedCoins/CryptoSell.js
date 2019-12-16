@@ -52,7 +52,8 @@ function CryptoSell({maxSell, img, coin, current_price, coinId, closeFn, enqueue
                             "coin": res.data.coin,
                             "img": res.data.img,
                             "amountSold": value.cash,
-                            "current_price": current_price
+                            "current_price": current_price,
+                            "dateSold": new Date().toJSON().slice(0,10).replace(/-/g,'/')
                         })
 
                     if(res.data.amountBuy === 0){

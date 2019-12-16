@@ -7,7 +7,7 @@ import TableRow from '@material-ui/core/TableRow';
 
 export default function QuickStats({market_cap_rank, circulating_supply, high_24h, low_24h, price_change_24h, ath}) {
     return (
-        <Table aria-label="quick stats table" style={{marginTop:`75px`}}>
+        <Table aria-label="quick stats table" style={{margin:`75px 0 0 0`, width:`25%`}}>
             <TableHead style={{background:`#6a6d6b`}}>
                 <TableRow>
                     <TableCell style={{color:`white`, fontWeight:`bold`}}>QUICK STATS</TableCell>

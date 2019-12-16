@@ -43,12 +43,12 @@ export default function CryptoToggle({id, market_cap_rank, circulating_supply, h
   }, [id, history])
 
   return (
-    <div style={{display:`flex`}}>
+    <div style={{display:`flex`, justifyContent:`space-around`}}>
       <div>
           <PriceChanges percentage={percentage}/>
           
           <ToggleButtonGroup
-              style={{margin:`30px 0 0 260px`}}
+              style={{margin:`30px 0 0 420px`}}
               value={history}
               exclusive
               onChange={(e, newDate) => setHistory(newDate)}

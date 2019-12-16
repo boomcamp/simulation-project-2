@@ -1,7 +1,7 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
-import Grid from '@material-ui/core/Grid';
+// import Grid from '@material-ui/core/Grid';
 // import Paper from '@material-ui/core/Paper';
 // import clsx from 'clsx';
 // import Container from '@material-ui/core/Container';
@@ -62,9 +62,9 @@ export default function Dashboard() {
                 <CyptoBuy />
               </Paper>
             </Grid> */}
-            <Grid item xs={9} style={{margin:`0 auto`}}>
+            {/* <Grid item xs={9} style={{margin:`0 auto`}}> */}
                 <CryptoTable />
-            </Grid>
+            {/* </Grid> */}
           {/* </Grid> */}
           <Box style={{padding:`80px 0 30px 0`}}>
             <Copyright />

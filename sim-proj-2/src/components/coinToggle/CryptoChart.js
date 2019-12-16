@@ -6,10 +6,10 @@ export default function CryptoChart({data}) {
     return (
         <AreaChart  
             style={{margin: `30px 0`}}
-            width={950}
+            width={1200}
             height={300}
             data={data}
-            margin={{ top: 10, right: 30, left: 20, bottom: 35,}}
+            margin={{ top: 10, right: 30, left: 50, bottom: 35,}}
         >
             <defs>
             <linearGradient id="colorPv" x1="0" y1="0" x2="0" y2="1">
