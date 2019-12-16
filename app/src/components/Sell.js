@@ -1,66 +1,86 @@
 import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { Loader } from 'rsuite';
 import axios from 'axios';
-import MaterialTable from 'material-table';
 import moment from 'moment';
+import Button from '@material-ui/core/Button';
+import { Table, TableCell, TableRow, Paper, TableHead, TableBody } from '@material-ui/core';
+import SellDialog from './SellDialog';
+
 
 const useStyles = makeStyles(theme => ({
     background: {
         display: "flex",
-        flexDirection: "column",
         padding: 20,
         background: 'rgb(82, 86, 89)',
         color: ' #fff',
         width: "100%",
-        height: "100vh",
+        height: "100%",
         margin: 0
     },
     loader: {
         display: "flex",
         justifyContent: "center",
         alignItems: "center"
+    },
+    items: {
+        display: "flex",
+        flexWrap: 'wrap',
+        margin: 10,
+        justifyContent: 'space-around',
+        alignContent: 'space-around'
+    },
+    box: ({ inactive }) => ({
+        boxShadow: '0 0 20px 0 rgba(0,0,0,0.12)',
+        borderRadius: 5,
+        display: 'flex',
+        justifyContent: "space-around",
+        alignItems: 'space-around',
+        background: "#f5f5f5",
+        padding: 20,
+        margin: 10,
+        width: '31%',
+        height: '45%',
+        color: "#575757",
+        flexDirection: 'column',
+        transition: '0.3s',
+        ...(!inactive && {
+            '&:hover': {
+                transform: 'translateY(-3px)',
+                boxShadow: '0 4px 20px 0 rgba(0,0,0,0.12)',
+            },
+        }),
+    }),
+    data: {
+        display: 'flex',
+        justifyContent: "flex-start",
+        alignContent: 'flex-start',
+    },
+    button: {
+        display: 'flex',
+        justifyContent: 'flex-end',
+        margin: 5
+    },
+    column: {
+        display: 'flex',
+        flexDirection: 'column'
+    },
+    header: {
+        margin: 5
+    },
+    id: {
+        display: 'flex',
+        justifyContent: 'flex-end'
     }
 }));
 
 
 export default function Sell() {
     const classes = useStyles();
-    const [state] = useState({
-        columns: [
-            { title: '#', field: 'id', editable: 'never' },
-            { title: 'Coin ID', field: 'coinID', editable: 'never' },
-            { title: 'Coin Name', field: 'name', editable: 'never' },
-            { title: 'Date', field: 'date', editable: 'never' },
-            {
-                title: 'Time',
-                field: 'time',
-                type: 'numeric',
-                editable: 'never'
-            },
-            {
-                title: 'Amount to Sell',
-                field: 'amount',
-                type: 'numeric'
-            },
-            {
-                title: 'Value',
-                field: 'value',
-                type: 'numeric',
-                editable: 'never'
-            },
-            {
-                title: 'Price of Coin Upon Buying',
-                field: 'priceBought',
-                type: 'numeric',
-                editable: 'never'
-            }
-        ],
-    });
-    const [isLoading, setIsLoading] = useState(true)
     const [trans, setTrans] = useState([])
     const [time, setTime] = useState('')
     const [date, setDate] = useState('')
+    const [open, setOpen] = useState(false)
+    const [id, setId] = useState(0)
 
     useEffect(() => {
         var times = moment()
@@ -76,98 +96,89 @@ export default function Sell() {
             url: `http://localhost:4000/transactions`
         })
             .then(data => {
-                console.log(data.data)
                 setTrans(data.data)
-                setIsLoading(false)
+                setId(data.data.id)
             })
             .catch(e => console.log(e))
     }, [])
 
-    const handleRefresh = (e) => {
-        e.reload(true)
+    const handleClickOpen = () => {
+        setOpen(true)
+    }
+
+    const handleClose = () => {
+        setOpen(false)
+    }
+
+    const handleSell = () => {
+        axios({
+            method: 'patch',
+            url: `/transactions/${id}`,
+            data: {
+
+            }
+        })
     }
 
     return (
         <div className={classes.background}>
-            {isLoading ?
-                <div className={classes.loader}>
-                    <Loader size="md" />
-                    Loading... <br />
-                    Please wait.
+            <div className={classes.column}>
+                <div className={classes.header}>
+                    <h2>Sell Coins</h2>
                 </div>
-                :
-                <MaterialTable
-                    title="Selling Investment"
-                    columns={state.columns}
-                    data={trans}
-                    options={{
-                        filtering: true,
-                        pageSize: 10,
-                        pageSizeOptions: [10],
-                        rowStyle: {
-                            backgroundColor: '#EEE',
-                        },
-                        actionsColumnIndex: 8
-                    }}
-                    editable={{
-                        onRowUpdate: (newData, oldData) =>
-                            new Promise(resolve => {
-                                setTimeout(() => {
-                                    resolve();
-                                    if (oldData) {
-                                        const data = [...trans];
-                                        data[trans.indexOf(oldData)] = newData;
-                                        setTrans(data);
-                                    }
-                                }, 600);
-                                axios({
-                                    method: 'get',
-                                    url: `/transactions/${newData.id}`
-                                })
-                                    .then(e => {
-                                        let prevAmount = e.data.amount
-
-                                        axios({
-                                            method: 'patch',
-                                            url: `/transactions/${newData.id}`,
-                                            data: {
-                                                date: date,
-                                                time: time,
-                                                amount: newData.amount,
-                                                value: newData.value
-                                            }
-                                        })
-                                            .then(
-                                                axios({
-                                                    method: 'get',
-                                                    url: `/transactions/${newData.id}`
-                                                })
-                                                    .then(e => {
-                                                        const newAmount = prevAmount - newData.amount
-                                                        const newVal = parseInt(e.data.amount) / parseInt(e.data.priceBought)
-
-                                                        axios({
-                                                            method: 'patch',
-                                                            url: `/transactions/${newData.id}`,
-                                                            data: {
-                                                                date: date,
-                                                                time: time,
-                                                                amount: newAmount,
-                                                                value: newVal
-                                                            }
-                                                        })
-                                                            .then(e => handleRefresh())
-                                                            .catch(e => console.log(e))
-                                                    })
-                                                    .catch(e => console.log(e))
-
-                                            )
-                                    })
-                                    .catch(e => console.log(e))
-                            })
-                    }}
-                />
-            }
-        </div>
+                <div className={classes.items}>
+                    {trans.map(res =>
+                        <div key={res.id} className={classes.box}>
+                            <Paper>
+                                <Table className={classes.table} aria-label="simple table">
+                                    <TableHead>
+                                        <TableRow>
+                                            <TableCell>ID</TableCell>
+                                            <TableCell>{res.id}</TableCell>
+                                        </TableRow>
+                                    </TableHead>
+                                    <TableBody>
+                                        <TableRow>
+                                            <TableCell>Name:</TableCell>
+                                            <TableCell>{res.name}</TableCell>
+                                        </TableRow>
+                                        <TableRow>
+                                            <TableCell>Date Purchased:</TableCell>
+                                            <TableCell>{res.date}</TableCell>
+                                        </TableRow>
+                                        <TableRow>
+                                            <TableCell>Time Purchased:</TableCell>
+                                            <TableCell>{res.time}</TableCell>
+                                        </TableRow>
+                                        <TableRow>
+                                            <TableCell>Amount:</TableCell>
+                                            <TableCell>${res.amount}</TableCell>
+                                        </TableRow>
+                                        <TableRow>
+                                            <TableCell>Amount when Purchased:</TableCell>
+                                            <TableCell>${res.priceBought}</TableCell>
+                                        </TableRow>
+                                        <TableRow>
+                                            <TableCell>Current Value:</TableCell>
+                                            <TableCell>{res.value}</TableCell>
+                                        </TableRow>
+                                    </TableBody>
+                                </Table>
+                            </Paper>
+                            <div className={classes.button}>
+                                <Button variant="outlined" autofocus onClick={() => handleClickOpen()}>Sell</Button>
+                            </div>
+                        </div>
+                    )}
+                    {open ? <SellDialog
+                        open={handleClickOpen}
+                        close={handleClose}
+                        handleSell={handleSell}
+                    />
+                        :
+                        <React.Fragment></React.Fragment>}
+                </div>
+            </div>
+        </div >
     );
 }

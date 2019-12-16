@@ -62,7 +62,7 @@ const useStyles = (theme => ({
     },
     margin: {
         margin: theme.spacing(1),
-    },
+    }
 }));
 
 
@@ -313,9 +313,9 @@ class DataChart extends Component {
                 value: this.state.convert / this.props.currentPrice
             }
         })
-            .then(e => {
-                e.history.push('/tracking')
-            })
+            .then(
+                this.history.push('/tracking')
+            )
             .catch(err => console.log(err))
     }
 
@@ -410,7 +410,6 @@ class DataChart extends Component {
                                         </Button>
                                     </DialogActions>
                                 </form>
-
                             </Dialog>
                         </div>
                     </React.Fragment>

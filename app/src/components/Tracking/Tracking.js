@@ -132,7 +132,11 @@ export default function Tracking() {
                                         value: newData.value
                                     },
                                 })
-                                    .then(
+                                    .then(e => {
+                                        const data = [...trans];
+                                        data.splice(data.indexOf(oldData), 1);
+                                        setTrans(data)
+
                                         axios({
                                             method: 'get',
                                             url: `/transactions/${newData.id}`
@@ -154,7 +158,7 @@ export default function Tracking() {
                                                     .catch(e => console.log(e))
                                             })
                                             .catch(e => console.log(e))
-                                    )
+                                    })
                                     .catch(err => console.log(err))
                             }),
                         onRowDelete: oldData =>
@@ -169,9 +173,13 @@ export default function Tracking() {
                                         method: 'delete',
                                         url: `/transactions/${oldData.id}`,
                                     })
-                                        .then(e => console.log(e.data))
+                                        .then(e => {
+                                            const data = [...trans];
+                                            data.splice(data.indexOf(oldData), 1);
+                                            setTrans(data)
+                                        })
                                         .catch(e => console.log(e));
-                                }, 600);
+                                }, 800);
 
 
                             }),

@@ -4,31 +4,61 @@
       "coinID": "bitcoin",
       "name": "Bitcoin",
       "date": "2019/12/16",
-      "time": "11:29:40 am",
-      "amount": 2,
-      "priceBought": 7085.92,
-      "value": 0.00014114326040931546,
-      "id": 3
+      "time": "03:11:22 pm",
+      "amount": "5",
+      "priceBought": 7081.75,
+      "value": 0.0007061149555147578,
+      "id": 1
     },
     {
       "coinID": "ethereum",
       "name": "Ethereum",
       "date": "2019/12/16",
-      "time": "11:29:45 am",
-      "amount": 1,
-      "priceBought": 141.67,
+      "time": "11:38:38 am",
+      "amount": 4,
+      "priceBought": 141.55,
       "value": 0.0070921985815602835,
+      "id": 2
+    },
+    {
+      "coinID": "ethereum",
+      "name": "Ethereum",
+      "date": "2019/12/16",
+      "time": "11:55:10 am",
+      "amount": "1",
+      "priceBought": 141.36,
+      "value": 0.0070921985815602835,
+      "id": 3
+    },
+    {
+      "coinID": "bitcoin",
+      "name": "Bitcoin",
+      "date": "2019/12/16",
+      "time": "11:52:06 am",
+      "amount": "5",
+      "priceBought": 7081.19,
+      "value": 0.0007060960092865748,
       "id": 4
     },
     {
-      "coinID": "tezos",
-      "name": "Tezos",
+      "coinID": "bitcoin",
+      "name": "Bitcoin",
       "date": "2019/12/16",
-      "time": "11:30:07 am",
-      "amount": 3,
-      "priceBought": 1.66,
-      "value": 1,
+      "time": "02:53:37 pm",
+      "amount": "10",
+      "priceBought": 7076.73,
+      "value": 0.0014130820308249714,
       "id": 5
+    },
+    {
+      "coinID": "bitcoin-cash",
+      "name": "Bitcoin Cash",
+      "date": "2019/12/16",
+      "time": "02:58:47 pm",
+      "amount": "5",
+      "priceBought": 204.97,
+      "value": 0.02439381372883837,
+      "id": 6
     }
   ]
 }

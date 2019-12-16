@@ -102,7 +102,7 @@ export default function CoinDetail(props) {
     const [priceChange30, setPriceChange30] = useState(0);
     const [priceChange1yr, setPriceChange1yr] = useState(0);
     const [convert, setConvert] = useState(0);
-    // const [market_Cap, setMarket_Cap] = useState(0);
+    const [thumb, setThumb] = useState(0);
 
     useEffect(() => {
         axios({
@@ -113,6 +113,7 @@ export default function CoinDetail(props) {
                 if (res.status !== 200) {
                     alert('Unable to fetch data')
                 } else {
+                    setThumb(res.data.image.thumb)
                     setDesc(res.data.description.en)
                     setUrl(res.data.links.homepage[0])
                     setForum(res.data.links.official_forum_url[0])
@@ -140,7 +141,7 @@ export default function CoinDetail(props) {
             <div className={classes.descbox}>
                 <div className={classes.title}>
                     <h5 className={classes.name}>{name}</h5>
-                    <img src={`${symbol}`} alt='logo' />
+                    <img src={`${thumb}`} alt='logo' />
                 </div>
                 <div>Homepage: <span><a href={url} target="_blank" rel="noopener noreferrer">{url}</a></span></div>
                 <div>Official Forum: <span><a href={forum} target="_blank" rel="noopener noreferrer">{forum}</a></span></div>
