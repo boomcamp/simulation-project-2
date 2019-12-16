@@ -40,8 +40,6 @@ export default function Transaction(props) {
 	const classes = useStyles();
 	const [coin, setCoin] = useState("");
 	const [amount, setAmount] = useState("");
-	const [fee, setFee] = useState(0);
-	const [basePrice, setBasePrice] = useState(0);
 
 	const confirmBuy = () => {
 		if (coin) {
@@ -50,12 +48,10 @@ export default function Transaction(props) {
 				name: props.name,
 				image: props.img.small,
 				coinQuantity: amount,
-				Amount: basePrice,
 				totalAmount: coin,
 				currentCoinPrice: props.price,
 				transaction: "buy",
-				timestamp: new Date().getTime(),
-				profitOrLoss: 0
+				timestamp: new Date().getTime()
 			})
 				.then(response => {
 					sessionStorage.setItem("success", true);
@@ -105,10 +101,8 @@ export default function Transaction(props) {
 								type="number"
 								onChange={e => {
 									if (e.target.value > -1) {
-										setAmount((+e.target.value - +e.target.value * 0.0149) / props.price);
-										setBasePrice(+e.target.value - +e.target.value * 0.0149);
+										setAmount(+e.target.value / props.price);
 										setCoin(+e.target.value);
-										setFee(+e.target.value * 0.0149);
 									}
 								}}
 								autoFocus={true}
@@ -125,10 +119,8 @@ export default function Transaction(props) {
 								value={amount}
 								onChange={e => {
 									if (e.target.value > -1) {
-										setCoin(+e.target.value * props.price + +e.target.value * props.price * 0.0149);
 										setAmount(+e.target.value);
-										setFee(+e.target.value * props.price * 0.0149);
-										setBasePrice(+e.target.value * props.price);
+										setCoin(+e.target.value * props.price);
 									}
 								}}
 							/>
@@ -137,7 +129,7 @@ export default function Transaction(props) {
 						<Grid container item xs={12} spacing={1} justify="center">
 							<Grid item>
 								<Button
-									variant="contained"
+									variant="outlined"
 									size="large"
 									color="primary"
 									onClick={confirmBuy}
@@ -148,7 +140,7 @@ export default function Transaction(props) {
 							</Grid>
 							<Grid item>
 								<Button
-									variant="contained"
+									variant="outlined"
 									size="large"
 									color="secondary"
 									style={{ marginTop: "20px" }}
@@ -176,14 +168,6 @@ export default function Transaction(props) {
 							</Typography>
 						</Grid>
 						<Grid item container xs={12} style={{ padding: "20px 20%" }}>
-							<Grid container item xs={12} justify="space-between">
-								<Typography variant="h6">Fee:</Typography>
-								<Typography variant="h6">{props.formatter.format(basePrice)}</Typography>
-							</Grid>
-							<Grid container item xs={12} justify="space-between">
-								<Typography variant="h6">Transaction Fee:</Typography>
-								<Typography variant="h6">{props.formatter.format(Math.round(fee * 10000) / 10000)}</Typography>
-							</Grid>
 							<Grid container item xs={12} justify="space-between">
 								<Typography variant="h6">Total:</Typography>
 								<Typography variant="h6">{props.formatter.format(coin)}</Typography>

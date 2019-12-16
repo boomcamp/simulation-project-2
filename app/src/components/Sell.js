@@ -69,7 +69,6 @@ export default function Transaction(props) {
 				var stat = true;
 				var statChecker = true;
 				let array = response.data.reverse();
-				console.log(response.data);
 				array.map((x, i) => {
 					if (x.transaction === "buy" && stat) {
 						statChecker = false;
@@ -90,26 +89,27 @@ export default function Transaction(props) {
 			});
 	}, [id, props.price]);
 	const confirmBuy = () => {
-		if (!error) {
-			Axios.post("http://localhost:4000/transactions", {
-				coinId: props.id,
-				name: props.name,
-				image: props.img.small,
-				coinQuantity: soldQuantity,
-				Amount: amount,
-				totalAmount: amount,
-				currentCoinPrice: props.price,
-				transaction: "sell",
-				timestamp: new Date().getTime(),
-				profitOrLoss: profitOrLoss
-			})
-				.then(response => {
-					sessionStorage.setItem("success", true);
-					history.push(`/coin/invested/${props.id}`);
+		if (coin !== "" && coin !== 0) {
+			if (!error) {
+				Axios.post("http://localhost:4000/transactions", {
+					coinId: props.id,
+					name: props.name,
+					image: props.img.small,
+					coinQuantity: soldQuantity,
+					totalAmount: amount,
+					currentCoinPrice: props.price,
+					transaction: "sell",
+					timestamp: new Date().getTime(),
+					profitOrLoss: profitOrLoss
 				})
-				.catch(error => {
-					console.log(error.response.data);
-				});
+					.then(response => {
+						sessionStorage.setItem("success", true);
+						history.push(`/coin/invested/${props.id}`);
+					})
+					.catch(error => {
+						console.log(error.response.data);
+					});
+			}
 		}
 	};
 	return (
@@ -119,7 +119,7 @@ export default function Transaction(props) {
 					<Grid container item xs={5}>
 						<Grid container item xs={12}>
 							<Typography variant="h6" display="block" component="h3">
-								Available Balance
+								New Balance
 							</Typography>
 						</Grid>
 						<Grid container item xs={12}>
@@ -174,7 +174,7 @@ export default function Transaction(props) {
 						<Grid container item xs={12} spacing={1} justify="center">
 							<Grid item>
 								<Button
-									variant="contained"
+									variant="outlined"
 									size="large"
 									color="primary"
 									onClick={confirmBuy}
@@ -185,7 +185,7 @@ export default function Transaction(props) {
 							</Grid>
 							<Grid item>
 								<Button
-									variant="contained"
+									variant="outlined"
 									size="large"
 									color="secondary"
 									style={{ marginTop: "20px" }}

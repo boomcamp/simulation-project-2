@@ -12,6 +12,8 @@ import Typography from "@material-ui/core/Typography";
 import Seven from "./charts/Seven";
 import Button from "@material-ui/core/Button";
 import Slide from "@material-ui/core/Slide";
+import Card from "@material-ui/core/Card";
+import CardContent from "@material-ui/core/CardContent";
 
 const useStyles = makeStyles(theme => ({
 	root: {
@@ -22,6 +24,19 @@ const useStyles = makeStyles(theme => ({
 	},
 	table: {
 		minWidth: 650
+	},
+	card: {
+		width: "100%",
+		boxShadow: "none",
+		border: "1px solid #dedede",
+		borderRadius: "0",
+		background: "#e0f1ff"
+	},
+	title: {
+		fontSize: 14
+	},
+	pos: {
+		marginBottom: 12
 	}
 }));
 
@@ -93,46 +108,62 @@ export default function Stats(props) {
 	return (
 		<Slide direction="right" in={true}>
 			<Grid className={classes.paper} container direction="row" justify="flex-start" alignItems="flex-start" spacing={3}>
-				<Grid container direction="row" justify="space-between" alignItems="flex-start" item xs={3}>
+				<Grid container direction="row" justify="space-between" alignItems="flex-start" item xs={3} spacing={1}>
 					<Typography variant="subtitle2" display="block" gutterBottom>
 						Quick Stats
 					</Typography>
 					<Grid container direction="row" justify="space-between" alignItems="flex-end" item xs={12}>
-						<Typography variant="button" display="block" gutterBottom>
-							Price
-						</Typography>{" "}
-						<Typography variant="button" display="block" style={{ fontSize: "50px", marginBottom: "-15px" }} gutterBottom>
-							{formatter.format(props.priceData.usd)}
-						</Typography>
+						<Card className={classes.card}>
+							<CardContent>
+								<Typography className={classes.title} color="textSecondary" gutterBottom>
+									Current Price
+								</Typography>
+								<Typography variant="h5" component="h2">
+									{formatter.format(props.priceData.usd)}
+								</Typography>
+							</CardContent>
+						</Card>
 					</Grid>
 					<Grid container direction="row" justify="space-between" alignItems="flex-start" item xs={12}>
-						<Typography variant="button" display="block" gutterBottom>
-							Market Cap Rank
-						</Typography>{" "}
-						<Typography variant="button" display="block" gutterBottom>
-							{props.cMarketData.market_cap_rank}
-						</Typography>
+						<Card className={classes.card}>
+							<CardContent>
+								<Typography className={classes.title} color="textSecondary" gutterBottom>
+									Market Cap Rank
+								</Typography>
+								<Typography variant="h5" component="h2">
+									{props.cMarketData.market_cap_rank}
+								</Typography>
+							</CardContent>
+						</Card>
 					</Grid>
 					<Grid container direction="row" justify="space-between" alignItems="flex-start" item xs={12}>
-						<Typography variant="button" display="block" gutterBottom>
-							Market Cap
-						</Typography>{" "}
-						<Typography variant="button" display="block" gutterBottom>
-							{formatter.format(props.marketData.usd)}
-						</Typography>
+						<Card className={classes.card}>
+							<CardContent>
+								<Typography className={classes.title} color="textSecondary" gutterBottom>
+									Market Cap
+								</Typography>
+								<Typography variant="h5" component="h2">
+									{formatter.format(props.marketData.usd)}
+								</Typography>
+							</CardContent>
+						</Card>
 					</Grid>
 					<Grid container direction="row" justify="space-between" alignItems="flex-start" item xs={12}>
-						<Typography variant="button" display="block" gutterBottom>
-							Circulating Supply
-						</Typography>{" "}
-						<Typography variant="button" display="block" gutterBottom>
-							{props.cMarketData.circulating_supply}
-						</Typography>
+						<Card className={classes.card}>
+							<CardContent>
+								<Typography className={classes.title} color="textSecondary" gutterBottom>
+									Circulating Supply
+								</Typography>
+								<Typography variant="h5" component="h2">
+									{props.cMarketData.circulating_supply}
+								</Typography>
+							</CardContent>
+						</Card>
 					</Grid>
-					<Grid container spacing={1}>
-						<Grid item xs={12}>
+					<Grid container item spacing={1}>
+						<Grid container item xs={12}>
 							<Button
-								variant="contained"
+								variant="outlined"
 								color="secondary"
 								fullWidth={true}
 								onClick={() => {
@@ -144,7 +175,7 @@ export default function Stats(props) {
 						</Grid>
 						<Grid item xs={12}>
 							<Button
-								variant="contained"
+								variant="outlined"
 								color="primary"
 								fullWidth={true}
 								onClick={() => {

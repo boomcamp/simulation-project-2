@@ -104,27 +104,29 @@ export default function Investment() {
 					</MuiThemeProvider>
 				)
 			},
-			{ title: "Cost | Earned", field: "Amount", type: "numeric", render: rowData => formatter.format(rowData.Amount) },
 			{
-				title: "Total Paid(+Trans Fee) | Earned",
+				title: "Total Cost | Earned",
 				field: "totalAmount",
 				type: "numeric",
 				render: rowData => formatter.format(rowData.totalAmount)
 			},
 			{
-				title: "Percentage Profit or Loss",
+				title: "% Profit or Loss",
 				field: "totalAmount",
 				type: "numeric",
-				render: rowData => (
-					<MuiThemeProvider theme={theme}>
-						<Typography variant="h6" color={rowData.profitOrLoss < 0 ? "error" : "primary"}>
-							{Math.round(rowData.profitOrLoss * 10000) / 10000} %
-						</Typography>
-					</MuiThemeProvider>
-				)
+				render: rowData =>
+					rowData.profitOrLoss || rowData.profitOrLoss === 0 ? (
+						<MuiThemeProvider theme={theme}>
+							<Typography variant="h6" color={rowData.profitOrLoss < 0 ? "error" : "primary"}>
+								{Math.round(rowData.profitOrLoss * 10000) / 10000} %
+							</Typography>
+						</MuiThemeProvider>
+					) : (
+						<Typography variant="h6">------</Typography>
+					)
 			},
 			{
-				title: "Bought | Sell",
+				title: "Coin Price when bought or sell",
 				field: "currentCoinPrice",
 				type: "numeric",
 				render: rowData => formatter.format(rowData.currentCoinPrice)
