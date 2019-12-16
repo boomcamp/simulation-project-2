@@ -10,8 +10,8 @@ const useStyles = makeStyles(theme => ({
     background: {
         display: "flex",
         padding: 20,
-        background: 'rgb(82, 86, 89)',
-        color: ' #fff',
+        background: "#fbf9f8",
+        color: ' #000',
         width: "100%",
         height: "100%",
         margin: 0
@@ -34,7 +34,7 @@ const useStyles = makeStyles(theme => ({
         display: 'flex',
         justifyContent: "space-around",
         alignItems: 'space-around',
-        background: "#f5f5f5",
+        background: "#eee5e3",
         padding: 20,
         margin: 10,
         width: '31%',
@@ -86,6 +86,7 @@ export default function Sell() {
     const [amount, setAmount] = useState(0)
     const [priceBought, setPriceBought] = useState(0)
     const [value, setValue] = useState(0)
+    const [sold, setSold] = useState('Unsold')
 
     useEffect(() => {
         axios({
@@ -114,13 +115,8 @@ export default function Sell() {
     }
 
     const handleSell = () => {
-        axios({
-            method: 'patch',
-            url: `/transactions/${id}`,
-            data: {
-
-            }
-        })
+        console.log('sold')
+        setSold("Sold")
     }
 
     return (
@@ -136,8 +132,9 @@ export default function Sell() {
                                 <Table className={classes.table} aria-label="simple table">
                                     <TableHead>
                                         <TableRow>
-                                            <TableCell>ID</TableCell>
-                                            <TableCell>{res.id}</TableCell>
+                                            <TableCell align="right" colSpan={2}>
+                                                {res.id}
+                                            </TableCell>
                                         </TableRow>
                                     </TableHead>
                                     <TableBody>
@@ -167,29 +164,30 @@ export default function Sell() {
                                         </TableRow>
                                         <TableRow>
                                             <TableCell>Status:</TableCell>
-                                            <TableCell>Unsold</TableCell>
+                                            <TableCell>{sold}</TableCell>
                                         </TableRow>
                                     </TableBody>
                                 </Table>
                             </Paper>
                             <div className={classes.button}>
-                                <Button variant="outlined" autofocus onClick={() => handleClickOpen()}>Sell</Button>
+                                <Button variant="contained" color="secondary" autofocus onClick={() => handleClickOpen()}>Sell</Button>
                             </div>
                         </div>
                     )}
                 </div>
-                {open ? <SellDialog
-                    open={handleClickOpen}
-                    close={handleClose}
-                    name={name}
-                    id={id}
-                    time={time}
-                    date={date}
-                    amount={amount}
-                    priceBought={priceBought}
-                    value={value}
-                    handleSell={handleSell}
-                />
+                {open ?
+                    <SellDialog
+                        open={handleClickOpen}
+                        close={handleClose}
+                        name={name}
+                        id={id}
+                        time={time}
+                        date={date}
+                        amount={amount}
+                        priceBought={priceBought}
+                        value={value}
+                        handleSell={handleSell}
+                    />
                     :
                     <React.Fragment></React.Fragment>}
             </div>

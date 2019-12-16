@@ -154,7 +154,7 @@ export default function CoinDetail(props) {
                 <div className={classes.stat}>
                     <div className={classes.rootTable}>
                         <Paper>
-                            <Table className={classes.table} aria-label="simple table">
+                            <Table aria-label="simple table">
                                 <TableHead>
                                     <TableRow>
                                         <TableCell align="center" colSpan={2}>
