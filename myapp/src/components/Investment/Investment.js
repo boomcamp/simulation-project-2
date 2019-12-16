@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import axios from "axios";
 import "./investment.css";
-import Moment from "moment";
+import "react-toastify/dist/ReactToastify.css";
 import CoinWallet from "../CoinWallet/CoinWallet";
 import { Tabs } from "antd";
 import {
@@ -23,6 +23,7 @@ import {
   MDBTableBody,
   MDBTableHead
 } from "mdbreact";
+import Moment from "moment";
 var commaNumber = require("comma-number");
 const { TabPane } = Tabs;
 Moment.locale("en");
@@ -35,7 +36,8 @@ export default class Investment extends Component {
       collapse: false,
       details: [],
       name: "",
-      mkc: ""
+      mkc: "",
+      datas: []
     };
     this.onClick = this.onClick.bind(this);
   }
@@ -43,6 +45,67 @@ export default class Investment extends Component {
   componentDidMount() {
     axios.get("http://localhost:4000/transactions").then(res => {
       res.data.map(info => {
+        let x =
+          // console.log(info);
+          // console.log(info.sta);
+          this.setState({
+            details: this.state.details.concat({
+              amount: info.amount + ` ${info.symbol}`,
+              sum: (
+                <span style={{ color: "#42a5f5" }}>
+                  $ ${commaNumber(info.sum)}
+                </span>
+              ),
+              price: (
+                <span style={{ color: "#009688" }}>
+                  $ ${commaNumber(info.price)}
+                </span>
+              ),
+              name: info.name,
+              date: info.date,
+              status: info.status,
+              option: (
+                <MDBBtn
+                  color={info.status === "Sold" ? "danger" : "info"}
+                  // onClick={this.toggle}
+                  disabled={info.status === "Sold" ? true : false}
+                  size="sm"
+                  onClick={e => this.handleClick(info)}
+                >
+                  {/* {(info.status = "Sold" ? <span>Sold</span> : <span>Sell</span>)} */}
+                  {info.status === "Sold" ? (
+                    <span>Sold</span>
+                  ) : (
+                    <span>Sell</span>
+                  )}
+                </MDBBtn>
+              )
+              // (
+              //   <Button
+              //     type={info.status === "Sold" ? "danger" : "primary"}
+              //     disabled={info.status === "Sold" ? true : false}
+              //     onClick={e => this.handleClick(e.target.value)}
+              //   >
+              //     {" "}
+              //     {/* {(info.status = "Sold" ? <span>Sold</span> : <span>Sell</span>)} */}
+              //     {info.status == "Sold" ? (
+              //       <span>Sold</span>
+              //     ) : (
+              //       <span>Sell</span>
+              //     )}
+              //   </Button>
+              // )
+            })
+          });
+      });
+    });
+  }
+
+  loadAgain = () => {
+    this.setState({ details: [] });
+    axios.get("http://localhost:4000/transactions").then(res => {
+      res.data.map(info => {
+        // console.log(info.sta);
         this.setState({
           details: this.state.details.concat({
             amount: info.amount + ` ${info.symbol}`,
@@ -50,38 +113,38 @@ export default class Investment extends Component {
             price: `$ ${commaNumber(info.price)}`,
             name: info.name,
             date: info.date,
+            status: info.status,
             option: (
               <MDBBtn
-                color="info"
+                color={info.status === "Sold" ? "danger" : "info"}
                 // onClick={this.toggle}
+                disabled={info.status === "Sold" ? true : false}
                 size="sm"
-                value={JSON.stringify(info)}
-                onClick={e => this.handleClick(e.target.value)}
+                onClick={e => this.handleClick(info)}
               >
-                Sell
+                {/* {(info.status = "Sold" ? <span>Sold</span> : <span>Sell</span>)} */}
+                {info.status == "Sold" ? <span>Sold</span> : <span>Sell</span>}
               </MDBBtn>
             )
           })
         });
       });
     });
-  }
+  };
+
   handleClick = e => {
-    const x = JSON.parse(e);
-    console.log(x);
-    // console.log(x.amount);
-    axios.get(`https://api.coingecko.com/api/v3/coins/${x.name}`).then(res => {
+    // console.log(e.name);
+    axios.get(`https://api.coingecko.com/api/v3/coins/${e.name}`).then(res => {
       const profit =
-        res.data.market_data.current_price.usd * x.amount - x.price * x.amount;
-      // const finalprof = (profit / x.price) * 100;
-      // console.log(finalprof);
+        res.data.market_data.current_price.usd * e.amount - e.price * e.amount;
       this.setState({
+        datas: e,
         image: res.data.image.small,
         symbol: res.data.symbol,
         modal: !this.state.modal,
         name: res.data.id,
         mkc: res.data.market_data.current_price.usd,
-        balance: x.amount,
+        balance: e.amount,
         profits: profit
       });
     });
@@ -92,25 +155,35 @@ export default class Investment extends Component {
     });
   };
   handleSell = () => {
-    const date = new Date().getDate();
-    const month = new Date().getMonth() + 1;
-    const year = new Date().getFullYear();
-    const hours = new Date().getHours();
-    const min = new Date().getMinutes();
-    const sec = new Date().getSeconds();
+    // console.log(this.state.datas.id);
+    const id = this.state.datas.id;
+    const amnt = this.state.datas.amount;
+    const bal = this.state.datas.coinBalance;
+    const results = amnt - bal;
+    console.log(results);
+
     axios
-      .put("http://localhost:4000/transactions", {
-        date:
-          date + "/" + month + "/" + year + " " + hours + ":" + min + ":" + sec,
+      .patch(`http://localhost:4000/transactions/${id}`, {
         amount: this.state.amount,
-        coinBalance: this.state.amount,
+        coinBalance: results,
         sum: this.state.sum,
         price: this.props.price,
         symbol: this.props.id,
         image: this.props.image,
-        name: this.props.name
+        name: this.props.name,
+        status: "Sold"
       })
-      .then(res => {});
+      .then(res => {
+        // toast.success("Successfully Sold!");
+        // const a = res.data.coinBalance;
+        // const b = res.data.amount;
+        // // const afterBal = a - b;
+        this.setState({
+          modal: false
+        });
+        this.loadAgain();
+        // console.log(this.state.updated);
+      });
   };
   onClick() {
     this.props.history.push("/investment");
@@ -118,7 +191,9 @@ export default class Investment extends Component {
       collapse: !this.state.collapse
     });
   }
+
   render() {
+    // console.log(this.state.datas);
     const bgPink = { backgroundColor: "#8dc647" };
     const data = {
       columns: [
@@ -149,6 +224,12 @@ export default class Investment extends Component {
         {
           label: "Date Purchased",
           field: "date",
+          sort: "asc",
+          width: 150
+        },
+        {
+          label: "Status",
+          field: "status",
           sort: "asc",
           width: 150
         },
@@ -189,9 +270,6 @@ export default class Investment extends Component {
             </TabPane>
             <TabPane tab="Coin Wallet" key="2">
               <CoinWallet />
-            </TabPane>
-            <TabPane tab="Tab 3" key="3">
-              Content of tab 3
             </TabPane>
           </Tabs>
           <MDBModal isOpen={this.state.modal} toggle={this.toggle} size="lg">
@@ -241,7 +319,7 @@ export default class Investment extends Component {
               <MDBBtn onClick={this.toggle} color="info">
                 Close
               </MDBBtn>
-              <MDBBtn color="primary" onClick={this.handleSell}>
+              <MDBBtn color="primary" onClick={() => this.handleSell()}>
                 Proceed
               </MDBBtn>
             </MDBModalFooter>

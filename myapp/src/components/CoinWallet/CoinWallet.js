@@ -14,24 +14,54 @@ export default class CoinWallet extends Component {
     axios.get("http://localhost:4000/transactions").then(res => {
       // console.log(res.data);
       let result = res.data.reduce((c, v) => {
+        const image = v.image;
         const num = parseFloat(v.coinBalance);
         c[v.name] = (c[v.name] || 0) + num;
         return c;
       }, {});
       let newData = [];
       let init = 0;
-      // console.log(result);
+
       for (var key in result) {
-        newData.push({ id: init++, name: key, amount: result[key] });
+        newData.push({
+          id: init++,
+          name: key,
+          amount: result[key]
+          // image: image
+        });
       }
       this.setState({
         coins: newData
       });
     });
   }
+  loadAgain = () => {
+    axios.get("http://localhost:4000/transactions").then(res => {
+      // console.log(res.data);
+      let result = res.data.reduce((c, v) => {
+        const image = v.image;
+        const num = parseFloat(v.coinBalance);
+        c[v.name] = (c[v.name] || 0) + num;
+        return c;
+      }, {});
+      let newData = [];
+      let init = 0;
 
+      for (var key in result) {
+        newData.push({
+          id: init++,
+          name: key,
+          amount: result[key]
+          // image: image
+        });
+      }
+      this.setState({
+        coins: newData
+      });
+    });
+  };
   render() {
-    // console.log(this.state.coins);
+    this.loadAgain();
     return (
       <div>
         {/* {this.state.name} */}
@@ -45,6 +75,7 @@ export default class CoinWallet extends Component {
           <MDBTableBody>
             {this.state.coins
               ? this.state.coins.map(x => {
+                  //     console.log(x);
                   return (
                     <tr key={x.id}>
                       <td>{x.name}</td>
@@ -63,6 +94,7 @@ export default class CoinWallet extends Component {
             </tr>
           </MDBTableBody>
         </MDBTable>
+        {/* <MDBDataTable striped hover data={data} /> */}
       </div>
     );
   }

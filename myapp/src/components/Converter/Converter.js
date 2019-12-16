@@ -7,6 +7,8 @@ import "react-toastify/dist/ReactToastify.css";
 import { toast } from "react-toastify";
 // import { InputNumber } from "antd";
 import { MDBContainer, MDBInputGroup } from "mdbreact";
+var dateFormat = require("dateformat");
+var now = new Date();
 export default class BuySell extends Component {
   constructor(props) {
     super(props);
@@ -31,23 +33,17 @@ export default class BuySell extends Component {
     });
   };
   submitClick() {
-    const date = new Date().getDate();
-    const month = new Date().getMonth() + 1;
-    const year = new Date().getFullYear();
-    const hours = new Date().getHours();
-    const min = new Date().getMinutes();
-    const sec = new Date().getSeconds();
     axios
       .post("http://localhost:4000/transactions", {
-        date:
-          date + "/" + month + "/" + year + " " + hours + ":" + min + ":" + sec,
+        date: dateFormat(now, "dddd, mmmm dS, yyyy, h:MM:ss TT"),
         amount: this.state.amount,
         coinBalance: this.state.amount,
         sum: this.state.sum,
         price: this.props.price,
         symbol: this.props.id,
         image: this.props.image,
-        name: this.props.name
+        name: this.props.name,
+        status: "Not yet sold"
       })
       .then(res => {
         // Moment.locale("en");

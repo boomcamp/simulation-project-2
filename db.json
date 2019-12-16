@@ -1,26 +1,40 @@
 {
   "transactions": [
     {
-      "date": "13/12/2019 17:26:4",
-      "amount": "7",
-      "coinBalance": "7",
-      "sum": 1.5199799999999999,
-      "price": 0.21714,
-      "symbol": "xrp",
-      "image": "https://assets.coingecko.com/coins/images/44/small/xrp.png?1564480400",
-      "name": "ripple",
+      "date": "Monday, December 16th, 2019, 5:40:43 PM",
+      "amount": "1",
+      "coinBalance": 0,
+      "sum": 7063,
+      "price": 7063,
+      "symbol": "btc",
+      "image": "https://assets.coingecko.com/coins/images/1/small/bitcoin.png?1547033579",
+      "name": "bitcoin",
+      "status": "Sold",
       "id": 10
     },
     {
-      "date": "13/12/2019 17:31:46",
-      "amount": "5",
-      "coinBalance": "5",
-      "sum": 1.08595,
-      "price": 0.21719,
-      "symbol": "xrp",
-      "image": "https://assets.coingecko.com/coins/images/44/small/xrp.png?1564480400",
-      "name": "ripple",
+      "date": "Monday, December 16th, 2019, 5:41:48 PM",
+      "amount": "2",
+      "coinBalance": 0,
+      "sum": 14126,
+      "price": 7063,
+      "symbol": "btc",
+      "image": "https://assets.coingecko.com/coins/images/1/small/bitcoin.png?1547033579",
+      "name": "bitcoin",
+      "status": "Sold",
       "id": 11
+    },
+    {
+      "date": "Monday, December 16th, 2019, 5:50:35 PM",
+      "amount": "1",
+      "coinBalance": 0,
+      "sum": 7067.72,
+      "price": 7067.72,
+      "symbol": "btc",
+      "image": "https://assets.coingecko.com/coins/images/1/small/bitcoin.png?1547033579",
+      "name": "bitcoin",
+      "status": "Sold",
+      "id": 12
     }
   ]
 }
