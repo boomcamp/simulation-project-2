@@ -174,7 +174,7 @@ export default class Coindetail extends React.Component {
           <div className="logo-box">
             <img src={this.state.logo} alt="" />
             <div className="weight size logo-name">
-              {this.state.id}{" "}
+              {this.state.name}{" "}
               <div className="upcase">({this.state.symbol})</div>
             </div>
             <div className="des">{ReactHtmlParser(this.state.des)}</div>
