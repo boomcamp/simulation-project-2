@@ -22,14 +22,13 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 
 export default function MaterialTableDemo() {
-  const [disabled, setDissabled] = React.useState(false);
+  const [gained, setGained] = React.useState('')
   const [sell, setSell] = React.useState({})
   const [price, setPrice] = React.useState('')
-  const [data, setData] = React.useState({});
-  const [open, setOpen] = React.useState(false);
+  const [data, setData] = React.useState({})
+  const [open, setOpen] = React.useState(false)
   const [state, setState] = React.useState({
     columns: [
-      { title: 'transaction ID', field: 'id' },
       {
         title: '', field: 'image',
         render: row => <img src={row.image} alt={row.id} style={{ width: 40, borderRadius: '50%' }} />,
@@ -53,10 +52,45 @@ export default function MaterialTableDemo() {
             decimalScale='2'
           />
       },
-      { title: 'Date', field: 'date' },
-      { title: 'Status', field: 'status' },
+      { title: 'Date Purchased', field: 'date' },
+      // { title: 'Status', field: 'status' },
+     
       { title: 'Action',
-        render: row =>  <Button onClick={e => handleClickOpen(row.id, row.coinId)} variant="contained" color="primary" disabled={disabled}> sell </Button>
+          
+        render: row =>  (row.status === 'SOLD')
+        ?<Button onClick={e => coinModal(row.id, row.coinId)} variant="contained" color="primary" disabled> Sold </Button>
+        :<Button onClick={e => coinModal(row.id, row.coinId)} variant="contained" color="primary" > Sell </Button>
+      },
+
+      { title: 'Date Sold', field: 'newDate',
+        cellStyle: {
+        backgroundColor: '#a2e7eb',
+        textAlign: 'center'
+        }, 
+        headerStyle: {
+          textAlign: 'center'
+        }
+      },
+
+      { title: 'Earned/Lost', render: row =>
+      <NumberFormat 
+        style={{
+          color: row.mOT > 0 ? 'green' : 'red'
+        }}
+        value={row.mOT}
+        allowNegative={false}
+        displayType={'text'}
+        thousandSeparator={true} 
+        prefix={'$'}
+        decimalScale='2'
+      />,
+      cellStyle: {
+        backgroundColor: '#a2e7eb',
+        textAlign: 'center'
+      }, 
+      headerStyle: {
+        textAlign: 'center'
+      } 
       },
 
     ],
@@ -64,16 +98,28 @@ export default function MaterialTableDemo() {
   });
 
   useEffect(() => {
-    renderInvest()
+    const data = setInterval(() => {
+      renderInvest()
+     }, 1000);
+     return () => { clearInterval(data) }     
   }, []);
 
+  useEffect(()=>{
+    const data = setInterval(() => {
+      renderInvest()
+     }, 800);
+     return () => { clearInterval(data) }     
+  },[data])
+
   const coinModal = (id, coin) => {
+    setOpen(true);
     axios({
       method: 'get',
       url: `http://localhost:4000/transactions/${id}`
     })
       .then(response => {
         setData(response.data)
+      
         let current = response.data.currentPrice
         let amount = response.data.totalAmount
         axios({
@@ -85,17 +131,17 @@ export default function MaterialTableDemo() {
            
             let whenBought = response.data.market_data.current_price.usd;
 
-            let computed = current - whenBought;
+            let computed = whenBought -current;
             computed = (computed/whenBought) * 100;  
             var result = (computed / 100) * amount;
             var totalAmount = amount + result;
+            setGained(result)
             setSell({
               percentChange: computed,
               result: result,
               totalAmount: totalAmount
             })
-
-            console.log(computed)
+            
           })
           .catch(err => {
             console.log('err');
@@ -109,29 +155,45 @@ export default function MaterialTableDemo() {
 
   }
 
-  const doSell = () => {
-    setDissabled(true)
-    setOpen(false);
-    
-  }
+const doSell = (e) => {
+  setOpen(false);
+  renderInvest()
 
-  console.log(disabled)
-  const handleClickOpen = (id, coin) => {
-    setOpen(true);
-    coinModal(id, coin)
+  let date = new Date();
+  let newDate = date.toLocaleString()
+
+  axios({
+    method: 'patch',
+    url: `http://localhost:4000/transactions/${e}`,
+    data: {
+      
+        "rank": data.rank,
+        "image": data.image,
+        "coinName": data.coinName,
+        "coinQuantity": data.coinQuantity,
+        "totalAmount": data.totalAmount,
+        "date": data.date,
+        "currentPrice": data.currentPrice,
+        "coinId": data.coinId,
+        "status": "SOLD",
+        "mOT": gained,
+        "id": data.id,
+        "newDate": newDate 
+    }
+  })
  
-
-
-  };
-
+  .catch(err => {
+    console.log('err');
+  })
+}
 
   const handleClose = () => {
     setOpen(false);
+    setData({})
 
   };
 
-  const renderInvest = () => {
-
+const renderInvest = () => {
     axios({
       method: 'get',
       url: 'http://localhost:4000/transactions',
@@ -204,7 +266,7 @@ export default function MaterialTableDemo() {
               <br />
 
               <tr style={{ textAlign: 'left' }}>
-                <td>Current Price</td>
+                <td>Current Price Today:</td>
                 <td></td>
                 <td>
                   <NumberFormat
@@ -218,7 +280,7 @@ export default function MaterialTableDemo() {
               </tr>
 
               <tr style={{ textAlign: 'left' }}>
-                <td>Change(%)</td>
+                <td>Change(%):</td>
                 <td></td>
                 <td>
                 <NumberFormat
@@ -234,8 +296,8 @@ export default function MaterialTableDemo() {
               </tr>
 
               <tr style={{ textAlign: 'left' }}>
-                <td style ={{ display: sell.result > 0 ? null : 'none'}}>You will earn</td>
-                <td style ={{ display: sell.result > 0 ? 'none' : null}}>You will lose</td>
+                <td style ={{ display: sell.result > 0 ? null : 'none'}}>You will earn:</td>
+                <td style ={{ display: sell.result > 0 ? 'none' : null}}>You will lose:</td>
                 <td></td>
                 <td>
                 <NumberFormat
@@ -255,14 +317,41 @@ export default function MaterialTableDemo() {
               </tfoot>
             </table>
 
+            <br/>
+
+            <span>Your {' '} 
+             
+               <NumberFormat
+                    value={data.totalAmount} 
+                    allowNegative={false}
+                    displayType={'text'}
+                    thousandSeparator={true}
+                    prefix={'$'}
+                    decimalScale='2'
+              
+                  />
+             {' '}  will become {' '} 
+             
+             <NumberFormat
+                    value={sell.totalAmount}
+                    allowNegative={false}
+                    displayType={'text'}
+                    thousandSeparator={true}
+                    prefix={'$'}
+                    decimalScale='2'
+                
+                  />
+
+             </span>
+
          
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose} variant="contained" color="secondary">
             Cancel
             </Button>
-          <Button onClick={doSell} variant="contained" color="primary">
-            Sell
+          <Button id={data.id} onClick={e => doSell(data.id)} variant="contained" color="primary">
+            Confirm
             </Button>
         </DialogActions>
       </Dialog>

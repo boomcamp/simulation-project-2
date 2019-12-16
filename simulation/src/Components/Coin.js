@@ -100,7 +100,8 @@ const useStyles = makeStyles((theme: Theme) =>
     modal:{
       display: 'flex',
       justifyContent: 'space-around'
-    }
+    },
+   
   }),
 );
 
