@@ -26,9 +26,9 @@ Simulation Project 2 : Cryptocurrency App is an application that displays the li
 
 -  [React JS](https://reactjs.org/)
 -  [CoinGecko API V3](https://www.coingecko.com/api/documentations/v3)
--  [Visual Studio Code](<([https://code.visualstudio.com/](https://code.visualstudio.com/))>)
--  [Material-UI](<([https://material-ui.com/](https://material-ui.com/))>)
--  [Recharts](<([http://recharts.org/en-US/](http://recharts.org/en-US/))>)
+-  [Visual Studio Code](https://code.visualstudio.com/)
+-  [Material-UI](https://material-ui.com/)
+-  [Recharts](https://recharts.org/en-US/)
 
 ## Author/s
 
