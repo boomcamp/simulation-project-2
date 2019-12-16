@@ -22,6 +22,12 @@ export default class App extends React.Component {
     });
   };
 
+  componentDidUpdate = () => {
+    axios.get(this.state.url).then(response => {
+      this.setState({ data: response.data });
+    });
+  };
+
   handleChange = (e, pageInfo) => {
     this.setState({
       activePage: pageInfo.activePage,

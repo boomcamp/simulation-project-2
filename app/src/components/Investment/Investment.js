@@ -19,7 +19,7 @@ export default class Investment extends React.Component {
       amountSold: "",
       Sell: "",
       loading: true,
-      modalToggle: false,
+      toggle: false,
       coinName: "",
       columns: [
         {
@@ -65,7 +65,17 @@ export default class Investment extends React.Component {
           field: "profit",
           render: rowData => (
             <React.Fragment>
-              ${rowData.profit ? Number(rowData.profit.toFixed(5)) : 0}
+              {rowData.profit < 0 ? (
+                <div className="r">
+                  {" "}
+                  ${rowData.profit ? Number(rowData.profit.toFixed(5)) : 0}
+                </div>
+              ) : (
+                <div className="g">
+                  {" "}
+                  ${rowData.profit ? Number(rowData.profit.toFixed(5)) : 0}
+                </div>
+              )}
             </React.Fragment>
           )
         },
@@ -96,7 +106,7 @@ export default class Investment extends React.Component {
           )
           .then(response => {
             e.current_price = response.data[e.coinId].usd;
-            setTimeout(() => this.setState({ loading: false }), 1000);
+            setTimeout(() => this.setState({ loading: false }), 500);
           });
         return e;
       });
@@ -112,11 +122,11 @@ export default class Investment extends React.Component {
   };
 
   handleOpen = data => {
-    this.setState({ modalToggle: true, currentData: data });
+    this.setState({ toggle: true, currentData: data });
   };
 
   handleClose = () => {
-    this.setState({ modalToggle: false });
+    this.setState({ toggle: false });
   };
 
   handleSell = value => {
@@ -135,9 +145,9 @@ export default class Investment extends React.Component {
       })
       .then(() => {
         this.fetch();
-        this.setState({ modalToggle: false });
+        this.setState({ toggle: false });
         message.info("Sell Successful!", 2);
-        setTimeout(() => this.setState({ loading: false }), 1000);
+        setTimeout(() => this.setState({ loading: false }), 500);
       });
   };
 
@@ -150,7 +160,7 @@ export default class Investment extends React.Component {
               title="Investment List"
               columns={this.state.columns}
               data={this.state.data.filter(x => x.invested !== 0)}
-              options={{ search: false }}
+              options={{ search: false, paging: false }}
               isLoading={this.state.loading}
             />
           </div>
@@ -167,7 +177,7 @@ export default class Investment extends React.Component {
         </div>
 
         <Dialog
-          open={this.state.modalToggle}
+          open={this.state.toggle}
           onClose={this.handleClose}
           aria-labelledby="alert-dialog-title"
           aria-describedby="alert-dialog-description"

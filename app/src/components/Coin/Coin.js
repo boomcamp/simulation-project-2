@@ -21,6 +21,7 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import TextField from "@material-ui/core/TextField";
 import SyncAltIcon from "@material-ui/icons/SyncAlt";
 import AccountBalanceIcon from "@material-ui/icons/AccountBalance";
+import KeyboardReturnIcon from "@material-ui/icons/KeyboardReturn";
 import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
 import Divider from "@material-ui/core/Divider";
 import { message } from "antd";
@@ -163,7 +164,7 @@ export default class Coindetail extends React.Component {
           <div className="back-btn">
             <Link to="/">
               <Button variant="outlined" color="primary">
-                Return to Coin List
+                <KeyboardReturnIcon />
               </Button>
             </Link>
             <Switch>
@@ -200,7 +201,7 @@ export default class Coindetail extends React.Component {
               <Button
                 variant="contained"
                 color="primary"
-                style={{ width: 100 }}
+                style={{ width: 200 }}
                 onClick={this.handleClickOpen}
               >
                 <ShoppingCartIcon />

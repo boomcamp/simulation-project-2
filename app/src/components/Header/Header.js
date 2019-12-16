@@ -14,7 +14,7 @@ export default class Header extends React.Component {
         </MDBNavbarBrand>
         <div className="right">
           <Link to={"/investment"}>
-            <Button color="primary">Investment Tracking</Button>
+            <Button color="default">Investment Tracking</Button>
           </Link>
         </div>
       </MDBNavbar>

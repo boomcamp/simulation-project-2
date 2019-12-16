@@ -21,6 +21,7 @@ body {
   width: 75%;
   margin: auto;
   margin-top: 50px;
+  margin-bottom: 50px;
 }
 
 .invest-cont {
@@ -144,11 +145,6 @@ body {
 
 .back-btn {
   margin-bottom: 20px;
-}
-
-.r {
-  display: flex;
-  flex-direction: row;
 }
 
 .right {
