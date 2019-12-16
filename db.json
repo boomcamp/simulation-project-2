@@ -23,32 +23,112 @@
     {
       "coinName": "XRP",
       "price": 0.217093,
-      "invested": 25,
-      "amountSold": 25,
+      "invested": 0,
+      "amountSold": 50,
       "coinId": "ripple",
-      "profit": -0.00017500000000048033,
+      "profit": -0.03767500000000101,
       "image": "https://assets.coingecko.com/coins/images/44/small/xrp.png?1564480400",
       "id": 4
     },
     {
       "coinName": "Bitcoin",
       "price": 7220.43,
-      "invested": 200,
-      "amountSold": 300,
+      "invested": 0,
+      "amountSold": 500,
       "coinId": "bitcoin",
-      "profit": -2.5,
+      "profit": -25674.5,
       "image": "https://assets.coingecko.com/coins/images/1/small/bitcoin.png?1547033579",
       "id": 5
     },
     {
       "coinName": "Bitcoin",
       "price": 7222.99,
-      "invested": 49,
-      "amountSold": 0,
+      "invested": 0,
+      "amountSold": 49,
       "coinId": "bitcoin",
-      "profit": 0,
+      "profit": -6408.710000000021,
       "image": "https://assets.coingecko.com/coins/images/1/small/bitcoin.png?1547033579",
       "id": 6
+    },
+    {
+      "coinName": "Bitcoin",
+      "price": 7087.77,
+      "invested": 0,
+      "amountSold": 500,
+      "coinId": "bitcoin",
+      "profit": -1332.5,
+      "image": "https://assets.coingecko.com/coins/images/1/small/bitcoin.png?1547033579",
+      "id": 7
+    },
+    {
+      "coinName": "Bitcoin",
+      "price": 7084.81,
+      "invested": 100,
+      "amountSold": 50,
+      "coinId": "bitcoin",
+      "profit": -355,
+      "image": "https://assets.coingecko.com/coins/images/1/small/bitcoin.png?1547033579",
+      "id": 8
+    },
+    {
+      "coinName": "Bitcoin",
+      "price": 7085.92,
+      "invested": 100,
+      "amountSold": 23,
+      "coinId": "bitcoin",
+      "profit": -188.8300000000163,
+      "image": "https://assets.coingecko.com/coins/images/1/small/bitcoin.png?1547033579",
+      "id": 9
+    },
+    {
+      "coinName": "Bitcoin",
+      "price": 7085.92,
+      "invested": 90,
+      "amountSold": 9,
+      "coinId": "bitcoin",
+      "profit": -73.88999999999942,
+      "image": "https://assets.coingecko.com/coins/images/1/small/bitcoin.png?1547033579",
+      "id": 10
+    },
+    {
+      "coinName": "Litecoin",
+      "price": 42.97,
+      "invested": 75,
+      "amountSold": 75,
+      "coinId": "litecoin",
+      "profit": -0.75,
+      "image": "https://assets.coingecko.com/coins/images/2/small/litecoin.png?1547033580",
+      "id": 11
+    },
+    {
+      "coinName": "Ethereum",
+      "price": 140.86,
+      "invested": 6,
+      "amountSold": 6,
+      "coinId": "ethereum",
+      "profit": -0.12000000000011823,
+      "image": "https://assets.coingecko.com/coins/images/279/small/ethereum.png?1547034048",
+      "id": 13
+    },
+    {
+      "coinName": "Ethereum",
+      "price": 140.97,
+      "invested": 10,
+      "amountSold": 2,
+      "coinId": "ethereum",
+      "profit": -0.2599999999999909,
+      "image": "https://assets.coingecko.com/coins/images/279/small/ethereum.png?1547034048",
+      "id": 14
+    },
+    {
+      "coinName": "Bitcoin",
+      "price": 7067.04,
+      "invested": 499,
+      "amountSold": 25,
+      "coinId": "bitcoin",
+      "profit": -10.5,
+      "image": "https://assets.coingecko.com/coins/images/1/small/bitcoin.png?1547033579",
+      "id": 15
     }
   ]
 }

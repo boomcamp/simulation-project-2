@@ -22,6 +22,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const MainDiv = styled.div`
+  display: "flex";
   margin: 0 auto;
   padding: 10px;
   box-shadow: 5px 10px 8px #888888;
@@ -197,6 +198,9 @@ export default class chartInfo extends React.Component {
 
   investHandler = e => {
     e.preventDefault();
+    this.setState({
+      toggleModal: false
+    });
     axios
       .post("http://localhost:4000/transactions", {
         coinName: this.state.details.name,

@@ -10,6 +10,11 @@ import TextField from "@material-ui/core/TextField";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { AiOutlineReload } from "react-icons/ai";
+import CircularProgress from "@material-ui/core/CircularProgress";
+import { Link, Route, Switch } from "react-router-dom";
+import { Tooltip } from "@material-ui/core";
+import Zoom from "@material-ui/core/Zoom";
 
 const MainDiv = styled.div`
   display: flex;
@@ -27,6 +32,7 @@ const Div = styled.div`
   border-radius: 10px;
   height: 100%;
   margin-bottom: 10px;
+  box-shadow: 5px 10px 8px #888888;
 `;
 
 const Red = styled.p`
@@ -43,30 +49,33 @@ export default class investmentTrack extends React.Component {
       selectedRow: null,
       columns: [
         {
-          title: "Coin",
-          field: "coinName",
+          title: "Coin Name",
+          field: "name",
           render: rowData => (
-            <div className="weight">
-              {" "}
-              <img
-                src={rowData.image}
-                alt=""
-                className="resize"
-                style={{
-                  height: 25,
-                  width: 25
-                }}
-              />
-              <div
-                style={{
-                  marginLeft: 35,
-                  marginTop: -25,
-                  fontWeight: "bold"
-                }}
-              >
-                {rowData.coinName}
-              </div>
-            </div>
+            <React.Fragment>
+              <img className="logo" src={rowData.image} alt="" />
+              <Link key={rowData.coinId} to={`chartInfo/${rowData.coinId}`}>
+                <Tooltip TransitionComponent={Zoom} title="Show Price Chart">
+                  <div>
+                    <button
+                      style={{
+                        color: "darkblue",
+                        marginLeft: -13,
+                        fontSize: 15,
+                        background: "transparent",
+                        border: "transparent",
+                        cursor: "pointer"
+                      }}
+                    >
+                      {rowData.coinName}
+                    </button>
+                  </div>
+                </Tooltip>
+              </Link>
+              <Switch>
+                <Route />
+              </Switch>
+            </React.Fragment>
           )
         },
         {
@@ -104,10 +113,14 @@ export default class investmentTrack extends React.Component {
           field: "profit",
           render: rowData => (
             <React.Fragment>
-              {rowData.profit < 0 ? (
-                <Red>${Number(rowData.profit.toFixed(3))}</Red>
+              {rowData.profit ? (
+                rowData.profit < 0 ? (
+                  <Red>${Number(rowData.profit.toFixed(3))}</Red>
+                ) : (
+                  <Green>${Number(rowData.profit.toFixed(3))}</Green>
+                )
               ) : (
-                <Green>${Number(rowData.profit.toFixed(3))}</Green>
+                ""
               )}
             </React.Fragment>
           )
@@ -133,12 +146,14 @@ export default class investmentTrack extends React.Component {
       ],
       data: [],
       toggleModal: false,
+      openModal: false,
       currentData: {}
     };
   }
 
   fetchData = () => {
     axios.get(`http://localhost:4000/transactions`).then(response => {
+      console.log(response);
       const initialData = response.data.map(e => {
         axios
           .get(
@@ -149,7 +164,6 @@ export default class investmentTrack extends React.Component {
           });
         return e;
       });
-      console.log(initialData);
       let sum = response.data.map(x => x.amountSold).reduce((a, b) => a + b, 0);
       this.setState({ data: initialData, totalResult: sum });
     });
@@ -157,6 +171,14 @@ export default class investmentTrack extends React.Component {
 
   componentDidMount = () => {
     this.fetchData();
+  };
+
+  handleClick = () => {
+    this.setState({ openModal: true });
+    this.fetchData();
+    setTimeout(() => {
+      this.setState({ openModal: false });
+    }, 500);
   };
 
   handleClickOpen = val => {
@@ -173,6 +195,9 @@ export default class investmentTrack extends React.Component {
 
   sellHandler = (e, data) => {
     e.preventDefault();
+    this.setState({
+      toggleModal: false
+    });
     axios
       .patch(`http://localhost:4000/transactions/${data.id}`, {
         amountSold: this.state.amountSold + data.amountSold,
@@ -191,8 +216,29 @@ export default class investmentTrack extends React.Component {
   render() {
     return (
       <MainDiv>
-        <ToastContainer />
         <div>
+          <Dialog
+            open={this.state.openModal}
+            PaperProps={{
+              style: {
+                backgroundColor: "transparent",
+                boxShadow: "none"
+              }
+            }}
+          >
+            <div
+              style={{
+                backgroundColor: "transparent",
+                width: "75px",
+                height: "75px",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center"
+              }}
+            >
+              <CircularProgress color="secondary" />
+            </div>
+          </Dialog>
           <Dialog
             open={this.state.toggleModal}
             onClose={this.handleClose}
@@ -229,10 +275,12 @@ export default class investmentTrack extends React.Component {
           </Dialog>
         </div>
         <div>
+          <ToastContainer />
           <MaterialTable
             style={{
               marginRight: 30,
-              width: 1110
+              width: 1110,
+              boxShadow: "5px 10px 8px #888888"
             }}
             title="List of Investments"
             columns={this.state.columns}
@@ -241,6 +289,14 @@ export default class investmentTrack extends React.Component {
               paging: false,
               search: false
             }}
+            actions={[
+              {
+                icon: "replay",
+                tooltip: "Reload",
+                isFreeAction: true,
+                onClick: () => this.handleClick()
+              }
+            ]}
           />
         </div>
         <div
@@ -259,17 +315,23 @@ export default class investmentTrack extends React.Component {
               TOTAL PROFIT/LOSS:
               <div
                 style={{
+                  fontSize: 35,
                   textAlign: "center",
                   marginTop: 120,
-                  marginLeft: 120
+                  marginLeft: 80
                 }}
               >
-                {this.state.totalResult < 0 ? (
-                  <Red>${parseFloat(this.state.totalResult).toFixed(3)}</Red>
+                {" "}
+                {this.state.totalResult ? (
+                  this.state.totalResult < 0 ? (
+                    <Red>${parseFloat(this.state.totalResult).toFixed(3)}</Red>
+                  ) : (
+                    <Green>
+                      ${parseFloat(this.state.totalResult).toFixed(3)}
+                    </Green>
+                  )
                 ) : (
-                  <Green>
-                    ${parseFloat(this.state.totalResult).toFixed(3)}
-                  </Green>
+                  "$0.000"
                 )}
               </div>
             </span>
