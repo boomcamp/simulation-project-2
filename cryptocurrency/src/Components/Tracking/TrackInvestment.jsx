@@ -19,6 +19,12 @@ function TrackInvestment() {
   }));
 
   const classes = useStyles();
+  const [update, setUpdate] = useState(null);
+
+  const updateFn = (e) => {
+    setUpdate(e)
+    setTransactionList({...transactionList, data: []})
+  }
   const [transactionList, setTransactionList] = useState({
     columns: [
       {
@@ -66,11 +72,11 @@ function TrackInvestment() {
       {
         title: 'Transaction Date',
         field: 'transactionDate',
-        render: rowDate => <TransactDate date={rowDate.transactionDate}/>
+        render: rowDate => <TransactDate date={rowDate.transactionDate} />
       },
       {
         title: '',
-        render: rowTrack => (rowTrack.type === 'buy') ? <TrackBtn transactionID={rowTrack.id} coinID={rowTrack.cryptoCurrency} /> : <Sold transactionData={rowTrack}/>
+        render: rowTrack => (rowTrack.type === 'buy') ? <TrackBtn updateFn={updateFn} transactionID={rowTrack.id} coinID={rowTrack.cryptoCurrency} /> : <Sold transactionData={rowTrack}/>
       }
     ],
     data: [],
@@ -89,7 +95,7 @@ function TrackInvestment() {
     })
     .catch(error => console.log(error))
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [update])
 
   return (
     <React.Fragment>
@@ -97,7 +103,7 @@ function TrackInvestment() {
       <Container maxWidth="xl" className={classes.paper}>
         <MaterialTable 
           columns={transactionList.columns}
-          data={transactionList.data.reverse()}
+          data={transactionList.data}
           title="List of Investments"
           options={{
             pageSize: 10

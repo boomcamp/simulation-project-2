@@ -6,7 +6,6 @@ import axios from 'axios';
 import {Table,TableBody,TableCell,TableHead,TableRow} from '@material-ui/core';
 import Sell from './Sell';
 
-
 function TrackBtn(props) {
   const { coinID, transactionID } = props;
 
@@ -41,6 +40,16 @@ function TrackBtn(props) {
 
   const [coinData, setCoinData] = useState({})
 
+  const [open, setOpen] = useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   useEffect(() => {
     axios({
       method: 'GET',
@@ -54,8 +63,9 @@ function TrackBtn(props) {
     })
     .catch(error => console.log(error))
     fetchingCoinDataFn(coinID)
+    
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [open])
 
   const fetchingCoinDataFn = (id) => {
     axios({
@@ -70,16 +80,6 @@ function TrackBtn(props) {
     })
     .catch(error => console.log(error))
   }
-
-  const [open, setOpen] = useState(false);
-
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
 
   const computePriceFn = (e) => {
     let qty = transactionData.fetchedTransactionData && transactionData.fetchedTransactionData.cryptoCurrencyQty;
@@ -99,17 +99,38 @@ function TrackBtn(props) {
     let oldPrice = transactionData.fetchedTransactionData && transactionData.fetchedTransactionData.cryptoCurrencyPrice;
     let newPrice = coinData.fetchedCoinData && coinData.fetchedCoinData.current_price;
     let total = newPrice - oldPrice;
-    return Math.abs(total.toFixed(2))
+    return total.toFixed(2)
   }
 
   const earnloseFn = (e) => {
     if(e < 0){
       return "You will lose"
     }else if(e > 0){
-      return "You will gain"
+      return "You will earn"
     }else{
-      return "You will gain nothing"
+      return "You will earn nothing"
     }
+  }
+
+  const sellFn = () => {
+    let tempData =  transactionData.fetchedTransactionData;
+    tempData.earned = profitFn()
+    tempData.sellPrice = computePriceFn(coinData.fetchedCoinData && coinData.fetchedCoinData.current_price)
+    tempData.sellPricePerCoin = coinData.fetchedCoinData && coinData.fetchedCoinData.current_price
+    tempData.type = 'sold'
+    tempData.transactionDate = new Date().getTime()
+    axios({
+      method: 'PUT',
+      url: `http://localhost:4000/transactions/${transactionID}`,
+      data: tempData
+    })
+    .then(() => {
+       setOpen(false);
+    })
+    .then(()=>props.updateFn(transactionID)) 
+    .catch(() => {
+      setOpen(false);
+    })
   }
 
   return (
@@ -118,7 +139,7 @@ function TrackBtn(props) {
         Track
       </Button>
       <Dialog
-        maxWidth='xl'
+        maxWidth='md'
         fullWidth={true}
         open={open}
         onClose={handleClose}
@@ -126,7 +147,7 @@ function TrackBtn(props) {
         aria-describedby="alert-dialog-description"
       >
         <DialogTitle id="alert-dialog-title" className={classes.root}>
-          Track
+        <span style={{textTransform: 'capitalize', fontWeight: 600}}>{transactionData.fetchedTransactionData && transactionData.fetchedTransactionData.cryptoCurrency}</span>
         </DialogTitle>
           <DialogContent>
             <Grid container spacing={2}>
@@ -165,12 +186,15 @@ function TrackBtn(props) {
                   <p className={classes.earn}>
                     {earnloseFn(profitPercentageFn())} &nbsp;
                     <span style={{color: (profitPercentageFn() < 0) ? 'red' : (profitPercentageFn() === 0) ? 'blue' :'green'}}>
-                      ${profitFn()}
+                      ${Math.abs(profitFn())}
                     </span>                   
                   </p>
                 </Grid>
                 <Grid container justify="center" spacing={2}>
-                  <Sell close={handleClose} key="sellBtn" transactionData={transactionData.fetchedTransactionData} transactionID={transactionID} sellPrice={computePriceFn(coinData.fetchedCoinData && coinData.fetchedCoinData.current_price)} sellPricePerCoin={coinData.fetchedCoinData && coinData.fetchedCoinData.current_price} earnedProfit={profitFn()}/>
+                  <Sell 
+                    key="sellBtn" 
+                    sellFire={sellFn}
+                  />
                 </Grid>
               </Grid>
             </Grid>

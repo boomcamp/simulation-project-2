@@ -46,9 +46,6 @@ function Coin(props) {
       width: 20,
       height: 19,
     },
-    sampleBorder: {
-      border: '1px solid white'
-    },
     currencyImg: {
       margin: 'auto 48%'
     },
@@ -69,11 +66,9 @@ function Coin(props) {
     },
     table: {
       margin: 'auto',
-      border: '1px solid black',
       width: '75%',
     },
     tableCell: {
-      border: '1px solid black',
       textAlign: 'center'
     },
     topBotMargin: {
@@ -166,19 +161,19 @@ function Coin(props) {
                   <li><span>Market Cap: </span> Rank #{coinData.data.coingecko_rank}</li>
                   <li><span>Symbol: </span> {coinData.data.symbol}</li>
                   <li><span>Categories: </span> {(coinData.data.categories) ? coinData.data.categories[0] : null}</li>
-                  <li><span>Homepage: </span> <a href={(coinData.data.links) && coinData.data.links.homepage[0]}>{(coinData.data.links) && coinData.data.links.homepage[0]}</a></li>
-                  <li><span>Explorers: </span> <a href={(coinData.data.links) && coinData.data.links.blockchain_site[0]}>{(coinData.data.links) && coinData.data.links.blockchain_site[0]}</a></li>
-                  <li><span>Official Forum: </span> <a href={(coinData.data.links) && coinData.data.links.official_forum_url[0]}>{(coinData.data.links) && coinData.data.links.official_forum_url[0]}</a></li>
-                  <li><span>Source Code: </span> <a href={(coinData.data.links) && coinData.data.links.repos_url.github[0]}>{(coinData.data.links) && coinData.data.links.repos_url.github[0]}</a></li>
+                  <li><span>Homepage: </span> <a style={{textDecoration: 'none', color: 'black'}} href={(coinData.data.links) && coinData.data.links.homepage[0]}>{(coinData.data.links) && coinData.data.links.homepage[0]}</a></li>
+                  <li><span>Explorers: </span> <a style={{textDecoration: 'none', color: 'black'}} href={(coinData.data.links) && coinData.data.links.blockchain_site[0]}>{(coinData.data.links) && coinData.data.links.blockchain_site[0]}</a></li>
+                  <li><span>Official Forum: </span> <a style={{textDecoration: 'none', color: 'black'}} href={(coinData.data.links) && coinData.data.links.official_forum_url[0]}>{(coinData.data.links) && coinData.data.links.official_forum_url[0]}</a></li>
+                  <li><span>Source Code: </span> <a style={{textDecoration: 'none', color: 'black'}} href={(coinData.data.links) && coinData.data.links.repos_url.github[0]}>{(coinData.data.links) && coinData.data.links.repos_url.github[0]}</a></li>
                 </ul>
                 <ul className={classes.currencyList}>
-                  <li><span>Price Changes: </span> <NumberFormat decimalScale={1} value={(coinData.data.market_data) && coinData.data.market_data.price_change_percentage_24h} displayType={'text'} suffix={'%'} /></li>
-                  <li><span>Bitcoin Price: </span> <NumberFormat decimalScale={2} value={(coinData.data.market_data) && coinData.data.market_data.current_price.usd} displayType={'text'} thousandSeparator={true} prefix={'$'} /></li>
-                  <li><span>Market Cap: </span> <NumberFormat value={(coinData.data.market_data) && coinData.data.market_data.market_cap.usd} displayType={'text'} thousandSeparator={true} prefix={'$'} /></li>
-                  <li><span>24 Hour Trading Volume: </span> <NumberFormat value={(coinData.data.market_data) && coinData.data.market_data.total_volume.usd} displayType={'text'} thousandSeparator={true} prefix={'$'} /></li>
-                  <li><span>24h Low / 24h High: </span> <NumberFormat decimalScale={2} value={(coinData.data.market_data) && coinData.data.market_data.low_24h.usd} displayType={'text'} thousandSeparator={true} prefix={'$'} /> / <NumberFormat decimalScale={2} value={(coinData.data.market_data) && coinData.data.market_data.high_24h.usd} displayType={'text'} thousandSeparator={true} prefix={'$'} /></li>
-                  <li><span>All-Time High: </span> <NumberFormat decimalScale={2} value={(coinData.data.market_data) && coinData.data.market_data.ath.usd} displayType={'text'} thousandSeparator={true} prefix={'$'} /></li>
-                  <li><span>All-Time Low: </span> <NumberFormat decimalScale={2} value={(coinData.data.market_data) && coinData.data.market_data.atl.usd} displayType={'text'} thousandSeparator={true} prefix={'$'} /></li>
+                  <li><span>Price Changes: </span> <NumberFormat style={{fontWeight: 500, color: ((coinData.data.market_data) && coinData.data.market_data.price_change_percentage_24h < 0) ? 'red' : 'green'}} decimalScale={1} value={(coinData.data.market_data) && coinData.data.market_data.price_change_percentage_24h} displayType={'text'} suffix={'%'} /></li>
+                  <li><span>Bitcoin Price: </span> <NumberFormat style={{fontWeight: 500}} decimalScale={2} value={(coinData.data.market_data) && coinData.data.market_data.current_price.usd} displayType={'text'} thousandSeparator={true} prefix={'$'} /></li>
+                  <li><span>Market Cap: </span> <NumberFormat style={{fontWeight: 500, color: 'blue'}} value={(coinData.data.market_data) && coinData.data.market_data.market_cap.usd} displayType={'text'} thousandSeparator={true} prefix={'$'} /></li>
+                  <li><span>24 Hour Trading Volume: </span> <NumberFormat style={{fontWeight: 500, color: 'blue'}}  value={(coinData.data.market_data) && coinData.data.market_data.total_volume.usd} displayType={'text'} thousandSeparator={true} prefix={'$'} /></li>
+                  <li><span>24h Low / 24h High: </span> <NumberFormat style={{fontWeight: 500, color: 'red'}} decimalScale={2} value={(coinData.data.market_data) && coinData.data.market_data.low_24h.usd} displayType={'text'} thousandSeparator={true} prefix={'$'} /> / <NumberFormat style={{fontWeight: 500, color: 'green'}} decimalScale={2} value={(coinData.data.market_data) && coinData.data.market_data.high_24h.usd} displayType={'text'} thousandSeparator={true} prefix={'$'} /></li>
+                  <li><span>All-Time High: </span> <NumberFormat style={{fontWeight: 500, color: 'green'}} decimalScale={2} value={(coinData.data.market_data) && coinData.data.market_data.ath.usd} displayType={'text'} thousandSeparator={true} prefix={'$'} /></li>
+                  <li><span>All-Time Low: </span> <NumberFormat style={{fontWeight: 500, color: 'red'}} decimalScale={2} value={(coinData.data.market_data) && coinData.data.market_data.atl.usd} displayType={'text'} thousandSeparator={true} prefix={'$'} /></li>
                   <li className={classes.buysellBtn}>
                     <Buy coinID={props.match.params.coin} coinSymbol={coinData.data.symbol} coinImage={(coinData.data.image) && coinData.data.image.small} coinName={coinData.data.name} coinSym={coinData.data.symbol} coinPrice={(coinData.data.market_data) && coinData.data.market_data.current_price.usd} />
                   </li>
@@ -187,7 +182,7 @@ function Coin(props) {
               <Grid container className={classes.currencyDetails} justify="space-around" spacing={2}>
                 <Grid item xs={12} sm={10} md={9} lg={9}>
                   <h3>Description:</h3>
-                  <p dangerouslySetInnerHTML = {{__html: (coinData.data.description) && coinData.data.description.en}}/>
+                  <p style={{color: 'black', textDecoration: 'none'}} dangerouslySetInnerHTML = {{__html: (coinData.data.description) && coinData.data.description.en}}/>
                 </Grid>
               </Grid>  
               <Grid item xs={12} className={classes.topBotMargin}>
