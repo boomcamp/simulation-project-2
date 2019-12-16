@@ -24,6 +24,7 @@
 ## Built With
 - [Windows Visual Studio](https://code.visualstudio.com) - The web framework used
 - [Coingecko](https://www.coingecko.com/en/api) - API used
+- [ReactJS](https://reactjs.org/)
 
 
 
