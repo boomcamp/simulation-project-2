@@ -14,6 +14,8 @@ import {
   arrow
 } from "./Style";
 import { FaArrowAltCircleUp, FaArrowAltCircleDown } from "react-icons/fa";
+import { Link } from "react-router-dom";
+import ReactTooltip from "react-tooltip";
 
 const list = [
   {
@@ -30,12 +32,15 @@ const table2 = [
     title: "Coin",
     field: "crypto.id",
     render: rowData => (
-      <CoinName>
-        <ImgCont>
-          <Img src={rowData.crypto.img} />
-        </ImgCont>
-        <Span>{rowData.crypto.id}</Span>
-      </CoinName>
+      <Link to={`/coins/${rowData.crypto.id}`}>
+        <CoinName data-tip={rowData.crypto.id}>
+          <ImgCont>
+            <Img src={rowData.crypto.img} />
+          </ImgCont>
+          <Span>{rowData.crypto.id}</Span>
+        </CoinName>
+        <ReactTooltip />
+      </Link>
     )
   },
   {
@@ -107,4 +112,12 @@ const table2 = [
     render: rowData => <span style={blue}>{rowData.dateSold}</span>
   }
 ];
-export { list, table2 };
+const tempDate = new Intl.DateTimeFormat("en-US", {
+  year: "numeric",
+  month: "short",
+  day: "2-digit",
+  hour: "2-digit",
+  minute: "2-digit"
+}).format(Date.now());
+
+export { list, table2, tempDate };

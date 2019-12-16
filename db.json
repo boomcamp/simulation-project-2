@@ -151,9 +151,9 @@
       },
       "amount": 2726.756378769,
       "price": 0.03667361,
-      "amountSold": 1010,
-      "profit": 0.006999999999997897,
-      "dateSold": "Dec 13, 2019, 05:18 PM",
+      "amountSold": 2726.756378769,
+      "profit": -0.746398536822781,
+      "dateSold": "Dec 16, 2019, 10:24 AM",
       "id": 12
     },
     {
@@ -168,6 +168,84 @@
       "profit": 0,
       "dateSold": "Dec 13, 2019, 05:18 PM",
       "id": 13
+    },
+    {
+      "crypto": {
+        "id": "bitcoin",
+        "img": "https://assets.coingecko.com/coins/images/1/large/bitcoin.png?1547033579",
+        "unit": "btc"
+      },
+      "amount": 999,
+      "price": 7085.94,
+      "amountSold": 0,
+      "profit": 0,
+      "dateSold": "",
+      "id": 14
+    },
+    {
+      "crypto": {
+        "id": "bitcoin",
+        "img": "https://assets.coingecko.com/coins/images/1/large/bitcoin.png?1547033579",
+        "unit": "btc"
+      },
+      "amount": 9999,
+      "price": 7082.24,
+      "amountSold": 0,
+      "profit": 0,
+      "dateSold": "",
+      "id": 15
+    },
+    {
+      "crypto": {
+        "id": "litecoin",
+        "img": "https://assets.coingecko.com/coins/images/2/large/litecoin.png?1547033580",
+        "unit": "ltc"
+      },
+      "amount": 999,
+      "price": 43.27,
+      "amountSold": 0,
+      "profit": 0,
+      "dateSold": "",
+      "id": 16
+    },
+    {
+      "crypto": {
+        "id": "ethereum",
+        "img": "https://assets.coingecko.com/coins/images/279/large/ethereum.png?1547034048",
+        "unit": "eth"
+      },
+      "amount": 999,
+      "price": 141.68,
+      "amountSold": 999,
+      "profit": -169.8300000000163,
+      "dateSold": "Dec 16, 2019, 03:01 PM",
+      "id": 17
+    },
+    {
+      "crypto": {
+        "id": "bitcoin",
+        "img": "https://assets.coingecko.com/coins/images/1/large/bitcoin.png?1547033579",
+        "unit": "btc"
+      },
+      "amount": 999,
+      "price": 7075.84,
+      "amountSold": 999,
+      "profit": 2387.609999999404,
+      "dateSold": "Dec 16, 2019, 03:02 PM",
+      "id": 18
+    },
+    {
+      "crypto": {
+        "id": "bitcoin",
+        "img": "https://assets.coingecko.com/coins/images/1/large/bitcoin.png?1547033579",
+        "unit": "btc"
+      },
+      "amount": 999,
+      "price": 7066.43,
+      "amountSold": 0,
+      "profit": 0,
+      "dateSold": "",
+      "id": 19
     }
   ]
 }

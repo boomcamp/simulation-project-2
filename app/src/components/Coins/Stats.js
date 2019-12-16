@@ -1,20 +1,21 @@
 import React from "react";
 import { Stats, Details, SpanDetails, Span, StatsDiv } from "./Style";
-import { month } from "./Data";
 
 export default class Stat extends React.Component {
   render() {
     const { temp, temp_c, temp_md, currency } = this.props;
-    const new_date = new Date(temp ? Date.parse(temp.last_updated) : "");
-    const time = new_date.getHours() > 12 ? "pm" : "am";
-    let hr =
-      new_date.getHours() > 12 ? new_date.getHours() - 12 : new_date.getHours();
-    hr = hr < 10 ? "0" + hr : hr;
-    const min =
-      new_date.getHours() < 10
-        ? "0" + new_date.getMinutes()
-        : new_date.getMinutes();
-
+    let new_date = "";
+    let tempDate = "";
+    if (temp) {
+      new_date = new Date(Date.parse(temp.last_updated));
+      tempDate = new Intl.DateTimeFormat("en-US", {
+        year: "numeric",
+        month: "short",
+        day: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit"
+      }).format(new_date);
+    }
     return (
       <Stats>
         {temp ? (
@@ -63,18 +64,7 @@ export default class Stat extends React.Component {
               </SpanDetails>
               <SpanDetails>
                 <Span>Last Updated</Span>
-                <Span>
-                  {month[new_date.getMonth()] +
-                    ", " +
-                    new_date.getDate() +
-                    " " +
-                    new_date.getFullYear() +
-                    " @ " +
-                    hr +
-                    ":" +
-                    min +
-                    time}
-                </Span>
+                <Span>{tempDate}</Span>
               </SpanDetails>
             </Details>
           </StatsDiv>

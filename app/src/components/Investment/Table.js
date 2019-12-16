@@ -23,6 +23,8 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import { table2 } from "./Data";
 import Tabs from "react-bootstrap/Tabs";
 import Tab from "react-bootstrap/Tab";
+import { Link } from "react-router-dom";
+import ReactTooltip from "react-tooltip";
 export default class Table extends Component {
   constructor() {
     super();
@@ -32,12 +34,15 @@ export default class Table extends Component {
           title: "Coin",
           field: "crypto.id",
           render: rowData => (
-            <CoinName>
-              <ImgCont>
-                <Img src={rowData.crypto.img} />
-              </ImgCont>
-              <Span>{rowData.crypto.id}</Span>
-            </CoinName>
+            <Link to={`/coins/${rowData.crypto.id}`}>
+              <CoinName data-tip={rowData.crypto.id}>
+                <ImgCont>
+                  <Img src={rowData.crypto.img} />
+                </ImgCont>
+                <Span>{rowData.crypto.id}</Span>
+              </CoinName>
+              <ReactTooltip />
+            </Link>
           )
         },
         {
@@ -142,7 +147,8 @@ export default class Table extends Component {
       handleSubmitSell,
       handleClose,
       currentTransaction,
-      sellingAmount
+      sellingAmount,
+      getData
     } = this.props;
     const data = currentTransaction;
 
@@ -164,9 +170,17 @@ export default class Table extends Component {
                 title="List of Investments"
                 columns={this.state.columns}
                 data={transList
-                  .reverse()
-                  .filter(x => x.amount !== x.amountSold)}
+                  .filter(x => x.amount !== x.amountSold)
+                  .reverse()}
                 isLoading={loading}
+                actions={[
+                  {
+                    icon: "replay",
+                    tooltip: "Reload",
+                    isFreeAction: true,
+                    onClick: () => getData()
+                  }
+                ]}
               />
             </Tab>
             <Tab eventKey="log" title="Transaction Log">
@@ -174,9 +188,17 @@ export default class Table extends Component {
                 title="Recent Investments"
                 columns={table2}
                 data={transList
-                  .reverse()
-                  .filter(x => x.amount === x.amountSold)}
+                  .filter(x => x.amount === x.amountSold)
+                  .reverse()}
                 isLoading={loading}
+                actions={[
+                  {
+                    icon: "replay",
+                    tooltip: "Reload",
+                    isFreeAction: true,
+                    onClick: () => getData()
+                  }
+                ]}
               />
             </Tab>
           </Tabs>

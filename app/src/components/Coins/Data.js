@@ -1,17 +1,3 @@
-const month = [
-  "Jan",
-  "Feb",
-  "Mar",
-  "Apr",
-  "May",
-  "Jun",
-  "Jul",
-  "Aug",
-  "Sep",
-  "Oct",
-  "Nov",
-  "Dec"
-];
 const days = [
   { name: "24h", value: "1" },
   { name: "1 Week", value: "7" },
@@ -20,4 +6,4 @@ const days = [
   { name: "1 Year", value: "360" },
   { name: "All time", value: "max" }
 ];
-export { month, days };
+export { days };

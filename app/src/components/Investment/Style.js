@@ -140,7 +140,7 @@ const Icon = styled.span`
 const History = styled.span`
   font-size: 20px;
   margin: 0 0 10px 0;
-  color: #3f51b5;
+  color: steelblue;
 `;
 const ValueBox = styled.div`
   width: 200px;
@@ -163,7 +163,7 @@ const Fresh = styled.span`
   display: flex;
   justify-content: center;
 `;
-const blue = { color: "blue" };
+const blue = { color: "#3c8dd4" };
 const red = { color: "red" };
 const green = { color: "#5ee52e" };
 const active = { border: "3px solid #5ee52e" };

@@ -1,6 +1,5 @@
 import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { month } from "./Data";
 import ReactHtmlParser from "react-html-parser";
 import { Div2, Name, Img, Title, Desc, Box, Main, Icon } from "./Style";
 
@@ -37,18 +36,12 @@ export default class Coins extends React.Component {
         this.setState({
           data: res.data.prices.map(x => {
             const new_date = new Date(x[0]);
-            const min =
-              new_date.getMinutes() < 10
-                ? "0" + new_date.getMinutes()
-                : new_date.getMinutes();
-            const time = new_date.getHours() > 12 ? "pm" : "am";
-            let hr =
-              new_date.getHours() > 12
-                ? new_date.getHours() - 12
-                : new_date.getHours();
-            hr = hr < 10 ? "0" + hr : hr;
+            const hour = new Intl.DateTimeFormat("en-US", {
+              hour: "2-digit",
+              minute: "2-digit"
+            }).format(new_date);
             return {
-              Date: hr + ":" + min + " " + time,
+              Date: hour,
               Price: Number(Math.round(x[1] + "e2") + "e-2")
             };
           })
@@ -64,35 +57,30 @@ export default class Coins extends React.Component {
         this.setState({
           data: res.data.prices.map(x => {
             const new_date = new Date(x[0]);
-            const min =
-              new_date.getMinutes() < 10
-                ? "0" + new_date.getMinutes()
-                : new_date.getMinutes();
-
-            const time = new_date.getHours() > 12 ? "pm" : "am";
-            let hr =
-              new_date.getHours() > 12
-                ? new_date.getHours() - 12
-                : new_date.getHours();
-            hr = hr < 10 ? "0" + hr : hr;
+            const hour = new Intl.DateTimeFormat("en-US", {
+              hour: "2-digit",
+              minute: "2-digit"
+            }).format(new_date);
+            const month = new Intl.DateTimeFormat("en-US", {
+              month: "short",
+              day: "2-digit"
+            }).format(new_date);
+            const year = new Intl.DateTimeFormat("en-US", {
+              year: "numeric",
+              month: "short"
+            }).format(new_date);
             return value === "max"
               ? {
-                  Date:
-                    month[new_date.getMonth()] +
-                    "' " +
-                    new_date
-                      .getFullYear()
-                      .toString()
-                      .substr(-2),
+                  Date: year,
                   Price: Number(Math.round(x[1] + "e2") + "e-2")
                 }
               : value === "1"
               ? {
-                  Date: hr + ":" + min + " " + time,
+                  Date: hour,
                   Price: Number(Math.round(x[1] + "e2") + "e-2")
                 }
               : {
-                  Date: new_date.getDate() + ". " + month[new_date.getMonth()],
+                  Date: month,
                   Price: Number(Math.round(x[1] + "e2") + "e-2")
                 };
           }),

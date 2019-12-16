@@ -70,7 +70,7 @@ const Red = styled.span`
   color: red;
 `;
 const Blue = styled.span`
-  color: blue;
+  color: #3c8dd4;
 `;
 const Green = styled.span`
   color: green;

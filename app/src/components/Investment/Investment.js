@@ -30,16 +30,9 @@ import {
 } from "./Style";
 import "../../App.css";
 import Table from "./Table";
-import { list } from "./Data";
+import { list, tempDate } from "./Data";
 import Axios from "axios";
 import { toast } from "react-toastify";
-const tempDate = new Intl.DateTimeFormat("en-US", {
-  year: "numeric",
-  month: "short",
-  day: "2-digit",
-  hour: "2-digit",
-  minute: "2-digit"
-}).format(Date.now());
 
 export default class Investment extends React.Component {
   constructor() {
@@ -59,7 +52,8 @@ export default class Investment extends React.Component {
         value: "bitcoin",
         label: "Bitcoin",
         unit: "btc"
-      }
+      },
+      loading: true
     };
   }
   handleClickOpen = val => {
@@ -85,6 +79,7 @@ export default class Investment extends React.Component {
         );
         return x;
       });
+      console.log(temp);
       this.setState({
         transList: temp,
         lastTrans: res.data[res.data.length - 1],
@@ -92,7 +87,7 @@ export default class Investment extends React.Component {
       });
       setTimeout(() => {
         this.setState({ loading: false });
-      }, 1000);
+      }, 500);
     });
   };
   componentDidMount() {
@@ -220,8 +215,9 @@ export default class Investment extends React.Component {
         })
       );
   };
+
   render() {
-    const { currency, loading, handleUpdate } = this.props;
+    const { currency } = this.props;
     const cryptoList2 = this.state.cryptoList.map(x => {
       return { value: x.id, label: x.name, unit: x.symbol };
     });
@@ -230,7 +226,7 @@ export default class Investment extends React.Component {
         <Left>
           <Table
             transList={this.state.transList}
-            loading={loading}
+            loading={this.state.loading}
             handleOnChange={this.handleOnChange}
             handleSubmitSell={this.handleSubmitSell}
             handleClickOpen={this.handleClickOpen}
@@ -238,7 +234,7 @@ export default class Investment extends React.Component {
             open={this.state.open}
             currentTransaction={this.state.currentTransaction}
             sellingAmount={this.state.sellingAmount}
-            handleUpdate={handleUpdate}
+            getData={this.getData}
           />
         </Left>
         <Right>
