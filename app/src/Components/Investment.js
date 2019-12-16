@@ -17,11 +17,16 @@ import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
-
+import SoldTransactions from "./SoldTransactions";
 import Header from "./Header";
 
 function App() {
-  const [totalinvestment, setTotalInvestment] = useState([]);
+  const [soldTrans, setSoldTrans] = useState([]);
+  const [totalinvestment, setTotalInvestment] = useState([]); // FOR COINS
+  const [amountInvested, setAmountInvested] = useState({
+    totalInvest: 0,
+    totalInvestBal: 0
+  }); // FOR USD INVESTED
   const [coins, setCoins] = useState([]);
   const [state, setState] = React.useState({
     columns: [
@@ -43,7 +48,7 @@ function App() {
         render: state => `${state.value} ${state.symbol}`
       },
       { title: "Amount", render: state => `$${state.amount}` },
-      { title: "Price Before", render: state => `$${state.priceBefore}` },
+      { title: "Price per Coin", render: state => `$${state.priceBefore}` },
       { title: "Date", field: "date" },
       { title: "Status", field: "status" },
       {
@@ -85,6 +90,11 @@ function App() {
         });
         setState({ ...state, data: filteredTrans });
 
+        var filteredSoldTrans = response.data.filter(function(transaction) {
+          return transaction.mode === "sell";
+        });
+        setSoldTrans(filteredSoldTrans);
+
         //CALCULATE COIN TOTAL
         let result = response.data.reduce((c, v) => {
           const num = parseFloat(v.coinBalance);
@@ -94,7 +104,6 @@ function App() {
 
         let newData = [];
 
-        
         for (var key in result) {
           newData.push({ coinName: key, totalValue: result[key] });
         }
@@ -102,10 +111,21 @@ function App() {
         // END CALCULATE COIN TOTAL
 
         //CALCULATE INVESTMENTS
-          
-        console.log(response.data);
+        var filterBoughtCoins = response.data.filter(function(coin) {
+          return coin.mode === "buy";
+        });
+        var totalInvest = filterBoughtCoins
+          .map(item => parseFloat(item.amount))
+          .reduce((prev, next) => prev + next);
+        var totalInvestBal = response.data
+          .map(item => parseFloat(item.amountBalance))
+          .reduce((prev, next) => prev + next);
 
-
+        setAmountInvested({
+          totalInvest: totalInvest,
+          totalInvestBal: totalInvestBal
+        });
+        //END CALCULATE INVESTMENTS
       })
       .catch(err => console.log(err));
   };
@@ -183,7 +203,7 @@ function App() {
       coinName: selected.coinName,
       symbol: selected.symbol,
       image: selected.image,
-      amount: percentage.totalAmount,
+      amount: selected.amount,
       priceBefore: selected.priceBefore,
       priceAfter: percentage.priceAfter,
       mode: "sell",
@@ -235,7 +255,14 @@ function App() {
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
+    if (newValue === 1) {
+      setCoin(false);
+    } else {
+      setCoin(true);
+    }
   };
+
+  const [coin, setCoin] = useState(true); //HIDE COIN/INVESTMENT TAB
 
   return (
     <>
@@ -263,7 +290,7 @@ function App() {
               display: hidden ? "none" : null
             }}
           >
-            <Grid item xs={12} >
+            <Grid item xs={12}>
               <Typography variant="h6" gutterBottom>
                 My Wallet
               </Typography>
@@ -277,14 +304,18 @@ function App() {
                 <Tab label="Investment" />
               </Tabs>
             </Grid>
-            <Grid container spacing={1} style={{ marginTop: "1%" }}>
+            <Grid
+              container
+              spacing={1}
+              style={{ marginTop: "1%", display: coin ? null : "none" }}
+            >
               <Grid item xs={4}>
                 <Typography
                   variant="h7"
                   gutterBottom
                   style={{ fontWeight: "bold" }}
                 >
-                  Coin
+                  Click a coin for history
                 </Typography>
               </Grid>
               <Grid item xs={6}>
@@ -296,38 +327,55 @@ function App() {
                   Balance
                 </Typography>
               </Grid>
-
-              {totalinvestment.map(data => (
-                <Grid container spacing={1}>
-                  <Grid item xs={4}>
-                    {data.coinName}
-                  </Grid>
-                  <Grid item xs={6}>
-                    {data.totalValue}
-                  </Grid>
-                </Grid>
-              ))}
+              <SoldTransactions
+                totalinvestment={totalinvestment}
+                soldTrans={soldTrans}
+              />
             </Grid>
-            <Grid container spacing={2} style={{ marginTop: "1%" }}>
+            <Grid
+              container
+              spacing={2}
+              style={{ marginTop: "1%", display: coin ? "none" : null }}
+            >
               <Grid
                 item
                 xs={4}
-                style={{ display: "flex", justifyContent: "flex-start" }}
+                style={{
+                  display: "flex",
+                  justifyContent: "flex-start",
+                  fontWeight: "bold"
+                }}
               >
                 Total Amount Invested:
               </Grid>
               <Grid item xs={6}>
-                On Progress
+                <NumberFormat
+                  value={amountInvested.totalInvest}
+                  displayType={"text"}
+                  thousandSeparator={true}
+                  prefix="$"
+                  decimalScale={"2"}
+                />
               </Grid>
               <Grid
                 item
                 xs={4}
-                style={{ display: "flex", justifyContent: "flex-start" }}
+                style={{
+                  display: "flex",
+                  justifyContent: "flex-start",
+                  fontWeight: "bold"
+                }}
               >
                 Total Invested Balance:
               </Grid>
               <Grid item xs={6}>
-                On Progress
+                <NumberFormat
+                  value={amountInvested.totalInvestBal}
+                  displayType={"text"}
+                  thousandSeparator={true}
+                  prefix="$"
+                  decimalScale={"2"}
+                />
               </Grid>
             </Grid>
           </Grid>

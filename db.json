@@ -62,6 +62,12 @@
       "id": 3
     },
     {
+      "coinBalance": 0,
+      "status": "sold",
+      "priceSold": 140.85,
+      "amountBalance": 0,
+      "amountSold": 70.425,
+      "dateSold": "Mon Dec 16 2019,  5:01:00 PM",
       "coinID": "ethereum",
       "value": 0.5,
       "date": "Fri Dec 13 2019,  5:39:23 PM",
@@ -74,11 +80,173 @@
       },
       "amount": 72.125,
       "priceBefore": 144.25,
-      "coinBalance": 0.5,
+      "mode": "buy",
+      "id": 4
+    },
+    {
+      "coinID": "bitcoin",
+      "value": 0.02122328165700064,
+      "date": "Mon Dec 16 2019,  1:49:08 PM",
+      "coinName": "Bitcoin",
+      "symbol": "btc",
+      "image": {
+        "thumb": "https://assets.coingecko.com/coins/images/1/thumb/bitcoin.png?1547033579",
+        "small": "https://assets.coingecko.com/coins/images/1/small/bitcoin.png?1547033579",
+        "large": "https://assets.coingecko.com/coins/images/1/large/bitcoin.png?1547033579"
+      },
+      "amount": "150",
+      "priceBefore": 7067.71,
+      "coinBalance": 0.02122328165700064,
       "mode": "buy",
       "status": "not sold",
-      "amountBalance": 72.125,
-      "id": 4
+      "amountBalance": "150",
+      "id": 5
+    },
+    {
+      "coinID": "ethereum",
+      "value": 0.5,
+      "date": "Mon Dec 16 2019,  5:01:00 PM",
+      "coinName": "Ethereum",
+      "symbol": "eth",
+      "image": {
+        "thumb": "https://assets.coingecko.com/coins/images/279/thumb/ethereum.png?1547034048",
+        "small": "https://assets.coingecko.com/coins/images/279/small/ethereum.png?1547034048",
+        "large": "https://assets.coingecko.com/coins/images/279/large/ethereum.png?1547034048"
+      },
+      "amount": 72.125,
+      "priceBefore": 144.25,
+      "priceAfter": 140.85,
+      "mode": "sell",
+      "status": "sold",
+      "coinBalance": 0,
+      "amountBalance": 70.425,
+      "id": 6
+    },
+    {
+      "coinBalance": 0,
+      "status": "sold",
+      "priceSold": 205.28,
+      "amountBalance": 0,
+      "amountSold": 100.15612802498048,
+      "dateSold": "Mon Dec 16 2019,  5:31:31 PM",
+      "coinID": "bitcoin-cash",
+      "value": 0.4879000780640125,
+      "date": "Mon Dec 16 2019,  5:10:14 PM",
+      "coinName": "Bitcoin Cash",
+      "symbol": "bch",
+      "image": {
+        "thumb": "https://assets.coingecko.com/coins/images/780/thumb/bitcoin_cash.png?1547034541",
+        "small": "https://assets.coingecko.com/coins/images/780/small/bitcoin_cash.png?1547034541",
+        "large": "https://assets.coingecko.com/coins/images/780/large/bitcoin_cash.png?1547034541"
+      },
+      "amount": "100",
+      "priceBefore": 204.96,
+      "mode": "buy",
+      "id": 7
+    },
+    {
+      "coinBalance": 0,
+      "status": "sold",
+      "priceSold": 205.28,
+      "amountBalance": 0,
+      "amountSold": 200.31225604996095,
+      "dateSold": "Mon Dec 16 2019,  5:31:34 PM",
+      "coinID": "bitcoin-cash",
+      "value": 0.975800156128025,
+      "date": "Mon Dec 16 2019,  5:10:20 PM",
+      "coinName": "Bitcoin Cash",
+      "symbol": "bch",
+      "image": {
+        "thumb": "https://assets.coingecko.com/coins/images/780/thumb/bitcoin_cash.png?1547034541",
+        "small": "https://assets.coingecko.com/coins/images/780/small/bitcoin_cash.png?1547034541",
+        "large": "https://assets.coingecko.com/coins/images/780/large/bitcoin_cash.png?1547034541"
+      },
+      "amount": "200",
+      "priceBefore": 204.96,
+      "mode": "buy",
+      "id": 8
+    },
+    {
+      "coinBalance": 0,
+      "status": "sold",
+      "priceSold": 205.28,
+      "amountBalance": 0,
+      "amountSold": 300.46838407494147,
+      "dateSold": "Mon Dec 16 2019,  5:31:39 PM",
+      "coinID": "bitcoin-cash",
+      "value": 1.4637002341920373,
+      "date": "Mon Dec 16 2019,  5:10:25 PM",
+      "coinName": "Bitcoin Cash",
+      "symbol": "bch",
+      "image": {
+        "thumb": "https://assets.coingecko.com/coins/images/780/thumb/bitcoin_cash.png?1547034541",
+        "small": "https://assets.coingecko.com/coins/images/780/small/bitcoin_cash.png?1547034541",
+        "large": "https://assets.coingecko.com/coins/images/780/large/bitcoin_cash.png?1547034541"
+      },
+      "amount": "300",
+      "priceBefore": 204.96,
+      "mode": "buy",
+      "id": 9
+    },
+    {
+      "coinID": "bitcoin-cash",
+      "value": 0.4879000780640125,
+      "date": "Mon Dec 16 2019,  5:31:31 PM",
+      "coinName": "Bitcoin Cash",
+      "symbol": "bch",
+      "image": {
+        "thumb": "https://assets.coingecko.com/coins/images/780/thumb/bitcoin_cash.png?1547034541",
+        "small": "https://assets.coingecko.com/coins/images/780/small/bitcoin_cash.png?1547034541",
+        "large": "https://assets.coingecko.com/coins/images/780/large/bitcoin_cash.png?1547034541"
+      },
+      "amount": "100",
+      "priceBefore": 204.96,
+      "priceAfter": 205.28,
+      "mode": "sell",
+      "status": "sold",
+      "coinBalance": 0,
+      "amountBalance": 100.15612802498048,
+      "id": 10
+    },
+    {
+      "coinID": "bitcoin-cash",
+      "value": 0.975800156128025,
+      "date": "Mon Dec 16 2019,  5:31:34 PM",
+      "coinName": "Bitcoin Cash",
+      "symbol": "bch",
+      "image": {
+        "thumb": "https://assets.coingecko.com/coins/images/780/thumb/bitcoin_cash.png?1547034541",
+        "small": "https://assets.coingecko.com/coins/images/780/small/bitcoin_cash.png?1547034541",
+        "large": "https://assets.coingecko.com/coins/images/780/large/bitcoin_cash.png?1547034541"
+      },
+      "amount": "200",
+      "priceBefore": 204.96,
+      "priceAfter": 205.28,
+      "mode": "sell",
+      "status": "sold",
+      "coinBalance": 0,
+      "amountBalance": 200.31225604996095,
+      "id": 11
+    },
+    {
+      "coinID": "bitcoin-cash",
+      "value": 1.4637002341920373,
+      "date": "Mon Dec 16 2019,  5:31:39 PM",
+      "coinName": "Bitcoin Cash",
+      "symbol": "bch",
+      "image": {
+        "thumb": "https://assets.coingecko.com/coins/images/780/thumb/bitcoin_cash.png?1547034541",
+        "small": "https://assets.coingecko.com/coins/images/780/small/bitcoin_cash.png?1547034541",
+        "large": "https://assets.coingecko.com/coins/images/780/large/bitcoin_cash.png?1547034541"
+      },
+      "amount": "300",
+      "priceBefore": 204.96,
+      "priceAfter": 205.28,
+      "mode": "sell",
+      "status": "sold",
+      "coinBalance": 0,
+      "amountBalance": 300.46838407494147,
+      "id": 12
     }
   ]
 }
