@@ -91,15 +91,13 @@ export default function AcccessibleTable(props) {
    let { id } = useParams();
 
    useEffect(() => {
-      Axios.get(`https://api.coingecko.com/api/v3/coins/${id}`).then(
-         response => {
-            setData(response.data);
-            setImage(response.data.image);
-            setPrice(response.data.market_data.current_price);
-            setSymbol(response.data.symbol);
-            console.log(response.data);
-         }
-      );
+      Axios.get(`https://api.coingecko.com/api/v3/coins/${id}`).then(response => {
+         setData(response.data);
+         setImage(response.data.image);
+         setPrice(response.data.market_data.current_price);
+         setSymbol(response.data.symbol);
+         console.log(response.data);
+      });
    }, [id]);
 
    const circulatingFormat = num => {
@@ -153,11 +151,7 @@ export default function AcccessibleTable(props) {
 
             <div style={{ display: "flex" }}>
                <div className={classes.bs}>
-                  <img
-                     src={image.small}
-                     style={{ marginTop: "2vh" }}
-                     alt="coin"
-                  />
+                  <img src={image.small} style={{ marginTop: "2vh" }} alt="coin" />
                   <h3 style={{ textTransform: "uppercase" }}>{symbol}</h3>
 
                   <span style={{ textTransform: "uppercase" }}>
@@ -166,9 +160,7 @@ export default function AcccessibleTable(props) {
 
                   <div className={classes.div} style={{ marginBottom: "0vh" }}>
                      <Typography>
-                        <span style={{ textTransform: "uppercase" }}>
-                           {data.symbol}{" "}
-                        </span>
+                        <span style={{ textTransform: "uppercase" }}>{data.symbol} </span>
                         Total:
                      </Typography>
                      <Typography className={classes.buy}>
@@ -223,27 +215,19 @@ export default function AcccessibleTable(props) {
                         value={coin}
                         onChange={e => {
                            if (e.target.value > -1) {
-                              var net =
-                                 +e.target.value -
-                                 (+e.target.value + -e.target.value * 0.01) *
-                                    0.01;
-                              setAmount(net / price.usd);
+                              setAmount(e.target.value / price.usd);
                               setCoin(e.target.value);
                               props.amo(e.target.value);
-                              props.handleAmount(net / price.usd);
+                              props.handleAmount(e.target.value / price.usd);
                            }
                         }}
                         InputProps={{
                            startAdornment: (
-                              <InputAdornment position="start">
-                                 &#36;
-                              </InputAdornment>
+                              <InputAdornment position="start">&#36;</InputAdornment>
                            )
                         }}
                      />
-                     <SwapHorizIcon
-                        style={{ marginLeft: "20px", marginRight: "20px" }}
-                     />
+                     <SwapHorizIcon style={{ marginLeft: "20px", marginRight: "20px" }} />
                      <TextField
                         id="outlined-number"
                         ant="outlined"
@@ -260,19 +244,13 @@ export default function AcccessibleTable(props) {
                         }}
                         InputProps={{
                            endAdornment: (
-                              <InputAdornment position="start">
-                                 {symbol}
-                              </InputAdornment>
+                              <InputAdornment position="start">{symbol}</InputAdornment>
                            )
                         }}
                      />
                   </Paper>
 
-                  <img
-                     src={checkout}
-                     className={classes.buysell}
-                     alt="checkout"
-                  />
+                  <img src={checkout} className={classes.buysell} alt="checkout" />
                </div>
             </div>
          </div>

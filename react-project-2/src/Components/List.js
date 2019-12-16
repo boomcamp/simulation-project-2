@@ -108,16 +108,12 @@ export default function List() {
             }}
          >
             Cryptocurrency is an internet-based medium of exchange which uses
-            cryptographical functions to conduct financial transactions.
-            Cryptocurrencies leverage blockchain technology to gain
-            decentralization, transparency, and immutability.
+            cryptographical functions to conduct financial transactions. Cryptocurrencies
+            leverage blockchain technology to gain decentralization, transparency, and
+            immutability.
          </Typography>
          <NavLink to="/transaction-history">
-            <Button
-               variant="contained"
-               color="primary"
-               className={classes.button}
-            >
+            <Button variant="contained" color="primary" className={classes.button}>
                Transaction History
             </Button>
          </NavLink>
@@ -147,9 +143,7 @@ export default function List() {
                               to={`/coin-details/${rowData.id}`}
                               style={{ textDecoration: "none", color: "black" }}
                            >
-                              <span className={classes.name}>
-                                 {rowData.name}
-                              </span>
+                              <span className={classes.name}>{rowData.name}</span>
                            </NavLink>
                         )
                      },
@@ -171,10 +165,7 @@ export default function List() {
                      {
                         title: "Ticker",
                         render: rowData => (
-                           <span className={classes.symbol}>
-                              {" "}
-                              {rowData.symbol}
-                           </span>
+                           <span className={classes.symbol}> {rowData.symbol}</span>
                         )
                      },
                      {
@@ -182,10 +173,7 @@ export default function List() {
                         render: rowData => (
                            <span>
                               {" "}
-                              $
-                              {!rowData.current_price
-                                 ? "0"
-                                 : rowData.current_price}
+                              ${!rowData.current_price ? "0" : rowData.current_price}
                            </span>
                         )
                      },
@@ -194,9 +182,7 @@ export default function List() {
                         render: rowData => (
                            <span>
                               {" "}
-                              {circulatingFormat(
-                                 Math.round(rowData.circulating_supply)
-                              )}
+                              {circulatingFormat(Math.round(rowData.circulating_supply))}
                            </span>
                         )
                      },

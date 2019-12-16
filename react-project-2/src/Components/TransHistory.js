@@ -68,11 +68,9 @@ export default function InvestmentTracking() {
    let { id } = useParams();
 
    useEffect(() => {
-      Axios.get(`https://api.coingecko.com/api/v3/coins/${id}`).then(
-         response => {
-            setData(response.data.name + "'s Transaction History");
-         }
-      );
+      Axios.get(`https://api.coingecko.com/api/v3/coins/${id}`).then(response => {
+         setData(response.data.name + "'s Transaction History");
+      });
    }, [id]);
 
    useEffect(() => {
@@ -107,10 +105,7 @@ export default function InvestmentTracking() {
    });
 
    const toggleDrawer = (side, open) => event => {
-      if (
-         event.type === "keydown" &&
-         (event.key === "Tab" || event.key === "Shift")
-      ) {
+      if (event.type === "keydown" && (event.key === "Tab" || event.key === "Shift")) {
          return;
       }
 
@@ -190,9 +185,7 @@ export default function InvestmentTracking() {
                      <div className="weatherCondition">Total Transactions</div>
                   </div>
                </div>
-               <div className="date" style={{ fontSize: "24px" }}>
-                  BUY
-               </div>
+               <div className="date">BUY</div>
             </article>
 
             <article className="widget1">
@@ -233,11 +226,7 @@ export default function InvestmentTracking() {
                      title: "Logo",
                      render: rowData => (
                         <Link to={`/coin-history/${rowData.coinID}`}>
-                           <img
-                              src={rowData.image}
-                              className={classes.image}
-                              alt=""
-                           />
+                           <img src={rowData.image} className={classes.image} alt="" />
                         </Link>
                      )
                   },
@@ -252,43 +241,27 @@ export default function InvestmentTracking() {
                   {
                      title: "Symbol",
                      render: rowData => (
-                        <span style={{ textTransform: "uppercase" }}>
-                           {rowData.coin}
-                        </span>
+                        <span style={{ textTransform: "uppercase" }}>{rowData.coin}</span>
                      )
                   },
                   {
                      title: "Average Price",
                      render: rowData => (
-                        <span>
-                           ${Math.round(rowData.currentCoinPrice * 100) / 100}
-                        </span>
+                        <span>${Math.round(rowData.currentCoinPrice * 100) / 100}</span>
                      ),
                      type: "numeric"
                   },
                   {
                      title: "Coin Quantity",
                      render: rowData => (
-                        <span>
-                           {Math.round(rowData.coinQuantity * 1000) / 1000}
-                        </span>
-                     ),
-                     type: "numeric"
-                  },
-
-                  {
-                     title: "Price Bought / Sold",
-                     render: rowData => (
-                        <span>${Math.round(rowData.amount * 100) / 100}</span>
+                        <span>{Math.round(rowData.coinQuantity * 1000) / 1000}</span>
                      ),
                      type: "numeric"
                   },
                   {
-                     title: "Total Payment (+Trans fee)",
+                     title: "Total Payment / Earnings",
                      render: rowData => (
-                        <span>
-                           ${Math.round(rowData.totalAmount * 1000) / 1000}
-                        </span>
+                        <span>${Math.round(rowData.totalAmount * 1000) / 1000}</span>
                      ),
                      type: "numeric"
                   },

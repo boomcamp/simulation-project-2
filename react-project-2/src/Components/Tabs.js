@@ -105,33 +105,17 @@ export default function TabsC() {
    let { id } = useParams();
 
    useEffect(() => {
-      Axios.get(`https://api.coingecko.com/api/v3/coins/${id}`).then(
-         response => {
-            setData(response.data);
+      Axios.get(`https://api.coingecko.com/api/v3/coins/${id}`).then(response => {
+         setData(response.data);
+         setOneHour(response.data.market_data.price_change_percentage_1h_in_currency);
+         setTwoFour(response.data.market_data.price_change_percentage_24h_in_currency);
+         setSeven(response.data.market_data.price_change_percentage_7d_in_currency);
+         setFourteen(response.data.market_data.price_change_percentage_14d_in_currency);
+         setThirty(response.data.market_data.price_change_percentage_30d_in_currency);
+         setOneYear(response.data.market_data.price_change_percentage_1y_in_currency);
 
-            setOneHour(
-               response.data.market_data.price_change_percentage_1h_in_currency
-            );
-            setTwoFour(
-               response.data.market_data.price_change_percentage_24h_in_currency
-            );
-            setSeven(
-               response.data.market_data.price_change_percentage_7d_in_currency
-            );
-            setFourteen(
-               response.data.market_data.price_change_percentage_14d_in_currency
-            );
-            setThirty(
-               response.data.market_data.price_change_percentage_30d_in_currency
-            );
-            setOneYear(
-               response.data.market_data.price_change_percentage_1y_in_currency
-            );
-            // setImage(response.data.image);
-
-            console.log(response.data);
-         }
-      );
+         console.log(response.data);
+      });
    }, [id]);
 
    return (
@@ -159,8 +143,7 @@ export default function TabsC() {
                <AppBar
                   position="static"
                   style={{
-                     background:
-                        "linear-gradient(to left, #172c66 0%, #6a407f 42%)",
+                     background: "linear-gradient(to left, #172c66 0%, #6a407f 42%)",
                      color: "white"
                   }}
                >
@@ -203,9 +186,7 @@ export default function TabsC() {
                   aria-controls="panel1a-content"
                   id="panel1a-header"
                >
-                  <Typography className={classes.heading}>
-                     Other Details
-                  </Typography>
+                  <Typography className={classes.heading}>Other Details</Typography>
                </ExpansionPanelSummary>
                <ExpansionPanelDetails style={{ height: "9.8vh" }}>
                   <Paper className={classes.paper}>
@@ -231,9 +212,7 @@ export default function TabsC() {
                                     {Math.round(onehour.usd * 10) / 10}%
                                  </span>
                               ) : (
-                                 <span>
-                                    {Math.round(onehour.usd * 10) / 10}%
-                                 </span>
+                                 <span>{Math.round(onehour.usd * 10) / 10}%</span>
                               )}
                            </TableCell>
                            <TableCell>
@@ -242,9 +221,7 @@ export default function TabsC() {
                                     {Math.round(twofour.usd * 10) / 10}%
                                  </span>
                               ) : (
-                                 <span>
-                                    {Math.round(twofour.usd * 10) / 10}%
-                                 </span>
+                                 <span>{Math.round(twofour.usd * 10) / 10}%</span>
                               )}
                            </TableCell>
                            <TableCell>
@@ -262,9 +239,7 @@ export default function TabsC() {
                                     {Math.round(fourteen.usd * 10) / 10}%
                                  </span>
                               ) : (
-                                 <span>
-                                    {Math.round(fourteen.usd * 10) / 10}%
-                                 </span>
+                                 <span>{Math.round(fourteen.usd * 10) / 10}%</span>
                               )}
                            </TableCell>
                            <TableCell>
@@ -273,9 +248,7 @@ export default function TabsC() {
                                     {Math.round(thirty.usd * 10) / 10}%
                                  </span>
                               ) : (
-                                 <span>
-                                    {Math.round(thirty.usd * 10) / 10}%
-                                 </span>
+                                 <span>{Math.round(thirty.usd * 10) / 10}%</span>
                               )}
                            </TableCell>
                            <TableCell>
@@ -284,9 +257,7 @@ export default function TabsC() {
                                     {Math.round(oneyear.usd * 10) / 10}%
                                  </span>
                               ) : (
-                                 <span>
-                                    {Math.round(oneyear.usd * 10) / 10}%
-                                 </span>
+                                 <span>{Math.round(oneyear.usd * 10) / 10}%</span>
                               )}
                            </TableCell>
                         </TableBody>

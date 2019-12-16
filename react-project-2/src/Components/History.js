@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import MaterialTable from "material-table";
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles, createMuiTheme, MuiThemeProvider } from "@material-ui/core/styles";
 import Axios from "axios";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
@@ -16,7 +16,6 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import HomeIcon from "@material-ui/icons/Home";
 import TrackChangesIcon from "@material-ui/icons/TrackChanges";
-import Buy from "../assets/images/buy.png";
 import Sell from "../assets/images/sell.png";
 import Com from "../assets/images/commerce.png";
 
@@ -54,6 +53,12 @@ const useStyles = makeStyles(theme => ({
    }
 }));
 
+const theme = createMuiTheme({
+   palette: {
+      primary: { main: "#766ef3" }
+   }
+});
+
 export default function InvestmentTracking() {
    const classes = useStyles();
    const [data, setData] = React.useState([]);
@@ -67,21 +72,17 @@ export default function InvestmentTracking() {
    const [coinLs, setCoinLs] = useState({});
 
    useEffect(() => {
-      Axios.get(`https://api.coingecko.com/api/v3/coins/${id}`).then(
-         response => {
-            setData(response.data.name + "'s Transaction History");
-            setImg(response.data.image.thumb);
-         }
-      );
+      Axios.get(`https://api.coingecko.com/api/v3/coins/${id}`).then(response => {
+         setData(response.data.name + "'s Transaction History");
+         setImg(response.data.image.thumb);
+      });
    }, [id]);
 
    useEffect(() => {
       Axios.get(`http://localhost:4000/transactions`).then(response => {
          let buyData = response.data.filter(data => data.transaction === "buy");
          let coins = [...buyData.map(el => el.coinID)].toString();
-         const pricesWs = new WebSocket(
-            `wss://ws.coincap.io/prices?assets=${coins}`
-         );
+         const pricesWs = new WebSocket(`wss://ws.coincap.io/prices?assets=${coins}`);
          pricesWs.onmessage = function(msg) {
             Object.keys(JSON.parse(msg.data)).forEach(e => {
                coinList[e] = JSON.parse(msg.data)[`${e}`];
@@ -119,10 +120,7 @@ export default function InvestmentTracking() {
    });
 
    const toggleDrawer = (side, open) => event => {
-      if (
-         event.type === "keydown" &&
-         (event.key === "Tab" || event.key === "Shift")
-      ) {
+      if (event.type === "keydown" && (event.key === "Tab" || event.key === "Shift")) {
          return;
       }
 
@@ -205,9 +203,7 @@ export default function InvestmentTracking() {
                      <div className="weatherCondition">Total Transactions</div>
                   </div>
                </div>
-               <div className="date" style={{ fontSize: "24px" }}>
-                  BUY
-               </div>
+               <div className="date">BUY</div>
             </article>
 
             <article className="widget1">
@@ -226,15 +222,18 @@ export default function InvestmentTracking() {
             </article>
 
             <article className="widget2">
-               <div className="weatherIcon1">
-                  <h1>0</h1>
+               <div className="weatherIcon">
+                  <h1>{buyLength + +sellLength}</h1>
                </div>
-               <div className="weatherInfo1">
-                  <div className="weatherCondition1">Profit / Loss</div>
+               <div className="weatherInfo">
+                  <div className="temperature">
+                     <img src={Sell} style={{ width: "3vw" }} alt="" />
+                  </div>
+                  <div className="description">
+                     <div className="weatherCondition">Total Transactions</div>
+                  </div>
                </div>
-               <div className="date1">
-                  <img src={Buy} style={{ width: "3vw" }} alt="" />
-               </div>
+               <div className="date">ALL</div>
             </article>
          </div>
          <div className={classes.table}>
@@ -252,63 +251,51 @@ export default function InvestmentTracking() {
                   {
                      title: "Average Price",
                      render: rowData => (
-                        <span>
-                           ${Math.round(rowData.currentCoinPrice * 100) / 100}
-                        </span>
+                        <span>${Math.round(rowData.currentCoinPrice * 100) / 100}</span>
                      ),
                      type: "numeric"
                   },
                   {
                      title: "Coin Quantity",
                      render: rowData => (
-                        <span>
-                           {Math.round(rowData.coinQuantity * 1000) / 1000}
-                        </span>
-                     ),
-                     type: "numeric"
-                  },
-
-                  {
-                     title: "Price Bought / Sold",
-                     render: rowData => (
-                        <span>${Math.round(rowData.amount * 100) / 100}</span>
+                        <span>{Math.round(rowData.coinQuantity * 1000) / 1000}</span>
                      ),
                      type: "numeric"
                   },
                   {
-                     title: "Total Payment (+Trans fee)",
+                     title: "Total Payment / Earnings",
                      render: rowData => (
-                        <span>
-                           ${Math.round(rowData.totalAmount * 1000) / 1000}
-                        </span>
+                        <span>${Math.round(rowData.totalAmount * 1000) / 1000}</span>
                      ),
                      type: "numeric"
                   },
                   {
                      title: "Transaction",
                      render: rowData => (
-                        <span>
-                           {rowData.transaction === "buy" ? (
-                              <p
-                                 style={{
-                                    textTransform: "uppercase",
-                                    color: "purple"
-                                 }}
-                              >
-                                 {" "}
-                                 {rowData.transaction}
-                              </p>
-                           ) : (
-                              <p
-                                 style={{
-                                    textTransform: "uppercase",
-                                    color: "blue"
-                                 }}
-                              >
-                                 {rowData.transaction}
-                              </p>
-                           )}
-                        </span>
+                        <Link to={`/transaction/${id}`}>
+                           <span>
+                              {rowData.transaction === "buy" ? (
+                                 <p
+                                    style={{
+                                       textTransform: "uppercase",
+                                       color: "purple"
+                                    }}
+                                 >
+                                    {" "}
+                                    {rowData.transaction}
+                                 </p>
+                              ) : (
+                                 <p
+                                    style={{
+                                       textTransform: "uppercase",
+                                       color: "blue"
+                                    }}
+                                 >
+                                    {rowData.transaction}
+                                 </p>
+                              )}
+                           </span>
+                        </Link>
                      )
                   },
                   {
@@ -326,8 +313,7 @@ export default function InvestmentTracking() {
                            +rowData.totalAmount *
                            (+(
                               parseInt(-1, 10) +
-                              (+coinLs[rowData.coinID] -
-                                 +rowData.currentCoinPrice) /
+                              (+coinLs[rowData.coinID] - +rowData.currentCoinPrice) /
                                  +rowData.currentCoinPrice
                            ) /
                               100);
@@ -344,19 +330,31 @@ export default function InvestmentTracking() {
                      render: rowData => {
                         var profitPercent =
                            parseInt(-1, 10) +
-                           (+coinLs[rowData.coinID] -
-                              +rowData.currentCoinPrice) /
+                           (+coinLs[rowData.coinID] - +rowData.currentCoinPrice) /
                               +rowData.currentCoinPrice;
                         return (
-                           <p
-                              className={
-                                 profitPercent > 0 ? "blueviolet" : "red"
-                              }
-                           >
+                           <p className={profitPercent > 0 ? "blueviolet" : "red"}>
                               {profitPercent.toFixed(4)}%
                            </p>
                         );
                      }
+                  },
+                  {
+                     title: "Profit or Loss",
+                     type: "numeric",
+                     render: rowData =>
+                        rowData.profitOrLoss || rowData.profitOrLoss === 0 ? (
+                           <MuiThemeProvider theme={theme}>
+                              <Typography
+                                 style={{ fontSize: "16px" }}
+                                 color={rowData.profitOrLoss < 0 ? "error" : "primary"}
+                              >
+                                 <b>{Math.round(rowData.profitOrLoss * 1000) / 1000} %</b>
+                              </Typography>
+                           </MuiThemeProvider>
+                        ) : (
+                           <Typography variant="h6">------</Typography>
+                        )
                   }
                ]}
                data={trans}

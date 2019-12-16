@@ -95,15 +95,13 @@ export default function AcccessibleTable(props) {
    let { id } = useParams();
 
    useEffect(() => {
-      Axios.get(`https://api.coingecko.com/api/v3/coins/${id}`).then(
-         response => {
-            setData(response.data);
-            setImage(response.data.image);
-            setPrice(response.data.market_data.current_price);
-            setSymbol(response.data.symbol);
-            console.log(response.data);
-         }
-      );
+      Axios.get(`https://api.coingecko.com/api/v3/coins/${id}`).then(response => {
+         setData(response.data);
+         setImage(response.data.image);
+         setPrice(response.data.market_data.current_price);
+         setSymbol(response.data.symbol);
+         console.log(response.data);
+      });
    }, [id]);
 
    useEffect(() => {
@@ -114,8 +112,7 @@ export default function AcccessibleTable(props) {
          });
          fArray.forEach(newVal => {
             console.log(newVal.coinQuantity);
-            if (newVal.transaction === "buy")
-               initBalance += newVal.coinQuantity;
+            if (newVal.transaction === "buy") initBalance += newVal.coinQuantity;
             else initBalance -= newVal.coinQuantity;
          });
          setBalance(initBalance);
@@ -181,9 +178,7 @@ export default function AcccessibleTable(props) {
                <AccountBalanceWalletIcon className={classes.account} />{" "}
                <span style={{ paddingLeft: "5px" }}>
                   {balance}
-                  <span
-                     style={{ paddingLeft: "2px", textTransform: "uppercase" }}
-                  >
+                  <span style={{ paddingLeft: "2px", textTransform: "uppercase" }}>
                      {symbol}
                   </span>
                </span>
@@ -192,11 +187,7 @@ export default function AcccessibleTable(props) {
 
             <div style={{ display: "flex" }}>
                <div className={classes.bs}>
-                  <img
-                     src={image.small}
-                     style={{ marginTop: "2vh" }}
-                     alt="coin"
-                  />
+                  <img src={image.small} style={{ marginTop: "2vh" }} alt="coin" />
                   <h3 style={{ textTransform: "uppercase" }}>{symbol}</h3>
                   <p>
                      <span style={{ textTransform: "uppercase" }}>
@@ -206,9 +197,7 @@ export default function AcccessibleTable(props) {
 
                   <div className={classes.div} style={{ marginBottom: "0vh" }}>
                      <Typography>
-                        <span style={{ textTransform: "uppercase" }}>
-                           {data.symbol}{" "}
-                        </span>
+                        <span style={{ textTransform: "uppercase" }}>{data.symbol} </span>
                         Quantity:
                      </Typography>
                      <Typography className={classes.buy}>
@@ -269,18 +258,14 @@ export default function AcccessibleTable(props) {
                            } else {
                               setAmount(e.target.value);
                               props.handleSellQuantity(e.target.value);
-                              props.handleCoinDifference(
-                                 balance - e.target.value
-                              );
+                              props.handleCoinDifference(balance - e.target.value);
                               setEarn(e.target.value * price.usd);
                               setError(false);
                            }
                         }}
                         InputProps={{
                            endAdornment: (
-                              <InputAdornment position="start">
-                                 {symbol}
-                              </InputAdornment>
+                              <InputAdornment position="start">{symbol}</InputAdornment>
                            )
                         }}
                      />

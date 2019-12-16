@@ -45,16 +45,14 @@ export default function AcccessibleTable(props) {
    let { id } = useParams();
 
    useEffect(() => {
-      Axios.get(`https://api.coingecko.com/api/v3/coins/${id}`).then(
-         response => {
-            setData(response.data);
-            setPrice(response.data.market_data.current_price);
-            setSymbol(response.data.symbol);
-            setImage(response.data.image.small);
-            setName(response.data.id);
-            console.log(response.data);
-         }
-      );
+      Axios.get(`https://api.coingecko.com/api/v3/coins/${id}`).then(response => {
+         setData(response.data);
+         setPrice(response.data.market_data.current_price);
+         setSymbol(response.data.symbol);
+         setImage(response.data.image.small);
+         setName(response.data.id);
+         console.log(response.data);
+      });
    }, [id]);
 
    const succ = value => {
@@ -113,9 +111,7 @@ export default function AcccessibleTable(props) {
                >
                   YOU ARE BUYING
                </p>
-               <Typography
-                  style={{ fontSize: "48px", color: "rgb(105, 63, 126)" }}
-               >
+               <Typography style={{ fontSize: "48px", color: "rgb(105, 63, 126)" }}>
                   {Math.round(props.amount * 1000) / 1000}{" "}
                   <span style={{ textTransform: "uppercase" }}>{symbol}</span>
                </Typography>
@@ -176,22 +172,9 @@ export default function AcccessibleTable(props) {
                      <span style={{ letterSpacing: "7px" }}>
                         ...........................
                      </span>
-                     ${" "}
-                     {props.coin -
-                        +((props.coin - +(props.coin * 0.01)) * 0.01)}
+                     $ {Math.round(props.coin * 1000) / 1000}
                   </p>
-                  <p>
-                     Transaction Fee (1%)
-                     <span style={{ letterSpacing: "7px" }}>
-                        .......................
-                     </span>
-                     ${" "}
-                     {circulatingFormat(
-                        Math.round(
-                           (props.coin - +(props.coin * 0.01)) * 0.01 * 1000
-                        ) / 1000
-                     )}
-                  </p>
+
                   <p
                      style={{
                         fontSize: "16px",
@@ -203,7 +186,7 @@ export default function AcccessibleTable(props) {
                      <span style={{ letterSpacing: "7px" }}>
                         ...........................
                      </span>
-                     ${circulatingFormat(props.coin)}
+                     ${Math.round(props.coin * 1000) / 1000}
                   </p>
                </div>
             </div>

@@ -105,18 +105,16 @@ export default function AcccessibleTable() {
 
    useEffect(() => {
       setLoad(true);
-      Axios.get(`https://api.coingecko.com/api/v3/coins/${id}`).then(
-         response => {
-            setData(response.data);
-            setImage(response.data.image);
-            setMarket(response.data.market_data);
-            setPrice(response.data.market_data.current_price);
-            setMCap(response.data.market_data.market_cap);
-            setDescription(response.data.description);
-            setLoad(false);
-            console.log(response.data);
-         }
-      );
+      Axios.get(`https://api.coingecko.com/api/v3/coins/${id}`).then(response => {
+         setData(response.data);
+         setImage(response.data.image);
+         setMarket(response.data.market_data);
+         setPrice(response.data.market_data.current_price);
+         setMCap(response.data.market_data.market_cap);
+         setDescription(response.data.description);
+         setLoad(false);
+         console.log(response.data);
+      });
    }, [id]);
 
    const formatter = new Intl.NumberFormat("en-US", {
@@ -155,10 +153,7 @@ export default function AcccessibleTable() {
                <Link className={classes.breadlist} to="/">
                   Home
                </Link>
-               <Link
-                  aria-current="page"
-                  style={{ color: "white", cursor: "default" }}
-               >
+               <Link aria-current="page" style={{ color: "white", cursor: "default" }}>
                   {data.name} Details
                </Link>
             </Breadcrumbs>
@@ -191,19 +186,13 @@ export default function AcccessibleTable() {
                   <TableRow>
                      <TableCell>
                         {" "}
-                        {!market.market_cap_rank
-                           ? "None"
-                           : market.market_cap_rank}{" "}
+                        {!market.market_cap_rank ? "None" : market.market_cap_rank}{" "}
                      </TableCell>
                      <TableCell component="th" scope="row">
                         {data.name}
                      </TableCell>
                      <TableCell>
-                        <img
-                           style={{ width: "2vw" }}
-                           src={image.large}
-                           alt="coin-logo"
-                        />
+                        <img style={{ width: "2vw" }} src={image.large} alt="coin-logo" />
                      </TableCell>
                      <TableCell style={{ textTransform: "uppercase" }}>
                         {data.symbol}
@@ -214,9 +203,7 @@ export default function AcccessibleTable() {
                         </b>
                      </TableCell>
                      <TableCell>
-                        {circulatingFormat(
-                           Math.round(market.circulating_supply)
-                        )}
+                        {circulatingFormat(Math.round(market.circulating_supply))}
                      </TableCell>
                   </TableRow>
                </TableBody>
@@ -237,9 +224,7 @@ export default function AcccessibleTable() {
                <TableBody>
                   <TableRow>
                      <TableCell>{data.last_updated}</TableCell>
-                     <TableCell>
-                        {!mCap.usd ? "0" : formatter.format(mCap.usd)}
-                     </TableCell>
+                     <TableCell>{!mCap.usd ? "0" : formatter.format(mCap.usd)}</TableCell>
                      {market.market_cap_change_24h < 0 ? (
                         <TableCell style={{ color: "red" }}>
                            {formatter.format(market.market_cap_change_24h)}

@@ -66,11 +66,9 @@ export default function Success(props) {
    let history = useHistory();
 
    useEffect(() => {
-      Axios.get(`https://api.coingecko.com/api/v3/coins/${id}`).then(
-         response => {
-            setData(response.data);
-         }
-      );
+      Axios.get(`https://api.coingecko.com/api/v3/coins/${id}`).then(response => {
+         setData(response.data);
+      });
    }, [id]);
 
    return (
@@ -79,8 +77,7 @@ export default function Success(props) {
             <div className={classes.confirm}>
                <img src={smile} className={classes.gif} alt="" />
                <Typography className={classes.successful}>
-                  Successfully sold{" "}
-                  <span className={classes.name}>{data.name}</span> !
+                  Successfully sold <span className={classes.name}>{data.name}</span> !
                </Typography>
 
                <Button

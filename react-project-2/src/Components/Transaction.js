@@ -159,14 +159,12 @@ export default function AcccessibleTable(props) {
 
    useEffect(() => {
       setLoad(true);
-      Axios.get(`https://api.coingecko.com/api/v3/coins/${id}`).then(
-         response => {
-            setData(response.data);
-            setImage(response.data.image);
-            setLoad(false);
-            console.log(response.data);
-         }
-      );
+      Axios.get(`https://api.coingecko.com/api/v3/coins/${id}`).then(response => {
+         setData(response.data);
+         setImage(response.data.image);
+         setLoad(false);
+         console.log(response.data);
+      });
    }, [id]);
 
    let cons;
@@ -242,8 +240,8 @@ export default function AcccessibleTable(props) {
             <div className={classes.display}>
                <img src={bitcoin} alt="icon" style={{ width: "8vw" }} />
                <p style={{ fontSize: "36px", fontWeight: "bold" }}>
-                  “Understanding block-chain makes you go mad, unless you start
-                  your own cult”
+                  “Understanding block-chain makes you go mad, unless you start your own
+                  cult”
                </p>
                <h3 style={{ color: "#f9d171" }}>― Arif Naseem ―</h3>
             </div>

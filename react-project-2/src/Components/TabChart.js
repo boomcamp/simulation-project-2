@@ -51,8 +51,7 @@ const CustomTooltip = props => {
                price: {`${formatter.format(props.payload[0].value)}`}
             </p>
             <p className="volume-hover">
-               volume:{" "}
-               {`${circulatingFormat(Math.round(props.payload[1].value))}`}
+               volume: {`${circulatingFormat(Math.round(props.payload[1].value))}`}
             </p>
          </div>
       );
@@ -63,14 +62,7 @@ const CustomTooltip = props => {
 function CustomizedAxisTick({ x, y, payload }) {
    return (
       <g transform={`translate(${x},${y})`}>
-         <text
-            x={0}
-            y={0}
-            dy={16}
-            textAnchor="end"
-            fill="#666"
-            transform="rotate(-35)"
-         >
+         <text x={0} y={0} dy={16} textAnchor="end" fill="#666" transform="rotate(-35)">
             {payload.value}
          </text>
       </g>
@@ -111,11 +103,7 @@ export default function TabChart({ tab }) {
    return (
       <div className={classes.pos}>
          {load ? (
-            <CircularProgress
-               disableShrink
-               color="primary"
-               className={classes.circle}
-            />
+            <CircularProgress disableShrink color="primary" className={classes.circle} />
          ) : (
             <ComposedChart
                data={HistoricalPrice}

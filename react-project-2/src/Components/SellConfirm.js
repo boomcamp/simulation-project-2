@@ -45,24 +45,52 @@ export default function AcccessibleTable(props) {
    let { id } = useParams();
 
    useEffect(() => {
-      Axios.get(`https://api.coingecko.com/api/v3/coins/${id}`).then(
-         response => {
+      Axios.get(`https://api.coingecko.com/api/v3/coins/${id}`)
+         .then(response => {
             setData(response.data);
             setPrice(response.data.market_data.current_price);
             setSymbol(response.data.symbol);
             setImage(response.data.image.small);
             setName(response.data.id);
             console.log(response.data);
-         }
-      );
-   }, [id]);
+            return Axios.get(`http://localhost:4000/transactions?coinID=${id}`);
+         })
+         .then(response => {
+            let aCurrentCointPrice = 0;
+            let count = 0;
+            var stat = true;
+            var statChecker = true;
+            let array = response.data.reverse();
+            array.map((x, i) => {
+               if (x.transaction === "buy" && stat) {
+                  statChecker = false;
+                  aCurrentCointPrice += x.currentCoinPrice;
+                  count++;
+               } else if (x.transaction === "sell") {
+                  if (!statChecker) {
+                     stat = false;
+                  }
+               }
+               return x;
+            });
+            //console.log(aCost, cQuantity);
+            console.log(price, aCurrentCointPrice, count);
+            console.log(
+               ((price.usd - aCurrentCointPrice / count) / (aCurrentCointPrice / count)) *
+                  100
+            );
+            setProfitOrLoss(
+               ((price.usd - aCurrentCointPrice / count) / (aCurrentCointPrice / count)) *
+                  100
+            );
+         });
+   }, [id, price.usd]);
 
    const succ = value => {
       setDone(value);
    };
 
    const confirm = () => {
-      setDone(true);
       if (props.sellQuantity) {
          Axios.post("http://localhost:4000/transactions", {
             coinID: id,
@@ -74,11 +102,12 @@ export default function AcccessibleTable(props) {
             image: image,
             currentCoinPrice: price.usd,
             transaction: "sell",
-            timestamp: new Date().getTime()
-            // profitOrLoss: profitOrLoss
+            timestamp: new Date().getTime(),
+            profitOrLoss: profitOrLoss
          }).catch(error => {
             console.log(error.response.data);
          });
+         setDone(true);
       }
    };
 
@@ -121,7 +150,10 @@ export default function AcccessibleTable(props) {
                   YOU ARE SELLING
                </p>
                <Typography
-                  style={{ fontSize: "48px", color: "rgb(105, 63, 126)" }}
+                  style={{
+                     fontSize: "48px",
+                     color: "rgb(105, 63, 126)"
+                  }}
                >
                   {Math.round(props.sellQuantity * 1000) / 1000}{" "}
                   <span style={{ textTransform: "uppercase" }}>{symbol}</span>
@@ -152,7 +184,12 @@ export default function AcccessibleTable(props) {
                   </div>
                </p>
                <hr style={{ border: "1px solid gray", width: "20vw" }} />
-               <div style={{ textAlign: "justify", marginLeft: "7.5vw" }}>
+               <div
+                  style={{
+                     textAlign: "justify",
+                     marginLeft: "7.5vw"
+                  }}
+               >
                   <p>
                      New
                      <span
@@ -165,9 +202,7 @@ export default function AcccessibleTable(props) {
                         {symbol}
                      </span>
                      Balance
-                     <span style={{ letterSpacing: "7px" }}>
-                        ..................
-                     </span>
+                     <span style={{ letterSpacing: "7px" }}>..................</span>
                      {Math.round(props.coinDiff * 10000) / 10000}
                   </p>
 
@@ -179,24 +214,28 @@ export default function AcccessibleTable(props) {
                      }}
                   >
                      Total Earnings
-                     <span style={{ letterSpacing: "7px" }}>
-                        ..................
-                     </span>
-                     {circulatingFormat(
-                        formatter.format(props.sellQuantity * price.usd)
-                     )}
+                     <span style={{ letterSpacing: "7px" }}>..................</span>
+                     {circulatingFormat(formatter.format(props.sellQuantity * price.usd))}
                   </p>
                </div>
             </div>
 
             <div
                className={classes.confirm}
-               style={{ height: "14.2vh", width: "25vw", margin: "2vh auto" }}
+               style={{
+                  height: "14.2vh",
+                  width: "25vw",
+                  margin: "2vh auto"
+               }}
             >
                <Button
                   variant="contained"
                   color="primary"
-                  style={{ width: "10vw", height: "5vh", marginTop: "3vh" }}
+                  style={{
+                     width: "10vw",
+                     height: "5vh",
+                     marginTop: "3vh"
+                  }}
                   onClick={confirm}
                >
                   Confirm Sell
