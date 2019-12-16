@@ -68,12 +68,12 @@ export default class Investment extends React.Component {
               {rowData.profit < 0 ? (
                 <div className="r">
                   {" "}
-                  ${rowData.profit ? Number(rowData.profit.toFixed(5)) : 0}
+                  ${rowData.profit ? parseFloat(rowData.profit.toFixed(5)) : 0}
                 </div>
               ) : (
                 <div className="g">
                   {" "}
-                  ${rowData.profit ? Number(rowData.profit.toFixed(5)) : 0}
+                  ${rowData.profit ? parseFloat(rowData.profit.toFixed(5)) : 0}
                 </div>
               )}
             </React.Fragment>
@@ -167,10 +167,18 @@ export default class Investment extends React.Component {
           <div className="profit-cont">
             <div className="weight">Total Profit/Loss</div>
             <div className="total weight">
-              {this.state.totalAmount < 0 ? (
-                <div className="r">${this.state.totalAmount}</div>
+              {this.state.totalAmount ? (
+                this.state.totalAmount < 0 ? (
+                  <div className="r">
+                    ${parseFloat(this.state.totalAmount.toFixed(3))}
+                  </div>
+                ) : (
+                  <div className="g">
+                    ${parseFloat(this.state.totalAmount.toFixed(3))}
+                  </div>
+                )
               ) : (
-                <div className="g">${this.state.totalAmount}</div>
+                0
               )}
             </div>
           </div>
