@@ -4,20 +4,10 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Button from '@material-ui/core/Button';
-import axios from 'axios';
 
-
-export default function SellDialog({ open, close, handleSell }) {
-    const [name, setName] = useState('')
-    useEffect(() => {
-        axios({
-            method: 'get',
-            url: `/transactions`
-        })
-            .then(e => setName(e.data.name))
-            .catch(e => console.log(e))
-
-    }, [])
+export default function SellDialog(props) {
+    const { name, date, time, id, amount, priceBought, value } = props
+    const { open, close, handleSell } = props
 
     return (
         <Dialog
@@ -30,15 +20,71 @@ export default function SellDialog({ open, close, handleSell }) {
         >
             <DialogTitle id="alert-dialog-title">{`Sell ${name}`}</DialogTitle>
             <DialogContent>
-                <h1>Hello</h1>
+                <div>
+                    <div>
+                        <h4>Date Purchased: </h4>
+                    </div>
+                    <div>
+                        <h3>{date}</h3>
+                    </div>
+                </div>
+                <div>
+                    <div>
+                        <h4>Price when Purchased: </h4>
+                    </div>
+                    <div>
+                        <h3>{priceBought}</h3>
+                    </div>
+                </div>
+                <div>
+                    <div>
+                        <h4>Amount: </h4>
+                    </div>
+                    <div>
+                        <h3>{amount}</h3>
+                    </div>
+                </div>
+
+                <div>
+                    <div>
+                        <h4>Value: </h4>
+                    </div>
+                    <div>
+                        <h3>{value}</h3>
+                    </div>
+                </div>
+                <div>
+                    <div>
+                        <h4>Current Price:</h4>
+                    </div>
+                    <div>
+                        <h3>{date}</h3>
+                    </div>
+                </div>
+                <div>
+                    <div>
+                        <h4>Change: </h4>
+                    </div>
+                    <div>
+                        <h3>{date}</h3>
+                    </div>
+                </div>
+                <div>
+                    <div>
+                        <h4>Profit / Loss </h4>
+                    </div>
+                    <div>
+                        <h3>{date}</h3>
+                    </div>
+                </div>
             </DialogContent>
             <DialogActions>
                 <Button onClick={close} color="primary">
                     CANCEL
-                                        </Button>
+                </Button>
                 <Button color="primary" autoFocus onClick={handleSell}>
                     OKAY
-                                        </Button>
+                </Button>
             </DialogActions>
         </Dialog>
     );

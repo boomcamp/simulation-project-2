@@ -373,33 +373,31 @@ class DataChart extends Component {
 
                                 <form onSubmit={this.handlePost}>
                                     <DialogContent>
-                                        <span className={classes.buy}>
-                                            <TextField
-                                                required
-                                                label="Amount to Invest"
-                                                type="number"
-                                                id="outlined-read-only-input"
-                                                className={clsx(classes.margin, classes.textField)}
-                                                InputProps={{
-                                                    startAdornment: <InputAdornment position="start">$</InputAdornment>
-                                                }}
-                                                placeholder="0"
-                                                variant="outlined"
-                                                onChange={e => this.setState({ convert: e.target.value })}
-                                            />
-                                            <TextField
-                                                label={name}
-                                                id="outlined-start-adornment"
-                                                className={clsx(classes.margin, classes.textField)}
-                                                InputProps={{
-                                                    readOnly: true,
-                                                    startAdornment: <InputAdornment position="start">{symbol}</InputAdornment>,
-                                                }}
-                                                variant="outlined"
-                                                value={this.state.convert / currentPrice}
-                                                onChange={e => console.log(e.target.value)}
-                                            />
-                                        </span>
+                                        <TextField
+                                            required
+                                            label="Amount to Invest"
+                                            type="number"
+                                            id="outlined-read-only-input"
+                                            className={clsx(classes.margin, classes.textField)}
+                                            InputProps={{
+                                                startAdornment: <InputAdornment position="start">$</InputAdornment>
+                                            }}
+                                            placeholder="0"
+                                            variant="outlined"
+                                            onChange={e => this.setState({ convert: e.target.value })}
+                                        />
+                                        <TextField
+                                            label={name}
+                                            id="outlined-start-adornment"
+                                            className={clsx(classes.margin, classes.textField)}
+                                            InputProps={{
+                                                readOnly: true,
+                                                startAdornment: <InputAdornment position="start">{symbol}</InputAdornment>,
+                                            }}
+                                            variant="outlined"
+                                            value={this.state.convert / currentPrice}
+                                            onChange={e => console.log(e.target.value)}
+                                        />
                                     </DialogContent>
                                     <DialogActions>
                                         <Button onClick={this.handleClose} color="primary">

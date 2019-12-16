@@ -59,6 +59,16 @@
       "priceBought": 204.97,
       "value": 0.02439381372883837,
       "id": 6
+    },
+    {
+      "coinID": "electroneum",
+      "name": "Electroneum",
+      "date": "2019/12/16",
+      "time": "04:43:11 pm",
+      "amount": "5",
+      "priceBought": 0.00369402,
+      "value": 1353.538962972588,
+      "id": 7
     }
   ]
 }

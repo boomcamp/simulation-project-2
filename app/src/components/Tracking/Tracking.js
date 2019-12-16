@@ -81,7 +81,6 @@ export default function Tracking() {
             url: `http://localhost:4000/transactions`
         })
             .then(data => {
-                console.log(data.data)
                 setTrans(data.data)
                 setIsLoading(false)
             })

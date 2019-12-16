@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import axios from 'axios';
-import moment from 'moment';
 import Button from '@material-ui/core/Button';
 import { Table, TableCell, TableRow, Paper, TableHead, TableBody } from '@material-ui/core';
 import SellDialog from './SellDialog';
@@ -77,20 +76,18 @@ const useStyles = makeStyles(theme => ({
 export default function Sell() {
     const classes = useStyles();
     const [trans, setTrans] = useState([])
-    const [time, setTime] = useState('')
-    const [date, setDate] = useState('')
     const [open, setOpen] = useState(false)
     const [id, setId] = useState(0)
+    const [name, setName] = useState('')
+    const [soldTime, setSoldTime] = useState('')
+    const [soldDate, setSoldDate] = useState('')
+    const [time, setTime] = useState('')
+    const [date, setDate] = useState('')
+    const [amount, setAmount] = useState(0)
+    const [priceBought, setPriceBought] = useState(0)
+    const [value, setValue] = useState(0)
 
     useEffect(() => {
-        var times = moment()
-            .format('hh:mm:ss a');
-        setTime(times)
-
-        var dates = moment()
-            .format('YYYY/MM/DD')
-        setDate(dates)
-
         axios({
             method: 'get',
             url: `http://localhost:4000/transactions`
@@ -98,6 +95,12 @@ export default function Sell() {
             .then(data => {
                 setTrans(data.data)
                 setId(data.data.id)
+                setName(data.data.name)
+                setDate(data.data.date)
+                setTime(data.data.time)
+                setAmount(data.data.amount)
+                setValue(data.data.value)
+                setPriceBought(data.data.priceBought)
             })
             .catch(e => console.log(e))
     }, [])
@@ -162,6 +165,10 @@ export default function Sell() {
                                             <TableCell>Current Value:</TableCell>
                                             <TableCell>{res.value}</TableCell>
                                         </TableRow>
+                                        <TableRow>
+                                            <TableCell>Status:</TableCell>
+                                            <TableCell>Unsold</TableCell>
+                                        </TableRow>
                                     </TableBody>
                                 </Table>
                             </Paper>
@@ -170,14 +177,21 @@ export default function Sell() {
                             </div>
                         </div>
                     )}
-                    {open ? <SellDialog
-                        open={handleClickOpen}
-                        close={handleClose}
-                        handleSell={handleSell}
-                    />
-                        :
-                        <React.Fragment></React.Fragment>}
                 </div>
+                {open ? <SellDialog
+                    open={handleClickOpen}
+                    close={handleClose}
+                    name={name}
+                    id={id}
+                    time={time}
+                    date={date}
+                    amount={amount}
+                    priceBought={priceBought}
+                    value={value}
+                    handleSell={handleSell}
+                />
+                    :
+                    <React.Fragment></React.Fragment>}
             </div>
         </div >
     );
