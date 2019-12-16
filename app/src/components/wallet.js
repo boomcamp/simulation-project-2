@@ -7,13 +7,17 @@ export default class wallet extends Component {
 
     this.state = {
       totalAmount: "",
-      totalUsd: ""
+      totalUsd: "",
+      totalSell:"",
+      SellAmount:""
     };
   }
   componentDidMount() {
     let totalamount = 0;
     let totalusd = 0;
-    axios.get(`http://localhost:4000/transactions`).then(response => {
+    let amountSell = 0;
+    let totalAmountSell= 0;
+    axios.get(`http://localhost:4000/transactions/?idname=${localStorage.getItem("id")}&&type=buy`).then(response => {
       response.data.map(res => {
         if (localStorage.getItem("id") === res.idname) {
           totalamount += parseFloat(res.amount);
@@ -26,10 +30,27 @@ export default class wallet extends Component {
         }
       });
     });
+
+    
+    axios.get(`http://localhost:4000/transactions/?idname=${localStorage.getItem("id")}&&type=sell`).then(response => {
+      response.data.map(res => {
+        if (localStorage.getItem("id") === res.idname) {
+          amountSell += parseFloat(res.amount);
+         
+          totalAmountSell += parseFloat(res.sum);
+          this.setState({
+            totalSell: amountSell,
+            SellAmount: totalAmountSell
+          });
+     
+        }
+      });
+    });
+
   }
 
   render() {
-    //   console.log(this.state.data)
+  
     return (
       <React.Fragment>
         <div
@@ -71,6 +92,8 @@ export default class wallet extends Component {
           >
             <h1>Total Buy: {this.state.totalAmount}</h1>
             <h1>Total Usd: ${this.state.totalUsd}</h1>
+            {/* <h1>Total Sell: {this.state.totalSell}</h1> */}
+            <h1>Total Usd Sell: ${this.state.SellAmount}</h1>
           </div>
           {/* <div>
             <Button

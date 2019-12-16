@@ -5,6 +5,8 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogActions from "@material-ui/core/DialogActions";
 import TextField from "@material-ui/core/TextField";
 import Slide from "@material-ui/core/Slide";
+import axios from "axios";
+
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="down" ref={ref} {...props} />;
 });
@@ -13,40 +15,24 @@ export default class sell extends Component {
     super(props);
 
     this.state = {
-      priceNow: 0,
-      total: 0
+  
+
     };
   }
 
   componentDidMount() {
-
-
     this.setState({
       totalbought: this.props.info ? this.props.info.sum : null,
-      priceNow: localStorage.getItem("currentPrice"),
+      priceNow: localStorage.getItem("currentPrice")
     });
+  
   }
-  handleClick = () => {
-  let a = this.props.info.current * this.state.inputAmount
-  let b = this.props.info.sum -a  
-  this.setState({
-    total: b
-  })
-  console.log(this.state.total)
-  };
-  handleChange = e => {
-    this.setState({
-      inputAmount: e.target.value
-    });
-    // console.log(this.state.inputAmount)
-  };
+  
+
   render() {
-    // console.log(this.props.info)
-    // console.log(this.state.totalamount)
-    // let priceNow = this.props.details ? this.props.details.current_price : null
-    // console.log(this.state.priceNow)
     return (
       <React.Fragment>
+       
         <Dialog
           open={this.props.openModal}
           onClose={this.props.close}
@@ -62,6 +48,7 @@ export default class sell extends Component {
             }}
           >
             {localStorage.getItem("id")}
+       
           </DialogTitle>
           <DialogActions>
             <TextField
@@ -70,17 +57,20 @@ export default class sell extends Component {
               label={localStorage.getItem("symbol")}
               helperText="Please select your currency"
               variant="outlined"
-              value={this.state.amount}
-              onChange={event => this.handleChange(event)}
+              value={this.props.inputAmount}
+              onChange={event => this.props.handleChange(event)}
               style={{
                 marginRight: 20
               }}
+              // max={this.props.info.amount}
             ></TextField>
 
             <Button
               variant="contained"
               color="primary"
-              onClick={this.handleClick}
+              disabled={this.props.info.amount == 0 ? true : false}
+              onClick={this.props.handleClick}
+
             >
               Sell
             </Button>
@@ -88,6 +78,7 @@ export default class sell extends Component {
               variant="contained"
               color="secondary"
               onClick={this.props.close}
+              
             >
               Close
             </Button>

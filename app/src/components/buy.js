@@ -11,7 +11,7 @@ export default class buy extends Component {
 
     this.state = {
       amount: "",
-      sum: "",
+      sum: 0,
       snackbarState: false,
       snackbarMessage: ""
     };
@@ -34,12 +34,16 @@ export default class buy extends Component {
     const min = new Date().getMinutes();
     const sec = new Date().getSeconds();
 
+    let localMoney =localStorage.getItem("wallet")
+
     if (this.state.amount === "") {
       this.handleOpenSnackbar("Pls input", "red ");
      
-    } else if(localStorage.getItem("amount") <= 0){
+    }
+     else if(localMoney < this.state.sum){
       this.handleOpenSnackbar("No money ", "red ");
-    } else {
+    } 
+    else {
         axios
           .post(`http://localhost:4000/transactions`, {
             date:
@@ -49,27 +53,47 @@ export default class buy extends Component {
             sum: this.state.sum,
             symbol: localStorage.getItem("symbol"),
             idname: localStorage.getItem("id"),
-            current: this.props.details.current_price
+            current: this.props.details.current_price,
+            type: 'buy'
           })
           .then(res => {
-            console.log(res);
+            // console.log(res);
           });
       this.setState({
         amount:"",
         sum:""
       })
       this.handleOpenSnackbar("Successfully Buy", "darkgreen");
+     let walletMoney = localStorage.getItem("wallet") - this.state.sum
+     let totalBuy = this.state.amount
+      axios.patch(`http://localhost:4000/wallet/1`,{
+        amount: walletMoney
+        
+      }).then(res =>{
+        console.log(res.data)
+        localStorage.setItem("wallet", res.data.amount)
+      }) 
+
     }
   };
   handleChange = event => {
-    this.setState({
-      amount: event.target.value,
-      sum: event.target.value * this.props.details.current_price
-    });
+    if(event.target.value){
+      this.setState({
+        amount: event.target.value,
+        sum: event.target.value * this.props.details.current_price
+      });
+    }
+    else{
+      this.setState({
+        amount: '',
+        sum: ''
+      });
+    }
   };
 
   render() {
-    Moment.locale('en');
+    // Moment.locale('en');
+    // console.log(this.state.sum)
     return (
       <React.Fragment>
         <Snackbar
