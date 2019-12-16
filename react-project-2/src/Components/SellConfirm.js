@@ -73,7 +73,6 @@ export default function AcccessibleTable(props) {
                }
                return x;
             });
-            //console.log(aCost, cQuantity);
             console.log(price, aCurrentCointPrice, count);
             console.log(
                ((price.usd - aCurrentCointPrice / count) / (aCurrentCointPrice / count)) *
@@ -91,7 +90,7 @@ export default function AcccessibleTable(props) {
    };
 
    const confirm = () => {
-      if (props.sellQuantity) {
+      if (props.sellQuantity !== "0" && props.sellQuantity !== 0) {
          Axios.post("http://localhost:4000/transactions", {
             coinID: id,
             name: name,

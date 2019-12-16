@@ -86,11 +86,9 @@ export default function AcccessibleTable(props) {
    const [price, setPrice] = React.useState([]);
    const [symbol, setSymbol] = React.useState([]);
    const [balance, setBalance] = React.useState([]);
-   const [coin, setCoin] = useState("");
    const [amount, setAmount] = useState("");
    const [earn, setEarn] = useState("");
    const [error, setError] = useState(false);
-   //    const [cancel, setCancel] = useState(false);
 
    let { id } = useParams();
 
