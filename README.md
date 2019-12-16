@@ -36,6 +36,8 @@ you find interesting. The price can be in the currency of your choosing.
 
 Users should be able to click on a coin in this view and be directed to the coin
 details view, the requirements of this view will be detailed below.
+*The Coin details shown in the table are **Ranking**,**coin**,**symbol**,**current price**,**Lowest and Lowest in 24hr**,**1h, 1d, 7d, 30d, 1y changes**,**Circulating Supply**,and **Market Cap***
+*In order to view the coin details, the user needs to click or select the name of cryptocurrency coin*
 
 ## 2. Coin Details View
 
@@ -63,6 +65,8 @@ Here are some React.js charting libraries you may find useful:
 - [VX](https://github.com/hshoff/vx)
 
 Feel free to add any other details to this page as you see fit.
+
+*On buying a coin, the user can see it here at this page. Just Click the **Buy** button and a modal will popup, and the user can enter his/her desired amount of coin*
 
 ## 3. Investment Tracking
 
@@ -118,6 +122,10 @@ will likely require for proper tracking.
 - Price of coin when purchased / sold. You can restrict this to a government
   issued currency if you'd like.
 - Total profit / loss.
+
+*In Tracking the profit of the investment, the user needs to click the *Track Investment* in the navigation bar, the user can also click the **track** button and a modal will popup that shows all the old and current details about the coin purchased.*
+*The user can also see if it is worth selling the coin he/she purchased. The profit will also be shown in the modal*
+*After the user sells the coin the track button will be disabled and the profit can be shown at the details on each row*
 
 ## Finished
 
