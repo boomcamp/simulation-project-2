@@ -140,7 +140,7 @@ export default function CoinDetail(props) {
             <div className={classes.descbox}>
                 <div className={classes.title}>
                     <h5 className={classes.name}>{name}</h5>
-                    <img src="https://assets.coingecko.com/coins/images/1/thumb/bitcoin.png?1547033579" alt='logo' />
+                    <img src={`${symbol}`} alt='logo' />
                 </div>
                 <div>Homepage: <span><a href={url} target="_blank" rel="noopener noreferrer">{url}</a></span></div>
                 <div>Official Forum: <span><a href={forum} target="_blank" rel="noopener noreferrer">{forum}</a></span></div>

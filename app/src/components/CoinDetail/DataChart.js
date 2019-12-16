@@ -300,7 +300,6 @@ class DataChart extends Component {
     }
 
     handlePost = (e) => {
-        e.preventDefault()
         axios({
             method: 'post',
             url: `http://localhost:4000/transactions`,
@@ -314,7 +313,9 @@ class DataChart extends Component {
                 value: this.state.convert / this.props.currentPrice
             }
         })
-            .then(e => e.preventDefault())
+            .then(e => {
+                e.history.push('/tracking')
+            })
             .catch(err => console.log(err))
     }
 
@@ -398,14 +399,13 @@ class DataChart extends Component {
                                                 value={this.state.convert / currentPrice}
                                                 onChange={e => console.log(e.target.value)}
                                             />
-                                            <div>Tip: Buy low and Sell high.</div>
                                         </span>
                                     </DialogContent>
                                     <DialogActions>
                                         <Button onClick={this.handleClose} color="primary">
                                             CANCEL
                                         </Button>
-                                        <Button type="submit" color="primary" autoFocus onClick={this.handleClose}>
+                                        <Button type="submit" color="primary" autoFocus>
                                             OKAY
                                         </Button>
                                     </DialogActions>

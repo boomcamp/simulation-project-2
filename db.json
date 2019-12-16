@@ -1,3 +1,34 @@
 {
-  "transactions": []
+  "transactions": [
+    {
+      "coinID": "bitcoin",
+      "name": "Bitcoin",
+      "date": "2019/12/16",
+      "time": "11:29:40 am",
+      "amount": 2,
+      "priceBought": 7085.92,
+      "value": 0.00014114326040931546,
+      "id": 3
+    },
+    {
+      "coinID": "ethereum",
+      "name": "Ethereum",
+      "date": "2019/12/16",
+      "time": "11:29:45 am",
+      "amount": 1,
+      "priceBought": 141.67,
+      "value": 0.0070921985815602835,
+      "id": 4
+    },
+    {
+      "coinID": "tezos",
+      "name": "Tezos",
+      "date": "2019/12/16",
+      "time": "11:30:07 am",
+      "amount": 3,
+      "priceBought": 1.66,
+      "value": 1,
+      "id": 5
+    }
+  ]
 }

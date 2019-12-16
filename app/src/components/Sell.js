@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Loader } from 'rsuite';
-import MaterialTable from 'material-table';
 import axios from 'axios';
+import MaterialTable from 'material-table';
 import moment from 'moment';
 
 const useStyles = makeStyles(theme => ({
@@ -20,16 +20,11 @@ const useStyles = makeStyles(theme => ({
         display: "flex",
         justifyContent: "center",
         alignItems: "center"
-    },
-    textField: {
-        width: "95%",
-    },
-    margin: {
-        margin: theme.spacing(1),
     }
 }));
 
-export default function Tracking() {
+
+export default function Sell() {
     const classes = useStyles();
     const [state] = useState({
         columns: [
@@ -44,7 +39,7 @@ export default function Tracking() {
                 editable: 'never'
             },
             {
-                title: 'Amount in USD',
+                title: 'Amount to Sell',
                 field: 'amount',
                 type: 'numeric'
             },
@@ -63,7 +58,7 @@ export default function Tracking() {
         ],
     });
     const [isLoading, setIsLoading] = useState(true)
-    const [trans, setTrans] = useState('')
+    const [trans, setTrans] = useState([])
     const [time, setTime] = useState('')
     const [date, setDate] = useState('')
 
@@ -88,6 +83,10 @@ export default function Tracking() {
             .catch(e => console.log(e))
     }, [])
 
+    const handleRefresh = (e) => {
+        e.reload(true)
+    }
+
     return (
         <div className={classes.background}>
             {isLoading ?
@@ -98,7 +97,7 @@ export default function Tracking() {
                 </div>
                 :
                 <MaterialTable
-                    title="Investment Transactions"
+                    title="Selling Investment"
                     columns={state.columns}
                     data={trans}
                     options={{
@@ -121,60 +120,51 @@ export default function Tracking() {
                                         setTrans(data);
                                     }
                                 }, 600);
-
                                 axios({
-                                    method: 'patch',
-                                    url: `/transactions/${newData.id}`,
-                                    data: {
-                                        date: date,
-                                        time: time,
-                                        amount: newData.amount,
-                                        value: newData.value
-                                    },
+                                    method: 'get',
+                                    url: `/transactions/${newData.id}`
                                 })
-                                    .then(
+                                    .then(e => {
+                                        let prevAmount = e.data.amount
+
                                         axios({
-                                            method: 'get',
-                                            url: `/transactions/${newData.id}`
+                                            method: 'patch',
+                                            url: `/transactions/${newData.id}`,
+                                            data: {
+                                                date: date,
+                                                time: time,
+                                                amount: newData.amount,
+                                                value: newData.value
+                                            }
                                         })
-                                            .then(e => {
-                                                const newVal = parseInt(e.data.amount) / parseInt(e.data.priceBought)
-
+                                            .then(
                                                 axios({
-                                                    method: 'patch',
-                                                    url: `/transactions/${newData.id}`,
-                                                    data: {
-                                                        date: date,
-                                                        time: time,
-                                                        amount: newData.amount,
-                                                        value: newVal
-                                                    }
+                                                    method: 'get',
+                                                    url: `/transactions/${newData.id}`
                                                 })
-                                                    .then(e => console.log(e.data))
+                                                    .then(e => {
+                                                        const newAmount = prevAmount - newData.amount
+                                                        const newVal = parseInt(e.data.amount) / parseInt(e.data.priceBought)
+
+                                                        axios({
+                                                            method: 'patch',
+                                                            url: `/transactions/${newData.id}`,
+                                                            data: {
+                                                                date: date,
+                                                                time: time,
+                                                                amount: newAmount,
+                                                                value: newVal
+                                                            }
+                                                        })
+                                                            .then(e => handleRefresh())
+                                                            .catch(e => console.log(e))
+                                                    })
                                                     .catch(e => console.log(e))
-                                            })
-                                            .catch(e => console.log(e))
-                                    )
-                                    .catch(err => console.log(err))
-                            }),
-                        onRowDelete: oldData =>
-                            new Promise(resolve => {
-                                setTimeout(() => {
-                                    resolve();
-                                    const data = [...trans];
-                                    data.splice(data.indexOf(oldData), 1);
-                                    setTrans(data);
 
-                                    axios({
-                                        method: 'delete',
-                                        url: `/transactions/${oldData.id}`,
+                                            )
                                     })
-                                        .then(e => console.log(e.data))
-                                        .catch(e => console.log(e));
-                                }, 600);
-
-
-                            }),
+                                    .catch(e => console.log(e))
+                            })
                     }}
                 />
             }

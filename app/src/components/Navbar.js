@@ -29,7 +29,10 @@ export default function Navbar(props) {
                             </Nav.Item>
                         </Link>
                         <Link to="/tracking">
-                            <Nav.Item eventKey="3" icon={<Icon icon="money" />}>Investment Tracking</Nav.Item>
+                            <Nav.Item eventKey="3" icon={<Icon icon="money" />}>Transactions</Nav.Item>
+                        </Link>
+                        <Link to="/sell">
+                            <Nav.Item eventKey="4" icon={<Icon icon="usd" />}>Sell Coins</Nav.Item>
                         </Link>
                     </Nav>
                 </Sidenav.Body>
