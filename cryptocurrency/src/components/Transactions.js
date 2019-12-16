@@ -36,13 +36,12 @@ export default class Transactions extends Component {
         })
         return response
       })
-      .then(getdata => {
+      .then(getdata=>{
         console.log(getdata)
         axios
         .get(`http://localhost:4000/transactions`,{
         })
         .then(getprice=>{
-          console.log(getprice.data)
           this.setState({
             getPrice : getprice.data
           })
@@ -51,6 +50,7 @@ export default class Transactions extends Component {
   }
 
   handleClickBuy = (e) => {
+    console.log(e)
     let defaultNum = 1000000
     axios
       .post(`http://localhost:4000/transactions`,
@@ -58,9 +58,11 @@ export default class Transactions extends Component {
           transactions : 'BUY',
           name: e.name,
           current_price: e.market_data.current_price.usd,
+          quantity : this.state.quantity,
           total_value: this.state.totalVal.toFixed(3),
           balance : localStorage.getItem('balance') - this.state.totalVal.toFixed(3), // Balance - Total value
-          profit_loss : parseInt(defaultNum) - parseInt(localStorage.getItem('balance')) - parseInt(this.state.totalVal.toFixed(3)),
+          profit_loss : (parseInt(e.market_data.current_price.usd) - parseInt(this.state.coins.market_data.current_price.usd))
+                         / parseInt(e.market_data.current_price.usd) * 100,
         })
       .then(resp => {
         console.log(resp)
@@ -88,9 +90,6 @@ export default class Transactions extends Component {
     current_price : e.market_data.current_price.usd,
     total_value : this.state.totalVal.toFixed(3),
     balance : parseInt(localStorage.getItem('balance')) + parseInt(this.state.totalVal.toFixed(3)), 
-    profit : parseInt(defaultNum) - parseInt(localStorage.getItem('balance')) - parseInt(this.state.totalVal.toFixed(3))
-
-
   })
     .then(responde=>{
       console.log(responde)
@@ -109,10 +108,12 @@ export default class Transactions extends Component {
   }
 
   handleOnChange = (e) =>{
+
     if(e.target.value){
       this.setState({
         totalVal: this.state.coins.market_data.current_price.usd * e.target.value,
-        disabled: false
+        disabled: false,
+        quantity : e.target.value
       })
     }
     else{
@@ -205,13 +206,14 @@ export default class Transactions extends Component {
           <Button onClick={this.handleClickCloseBuy} color="primary">
             Disagree
           </Button>
-          <Button onClick={() => this.handleClickBuy(this.state.coins)} color="primary" autoFocus>
+          <Button onClick={(e) => {
+            this.handleClickBuy(this.state.coins)
+            console.log(this.state.coins, )
+          }} color="primary" autoFocus>
             Agree
           </Button>
         </DialogActions>
       </Dialog>
-
-
 
       <Dialog
         open={this.state.openSell}
@@ -229,12 +231,13 @@ export default class Transactions extends Component {
           <Button onClick={this.handleClickCloseSell} color="primary">
             Disagree
           </Button>
-          <Button onClick={() => this.handleClickSell(this.state.coins)} color="primary" autoFocus>
+          <Button onClick={() => {
+            this.handleClickSell(this.state.coins)
+          }} color="primary" autoFocus>
             Agree
           </Button>
         </DialogActions>
       </Dialog>
-
 
         </div>
       </React.Fragment>

@@ -3,10 +3,9 @@ import axios from 'axios'
 import MaterialTable from 'material-table';
 
 export default class InvestmentTracking extends Component {
-    getProfitLoss = (profit, i) => {
-      return i
-      
-    }
+
+  
+  
     constructor(props) {
         super(props)
     
@@ -21,9 +20,16 @@ export default class InvestmentTracking extends Component {
                 { title: 'Price',
                  field: 'current_price',
                   render: rowData => <span style={{color:'navy'}}>{ rowData.current_price }</span> },
-                { title: 'Total Value', field: 'total_value'},
-                 { title: 'Profit/Loss', field: 'profit_loss',
-                   render: (rowProfit, index) => <span style={{color:'green'}}>{ this.getProfitLoss(rowProfit.current_price, index) }</span>},
+                  { title: 'Quantity', field: 'quantity'},
+                { title: 'Total Price', field: 'total_value'},
+                 { title: 'Profit/Loss(%  )', field: 'profit_loss',
+                 render: (rowProfit) => (
+                  <React.Fragment>
+                    {
+                      this.getProfitLoss(rowProfit.current_price, rowProfit.id)
+                    }
+                  </React.Fragment>
+                )},
   
                 { title: 'Account Balance', field: 'balance',
                   render: rowBal => <span style={{color:'blue'}}>{rowBal.balance}</span>
@@ -45,6 +51,33 @@ export default class InvestmentTracking extends Component {
             })
         })
     }
+    getProfitLoss = (profit, i) => {
+      let index = i === 1 ? 1 : i - 1;
+
+      if(i === 1 ){
+
+        return (
+          <span 
+          style={{color:'green'}}> 0
+          </span>
+        )
+      }
+      else{
+
+        let prevProfit = this.state.data[0].current_price
+        if( prevProfit > profit ){
+          return (
+          <span style={{color:'green'}}>{ ((prevProfit-profit) / profit * 100 ).toFixed(2)}</span>
+          ) 
+        }else{
+        return (
+          <span style= {{color:'red'}}>
+            { ((prevProfit-profit) / profit * 100).toFixed(2) }
+          </span>
+        )
+        }
+      }
+    };
 
     handleClick=(e)=>{
         console.log(e)

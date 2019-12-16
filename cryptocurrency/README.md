@@ -58,21 +58,23 @@ Details / Instructions:
                   Value and the Balance ( default balance of 1000000 stored on the localStorage, subtracted to the
                   Total Value of the coin that has been bought ) of the coin.
 
+                  --------------------------------------------------------------------------------
                    * Computations:
-
-                   total value of coin price = current_price + quantity of coin/s
+                
+                   >>Profit loss in percentage<<
                    
-                   Profit = default value of 1,000,000 - default Account balance of 1,000,000 + total value of coin price
+                   Get Profit / Loss Percentage
+                   coinTotal = Coin Price today - Price when Bought
+                   coinTotal = coinTotal / Price when Bought * 100 
+                   if the value is + (color = green) value then profit if - (color = red) then loss
+                  
+                   Account Balance = Total value of Coin Price(in usd) * quantity of coin/s 
+                   note: Account balance has a default value of 1,000,000
 
-                   Loss = default value if 1,000,000 - default Account balance of 1,000,000  - total value of coin price
-
+                   Transactions(columns) - determined if you BUY or SELL the coin.
+                  ----------------------------------------------------------------------------------
 
 6. Charts - Included in the Coin Details Page. Chart used: (Areachart).
 
 ----------------------------------------------------------- 
-
-Note:
-
-Investment, Profit and Loss unfinished.
-
 ############################################################
