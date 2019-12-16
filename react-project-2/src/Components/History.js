@@ -16,8 +16,9 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import HomeIcon from "@material-ui/icons/Home";
 import TrackChangesIcon from "@material-ui/icons/TrackChanges";
-import Sell from "../assets/images/sell.png";
+import Wallet from "../assets/images/wallet.png";
 import Com from "../assets/images/commerce.png";
+import Buy from "../assets/images/buy.png";
 
 const useStyles = makeStyles(theme => ({
    root: {
@@ -66,18 +67,45 @@ export default function InvestmentTracking() {
    const [buyLength, setBuyLength] = React.useState(0);
    const [sellLength, setSellLength] = React.useState(0);
    const [img, setImg] = React.useState([]);
+   const [balance, setBalance] = React.useState([]);
+   const [symbol, setSymbol] = React.useState([]);
+   const [totalProfit, setTotalProfit] = React.useState(0);
 
    let { id } = useParams();
+
+   let totalpl = 0;
+   let pl;
 
    useEffect(() => {
       Axios.get(`https://api.coingecko.com/api/v3/coins/${id}`).then(response => {
          setData(response.data.name + "'s Transaction History");
          setImg(response.data.image.thumb);
+         setSymbol(response.data.symbol);
       });
    }, [id]);
 
    useEffect(() => {
       Axios.get(`http://localhost:4000/transactions`).then(response => {
+         let initBalance = 0;
+         let fArray = response.data.filter(val => {
+            return val.coinID === id;
+         });
+         fArray.forEach(newVal => {
+            console.log(newVal.coinQuantity);
+            if (newVal.transaction === "buy") initBalance += newVal.coinQuantity;
+            else {
+               initBalance -= newVal.coinQuantity;
+               pl = (newVal.profitOrLoss / 100) * newVal.buyPrice * newVal.coinQuantity;
+               if (pl > -1) {
+                  totalpl += pl;
+               } else {
+                  totalpl -= pl;
+               }
+            }
+         });
+         setBalance(initBalance);
+         setTotalProfit(totalpl);
+
          setTrans(
             response.data.filter(val => {
                val.timestamp = new Intl.DateTimeFormat("en-US", {
@@ -181,32 +209,35 @@ export default function InvestmentTracking() {
          <div className={classes.widge}>
             <article className="widget">
                <div className="weatherIcon">
-                  <h1>{buyLength}</h1>
+                  <h1>
+                     {Math.round(balance * 1000) / 1000}
+                     <span style={{ paddingLeft: "10px", fontSize: "28px" }}>
+                        {symbol}
+                     </span>
+                  </h1>
                </div>
                <div className="weatherInfo">
-                  <div className="temperature">
-                     <img src={Com} style={{ width: "3vw" }} alt="" />
-                  </div>
                   <div className="description">
-                     <div className="weatherCondition">Total Transactions</div>
+                     <div className="weatherCondition">Coin Wallet</div>
                   </div>
                </div>
-               <div className="date">BUY</div>
+               <div className="date">
+                  <img src={Wallet} style={{ width: "3vw" }} alt="" />
+               </div>
             </article>
 
             <article className="widget1">
                <div className="weatherIcon">
-                  <h1>{sellLength}</h1>
+                  <h1>${Math.round(totalProfit * 1000) / 1000}</h1>
                </div>
                <div className="weatherInfo">
-                  <div className="temperature">
-                     <img src={Sell} style={{ width: "3vw" }} alt="" />
-                  </div>
-                  <div className="description">
-                     <div className="weatherCondition">Total Transactions</div>
+                  <div className="weatherCondition" style={{ paddingLeft: "25px" }}>
+                     Total Profit/Loss
                   </div>
                </div>
-               <div className="date">SELL</div>
+               <div className="date">
+                  <img src={Com} style={{ width: "3vw" }} alt="" />
+               </div>
             </article>
 
             <article className="widget2">
@@ -214,14 +245,13 @@ export default function InvestmentTracking() {
                   <h1>{buyLength + +sellLength}</h1>
                </div>
                <div className="weatherInfo">
-                  <div className="temperature">
-                     <img src={Sell} style={{ width: "3vw" }} alt="" />
-                  </div>
-                  <div className="description">
-                     <div className="weatherCondition">Total Transactions</div>
+                  <div className="weatherCondition" style={{ paddingLeft: "25px" }}>
+                     Total Transactions
                   </div>
                </div>
-               <div className="date">ALL</div>
+               <div className="date">
+                  <img src={Buy} style={{ width: "3vw" }} alt="" />
+               </div>
             </article>
          </div>
          <div className={classes.table}>
@@ -293,10 +323,46 @@ export default function InvestmentTracking() {
                         rowData.profitOrLoss || rowData.profitOrLoss === 0 ? (
                            <MuiThemeProvider theme={theme}>
                               <Typography
-                                 style={{ fontSize: "16px" }}
+                                 style={{
+                                    fontSize: "16px"
+                                 }}
                                  color={rowData.profitOrLoss < 0 ? "error" : "primary"}
                               >
                                  <b>{Math.round(rowData.profitOrLoss * 1000) / 1000} %</b>
+                              </Typography>
+                           </MuiThemeProvider>
+                        ) : (
+                           <Typography variant="h6">------</Typography>
+                        )
+                  },
+                  {
+                     title: "Profit or Loss",
+                     type: "numeric",
+                     render: rowData =>
+                        rowData.buyPrice || rowData.buyPrice === 0 ? (
+                           <MuiThemeProvider theme={theme}>
+                              <Typography
+                                 style={{
+                                    fontSize: "16px"
+                                 }}
+                                 color={
+                                    (rowData.profitOrLoss / 100) *
+                                       rowData.buyPrice *
+                                       rowData.coinQuantity <
+                                    0
+                                       ? "error"
+                                       : "primary"
+                                 }
+                              >
+                                 <b>
+                                    $
+                                    {Math.round(
+                                       (rowData.profitOrLoss / 100) *
+                                          rowData.buyPrice *
+                                          rowData.coinQuantity *
+                                          1000
+                                    ) / 1000}
+                                 </b>
                               </Typography>
                            </MuiThemeProvider>
                         ) : (

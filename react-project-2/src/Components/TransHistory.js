@@ -19,6 +19,7 @@ import TrackChangesIcon from "@material-ui/icons/TrackChanges";
 import Buy from "../assets/images/buy.png";
 import Sell from "../assets/images/sell.png";
 import Com from "../assets/images/commerce.png";
+import Tooltip from "@material-ui/core/Tooltip";
 
 const useStyles = makeStyles(theme => ({
    root: {
@@ -65,6 +66,7 @@ export default function InvestmentTracking() {
    const [trans, setTrans] = React.useState([]);
    const [buyLength, setBuyLength] = React.useState(0);
    const [sellLength, setSellLength] = React.useState(0);
+
    let { id } = useParams();
    let coinList = {};
    const [coinLs, setCoinLs] = useState({});
@@ -217,7 +219,7 @@ export default function InvestmentTracking() {
 
             <article className="widget2">
                <div className="weatherIcon">
-                  <h1>{trans.length}</h1>
+                  <h1>{buyLength + +sellLength}</h1>
                </div>
                <div className="weatherInfo">
                   <div className="temperature">
@@ -237,17 +239,21 @@ export default function InvestmentTracking() {
                   {
                      title: "Logo",
                      render: rowData => (
-                        <Link to={`/coin-history/${rowData.coinID}`}>
-                           <img src={rowData.image} className={classes.image} alt="" />
-                        </Link>
+                        <Tooltip title="Click to view its transaction history" arrow>
+                           <Link to={`/coin-history/${rowData.coinID}`}>
+                              <img src={rowData.image} className={classes.image} alt="" />
+                           </Link>
+                        </Tooltip>
                      )
                   },
                   {
                      title: "Coin",
                      render: rowData => (
-                        <Link to={`/coin-history/${rowData.coinID}`}>
-                           <span className={classes.name}>{rowData.name}</span>
-                        </Link>
+                        <Tooltip title="Click to view its transaction history" arrow>
+                           <Link to={`/coin-history/${rowData.coinID}`}>
+                              <span className={classes.name}>{rowData.name}</span>
+                           </Link>
+                        </Tooltip>
                      )
                   },
                   {

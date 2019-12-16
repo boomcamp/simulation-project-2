@@ -41,6 +41,7 @@ export default function AcccessibleTable(props) {
    const [image, setImage] = React.useState(false);
    const [name, setName] = React.useState(false);
    const [profitOrLoss, setProfitOrLoss] = React.useState(0);
+   const [buyPrice, setBuyPrice] = React.useState(0);
 
    let { id } = useParams();
 
@@ -78,6 +79,7 @@ export default function AcccessibleTable(props) {
                ((price.usd - aCurrentCointPrice / count) / (aCurrentCointPrice / count)) *
                   100
             );
+            setBuyPrice(aCurrentCointPrice / count);
          });
    }, [id, price.usd]);
 
@@ -98,7 +100,8 @@ export default function AcccessibleTable(props) {
             currentCoinPrice: price.usd,
             transaction: "sell",
             timestamp: new Date().getTime(),
-            profitOrLoss: profitOrLoss
+            profitOrLoss: profitOrLoss,
+            buyPrice: buyPrice
          }).catch(error => {
             console.log(error.response.data);
          });

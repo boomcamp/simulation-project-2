@@ -97,8 +97,7 @@ hr {
    flex-wrap: wrap;
    cursor: pointer;
    border-radius: $border-radius;
-   box-shadow: 0 27px 55px 0 rgba(0, 0, 0, 0.3),
-      0 17px 17px 0 rgba(0, 0, 0, 0.15);
+   box-shadow: 0 27px 55px 0 rgba(0, 0, 0, 0.3), 0 17px 17px 0 rgba(0, 0, 0, 0.15);
 }
 
 .widget1 {
@@ -112,8 +111,7 @@ hr {
    flex-wrap: wrap;
    cursor: pointer;
    border-radius: $border-radius;
-   box-shadow: 0 27px 55px 0 rgba(0, 0, 0, 0.3),
-      0 17px 17px 0 rgba(0, 0, 0, 0.15);
+   box-shadow: 0 27px 55px 0 rgba(0, 0, 0, 0.3), 0 17px 17px 0 rgba(0, 0, 0, 0.15);
 }
 
 .widget2 {
@@ -127,8 +125,7 @@ hr {
    flex-wrap: wrap;
    cursor: pointer;
    border-radius: $border-radius;
-   box-shadow: 0 27px 55px 0 rgba(0, 0, 0, 0.3),
-      0 17px 17px 0 rgba(0, 0, 0, 0.15);
+   box-shadow: 0 27px 55px 0 rgba(0, 0, 0, 0.3), 0 17px 17px 0 rgba(0, 0, 0, 0.15);
 }
 
 .weatherIcon {

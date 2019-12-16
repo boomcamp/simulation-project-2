@@ -114,7 +114,7 @@ export default function List() {
          </Typography>
          <NavLink to="/transaction-history">
             <Button variant="contained" color="primary" className={classes.button}>
-               Transaction History
+               Investment Tracking
             </Button>
          </NavLink>
          <Fade in>
