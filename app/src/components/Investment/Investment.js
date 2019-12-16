@@ -44,7 +44,13 @@ export default class Investment extends React.Component {
           title: "Current Price",
           field: "current_price",
           render: rowData => (
-            <React.Fragment>${rowData.current_price}</React.Fragment>
+            <React.Fragment>
+              {rowData.current_price < rowData.price ? (
+                <div className="r">${rowData.current_price} </div>
+              ) : (
+                <div className="g">${rowData.current_price}</div>
+              )}
+            </React.Fragment>
           )
         },
         {
@@ -150,7 +156,13 @@ export default class Investment extends React.Component {
           </div>
           <div className="profit-cont">
             <div className="weight">Total Profit/Loss</div>
-            <div className="total weight">${this.state.totalAmount}</div>
+            <div className="total weight">
+              {this.state.totalAmount < 0 ? (
+                <div className="r">${this.state.totalAmount}</div>
+              ) : (
+                <div className="g">${this.state.totalAmount}</div>
+              )}
+            </div>
           </div>
         </div>
 

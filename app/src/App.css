@@ -77,13 +77,13 @@ body {
   border-radius: 10px;
   height: 250px;
   width: 430px;
-  padding-top: 10px;
+  padding-top: 20px;
   padding-left: 20px;
   font-size: 25px;
 }
 
 .total {
-  font-size: 30px;
+  font-size: 50px;
   padding-top: 40px;
   padding-left: 10px;
 }
