@@ -53,7 +53,9 @@ export default class Buy extends React.Component {
               variant="outlined"
               style={{ textTransform: "uppercase" }}
               value={amountValue}
-              onChange={e => handleAmount(+e.target.value, "amount")}
+              onChange={e =>
+                handleAmount(+e.target.value, "amount", this.props.price)
+              }
             />
             <MDBIcon icon="exchange-alt" style={{ padding: "20px" }} />
             <TextField
@@ -62,7 +64,9 @@ export default class Buy extends React.Component {
               variant="outlined"
               style={{ textTransform: "uppercase" }}
               value={cryptValue}
-              onChange={e => handleAmount(+e.target.value, "crypt")}
+              onChange={e =>
+                handleAmount(+e.target.value, "crypt", this.props.price)
+              }
             />
           </Amount>
           <Button

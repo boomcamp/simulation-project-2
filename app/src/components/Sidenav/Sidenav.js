@@ -122,6 +122,9 @@ class Sidenav extends React.Component {
             handleEntries={this.props.handleEntries}
             dataPerPage={this.props.dataPerPage}
             totalEntries={this.props.totalEntries}
+            handleAmount={this.props.handleAmount}
+            amountValue={this.props.amountValue}
+            cryptValue={this.props.cryptValue}
           />
         </main>
       </div>

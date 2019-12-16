@@ -37,7 +37,10 @@ export default class Routes extends React.Component {
       handleOnChange,
       handleEntries,
       dataPerPage,
-      totalEntries
+      totalEntries,
+      handleAmount,
+      amountValue,
+      cryptValue
     } = this.props;
     const total = parseInt(totalEntries / dataPerPage);
     return (
@@ -74,7 +77,13 @@ export default class Routes extends React.Component {
         <Route
           render={props => (
             <MainDiv>
-              <Details {...props} currency={currency} />
+              <Details
+                {...props}
+                currency={currency}
+                handleAmount={handleAmount}
+                amountValue={amountValue}
+                cryptValue={cryptValue}
+              />
             </MainDiv>
           )}
           path="/details/:id"
@@ -82,7 +91,11 @@ export default class Routes extends React.Component {
         <Route
           render={() => (
             <MainDiv>
-              <Investments />
+              <Investments
+                handleAmount={handleAmount}
+                amountValue={amountValue}
+                cryptValue={cryptValue}
+              />
             </MainDiv>
           )}
           path="/investments"

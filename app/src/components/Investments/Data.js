@@ -2,6 +2,7 @@ import React from "react";
 import { MDBIcon } from "mdbreact";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
+import Tooltip from "@material-ui/core/Tooltip";
 
 const Title = styled.div`
   display: flex;
@@ -62,10 +63,12 @@ const investColumn = [
     field: "details.name",
     render: rowData => (
       <React.Fragment>
-        <Link to={`details/${rowData.details.coinId}`}>
-          <Img src={rowData.details.image} alt="" />
-          {rowData.details.name}
-        </Link>
+        <Tooltip title="Show Coin Details">
+          <Link to={`details/${rowData.details.coinId}`}>
+            <Img src={rowData.details.image} alt="" />
+            {rowData.details.name}
+          </Link>
+        </Tooltip>
       </React.Fragment>
     )
   },

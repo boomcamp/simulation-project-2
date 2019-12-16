@@ -18,6 +18,8 @@ export default class App extends React.Component {
       dataPerPage: 10,
       totalEntries: 0,
       totalPages: 0,
+      amountValue: "",
+      cryptValue: "",
       data: [],
       currencies: [],
       currency: {
@@ -121,6 +123,24 @@ export default class App extends React.Component {
     this.setState({ toggle: false });
   };
 
+  handleAmount = (val, option, price) => {
+    const crypt = option === "amount" ? val / price : val * price;
+    val === 0
+      ? this.setState({
+          cryptValue: "",
+          amountValue: ""
+        })
+      : option === "amount"
+      ? this.setState({
+          cryptValue: crypt,
+          amountValue: val
+        })
+      : this.setState({
+          amountValue: crypt,
+          cryptValue: val
+        });
+  };
+
   render() {
     return (
       <HashRouter>
@@ -140,6 +160,9 @@ export default class App extends React.Component {
           handleDrawerOpen={this.handleDrawerOpen}
           handleDrawerClose={this.handleDrawerClose}
           toggle={this.state.toggle}
+          handleAmount={this.handleAmount}
+          amountValue={this.state.amountValue}
+          cryptValue={this.state.cryptValue}
         />
       </HashRouter>
     );

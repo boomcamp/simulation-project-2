@@ -10,14 +10,7 @@ import {
   MDBIcon
 } from "mdbreact";
 import Button from "@material-ui/core/Button";
-import Dialog from "@material-ui/core/Dialog";
-import DialogActions from "@material-ui/core/DialogActions";
-import DialogContent from "@material-ui/core/DialogContent";
-import DialogTitle from "@material-ui/core/DialogTitle";
 import ButtonGroup from "@material-ui/core/ButtonGroup";
-import TextField from "@material-ui/core/TextField";
-import Typography from "@material-ui/core/Typography";
-
 import {
   AreaChart,
   Area,
@@ -38,18 +31,15 @@ import {
   Table,
   days,
   Buttons,
-  Amount,
   BackContainer
 } from "../Details/Data";
-
+import Modal from "../Modal/Modal";
 export default class Details extends React.Component {
   constructor() {
     super();
     this.state = {
       details: [],
-      toggleModal: false,
-      cryptValue: "",
-      amountValue: ""
+      toggleModal: false
     };
   }
 
@@ -136,22 +126,6 @@ export default class Details extends React.Component {
     this.setState({ toggleModal: false });
   };
 
-  handleAmount = (val, option) => {
-    const crypt =
-      option === "amount"
-        ? val / this.state.current_price
-        : val * this.state.current_price;
-    option === "amount"
-      ? this.setState({
-          cryptValue: crypt,
-          amountValue: val
-        })
-      : this.setState({
-          amountValue: crypt,
-          cryptValue: val
-        });
-  };
-
   handleInvest = e => {
     this.setState({ toggleModal: false });
     e.preventDefault();
@@ -171,7 +145,7 @@ export default class Details extends React.Component {
     };
     const Obj = {
       date: tempDate,
-      amount: this.state.amountValue,
+      amount: this.props.amountValue,
       amountSold: 0,
       currency: this.props.currency.value,
       details: coinDetails
@@ -182,17 +156,20 @@ export default class Details extends React.Component {
         toast.success(
           this.props.currency.unit +
             " " +
-            Number(Math.round(this.state.amountValue + "e2") + "e-2") +
+            Number(Math.round(this.props.amountValue + "e2") + "e-2") +
             " successfully invested in " +
             this.state.details.name
         );
+        this.props.handleAmount(0, "amount", 0);
+        this.props.handleAmount(0, "crypt", 0);
+        this.props.history.push("/investments");
       })
       .catch(() => {
         toast.error("Try again later!");
       });
   };
+
   render() {
-    console.log(this.props);
     return (
       <MainDiv>
         <BackContainer>
@@ -340,54 +317,19 @@ export default class Details extends React.Component {
             </MDBTable>
           </Table>
         </ContainerTwo>
-        <Dialog open={this.state.toggleModal} onClose={this.handleClose}>
-          <form onSubmit={e => this.handleInvest(e)}>
-            <DialogTitle>
-              <img
-                src={this.state.logo}
-                alt=""
-                style={{ width: "60px", height: "50px", paddingRight: "15px" }}
-              />
-              {this.state.details.name}
-            </DialogTitle>
-            <DialogContent>
-              <Typography
-                variant="h6"
-                component="h6"
-                style={{ paddingBottom: "10px" }}
-              >
-                Amount
-              </Typography>
-              <Amount>
-                <TextField
-                  required
-                  label={this.props.currency.value}
-                  variant="outlined"
-                  style={{ textTransform: "uppercase" }}
-                  value={this.state.amountValue}
-                  onChange={e => this.handleAmount(+e.target.value, "amount")}
-                />
-                <MDBIcon icon="exchange-alt" style={{ padding: "20px" }} />
-                <TextField
-                  required
-                  label={this.state.details.symbol}
-                  variant="outlined"
-                  style={{ textTransform: "uppercase" }}
-                  value={this.state.cryptValue}
-                  onChange={e => this.handleAmount(+e.target.value, "crypt")}
-                />
-              </Amount>
-            </DialogContent>
-            <DialogActions>
-              <Button onClick={this.handleClose} color="primary">
-                Cancel
-              </Button>
-              <Button color="primary" type="submit" autoFocus>
-                Invest
-              </Button>
-            </DialogActions>
-          </form>
-        </Dialog>
+        <Modal
+          toggleModal={this.state.toggleModal}
+          handleClose={this.handleClose}
+          handleInvest={this.handleInvest}
+          logo={this.state.logo}
+          name={this.state.details.name}
+          handleAmount={this.props.handleAmount}
+          amountValue={this.props.amountValue}
+          cryptValue={this.props.cryptValue}
+          price={this.state.current_price}
+          symbol={this.state.details.symbol}
+          details={"details"}
+        />
       </MainDiv>
     );
   }

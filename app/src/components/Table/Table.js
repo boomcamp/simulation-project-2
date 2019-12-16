@@ -3,6 +3,7 @@ import styled from "styled-components";
 import MaterialTable from "material-table";
 import { Link } from "react-router-dom";
 import { Sparklines, SparklinesLine } from "react-sparklines";
+import Tooltip from "@material-ui/core/Tooltip";
 
 const Img = styled.img`
   height: 30px;
@@ -31,10 +32,12 @@ export default class Table extends React.Component {
           field: "name",
           render: rowData => (
             <React.Fragment>
-              <Link to={`details/${rowData.id}`}>
-                <Img src={rowData.image} alt="" />
-                {rowData.name}
-              </Link>
+              <Tooltip title="Show Coin Details">
+                <Link to={`details/${rowData.id}`}>
+                  <Img src={rowData.image} alt="" />
+                  {rowData.name}
+                </Link>
+              </Tooltip>
             </React.Fragment>
           )
         },

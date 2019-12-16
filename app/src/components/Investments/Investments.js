@@ -4,12 +4,7 @@ import MaterialTable from "material-table";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import Button from "@material-ui/core/Button";
-import Dialog from "@material-ui/core/Dialog";
-import DialogActions from "@material-ui/core/DialogActions";
-import DialogContent from "@material-ui/core/DialogContent";
-import DialogTitle from "@material-ui/core/DialogTitle";
-import TextField from "@material-ui/core/TextField";
-import Typography from "@material-ui/core/Typography";
+import Tooltip from "@material-ui/core/Tooltip";
 import { MDBIcon } from "mdbreact";
 import {
   investColumn,
@@ -25,13 +20,13 @@ import {
   Container
 } from "./Data";
 import Buy from "../Buy/Buy";
+import Modal from "../Modal/Modal";
+
 export default class Investments extends React.Component {
   constructor() {
     super();
     this.state = {
       activeItem: "1",
-      amountValue: "",
-      cryptValue: "",
       data: [],
       coin: {
         label: "Bitcoin (btc)",
@@ -47,10 +42,12 @@ export default class Investments extends React.Component {
           field: "details.name",
           render: rowData => (
             <React.Fragment>
-              <Link to={`details/${rowData.details.coinId}`}>
-                <Img src={rowData.details.image} alt="" />
-                {rowData.details.name}
-              </Link>
+              <Tooltip title="Show Coin Details">
+                <Link to={`details/${rowData.details.coinId}`}>
+                  <Img src={rowData.details.image} alt="" />
+                  {rowData.details.name}
+                </Link>
+              </Tooltip>
             </React.Fragment>
           )
         },
@@ -161,13 +158,6 @@ export default class Investments extends React.Component {
       ]
     };
   }
-  toggle = tab => e => {
-    if (this.state.activeItem !== tab) {
-      this.setState({
-        activeItem: tab
-      });
-    }
-  };
   componentDidMount = () => {
     this.fetchdata();
   };
@@ -217,7 +207,6 @@ export default class Investments extends React.Component {
 
   componentDidUpdate() {
     if (this.state.updateLoading === true) {
-      console.log("did");
       axios.get(`http://localhost:4000/transactions`).then(response => {
         let tempData = response.data.map(e => {
           axios
@@ -252,6 +241,7 @@ export default class Investments extends React.Component {
   handleChange = val => {
     this.setState({ amountSell: val });
   };
+
   handleCoins = val => {
     this.setState({
       coin: Object.assign({}, val)
@@ -267,21 +257,6 @@ export default class Investments extends React.Component {
           symbol: response.data.symbol
         });
       });
-    console.log(this.state.coinDetails);
-  };
-
-  handleAmount = (val, option) => {
-    const crypt =
-      option === "amount" ? val / this.state.price : val * this.state.price;
-    option === "amount"
-      ? this.setState({
-          cryptValue: crypt,
-          amountValue: val
-        })
-      : this.setState({
-          amountValue: crypt,
-          cryptValue: val
-        });
   };
 
   handleInvest = e => {
@@ -304,7 +279,7 @@ export default class Investments extends React.Component {
     };
     const Obj = {
       date: tempDate,
-      amount: this.state.amountValue,
+      amount: this.props.amountValue,
       amountSold: 0,
       currency: "usd",
       details: coinDetails
@@ -314,10 +289,12 @@ export default class Investments extends React.Component {
       .then(() => {
         toast.success(
           "$ " +
-            Number(Math.round(this.state.amountValue + "e2") + "e-2") +
+            Number(Math.round(this.props.amountValue + "e2") + "e-2") +
             " successfully invested in " +
             this.state.name
         );
+        this.props.handleAmount(0, "amount", 0);
+        this.props.handleAmount(0, "crypt", 0);
       })
       .catch(() => {
         toast.error("Try again later!");
@@ -364,56 +341,13 @@ export default class Investments extends React.Component {
     return (
       <MainDiv>
         {this.state.currentData ? (
-          <Dialog open={this.state.toggleModal} onClose={this.handleClose}>
-            <form onSubmit={e => this.handleSell(e, this.state.currentData)}>
-              <DialogTitle>
-                <img
-                  src={this.state.currentData.details.image}
-                  alt=""
-                  style={{
-                    width: "60px",
-                    height: "50px",
-                    paddingRight: "15px"
-                  }}
-                />
-                {this.state.currentData.details.name}
-              </DialogTitle>
-              <DialogContent>
-                <Typography
-                  variant="h6"
-                  component="h6"
-                  style={{ paddingBottom: "10px" }}
-                >
-                  Amount to Sell
-                </Typography>
-                <TextField
-                  required
-                  type="number"
-                  label={
-                    this.state.currentData
-                      ? this.state.currentData.currency
-                      : ""
-                  }
-                  variant="outlined"
-                  style={{ textTransform: "uppercase", width: "300px" }}
-                  inputProps={{
-                    min: 0,
-                    max: this.state.currentData.amount,
-                    step: ".000000001"
-                  }}
-                  onChange={e => this.handleChange(e.target.value)}
-                />
-              </DialogContent>
-              <DialogActions>
-                <Button onClick={this.handleClose} color="primary">
-                  Disagree
-                </Button>
-                <Button type="submit" color="primary" autoFocus>
-                  Sell
-                </Button>
-              </DialogActions>
-            </form>
-          </Dialog>
+          <Modal
+            toggleModal={this.state.toggleModal}
+            handleChange={this.handleChange}
+            handleClose={this.handleClose}
+            handleSell={this.handleSell}
+            data={this.state.currentData}
+          />
         ) : (
           ""
         )}
@@ -423,7 +357,7 @@ export default class Investments extends React.Component {
             <MaterialTable
               title="Investment Tracking"
               columns={this.state.columns}
-              data={this.state.data.filter(x => x.amount !== 0)}
+              data={this.state.data.filter(x => x.amount !== 0).reverse()}
               isLoading={this.state.loading}
             />
           </div>
@@ -463,9 +397,10 @@ export default class Investments extends React.Component {
               allCoins={this.state.allCoins}
               coin={this.state.coin}
               handleCoins={this.handleCoins}
-              handleAmount={this.handleAmount}
-              amountValue={this.state.amountValue}
-              cryptValue={this.state.cryptValue}
+              handleAmount={this.props.handleAmount}
+              amountValue={this.props.amountValue}
+              cryptValue={this.props.cryptValue}
+              price={this.state.price}
               handleInvest={this.handleInvest}
             />
           </BuyStyle>
