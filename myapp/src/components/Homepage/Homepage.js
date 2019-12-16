@@ -3,7 +3,7 @@ import axios from "axios";
 import "./Homepage.css";
 import { BrowserRouter, Link, Route } from "react-router-dom";
 import { Modal } from "antd";
-import { Table, Tabs } from "antd";
+import { Table, Tabs,Button } from "antd";
 import { Collapse } from "antd";
 import CoinCharts from "../Charts/CoinChart";
 import Details from "../Details/Details";
@@ -33,6 +33,7 @@ export default class Homepage extends Component {
       marketHigh: [],
       marketLow: [],
       totalVolume: [],
+      stats:[],
       circulating_supply: [],
       percentagePerhour: [],
       percentagePeryear: [],
@@ -214,7 +215,36 @@ export default class Homepage extends Component {
           c += parseFloat(se.cryptoAmount);
           // console.log(se.name)
           // console.log(se);
-          console.log(se.cryptoAmount);
+          //console.log(se.cryptoAmount);
+          // console.log(a);
+          // console.log(c);
+          this.setState({
+            buyCoins: se,
+            coinsAmount: a,
+            crypt: c  
+          });
+        } else {
+        }
+      });
+    });
+  };
+  handleRefresh = () => {
+    let name = this.state.name;
+    let a = 0;
+    let c = 0;
+
+    axios.get(`http://localhost:4000/transactions`).then(el => {
+      // console.log(array1.reduce(reducer));
+
+      el.data.map(se => {
+        let crypt = se.cryptoAmount;
+
+        if (name === se.name) {
+          a += parseFloat(se.usdAmount);
+          c += parseFloat(se.cryptoAmount);
+          // console.log(se.name)
+          // console.log(se);
+          //console.log(se.cryptoAmount);
           // console.log(a);
           // console.log(c);
           this.setState({
@@ -258,10 +288,10 @@ export default class Homepage extends Component {
           title="CURRENCY"
           visible={this.state.visible}
           onCancel={this.handleCancel}
-          width="800px"
+          width="900px"
           footer={null}
         >
-          <Tabs defaultActiveKey="1" onTabClick={this.handleTabpane}>
+          <Tabs defaultActiveKey='1' onTabClick={this.handleTabpane}>
             <TabPane tab={<img src={this.state.img.thumb} />} key={"1"}>
               <div className="logoNameContainer">
                 <h1 className="coinsName">{this.state.name}</h1>
@@ -335,14 +365,23 @@ export default class Homepage extends Component {
                 <CoinCharts id={this.state.id} />
               </div>
             </TabPane>
-            <TabPane tab="Transaction" key="2">
+            <TabPane tab="Transaction" key="2" >
+            {/* <Button
+                icon='redo'
+                style={{ backgroundColor: "whitesmoke" ,margin:"10px 10px 10px 10px"}}
+                onClick={this.handleRefresh}
+              >
+               Click Me To Refresh
+              </Button> */}
               <Transactions
                 symbol={this.state.symbol}
                 coinsImg={this.state.img.small}
                 coinsPrice={this.state.cPrice.usd}
                 id={this.state.name}
               />
+              
               <Buy
+                
                 coinsPrice={this.state.cPrice.usd}
                 name={this.state.name}
                 usdAmout={this.state.coinsAmount}

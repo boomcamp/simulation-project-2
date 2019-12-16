@@ -28,6 +28,7 @@ export default class Transactions extends Component {
     if (this.state.totalAmount === "" || this.state.totalAmount === 0) {
       message.warning("Please input Some " + this.state.id + " amount");
     } else {
+      
       axios
         .post(`http://localhost:4000/transactions`, {
           totalAmount: this.state.totalAmount,
@@ -36,9 +37,37 @@ export default class Transactions extends Component {
           cryptoImage: this.state.cryptoImage,
           name: this.state.id,
           date: this.state.date,
-          symbol: this.state.symbol
+          symbol: this.state.symbol,
+          stats:'Not sold'
         })
         .then(res => {
+          let name = this.state.name;
+          let a = 0;
+          let c = 0;
+      
+          axios.get(`http://localhost:4000/transactions`).then(el => {
+            // console.log(array1.reduce(reducer));
+            console.log(el);
+            el.data.map(se => {
+              let crypt = se.cryptoAmount;
+      
+              if (name === se.name) {
+                a += parseFloat(se.usdAmount);
+                c += parseFloat(se.cryptoAmount);
+                // console.log(se.name)
+                // console.log(se);
+                console.log(se.cryptoAmount);
+                // console.log(a);
+                // console.log(c);
+                this.setState({
+                  buyCoins: se,
+                  coinsAmount: a,
+                  crypt: c
+                });
+              } else {
+              }
+            });
+          });
           // console.log(res);
           message.info("You bought successfully ");
         })
@@ -50,35 +79,26 @@ export default class Transactions extends Component {
         totalAmount: "",
         disabled: false
       });
+     
     }
-    let name = this.state.name;
-    let a = 0;
-    let c = 0;
-
-    axios.get(`http://localhost:4000/transactions`).then(el => {
-      // console.log(array1.reduce(reducer));
-      console.log(el);
-      el.data.map(se => {
-        let crypt = se.cryptoAmount;
-
-        if (name === se.name) {
-          a += parseFloat(se.usdAmount);
-          c += parseFloat(se.cryptoAmount);
-          // console.log(se.name)
-          // console.log(se);
-          console.log(se.cryptoAmount);
-          // console.log(a);
-          // console.log(c);
-          this.setState({
-            buyCoins: se,
-            coinsAmount: a,
-            crypt: c
-          });
-        } else {
-        }
-      });
-    });
+  
   };
+  // handleSell = event => {
+  //   console.log(event.id);
+  //   let sold = 'sold'
+  //   axios.patch(`http://localhost:4000/transactions?id=${event.id}`, {
+  //   totalAmount: this.state.totalAmount,
+  //   usdAmount: this.state.usdAmount,
+  //   cryptoAmount: this.state.cryptoAmount,
+  //   cryptoImage: this.state.cryptoImage,
+  //   name: this.state.id,
+  //   date: this.state.date,
+  //   symbol: this.state.symbol,
+  //     stats: sold}
+  //   ).then(d=>{console.log(d)})
+  //   ;
+  // };
+
 
   onChange = value => {
     var options = {
@@ -136,12 +156,13 @@ export default class Transactions extends Component {
               >
                 Buy
               </Button>
+              
             </Popconfirm>
           </div>
           {/* <div className="sellCoins">
             <Button icon="shopping-cart" type="primary" onClick={this.toggle}>
               Sell
-            </Button>
+            </Button> 
           </div> */}
         </div>
         <div className="inputCon">
