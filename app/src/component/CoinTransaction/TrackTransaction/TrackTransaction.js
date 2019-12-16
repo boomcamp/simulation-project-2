@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Axios from 'axios';
+
 import {
 	makeStyles,
 	Divider,
@@ -11,7 +12,6 @@ import {
 	TextField,
 	CircularProgress
 } from '@material-ui/core';
-import 'react-toastify/dist/ReactToastify.css';
 
 export default function TractTransaction(props) {
 	const classes = useStyles();
@@ -89,7 +89,7 @@ export default function TractTransaction(props) {
 						<MenuItem value="">None</MenuItem>
 						<MenuItem value="1h">1 Hour</MenuItem>
 						<MenuItem value="24h">1 Day</MenuItem>
-						<MenuItem value="1d">1 Week</MenuItem>
+						<MenuItem value="7d">1 Week</MenuItem>
 					</Select>
 					{isTracking ? (
 						<center>

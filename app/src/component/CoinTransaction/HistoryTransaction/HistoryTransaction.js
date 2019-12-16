@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import Axios from 'axios';
+
 import {
 	Divider,
 	Paper,
@@ -13,8 +15,6 @@ import {
 	FormControl,
 	Select
 } from '@material-ui/core';
-
-import Axios from 'axios';
 
 export default function HistoryTransaction(props) {
 	const classes = useStyles();
@@ -75,6 +75,10 @@ export default function HistoryTransaction(props) {
 							<TableCell align="left">Price</TableCell>
 							<TableCell align="left">Quantity</TableCell>
 							<TableCell align="left">Amount</TableCell>
+							{isSelect === 'Sell' ? (
+								<TableCell align="left">Profit/Loss</TableCell>
+							) : null}
+							<TableCell align="left">Date</TableCell>
 						</TableRow>
 					</TableHead>
 					<TableBody>
@@ -90,6 +94,12 @@ export default function HistoryTransaction(props) {
 										<TableCell align="left">
 											{formatter.format(row.amount)}
 										</TableCell>
+										{row.transaction === 'Sell' ? (
+											<TableCell align="left">
+												{formatter.format(row.profit)}
+											</TableCell>
+										) : null}
+										<TableCell align="left">{row.date}</TableCell>
 									</TableRow>
 								) : null
 							) : null

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Axios from 'axios';
+
 import {
 	TextField,
 	Button,
@@ -7,9 +8,9 @@ import {
 	Divider,
 	Paper
 } from '@material-ui/core';
-import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+
 import BuyReceipt from './BuyReceipt';
+import DateToday from '../DateToday';
 
 export default function BuyTransaction(props) {
 	const classes = useStyles();
@@ -17,6 +18,7 @@ export default function BuyTransaction(props) {
 	const [wallet, setWallet] = useState(0);
 	const [amount, setAmount] = useState(0);
 	const [quantity, setQuantity] = useState(0);
+	const { today } = DateToday();
 
 	useEffect(() => {
 		Axios.get('http://localhost:4000/transactions/').then(res => {
@@ -34,10 +36,10 @@ export default function BuyTransaction(props) {
 	const handleChange = e => {
 		if (e.target.value >= 0) {
 			let convert = props.coin.market_data.current_price.usd * e.target.value;
-			let trans = convert * 0.1;
+			// let trans = convert * 0.1;
 
 			setQuantity(e.target.value);
-			setAmount(convert + trans);
+			setAmount(convert);
 		}
 	};
 
@@ -57,26 +59,25 @@ export default function BuyTransaction(props) {
 						quantity: parseInt(quantity),
 						amount: amount,
 						wallet: wallet - amount,
-						image: props.coin.image.large
+						profit: 0,
+						date: today
 					}
 				})
 					.then(res => {
 						setAmount(0);
 						setQuantity(0);
 						setWallet(wallet - amount);
-						toast.success('Buy Success!');
 						alert('Buy Success!');
 						setReceipt(false);
 					})
 					.catch(err => {
 						console.log(err);
-						toast.error('Invalid entry');
 					});
 			} else {
 				alert('Not enough money.');
 			}
 		} else {
-			alert('Quantity Must be greater than 1');
+			alert('Quantity must be greater than 1');
 		}
 	};
 	return (
@@ -122,7 +123,12 @@ export default function BuyTransaction(props) {
 				</Button>
 			</form>
 			{receipt ? (
-				<BuyReceipt coin={props.coin} amount={amount} quantity={quantity} />
+				<BuyReceipt
+					coin={props.coin}
+					amount={amount}
+					quantity={quantity}
+					formatter={formatter}
+				/>
 			) : null}
 		</Paper>
 	);

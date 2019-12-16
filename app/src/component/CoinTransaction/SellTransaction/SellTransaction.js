@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Axios from 'axios';
+
 import {
 	TextField,
 	Button,
@@ -7,7 +8,9 @@ import {
 	Divider,
 	Paper
 } from '@material-ui/core';
+
 import SellReceipt from './SellReceipt';
+import DateToday from '../DateToday';
 
 export default function SellTransaction(props) {
 	const classes = useStyles();
@@ -15,24 +18,30 @@ export default function SellTransaction(props) {
 	const [wallet, setWallet] = useState(0);
 	const [amount, setAmount] = useState(0);
 	const [quantity, setQuantity] = useState(0);
+	const [profit, setProfit] = useState(0);
 	const [coinQuantity, setCoinQuantity] = useState(0);
+	const [coinAmount, setCoinAmount] = useState(0);
+	const { today } = DateToday();
 
 	useEffect(() => {
 		Axios.get('http://localhost:4000/transactions/').then(res => {
 			let money = res.data[res.data.length - 1];
 			money ? setWallet(money.wallet) : setWallet(1000000);
+			let cAmount = 0;
 			let qBuy = 0;
 			let qSell = 0;
 			res.data.forEach(item => {
 				if (props.coin.name === item.coin) {
 					if (item.transaction === 'Buy') {
 						qBuy = qBuy + item.quantity;
+						cAmount = cAmount + item.amount;
 					} else if (item.transaction === 'Sell') {
 						qSell = qSell + item.quantity;
 					}
 				}
 			});
-			return setCoinQuantity(qBuy - qSell);
+			setCoinQuantity(qBuy - qSell);
+			setCoinAmount(cAmount);
 		});
 	}, [wallet, props.coin.name]);
 
@@ -45,10 +54,13 @@ export default function SellTransaction(props) {
 	const handleAQuantity = e => {
 		if (e.target.value >= 0 && e.target.value <= coinQuantity) {
 			let convert = props.coin.market_data.current_price.usd * e.target.value;
-			let trans = convert * 0.1;
+			// let trans = convert * 0.1;
 
-			setAmount(convert + trans);
+			setAmount(convert);
 			setQuantity(e.target.value);
+
+			let price = convert - coinAmount;
+			setProfit(price);
 		}
 	};
 
@@ -57,6 +69,7 @@ export default function SellTransaction(props) {
 
 		if (quantity > 0) {
 			setReceipt(true);
+			let handleWallet = wallet + amount;
 			Axios({
 				method: 'post',
 				url: 'http://localhost:4000/transactions/',
@@ -66,8 +79,9 @@ export default function SellTransaction(props) {
 					price: props.coin.market_data.current_price.usd,
 					quantity: parseInt(quantity),
 					amount: amount,
-					wallet: wallet + amount,
-					image: props.coin.image.large
+					wallet: handleWallet,
+					profit: profit,
+					date: today
 				}
 			})
 				.then(res => {
@@ -129,7 +143,13 @@ export default function SellTransaction(props) {
 				</form>
 				<Divider />
 				{receipt ? (
-					<SellReceipt coin={props.coin} amount={amount} quantity={quantity} />
+					<SellReceipt
+						coin={props.coin}
+						amount={amount}
+						quantity={quantity}
+						formatter={formatter}
+						profit={profit}
+					/>
 				) : null}
 			</Paper>
 		</React.Fragment>

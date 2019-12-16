@@ -32,7 +32,15 @@ export default function SellReceipt(props) {
 						<h3>Amount:</h3>
 					</td>
 					<td>
-						<p>{props.amount}</p>
+						<p>{props.formatter.format(props.amount)}</p>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<h3>Profit/Loss:</h3>
+					</td>
+					<td>
+						<p>{props.formatter.format(props.profit)}</p>
 					</td>
 				</tr>
 			</tbody>

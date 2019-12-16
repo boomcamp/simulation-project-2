@@ -7,13 +7,13 @@ import {
 	Paper,
 	Grid,
 	Breadcrumbs,
-	Typography
+	Typography,
+	List,
+	ListItem,
+	ListItemIcon,
+	ListItemText,
+	Divider
 } from '@material-ui/core';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import Divider from '@material-ui/core/Divider';
 
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
@@ -28,7 +28,7 @@ import { Header } from './../../layout';
 
 export default function CoinTransaction(props) {
 	const classes = useStyles();
-	const [selectedIndex, setSelectedIndex] = React.useState('track');
+	const [selectedIndex, setSelectedIndex] = React.useState('buy');
 	const [coin, setCoin] = useState({});
 
 	useEffect(() => {
@@ -64,16 +64,6 @@ export default function CoinTransaction(props) {
 								<List component="nav" aria-label="main mailbox folders">
 									<ListItem
 										button
-										selected={selectedIndex === 'track'}
-										onClick={event => handleListItemClick(event, 'track')}
-									>
-										<ListItemIcon>
-											<TrendingDownIcon />
-										</ListItemIcon>
-										<ListItemText primary="Track Investment" />
-									</ListItem>
-									<ListItem
-										button
 										selected={selectedIndex === 'buy'}
 										onClick={event => handleListItemClick(event, 'buy')}
 									>
@@ -92,6 +82,17 @@ export default function CoinTransaction(props) {
 											<AttachMoneyIcon />
 										</ListItemIcon>
 										<ListItemText primary="Sell" />
+									</ListItem>
+									<Divider />
+									<ListItem
+										button
+										selected={selectedIndex === 'track'}
+										onClick={event => handleListItemClick(event, 'track')}
+									>
+										<ListItemIcon>
+											<TrendingDownIcon />
+										</ListItemIcon>
+										<ListItemText primary="Track Investment" />
 									</ListItem>
 									<Divider />
 									<ListItem
