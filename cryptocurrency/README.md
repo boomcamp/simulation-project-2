@@ -37,6 +37,20 @@ Components :
 6. Charts
 
 ---------------------------------------------------------
+Installations :
+
+* run from the terminal ../simulation-project-2/cryptocurrency
+  type: npm install, after installation
+  run the program with this following coomand: 
+  
+  npm start
+
+* run from the new tab in terminal ../simulation-project-2
+  start the server with this following command: 
+  
+  npm run server
+
+---------------------------------------------------------
 Details / Instructions:
 ---------------------------------------------------------
 
@@ -62,7 +76,7 @@ Details / Instructions:
                    * Computations:
                 
                    >>Profit loss in percentage<<
-                   
+
                    Get Profit / Loss Percentage
                    coinTotal = Coin Price today - Price when Bought
                    coinTotal = coinTotal / Price when Bought * 100 
