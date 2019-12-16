@@ -73,11 +73,7 @@ export default function AcccessibleTable(props) {
                }
                return x;
             });
-            console.log(price, aCurrentCointPrice, count);
-            console.log(
-               ((price.usd - aCurrentCointPrice / count) / (aCurrentCointPrice / count)) *
-                  100
-            );
+
             setProfitOrLoss(
                ((price.usd - aCurrentCointPrice / count) / (aCurrentCointPrice / count)) *
                   100

@@ -55,7 +55,7 @@ const useStyles = makeStyles(theme => ({
 
 const theme = createMuiTheme({
    palette: {
-      primary: { main: "#766ef3" }
+      primary: { main: "#4e2072" }
    }
 });
 
@@ -68,8 +68,6 @@ export default function InvestmentTracking() {
    const [img, setImg] = React.useState([]);
 
    let { id } = useParams();
-   let coinList = {};
-   const [coinLs, setCoinLs] = useState({});
 
    useEffect(() => {
       Axios.get(`https://api.coingecko.com/api/v3/coins/${id}`).then(response => {
@@ -80,16 +78,6 @@ export default function InvestmentTracking() {
 
    useEffect(() => {
       Axios.get(`http://localhost:4000/transactions`).then(response => {
-         let buyData = response.data.filter(data => data.transaction === "buy");
-         let coins = [...buyData.map(el => el.coinID)].toString();
-         const pricesWs = new WebSocket(`wss://ws.coincap.io/prices?assets=${coins}`);
-         pricesWs.onmessage = function(msg) {
-            Object.keys(JSON.parse(msg.data)).forEach(e => {
-               coinList[e] = JSON.parse(msg.data)[`${e}`];
-               setCoinLs(coinList);
-               setTrans({ ...trans, data: buyData });
-            });
-         };
          setTrans(
             response.data.filter(val => {
                val.timestamp = new Intl.DateTimeFormat("en-US", {
@@ -299,48 +287,7 @@ export default function InvestmentTracking() {
                      )
                   },
                   {
-                     title: "Last Price",
-                     field: "",
-                     render: rowData => {
-                        return <p>{coinLs[rowData.coinID]}</p>;
-                     }
-                  },
-                  {
-                     title: "Est. Profit",
-                     type: "numeric",
-                     render: rowData => {
-                        var profitVal =
-                           +rowData.totalAmount *
-                           (+(
-                              parseInt(-1, 10) +
-                              (+coinLs[rowData.coinID] - +rowData.currentCoinPrice) /
-                                 +rowData.currentCoinPrice
-                           ) /
-                              100);
-                        return (
-                           <p className={profitVal > 0 ? "green" : "red"}>
-                              {profitVal.toFixed(2)}
-                           </p>
-                        );
-                     }
-                  },
-                  {
-                     title: "Est. Profit %",
-                     type: "numeric",
-                     render: rowData => {
-                        var profitPercent =
-                           parseInt(-1, 10) +
-                           (+coinLs[rowData.coinID] - +rowData.currentCoinPrice) /
-                              +rowData.currentCoinPrice;
-                        return (
-                           <p className={profitPercent > 0 ? "blueviolet" : "red"}>
-                              {profitPercent.toFixed(4)}%
-                           </p>
-                        );
-                     }
-                  },
-                  {
-                     title: "Profit or Loss",
+                     title: "% Profit or Loss",
                      type: "numeric",
                      render: rowData =>
                         rowData.profitOrLoss || rowData.profitOrLoss === 0 ? (

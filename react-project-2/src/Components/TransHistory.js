@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import MaterialTable from "material-table";
 import { makeStyles } from "@material-ui/core/styles";
@@ -40,7 +40,7 @@ const useStyles = makeStyles(theme => ({
       display: "flex"
    },
    table: {
-      width: "75%",
+      width: "80%",
       height: "50vh",
       margin: "0 auto",
       marginTop: "35vh",
@@ -66,6 +66,8 @@ export default function InvestmentTracking() {
    const [buyLength, setBuyLength] = React.useState(0);
    const [sellLength, setSellLength] = React.useState(0);
    let { id } = useParams();
+   let coinList = {};
+   const [coinLs, setCoinLs] = useState({});
 
    useEffect(() => {
       Axios.get(`https://api.coingecko.com/api/v3/coins/${id}`).then(response => {
@@ -75,6 +77,16 @@ export default function InvestmentTracking() {
 
    useEffect(() => {
       Axios.get(`http://localhost:4000/transactions`).then(response => {
+         let buyData = response.data.filter(data => data.transaction === "buy");
+         let coins = [...buyData.map(el => el.coinID)].toString();
+         const pricesWs = new WebSocket(`wss://ws.coincap.io/prices?assets=${coins}`);
+         pricesWs.onmessage = function(msg) {
+            Object.keys(JSON.parse(msg.data)).forEach(e => {
+               coinList[e] = JSON.parse(msg.data)[`${e}`];
+               setCoinLs(coinList);
+               setTrans({ ...trans, data: buyData });
+            });
+         };
          setTrans(
             response.data.filter(val => {
                val.timestamp = new Intl.DateTimeFormat("en-US", {
@@ -239,9 +251,11 @@ export default function InvestmentTracking() {
                      )
                   },
                   {
-                     title: "Symbol",
+                     title: "Date",
                      render: rowData => (
-                        <span style={{ textTransform: "uppercase" }}>{rowData.coin}</span>
+                        <span style={{ textTransform: "uppercase" }}>
+                           {rowData.timestamp}
+                        </span>
                      )
                   },
                   {
@@ -293,12 +307,45 @@ export default function InvestmentTracking() {
                      )
                   },
                   {
-                     title: "Date",
-                     render: rowData => (
-                        <span style={{ textTransform: "uppercase" }}>
-                           {rowData.timestamp}
-                        </span>
-                     )
+                     title: "Last Price",
+                     field: "",
+                     render: rowData => {
+                        return <p>{coinLs[rowData.coinID]}</p>;
+                     }
+                  },
+                  {
+                     title: "Est. Profit",
+                     type: "numeric",
+                     render: rowData => {
+                        var profitVal =
+                           +rowData.totalAmount *
+                           (+(
+                              parseInt(-1, 10) +
+                              (+coinLs[rowData.coinID] - +rowData.currentCoinPrice) /
+                                 +rowData.currentCoinPrice
+                           ) /
+                              100);
+                        return (
+                           <p className={profitVal > 0 ? "green" : "red"}>
+                              {profitVal.toFixed(2)}
+                           </p>
+                        );
+                     }
+                  },
+                  {
+                     title: "% Est. Profit",
+                     type: "numeric",
+                     render: rowData => {
+                        var profitPercent =
+                           parseInt(-1, 10) +
+                           (+coinLs[rowData.coinID] - +rowData.currentCoinPrice) /
+                              +rowData.currentCoinPrice;
+                        return (
+                           <p className={profitPercent > 0 ? "blueviolet" : "red"}>
+                              {profitPercent.toFixed(4)}%
+                           </p>
+                        );
+                     }
                   }
                ]}
                data={trans}
