@@ -1,4 +1,4 @@
-# Simulation Project 2
+# Welcome to Simulation Project 2!
 
 Simulation Project 2 is a cryptocurrency web application that helps you when to convert your coins!
 The API used is from [https://www.coingecko.com/en/api/](https://www.coingecko.com/en/api/)
