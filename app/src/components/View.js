@@ -11,6 +11,8 @@ import List from "./List";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import KeyboardReturnIcon from "@material-ui/icons/ArrowBack";
 import Button from "@material-ui/core/Button";
+import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
+import Loader from "react-loader-spinner";
 
 const useStyles = makeStyles(theme => ({
 	root: {
@@ -39,6 +41,7 @@ export default function View() {
 	const [cMarketData, setSetMarketData] = useState([]);
 	const [priceHourPChange, setPriceHourPChange] = useState(null);
 	const [checker, setChecker] = useState(false);
+	const [loader, setLoader] = useState(true);
 
 	useEffect(() => {
 		Axios.get(`https://api.coingecko.com/api/v3/coins/${id}`)
@@ -51,6 +54,7 @@ export default function View() {
 				setSetMarketData(response.data.market_data);
 				setPriceHourPChange(response.data.market_data.price_change_percentage_1h_in_currency.usd);
 				setSymbol(response.data.symbol);
+				setLoader(false);
 			})
 			.catch(error => {
 				setChecker(true);
@@ -58,6 +62,19 @@ export default function View() {
 				console.log(error.response.data);
 			});
 	}, [id]);
+
+	if (loader) {
+		return (
+			<div>
+				<Container className={classes.root} fixed>
+					<Grid container direction="row" justify="center" alignItems="center" style={{ height: "97vh" }}>
+						{" "}
+						<Loader type="MutatingDots" color="#19aeaf" height={80} width={100} />
+					</Grid>
+				</Container>
+			</div>
+		);
+	}
 
 	if (checker) {
 		return (

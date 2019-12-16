@@ -13,7 +13,6 @@ import Divider from "@material-ui/core/Divider";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
-import SwapHorizontalCircleIcon from "@material-ui/icons/SwapHorizontalCircle";
 import HomeIcon from "@material-ui/icons/Home";
 import { useHistory } from "react-router-dom";
 import { NavLink } from "react-router-dom";
@@ -85,20 +84,6 @@ export default function Navigation() {
 						<HomeIcon />
 					</ListItemIcon>
 					<ListItemText primary={"Home"} />
-				</ListItem>
-			</List>
-			<Divider />
-			<List>
-				<ListItem
-					button
-					onClick={() => {
-						history.push("/");
-					}}
-				>
-					<ListItemIcon>
-						<SwapHorizontalCircleIcon />
-					</ListItemIcon>
-					<ListItemText primary={"Transactions"} />
 				</ListItem>
 			</List>
 			<Divider />

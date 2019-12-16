@@ -12,6 +12,16 @@ import { green } from "@material-ui/core/colors";
 import IconButton from "@material-ui/core/IconButton";
 import Snackbar from "@material-ui/core/Snackbar";
 import SnackbarContent from "@material-ui/core/SnackbarContent";
+import { Grid } from "@material-ui/core";
+import Card from "@material-ui/core/Card";
+import CardContent from "@material-ui/core/CardContent";
+import AddIcon from "@material-ui/icons/Add";
+import Chip from "@material-ui/core/Chip";
+import RemoveIcon from "@material-ui/icons/Remove";
+import MonetizationOnIcon from "@material-ui/icons/MonetizationOn";
+import Avatar from "@material-ui/core/Avatar";
+import ArrowDropUpIcon from "@material-ui/icons/ArrowDropUp";
+import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
 
 const useStyles = makeStyles(theme => ({
 	root: {
@@ -24,6 +34,18 @@ const useStyles = makeStyles(theme => ({
 	},
 	icon: {
 		marginTop: theme.spacing(8)
+	},
+	card: {
+		width: "100%",
+		boxShadow: "none",
+		border: "1px solid #c5c4c4",
+		borderRadius: "0"
+	},
+	title: {
+		fontSize: 14
+	},
+	pos: {
+		marginBottom: 12
 	}
 }));
 
@@ -89,6 +111,9 @@ export default function Investment() {
 	const classes = useStyles();
 	const [transactions, setData] = useState([]);
 	const [coin, setCoin] = useState("");
+	const [balance, setBalance] = useState(0);
+	const [coinInfo, setCoinInfo] = useState([]);
+	const [currentPrice, setCurrentPrice] = useState([]);
 	const [state] = React.useState({
 		columns: [
 			{ title: "#", field: "rowData.tableData.id", type: "numeric", render: rowData => rowData.tableData.id + 1 },
@@ -99,16 +124,36 @@ export default function Investment() {
 				render: rowData => (
 					<MuiThemeProvider theme={theme}>
 						<Typography variant="subtitle2" color={rowData.transaction === "buy" ? "primary" : "error"}>
-							{rowData.coinQuantity}
+							{`${rowData.coinQuantity}`}
 						</Typography>
 					</MuiThemeProvider>
 				)
 			},
 			{
-				title: "Total Cost | Earned",
+				title: "Coin Price",
+				field: "currentCoinPrice",
+				type: "numeric",
+				render: rowData => (
+					<Chip variant="outlined" icon={<MonetizationOnIcon />} label={formatter.format(rowData.currentCoinPrice)} />
+				)
+			},
+			{
+				title: "Amount Paid or Received",
 				field: "totalAmount",
 				type: "numeric",
-				render: rowData => formatter.format(rowData.totalAmount)
+				render: rowData => (
+					<Grid>
+						<MuiThemeProvider theme={theme}>
+							<Typography variant="body1">
+								<Chip
+									variant="outlined"
+									avatar={rowData.transaction === "sell" ? <Avatar>R</Avatar> : <Avatar>P</Avatar>}
+									label={formatter.format(rowData.totalAmount)}
+								/>
+							</Typography>
+						</MuiThemeProvider>
+					</Grid>
+				)
 			},
 			{
 				title: "% Profit or Loss",
@@ -116,20 +161,40 @@ export default function Investment() {
 				type: "numeric",
 				render: rowData =>
 					rowData.profitOrLoss || rowData.profitOrLoss === 0 ? (
-						<MuiThemeProvider theme={theme}>
-							<Typography variant="h6" color={rowData.profitOrLoss < 0 ? "error" : "primary"}>
-								{Math.round(rowData.profitOrLoss * 10000) / 10000} %
-							</Typography>
-						</MuiThemeProvider>
+						<Grid>
+							<MuiThemeProvider theme={theme}>
+								<Typography variant="body1">
+									<Chip
+										variant="outlined"
+										color={rowData.profitOrLoss < 0 ? "secondary" : "primary"}
+										icon={rowData.profitOrLoss < 0 ? <RemoveIcon /> : <AddIcon />}
+										label={Math.round(rowData.profitOrLoss * 10000 * -1 * -1) / 10000 + "%"}
+									/>
+								</Typography>
+							</MuiThemeProvider>
+						</Grid>
 					) : (
 						<Typography variant="h6">------</Typography>
 					)
 			},
 			{
-				title: "Coin Price when bought or sell",
-				field: "currentCoinPrice",
+				title: "",
+				field: "totalAmount",
 				type: "numeric",
-				render: rowData => formatter.format(rowData.currentCoinPrice)
+				render: rowData =>
+					rowData.profitOrLoss || rowData.profitOrLoss === 0 ? (
+						<Grid>
+							<MuiThemeProvider theme={theme}>
+								<Chip
+									variant="outlined"
+									icon={<MonetizationOnIcon />}
+									label={formatter.format((rowData.profitOrLoss / 100) * rowData.buyPrice * rowData.coinQuantity)}
+								/>
+							</MuiThemeProvider>
+						</Grid>
+					) : (
+						<Typography variant="h6">------</Typography>
+					)
 			},
 			{
 				title: "Transaction Type",
@@ -146,8 +211,9 @@ export default function Investment() {
 		],
 		data: []
 	});
-
 	const [open, setOpen] = useState(false);
+	const [totalProfit, setTotalProfit] = useState(0);
+	const [bPrice, setBPrice] = useState(0);
 
 	const handleClose = (event, reason) => {
 		if (reason === "clickaway") {
@@ -161,6 +227,8 @@ export default function Investment() {
 	useEffect(() => {
 		Axios.get(`https://api.coingecko.com/api/v3/coins/${id}`)
 			.then(response => {
+				setCoinInfo(response.data);
+				setCurrentPrice(response.data.market_data.current_price);
 				setCoin(response.data.name + " transaction history");
 			})
 			.catch(error => {
@@ -170,18 +238,56 @@ export default function Investment() {
 
 	useEffect(() => {
 		Axios.get(`http://localhost:4000/transactions?_sort=timestamp&_order=desc`).then(response => {
-			setData(
-				response.data.filter(val => {
-					val.timestamp = new Intl.DateTimeFormat("en-US", {
-						year: "numeric",
-						month: "short",
-						day: "2-digit",
-						hour: "2-digit",
-						minute: "2-digit"
-					}).format(val.timestamp);
-					return val.coinId === id;
-				})
-			);
+			let initBalance = 0;
+			let totalpl = 0;
+			let pl;
+
+			let array = response.data.filter(val => {
+				val.timestamp = new Intl.DateTimeFormat("en-US", {
+					year: "numeric",
+					month: "short",
+					day: "2-digit",
+					hour: "2-digit",
+					minute: "2-digit"
+				}).format(val.timestamp);
+				return val.coinId === id;
+			});
+
+			array.forEach(newVal => {
+				if (newVal.transaction === "buy") {
+					initBalance += newVal.coinQuantity;
+				} else {
+					initBalance -= newVal.coinQuantity;
+					pl = (newVal.profitOrLoss / 100) * newVal.buyPrice * newVal.coinQuantity;
+					if (pl > -1) {
+						totalpl += pl;
+					} else {
+						totalpl -= pl;
+					}
+				}
+			});
+
+			let aCurrentCointPrice = 0;
+			let count = 0;
+			var stat = true;
+			var statChecker = true;
+			array.map((x, i) => {
+				if (x.transaction === "buy" && stat) {
+					statChecker = false;
+					aCurrentCointPrice += x.currentCoinPrice;
+					count++;
+				} else if (x.transaction === "sell") {
+					if (!statChecker) {
+						stat = false;
+					}
+				}
+				return x;
+			});
+
+			setBPrice(aCurrentCointPrice / count);
+			setBalance(initBalance);
+			setData(array);
+			setTotalProfit(totalpl);
 		});
 
 		sessionStorage.getItem("success") ? setOpen(true) : setOpen(false);
@@ -200,7 +306,78 @@ export default function Investment() {
 			>
 				<MySnackbarContentWrapper onClose={handleClose} variant="success" message="Transaction Done!" />
 			</Snackbar>
-			<MaterialTable title={coin} columns={state.columns} data={transactions} />
+			<Grid container spacing={1} style={{ paddingTop: "1rem", paddingBottom: "1rem" }}>
+				<Grid container item xs={12}>
+					<Typography variant="h6" align="right" gutterBottom>
+						Possible Percentage Profit or Loss if you sell your Coin now
+					</Typography>
+				</Grid>
+				<Grid container item xs={12}>
+					<Grid container direction="row" justify="flex-start" alignItems="center">
+						<Typography variant="h3" component="h2">
+							{Math.round(((currentPrice.usd - bPrice) / bPrice) * 100 * 1000) / 1000} %
+						</Typography>{" "}
+					</Grid>
+				</Grid>
+				<Grid container item xs={3}>
+					<Card className={classes.card}>
+						<CardContent>
+							<Typography className={classes.title} color="textSecondary" gutterBottom>
+								Coin Wallet
+							</Typography>
+							<Typography variant="h5" component="h2">
+								{balance} {coinInfo.symbol}
+							</Typography>
+						</CardContent>
+					</Card>
+				</Grid>
+				<Grid container item xs={3}>
+					<Card className={classes.card}>
+						<CardContent>
+							<Typography className={classes.title} color="textSecondary" gutterBottom>
+								Current Price
+							</Typography>
+							<Typography variant="h5" component="h2">
+								{formatter.format(currentPrice.usd)}
+							</Typography>
+						</CardContent>
+					</Card>
+				</Grid>
+				<Grid container item xs={3}>
+					<Card className={classes.card}>
+						<CardContent>
+							<Typography className={classes.title} color="textSecondary" gutterBottom>
+								Total transactions
+							</Typography>
+							<Typography variant="h5" component="h2">
+								{transactions.length}
+							</Typography>
+						</CardContent>
+					</Card>
+				</Grid>
+				<Grid container item xs={3}>
+					<Card className={classes.card}>
+						<CardContent>
+							<Typography className={classes.title} color="textSecondary" gutterBottom>
+								Total Profit or Loss
+							</Typography>
+							<Grid container direction="row" justify="flex-start" alignItems="center">
+								{totalProfit > -1 ? (
+									<ArrowDropUpIcon style={{ color: "green" }} />
+								) : (
+									<ArrowDropDownIcon style={{ color: "red" }} />
+								)}
+								<Typography variant="h5" component="h2">
+									{formatter.format(totalProfit)}
+								</Typography>{" "}
+							</Grid>
+						</CardContent>
+					</Card>
+				</Grid>
+			</Grid>
+			<Grid item xs={12}>
+				<MaterialTable title={coin} columns={state.columns} data={transactions} />
+			</Grid>
 		</Container>
 	);
 }

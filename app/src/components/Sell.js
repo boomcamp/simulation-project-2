@@ -9,6 +9,7 @@ import AccountBalanceWalletIcon from "@material-ui/icons/AccountBalanceWallet";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
+import ListItemText from "@material-ui/core/ListItemText";
 import Grid from "@material-ui/core/Grid";
 import TextField from "@material-ui/core/TextField";
 import InputAdornment from "@material-ui/core/InputAdornment";
@@ -45,6 +46,7 @@ export default function Transaction(props) {
 	const [error, setError] = useState(false);
 	const [newBalance, setNewBalance] = useState(0);
 	const [profitOrLoss, setProfitOrLoss] = useState(0);
+	const [buyPrice, setBuyPrice] = useState(0);
 
 	useEffect(() => {
 		Axios.get(`http://localhost:4000/transactions`)
@@ -61,6 +63,7 @@ export default function Transaction(props) {
 					}
 				});
 				setBalance(initBalance);
+				setNewBalance(initBalance);
 				return Axios.get(`http://localhost:4000/transactions?coinId=${id}`);
 			})
 			.then(response => {
@@ -85,6 +88,7 @@ export default function Transaction(props) {
 				//console.log(aCost, cQuantity);
 				console.log(props.price, aCurrentCointPrice, count);
 				console.log(((props.price - aCurrentCointPrice / count) / (aCurrentCointPrice / count)) * 100);
+				setBuyPrice(aCurrentCointPrice / count);
 				setProfitOrLoss(((props.price - aCurrentCointPrice / count) / (aCurrentCointPrice / count)) * 100);
 			});
 	}, [id, props.price]);
@@ -100,7 +104,8 @@ export default function Transaction(props) {
 					currentCoinPrice: props.price,
 					transaction: "sell",
 					timestamp: new Date().getTime(),
-					profitOrLoss: profitOrLoss
+					profitOrLoss: profitOrLoss,
+					buyPrice: buyPrice
 				})
 					.then(response => {
 						sessionStorage.setItem("success", true);
@@ -119,7 +124,7 @@ export default function Transaction(props) {
 					<Grid container item xs={5}>
 						<Grid container item xs={12}>
 							<Typography variant="h6" display="block" component="h3">
-								New Balance
+								{props.name} Wallet
 							</Typography>
 						</Grid>
 						<Grid container item xs={12}>
@@ -128,9 +133,11 @@ export default function Transaction(props) {
 									<ListItemIcon style={{ color: "rgb(0, 78, 224)" }}>
 										<AccountBalanceWalletIcon fontSize="large" />
 									</ListItemIcon>
-									<Typography variant="h6" display="block" component="h3">
-										{balance} {props.symbol}
-									</Typography>
+									<Typography variant="h6" display="block" component="h3"></Typography>
+									<ListItemText
+										primary={balance + " " + props.symbol}
+										secondary={`New ${props.name} Balance: ${newBalance}`}
+									/>
 								</ListItem>
 							</List>
 						</Grid>
@@ -216,12 +223,6 @@ export default function Transaction(props) {
 							<Grid container item xs={12} justify="space-between">
 								<Typography variant="h6">Earnings:</Typography>
 								<Typography variant="h6">{!error ? props.formatter.format(amount) : false}</Typography>
-							</Grid>
-						</Grid>
-						<Grid item container xs={12} style={{ padding: "20px 20%" }}>
-							<Grid container item xs={12} justify="space-between">
-								<Typography variant="body1">New {props.name} Balance:</Typography>
-								<Typography variant="body1">{newBalance}</Typography>
 							</Grid>
 						</Grid>
 					</Grid>
