@@ -95,7 +95,12 @@ export default function BuyModal({ setOpenBuy, openBuy, details }) {
   });
 
   const handleChangeValues = event => {
-    setValues(event.target.value);
+    console.log(event.target.value);
+    if (event.target.value > balance.money) {
+      setValues(balance.money);
+    } else {
+      setValues(event.target.value);
+    }
   };
 
   const handleChangePayment = event => {
@@ -120,7 +125,8 @@ export default function BuyModal({ setOpenBuy, openBuy, details }) {
         price: details.market_data.current_price.usd,
         coinCountT: values / details.market_data.current_price.usd,
         coinCountU: values / details.market_data.current_price.usd,
-        investment: parseInt(values)
+        investment: parseInt(values),
+        investmentU: parseInt(values)
       })
       .then(() => (window.location.href = "/transaction"))
       .catch(error => console.log(error));

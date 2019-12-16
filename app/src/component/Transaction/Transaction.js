@@ -10,10 +10,7 @@ const useStyles = makeStyles({
   root: {
     width: "100%",
     backgroundColor: "white",
-    height: "80vh"
-  },
-  table: {
-    maxWidth: "95%"
+    height: "87vh"
   }
 });
 
@@ -46,12 +43,13 @@ export default function Transaction(props) {
         <div
           style={{
             display: "flex",
-            justifyContent: "center",
-            height: "80vh"
+            justifyContent: "center"
           }}
         >
-          <div style={{ display: "flex", flexDirection: "column" }}>
-            <Tabs rows={rows} setRows={setRows} />
+          <div
+            style={{ display: "flex", flexDirection: "column", width: "100%" }}
+          >
+            <Tabs rows={rows} />
           </div>
         </div>
       </Paper>

@@ -67,16 +67,17 @@ const Convert = styled(OutlinedInput)`
     color: black;
   }
 `;
-export default function SellModal({ setOpenSell, openSell, details }) {
+export default function SellModal({ setOpenSell, openSell, details, itemId }) {
   const theme = useTheme();
   const classes = useStyles();
   const [payment, setPayment] = useState("Bank");
   const [coins, setCoins] = useState("");
   const [amount, setAmount] = useState("");
-  const [wallet, setWallet] = useState(0);
+  const [data, setData] = useState(0);
   const [profit, setProfit] = useState(0);
   const [loss, setLoss] = useState(0);
   const [coinUpdate, setCoinUpdate] = useState(0);
+  const [balance, setBalance] = useState({});
 
   const fullScreen = useMediaQuery(theme.breakpoints.down("sm"));
 
@@ -104,14 +105,20 @@ export default function SellModal({ setOpenSell, openSell, details }) {
   };
 
   useEffect(() => {
-    Axios.get(`http://localhost:4000/transactions`).then(res => {
-      setWallet(...res.data);
+    Axios.get(`http://localhost:4000/transactions/${itemId}`).then(res => {
+      setData(res.data);
     });
-  }, []);
+    Axios.get(`http://localhost:4000/wallet`).then(res => {
+      setBalance(res.data);
+    });
+  }, [itemId]);
 
   const addTransaction = () => {
-    Axios.patch(`http://localhost:4000/transactions/${wallet.id}`, {
+    Axios.patch(`http://localhost:4000/transactions/${data.id}`, {
       coinCountU: coinUpdate
+    });
+    Axios.patch(`http://localhost:4000/wallet`, {
+      money: balance.money + parseInt(amount)
     });
     Axios.post(`http://localhost:4000/transactions`, {
       coin: details.localization.en,
@@ -120,12 +127,13 @@ export default function SellModal({ setOpenSell, openSell, details }) {
       deposit: payment,
       profit: profit,
       loss: loss,
-      coinCountSell: coins,
+      coinCountSell: parseInt(coins),
       amount: amount
     })
       .then(() => (window.location.href = "/transaction"))
       .catch(error => console.log(error));
   };
+  console.log(itemId);
   return (
     <>
       <Dialog
@@ -163,12 +171,11 @@ export default function SellModal({ setOpenSell, openSell, details }) {
                       marginRight: 30
                     }}
                   >
-                    {wallet.coinCountU}
+                    {data.coinCountU}
                     <small>
                       =
                       {usd.format(
-                        details.market_data.current_price.usd *
-                          wallet.coinCountU
+                        details.market_data.current_price.usd * data.coinCountU
                       )}
                     </small>
                   </div>
@@ -216,7 +223,11 @@ export default function SellModal({ setOpenSell, openSell, details }) {
                 id="outlined-adornment-weight"
                 value={amount}
                 onChange={e => {
-                  setAmount(e.target.value);
+                  if (e.target.value > data.investmentU) {
+                    setAmount(data.investmentU);
+                  } else {
+                    setAmount(e.target.value);
+                  }
                   setCoins(
                     (
                       e.target.value / details.market_data.current_price.usd
@@ -245,15 +256,20 @@ export default function SellModal({ setOpenSell, openSell, details }) {
                 id="outlined-adornment-weight"
                 value={coins}
                 onChange={e => {
-                  setCoins(e.target.value);
-                  setCoinUpdate(wallet.coinCountT - e.target.value);
+                  if (e.target.value > data.coinCountT) {
+                    setCoins(data.coinCountT);
+                  } else {
+                    setCoins(e.target.value);
+                  }
+
+                  setCoinUpdate(data.coinCountT - e.target.value);
                   setAmount(
                     e.target.value * details.market_data.current_price.usd
                   );
                   const CurrentPrice = Math.ceil(
                     e.target.value * details.market_data.current_price.usd
                   );
-                  const Investment = Math.ceil(e.target.value * wallet.price);
+                  const Investment = Math.ceil(e.target.value * data.price);
 
                   if (Investment < CurrentPrice) {
                     setProfit(CurrentPrice - Investment);

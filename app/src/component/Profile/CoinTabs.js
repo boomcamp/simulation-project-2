@@ -10,6 +10,7 @@ import CoinTable from "../Profile/CoinTable";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
+
   return (
     <Typography
       component="div"
@@ -47,10 +48,12 @@ const useStyles = makeStyles(theme => ({
 export default function SimpleTabs({ rows, setRows }) {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
-  const handleChange = (event, newValue) => {
+  const [item, setItem] = React.useState("Bitcoin");
+  let count = {};
+  const handleChange = (e, newValue) => {
     setValue(newValue);
   };
-  console.log(rows);
+
   return (
     <div className={classes.root}>
       <AppBar position="static">
@@ -60,11 +63,18 @@ export default function SimpleTabs({ rows, setRows }) {
           aria-label="simple tabs example"
         >
           {rows.map((r, i) => {
-            return (
-              r.transaction === "Buy" && (
-                <Tab label={r.coin} {...a11yProps(i)} key={i} />
-              )
-            );
+            count[r.coin] = (count[r.coin] || 0) + 1;
+            if (count[r.coin] === 1 && r.transaction === "Buy") {
+              return (
+                <Tab
+                  label={r.coin}
+                  {...a11yProps(i)}
+                  key={i}
+                  onClick={() => setItem(r.coin)}
+                />
+              );
+            }
+            return null;
           })}
         </Tabs>
       </AppBar>
@@ -72,7 +82,12 @@ export default function SimpleTabs({ rows, setRows }) {
         return (
           r.transaction === "Buy" && (
             <TabPanel value={value} index={i} key={i}>
-              <CoinTable rows={rows} setRows={setRows} />
+              <CoinTable
+                rows={rows}
+                setRows={setRows}
+                value={value}
+                item={item}
+              />
             </TabPanel>
           )
         );

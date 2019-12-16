@@ -24,7 +24,7 @@ const useStyles = makeStyles({
   root: {
     width: "100%",
     backgroundColor: "white",
-    height: "80vh"
+    height: "64vh"
   },
   table: {
     maxWidth: "95%"
@@ -44,6 +44,7 @@ function Profile() {
   useEffect(() => {
     Axios.get(`http://localhost:4000/transactions`).then(res => {
       setData([...res.data]);
+      console.log(res.data);
     });
     Axios.get(`http://localhost:4000/wallet`).then(res => {
       setBalance(res.data);
@@ -52,9 +53,7 @@ function Profile() {
 
   const totalCal = (details, type, key) => {
     let total = 0;
-    details.map(d => {
-      d.transaction === type && (total += d[key]);
-    });
+    details.map(d => d.transaction === type && (total += d[key]));
     return usd.format(total);
   };
   return (
@@ -78,7 +77,7 @@ function Profile() {
               </Typography>
             </CardContent>
           </CardActionArea>
-          <Typography style={{ margin: 10 }} align="center" variant="h1">
+          <Typography style={{ margin: 10 }} align="center" variant="h2">
             {data ? totalCal(data, "Sell", "profit") : null}
           </Typography>
         </Card>
@@ -95,7 +94,7 @@ function Profile() {
               </Typography>
             </CardContent>
           </CardActionArea>
-          <Typography style={{ margin: 10 }} align="center" variant="h1">
+          <Typography style={{ margin: 10 }} align="center" variant="h2">
             {usd.format(balance.money)}
           </Typography>
         </Card>
@@ -112,7 +111,7 @@ function Profile() {
               </Typography>
             </CardContent>
           </CardActionArea>
-          <Typography style={{ margin: 10 }} align="center" variant="h1">
+          <Typography style={{ margin: 10 }} align="center" variant="h2">
             {data ? totalCal(data, "Sell", "loss") : null}
           </Typography>
         </Card>
@@ -122,11 +121,12 @@ function Profile() {
         <div
           style={{
             display: "flex",
-            justifyContent: "center",
-            height: "80vh"
+            justifyContent: "center"
           }}
         >
-          <div style={{ display: "flex", flexDirection: "column" }}>
+          <div
+            style={{ display: "flex", flexDirection: "column", width: "100%" }}
+          >
             <Tabs rows={data} setRows={setData} />
           </div>
         </div>

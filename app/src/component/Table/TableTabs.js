@@ -42,11 +42,11 @@ function a11yProps(index) {
 const useStyles = makeStyles(theme => ({
   root: {
     flexGrow: 1,
-    backgroundColor: theme.palette.background.paper
+    backgroundColor: "none"
   }
 }));
 
-export default function SimpleTabs({ rows, setRows, loading }) {
+export default function TableTabs({ rows }) {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
   const handleChange = (event, newValue) => {
@@ -55,7 +55,10 @@ export default function SimpleTabs({ rows, setRows, loading }) {
 
   return (
     <div className={classes.root}>
-      <AppBar position="static">
+      <AppBar
+        position="static"
+        style={{ color: "black", backgroundColor: "white" }}
+      >
         <Tabs
           value={value}
           onChange={handleChange}
@@ -66,10 +69,10 @@ export default function SimpleTabs({ rows, setRows, loading }) {
         </Tabs>
       </AppBar>
       <TabPanel value={value} index={0}>
-        <TableBuy rows={rows} setRows={setRows} loading={loading} />
+        <TableBuy rows={rows} />
       </TabPanel>
       <TabPanel value={value} index={1}>
-        <TableSell rows={rows} setRows={setRows} loading={loading} />
+        <TableSell rows={rows} />
       </TabPanel>
     </div>
   );

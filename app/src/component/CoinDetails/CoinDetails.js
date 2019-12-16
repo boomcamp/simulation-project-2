@@ -5,7 +5,6 @@ import Chart from "../Chart/Chart.js";
 import ButtonTabs from "../Tabs/Tabs";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import BuyModal from "../Modal/BuyModal";
-import SellModal from "../Modal/SellModal";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 
 const Main = styled.div`
@@ -62,7 +61,6 @@ export default function CoinDetails({ match, history }) {
   const [chart, setChart] = useState([]);
   const [days, setDays] = useState(0);
   const [openBuy, setOpenBuy] = useState(false);
-  const [openSell, setOpenSell] = useState(false);
 
   useEffect(() => {
     axios
@@ -181,9 +179,6 @@ export default function CoinDetails({ match, history }) {
                 <Btn onClick={() => setOpenBuy(true)} id="buy">
                   Buy
                 </Btn>
-                <Btn onClick={() => setOpenSell(true)} id="sell">
-                  Sell
-                </Btn>
               </div>
             </Details>
           </Container>
@@ -200,11 +195,6 @@ export default function CoinDetails({ match, history }) {
           <BuyModal
             setOpenBuy={setOpenBuy}
             openBuy={openBuy}
-            details={details}
-          />
-          <SellModal
-            setOpenSell={setOpenSell}
-            openSell={openSell}
             details={details}
           />
         </Main>
