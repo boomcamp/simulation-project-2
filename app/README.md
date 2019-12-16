@@ -1,6 +1,8 @@
 # Overview
 
 - It contains about cryptocurrency price and investment tracker.
+- Detailed single coin view and its historical data
+- Show the graph per coin history
 
 ## API Resources
 
