@@ -22,7 +22,7 @@
 
 - [React JS](https://reactjs.org/)
 - [CoinGecko API V3](https://www.coingecko.com/api/documentations/v3#)
-- [Visual Studio Code](https://code.visualstudio.com/)
+- Visual Studio Code
 
 ## Author
 
@@ -31,5 +31,6 @@ Jerommel A. Astilero
 ## Acknowledgements
 
 - [CoinGecko API V3](https://www.coingecko.com/api/documentations/v3#)
-- [Visual Studio Code](https://code.visualstudio.com/)
 - [StackOverflow](https://stackoverflow.com/)
+- Visual Studio Code
+
