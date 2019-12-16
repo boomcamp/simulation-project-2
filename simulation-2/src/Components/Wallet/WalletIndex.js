@@ -12,11 +12,9 @@ export default function WalletIndex(props) {
     });
 
     const selected = (data) =>{
-        if( data.target.getAttribute('data-index') &&  data.target.getAttribute('data-transactionId') && data){
-            setState({coin_click_ontracker: data.target.getAttribute('data-index'), transaction_id: data.target.getAttribute('data-transactionId')})
+        if( data.target.getAttribute('data-index') &&  data.target.getAttribute('data-transactionid') && data){
+            setState({coin_click_ontracker: data.target.getAttribute('data-index'), transaction_id: data.target.getAttribute('data-transactionid')})
         }
-        
-        console.log(state)
     }
 
     return (

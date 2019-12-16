@@ -81,8 +81,6 @@ export default function SearchForBuy(props) {
       if (!open) {
         setOptions([]);
       }
-
-
     }, [open]);
 
     const getCoinDetails = (name) => {
@@ -95,12 +93,19 @@ export default function SearchForBuy(props) {
           return coin.name === name
         })
 
-        const coinDetails = await fetch(`https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=${coinobj[0].id}&order=market_cap_desc&per_page=100&page=1&sparkline=false
-        `)
-        
-        const coinres = await coinDetails.json();
-        setCoinValue(coinres[0].current_price)
-        setSelected(coinobj[0].id);
+        console.log(coinobj)
+
+        if(coinobj.length > 0){
+            const coinDetails = await fetch(`https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=${coinobj[0].id}&order=market_cap_desc&per_page=100&page=1&sparkline=false
+          `)
+          
+          const coinres = await coinDetails.json();
+          setCoinValue(coinres[0].current_price)
+          setSelected(coinobj[0].id);
+        }else{
+          setCoinValue(0)
+          setSelected(0);
+        }
       })();
     }
 
@@ -206,6 +211,10 @@ const useStyles = makeStyles(theme => ({
       borderColor: 'white',
       color: 'white!important'
     },
+    '& .MuiUInputBase-root.MuiOutlinedInput-root.makeStyles-root-11.Mui-focused.Mui-focused.MuiInputBase-formControl.MuiInputBase-adornedStart.MuiOutlinedInput-adornedStart':{
+      borderColor: 'white',
+      color: 'white!important'
+    }
   },
 }));
 

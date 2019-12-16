@@ -7,8 +7,8 @@
       },
       "BuyRef": {
         "price_from_buying": 7216.25,
-        "amount_bought_usd": 64926.89,
-        "Crypto_coin_bought": 9
+        "amount_bought_usd": 29477.53,
+        "Crypto_coin_bought": 4
       },
       "timeRef": "2019-12-13T09:28:56.186Z"
     },
@@ -23,6 +23,30 @@
         "Crypto_coin_bought": 0
       },
       "timeRef": "2019-12-13T09:32:06.054Z"
+    },
+    {
+      "id": "389613594b6840a1b92e19934d9c98c9146ec1a63308f85f6085035a64369b49",
+      "coinRef": {
+        "id": "ethereum"
+      },
+      "BuyRef": {
+        "price_from_buying": 141.82,
+        "amount_bought_usd": 1218.1999999999998,
+        "Crypto_coin_bought": 8.588368153585545
+      },
+      "timeRef": "2019-12-16T02:05:02.434Z"
+    },
+    {
+      "id": "982d4ce870702724eb03ddd0c8191373d835028a8f8acdb209d33642275dc73a",
+      "coinRef": {
+        "id": "1million-token"
+      },
+      "BuyRef": {
+        "price_from_buying": 0.01028578,
+        "amount_bought_usd": -0.13041020000000003,
+        "Crypto_coin_bought": 27.102250355686778
+      },
+      "timeRef": "2019-12-16T07:49:11.303Z"
     }
   ],
   "selltransactions": [
@@ -55,6 +79,76 @@
       "current_coin_possesion": 0,
       "coin_id": "10m-token",
       "timeRef": "2019-12-13T09:50:13.517Z"
+    },
+    {
+      "id": "0157a97a4564ab9ebadb28c5688ae7a0ffecfd8ad5405951710195e32ecdb0f5",
+      "transaction_ref_id": "389613594b6840a1b92e19934d9c98c9146ec1a63308f85f6085035a64369b49",
+      "number_of_ccoin_sold": 1.411631846414455,
+      "price_from_date_sold": 141.68,
+      "net_amount_gain_loss": 0.19762845849800215,
+      "current_coin_possesion": 8.588368153585545,
+      "coin_id": "ethereum",
+      "timeRef": "2019-12-16T02:21:18.876Z"
+    },
+    {
+      "id": "746379d22431d54e16744d9f9f8a7ab84f8d6d8280c65a14a92646128e45e546",
+      "transaction_ref_id": "ed4b2e85b5adc7462e9d2f27a17916803325482c9cfb25077e2bbb940914cb7a",
+      "number_of_ccoin_sold": "1",
+      "price_from_date_sold": 7093.22,
+      "net_amount_gain_loss": -123.02999999999975,
+      "current_coin_possesion": 8,
+      "coin_id": "bitcoin",
+      "timeRef": "2019-12-16T02:41:41.892Z"
+    },
+    {
+      "id": "468e2e8f91c0b07761d15c0f447ee29bd974da0e08203b191df673b98e13f961",
+      "transaction_ref_id": "ed4b2e85b5adc7462e9d2f27a17916803325482c9cfb25077e2bbb940914cb7a",
+      "number_of_ccoin_sold": "2",
+      "price_from_date_sold": 7093.22,
+      "net_amount_gain_loss": -246.0599999999995,
+      "current_coin_possesion": 6,
+      "coin_id": "bitcoin",
+      "timeRef": "2019-12-16T02:42:53.631Z"
+    },
+    {
+      "id": "8ad972cb11c80c079258af3423ca4ccd52365bb5034942d95b0beb5d140e4882",
+      "transaction_ref_id": "ed4b2e85b5adc7462e9d2f27a17916803325482c9cfb25077e2bbb940914cb7a",
+      "number_of_ccoin_sold": "1",
+      "price_from_date_sold": 7091.2,
+      "net_amount_gain_loss": -125.05000000000018,
+      "current_coin_possesion": 5,
+      "coin_id": "bitcoin",
+      "timeRef": "2019-12-16T02:48:47.983Z"
+    },
+    {
+      "id": "c7900050499bff3b0acaf2c6dac1881743b59caed16b4be4521547d9fc4772ae",
+      "transaction_ref_id": "ed4b2e85b5adc7462e9d2f27a17916803325482c9cfb25077e2bbb940914cb7a",
+      "number_of_ccoin_sold": "1",
+      "price_from_date_sold": 7078.5,
+      "net_amount_gain_loss": -137.75,
+      "current_coin_possesion": 4,
+      "coin_id": "bitcoin",
+      "timeRef": "2019-12-16T07:30:09.733Z"
+    },
+    {
+      "id": "571d05e5e83d9ad438024989998faea0c8a10e3e76c9cae978003b0ab29442e9",
+      "transaction_ref_id": "982d4ce870702724eb03ddd0c8191373d835028a8f8acdb209d33642275dc73a",
+      "number_of_ccoin_sold": 62.89774964431322,
+      "price_from_date_sold": 0.01589882,
+      "net_amount_gain_loss": 0.35304758466351593,
+      "current_coin_possesion": 37.10225035568678,
+      "coin_id": "1million-token",
+      "timeRef": "2019-12-16T09:04:19.456Z"
+    },
+    {
+      "id": "6aceb13568af2363bc2c52331d1a1450244f654f8a67451584ce2b808e2f377c",
+      "transaction_ref_id": "982d4ce870702724eb03ddd0c8191373d835028a8f8acdb209d33642275dc73a",
+      "number_of_ccoin_sold": "10",
+      "price_from_date_sold": 0.01589882,
+      "net_amount_gain_loss": 0.056130400000000025,
+      "current_coin_possesion": 27.102250355686778,
+      "coin_id": "1million-token",
+      "timeRef": "2019-12-16T09:07:29.868Z"
     }
   ]
 }

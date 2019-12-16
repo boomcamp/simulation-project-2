@@ -5,6 +5,9 @@
     import ToggleButton from '@material-ui/lab/ToggleButton';
     import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
 
+
+    // Charts -> Display Graph of current coin being viewed
+
     import {
         AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip,
       } from 'recharts';
@@ -43,7 +46,6 @@
         let format = '';
         function formattime(time){
             format = time > 12 ? 'am' : 'pm';
-            // setTformat(format);
             return time % 12
         }
 

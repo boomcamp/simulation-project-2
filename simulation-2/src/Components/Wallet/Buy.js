@@ -1,6 +1,7 @@
 import React,{useEffect, useState} from 'react'
 import axios from 'axios'
 import { sha256 } from 'js-sha256';
+import {style} from 'glamor'
 
 export default function Buy(props) {
 
@@ -29,16 +30,19 @@ export default function Buy(props) {
 
     return (
         <>
-            <div className='buy-action-btn' onClick={()=>{buy_coin(props.selected, props.BuyAmount, props.CoinValue, props.NumOfCoin);props.toggle()}} style={buybtn}>+ BUY COIN</div>
+            <div className='buy-action-btn' onClick={()=>{buy_coin(props.selected, props.BuyAmount, props.CoinValue, props.NumOfCoin);props.toggle()}} {...buybtn}>+ BUY COIN</div>
         </>
     )
 }
 
-const buybtn = {
+const buybtn = style({
     color: 'white',
     padding: '10px',
     background: 'rgb(22, 41, 66)',
     margin: '10px',
     textAlign: 'center',
-    cursor: 'pointer'
-}
+    cursor: 'pointer',
+    ':hover' : {
+        background: 'rgb(12, 11, 123)',
+    }
+})

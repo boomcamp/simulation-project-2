@@ -1,12 +1,8 @@
 import React,{useState} from 'react'
 import {Switch, Route} from 'react-router-dom'
 import DetailsView from '../Divisions/DetailsView'
-import MiniDrawer from '../Divisions/Drawer'
 import CoinWatch from '../Divisions/CoinWatch'
-import {Redirect} from 'react-router-dom'
 import WalletIndex from '../Wallet/WalletIndex'
-
-// import MiniDrawer from './Components/Divisions/Drawer';
 
 export default function RouteView(ref) {
     const [data,setData] = useState();

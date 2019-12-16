@@ -1,15 +1,11 @@
 import SideNav, { Toggle, Nav, NavItem, NavIcon, NavText } from '@trendmicro/react-sidenav';
 import React from 'react'
-
 import ViewListIcon from '@material-ui/icons/ViewList';
 import '@trendmicro/react-sidenav/dist/react-sidenav.css';
 import TimelineIcon from '@material-ui/icons/Timeline';
 import AccountBalanceWalletIcon from '@material-ui/icons/AccountBalanceWallet';
-
 import {BrowserRouter as Router, Switch, Route, Link} from 'react-router-dom';
-
 import RouteView from '../Routing/Route'
-import CoinWatch from '../Divisions/CoinWatch';
 
 export default function Sidebar() {
 

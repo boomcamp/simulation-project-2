@@ -14,6 +14,7 @@
   --main-blue-dark: #143959;
   --main-green: rgb(101, 17, 122);
   --main-green: rgb(192, 3, 240);
+  border: 1px solid rgb(19, 27, 145);
 }
 
 .stocks-red{ color: #F20C1F; }
@@ -283,4 +284,10 @@
 
 .cryptocoin-container:hover{
   border-color:'white!important'
+}
+
+
+
+#outlined-adornment-amount{
+  color: white;
 }

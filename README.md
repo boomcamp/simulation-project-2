@@ -1,20 +1,45 @@
 # Simulation Project 2
 
-## Project Overview
+### CryptoWatcher
 
-For this simulation project you'll be building a cryptocurrency price explorer
-and investment tracker.
+This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-To do this we'll utilize a free cryptocurrency API.
-[coingecko.com/api](https://www.coingecko.com/api)
+### API
 
-You can find the API documentation here
-[coingecko API docs](https://www.coingecko.com/api/documentations/v3)
+This project utilize the [CoinGecko API V3](https://www.coingecko.com/api/documentations/v3#/).
 
-Part of the challenge of this project will be exploring the API and finding the
-appropriate endpoints to utilize to build the required functionality. You won't
-be required to use specific endpoints, utilize API endpoints that help you
-accomplish the goals of each feature.
+### Overview
+
+Main interfaces involves a tabular list of known Cryptocurrenry with its current market value and other related data, a Graphical representation of its market related history and a trading options where you can buy and sell your prefered coin.
+
+### Home(index page)
+
+In here market related data will be observed of a given coin that is initially arranged according to its rank.
+You can explore more detailed visual representaion of its market value flow by clicking the sparkline.
+
+### Line Graph
+
+A toggle element is provided to explore a coins market flow or to what its value at a given timeframe. Accesed will only be provided when you click a certain coin, through its sparkline, within the index page.
+
+### Investment Tracking
+
+This component provides necessary functionality for tracking and dealing with cryptocurrency trading.
+
+Investing
+
+- Interact with the 'CLICK TO INVEST' button
+- Select your prefered coin to invest to.
+- Input value or number of coins
+- Click the 'BUY' button to confirm investment
+- Click 'CANCEL' to terminate process and hide the buy component
+
+Tracking
+
+
+
+
+
+<!-- end -->
 
 ## Requirements
 

@@ -54,7 +54,6 @@ export default function ProfitLoss() {
             }else{
                 total = total + (data.BuyRef.price_from_buying * data.BuyRef.Crypto_coin_bought)
             }
-            console.log(total)
         })
     }
 

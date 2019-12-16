@@ -7,8 +7,7 @@ import {Redirect,Link} from 'react-router-dom';
 
 import Sparkline from './Sparkline';
 
-
-
+// Index Page, Display Table
 export default function CoinWatch(props) {
 
     const [state, setState] = React.useState({
@@ -44,13 +43,13 @@ export default function CoinWatch(props) {
                     }
                 },
                 { title: '1H', field: 'onehour', type: 'numeric', render: rowdata=> {
-                    return <span style={rowdata.onehour>0?{color:'green'}:{color:'#F20C1F'}}> {rowdata.onehour.toFixed(2)+'%'}</span>
+                    return <span style={rowdata.onehour>0?{color:'green'}:{color:'#F20C1F'}}> {`${rowdata.onehour.toFixed(2)}%`}</span>
                 }},
                 { title: '24H', field: 'oneday', type: 'numeric', render: rowdata=> {
-                    return <span style={rowdata.oneday>0?{color:'green'}:{color:'#F20C1F'}}> {rowdata.oneday.toFixed(2)+'%'}</span>
+                    return <span style={rowdata.oneday>0?{color:'green'}:{color:'#F20C1F'}}> {`${rowdata.oneday.toFixed(2)}%`}</span>
                 }},
                 { title: '7DAYS', field: 'sevendays', type: 'numeric', render: rowdata=> {
-                    return <span style={rowdata.sevendays>0?{color:'green'}:{color:'#F20C1F'}}> {rowdata.oneday.toFixed(2)+'%'} </span>
+                    return (<span style={rowdata.sevendays>0?{color:'green'}:{color:'#F20C1F'}}> {`${rowdata.sevendays.toFixed(2)}%`} </span>)
                 } },
                 { title: 'ATH%', field: 'pchange', type: 'numeric', render: rowdata=>{return <span style={{color:'#143D73', textAlign:'left'}} >{rowdata.pchange}</span>}},
                 {title: 'Lasft 7 Days', field: 'sparkline',  type: 'numeric', render: rowdata=>{
@@ -89,8 +88,6 @@ export default function CoinWatch(props) {
                     sparkline: data.sparkline_in_7d.price
                 })
             });
-
-            console.log(cdata)
 
             setState(prevState=>{
                 return {...prevState, data: cdata}

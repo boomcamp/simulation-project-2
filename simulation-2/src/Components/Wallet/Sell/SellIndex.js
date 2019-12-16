@@ -1,13 +1,8 @@
-import React, { useEffect } from 'react'
-import { height } from '@material-ui/system'
+import React from 'react'
 import Transactionable from './Transactionable';
 import PastTransactions from './PastTransactions'
 
 export default function SellIndex(props) {
-
-    useEffect(()=>{
-        // console.log(props.SelectedCoinData)
-    })
 
     return (
         <div className='sell-index-container' style={sellIndexContainerStyle}>
