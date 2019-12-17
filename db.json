@@ -1,30 +1,31 @@
 {
   "wallet": [
     {
-      "amount": 35831.51000000002,
+      "amount": 22036.610000000015,
       "id": 1
     }
   ],
   "transactions": [
     {
-      "date": "16/12/2019 18:2:10",
+      "date": "17/12/2019 9:52:42",
       "amount": "",
-      "sum": 7064.19,
+      "sum": 6899.41,
       "symbol": "btc",
       "idname": "bitcoin",
-      "current": "7064.19",
+      "current": "6895.92",
       "type": "sell",
       "id": 2
     },
     {
-      "date": "16/12/2019 18:5:13",
-      "amount": "",
-      "sum": 7061.24,
+      "date": "17/12/2019 9:53:11",
+      "image": "https://assets.coingecko.com/coins/images/1/large/bitcoin.png?1547033579",
+      "amount": "2",
+      "sum": 13794.9,
       "symbol": "btc",
       "idname": "bitcoin",
-      "current": "7061.24",
-      "type": "sell",
-      "id": 4
+      "current": 6897.45,
+      "type": "buy",
+      "id": 3
     }
   ]
 }

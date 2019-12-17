@@ -14,10 +14,7 @@ export default class sell extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-  
-
-    };
+    this.state = {};
   }
 
   componentDidMount() {
@@ -25,14 +22,11 @@ export default class sell extends Component {
       totalbought: this.props.info ? this.props.info.sum : null,
       priceNow: localStorage.getItem("currentPrice")
     });
-  
   }
-  
 
   render() {
     return (
       <React.Fragment>
-       
         <Dialog
           open={this.props.openModal}
           onClose={this.props.close}
@@ -48,10 +42,11 @@ export default class sell extends Component {
             }}
           >
             {localStorage.getItem("id")}
-       
           </DialogTitle>
           <DialogActions>
-            <TextField
+            
+          <div style={{display: 'flex', flexDirection: 'column', width: '100%', justifyContent: 'center', margin: 20}}>
+          <TextField
               id="filled-select-currency-native"
               type="number"
               label={localStorage.getItem("symbol")}
@@ -59,18 +54,25 @@ export default class sell extends Component {
               variant="outlined"
               value={this.props.inputAmount}
               onChange={event => this.props.handleChange(event)}
-              style={{
-                marginRight: 20
-              }}
+              style={{margin: 10}}
               // max={this.props.info.amount}
             ></TextField>
 
+            <TextField style={{margin: 10, textAlign: 'center !important'}}
+              id="standard-read-only-input"
+              value={this.props.readValue}
+              label={this.props.readLabel}
+              InputProps={{
+                readOnly: true,
+              }}
+            />
+
+            <div>
             <Button
               variant="contained"
               color="primary"
               disabled={this.props.info.amount == 0 ? true : false}
               onClick={this.props.handleClick}
-
             >
               Sell
             </Button>
@@ -78,10 +80,11 @@ export default class sell extends Component {
               variant="contained"
               color="secondary"
               onClick={this.props.close}
-              
             >
               Close
             </Button>
+            </div>
+          </div>
           </DialogActions>
         </Dialog>
       </React.Fragment>
