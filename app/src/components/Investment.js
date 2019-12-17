@@ -259,7 +259,8 @@ export default function Investment() {
 				} else {
 					initBalance -= newVal.coinQuantity;
 					pl = (newVal.profitOrLoss / 100) * newVal.buyPrice * newVal.coinQuantity;
-					if (pl > -1) {
+					console.log(pl);
+					if (pl < -1) {
 						totalpl += pl;
 					} else {
 						totalpl -= pl;
