@@ -30,16 +30,31 @@ class transaction extends Component {
   }
 
   render() {
+    let calendar = new Date();
+    let date = calendar.getUTCDate();
+    let month = calendar.getUTCMonth();
+    let hours = calendar.getHours();
+    let min = calendar.getUTCMinutes();
+    let sec = calendar.getUTCSeconds();
+    let year = calendar.getUTCFullYear();
+    let today = `${month}/${date}/${year} `;
+    let time = `${hours}:${min}:${sec}`;
     return (
       <React.Fragment>
         <Table celled striped>
           <Table.Header className={classes.table}>
             <Table.Row className={classes.head}>
-              <Table.HeaderCell colSpan="5">
+              <Table.HeaderCell colSpan="9">
                 <Typography variant="h4"> Historical Transaction</Typography>
               </Table.HeaderCell>
             </Table.Row>
             <Table.Row>
+              <Table.Cell>
+                <b>Date</b>
+              </Table.Cell>
+              <Table.Cell>
+                <b>Time</b>
+              </Table.Cell>
               <Table.Cell>
                 <b>Coin Name</b>
               </Table.Cell>
@@ -61,6 +76,8 @@ class transaction extends Component {
           <Table.Body>
             {this.state.name.map(x => (
               <Table.Row key={x.id}>
+                <Table.Cell>{today}</Table.Cell>
+                <Table.Cell>{time}</Table.Cell>
                 <Table.Cell>{x.name}</Table.Cell>
                 <Table.Cell>{Math.abs(x.quantity)}</Table.Cell>
                 <Table.Cell>{x.price}</Table.Cell>

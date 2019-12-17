@@ -23,12 +23,21 @@ class modal extends Component {
     };
   }
   componentDidMount() {
-    axios.get(`http://localhost:4001/wallet/1`).then(response => {
-      this.setState({
-        wallet: response.data.amount
-      });
-      // console.log(response.data);
-    });
+    axios
+      .get(`http://localhost:4001/wallet/1`)
+      .then(response => {
+        this.setState({
+          wallet: response.data.amount
+        });
+      })
+      .then(
+        axios.get(`http://localhost:4001/transactions`).then(res => {
+          res.data.forEach(a => {
+            if (a.name === this.props.details.name) {
+            }
+          });
+        })
+      );
   }
 
   handleChange = e => {
@@ -52,8 +61,6 @@ class modal extends Component {
           wallet: res.data.amount
         });
       });
-  };
-  handleSellClick = () => {
     axios({
       method: `post`,
       url: `http://localhost:4001/transactions`,
@@ -71,6 +78,7 @@ class modal extends Component {
     });
     message.success("Successfully sell");
   };
+
   render() {
     const { classes } = this.props;
     const formatter = new Intl.NumberFormat("en-US", {

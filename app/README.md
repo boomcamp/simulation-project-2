@@ -21,6 +21,6 @@ Cryptocurrency price explorer
 
 > Able to view a cryptocurrency coins available from cryptocurrency API. [coingecko.com/api]
 > Able to view coins details
-> Able to buy and sell(need to purchase to able to sell a coin)
+> Able to buy and sell(need to purchase to able the sell button)
 > I created another server [http://localhost:4001/wallet] to set a default money wallet to be able for the user to buy and sell.
 > Able to track history of buying and selling coins

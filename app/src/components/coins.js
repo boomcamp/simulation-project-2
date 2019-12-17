@@ -46,7 +46,7 @@ class coins extends Component {
       quantity: "",
       open: false,
       totalcoin: "",
-      totalCoins: [],
+      totalCoins: null,
       sellaction: false,
       wallet: [],
       prevWallet: [],
@@ -78,17 +78,18 @@ class coins extends Component {
       })
       .then(
         axios.get("http://localhost:4001/transactions").then(res => {
+          var y = 0;
           res.data.forEach(item => {
-            if (item.name === coinName) {
-              this.setState({
-                totalCoins: this.state.totalCoins.concat(
-                  parseInt(item.quantity)
-                )
-              });
+            if (item.name === coinName && item.transaction === "buy") {
+              y = y + parseInt(item.quantity);
             }
+          });
+          this.setState({
+            totalCoins: y
           });
         })
       )
+
       .catch(err => console.log(err));
   }
   changeAmountValue(e) {
@@ -169,19 +170,35 @@ class coins extends Component {
           quantity: this.state.quantity,
           transaction: "buy"
         }
-      }).then(res => {
-        axios
-          .patch(`http://localhost:4001/wallet/1`, {
-            amount: this.state.wallet
-          })
-          .then(response => {});
-        message.success("Transaction complete");
-        this.setState({ quantity: "", disableButton: true });
-      });
+      })
+        .then(res => {
+          axios
+            .patch(`http://localhost:4001/wallet/1`, {
+              amount: this.state.wallet
+            })
+            .then(response => {});
+          message.success("Transaction complete");
+          this.setState({ quantity: "", disableButton: true });
+        })
+        .then(this.loadAgain());
     } else {
       message.error("Not enough wallet balance");
     }
   };
+
+  loadAgain() {
+    var coinName = localStorage.getItem("name");
+    axios.get("http://localhost:4001/transactions").then(res => {
+      let y = 0;
+      res.data.forEach(item => {
+        if (item.name === coinName && item.transaction === "buy") {
+          y = y + parseInt(item.quantity);
+        }
+      });
+      this.setState({ totalCoins: y });
+    });
+  }
+
   closeModal() {
     this.setState({
       quantity: "",
@@ -189,7 +206,7 @@ class coins extends Component {
     });
   }
   render() {
-    var total = this.state.totalCoins.reduce((a, b) => a + b, 0);
+    var total = this.state.totalCoins;
     const { classes } = this.props;
     const formatter = new Intl.NumberFormat("en-US", {
       style: "currency",

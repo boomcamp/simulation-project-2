@@ -2,89 +2,33 @@
   "wallet": [
     {
       "id": 1,
-      "amount": 920965.3758342903
+      "amount": 139790.32583429053
     }
   ],
   "transactions": [
     {
       "name": "Bitcoin",
-      "price": 7083.69,
-      "totalPrice": 7083.69,
+      "price": 6887.26,
+      "totalPrice": 6887.26,
       "quantity": "1",
       "transaction": "buy",
       "id": 1
     },
     {
       "name": "Bitcoin",
-      "price": 7083.69,
-      "totalPrice": 7083.69,
-      "quantity": -1,
-      "transaction": "sell",
+      "price": 6887.26,
+      "totalPrice": 6887.26,
+      "quantity": "1",
+      "transaction": "buy",
       "id": 2
     },
     {
-      "name": "Ethereum",
-      "price": 141.25,
-      "totalPrice": 282.5,
-      "quantity": "2",
-      "transaction": "buy",
+      "name": "Bitcoin",
+      "price": 6887.26,
+      "totalPrice": 6887.26,
+      "quantity": -1,
+      "transaction": "sell",
       "id": 3
-    },
-    {
-      "name": "Ethereum",
-      "price": 141.25,
-      "totalPrice": 282.5,
-      "quantity": 2,
-      "transaction": "sell",
-      "id": 4
-    },
-    {
-      "name": "Bitcoin",
-      "price": 7060.9,
-      "totalPrice": 7060.9,
-      "quantity": "1",
-      "transaction": "buy",
-      "id": 5
-    },
-    {
-      "name": "Ethereum",
-      "price": 140.98,
-      "totalPrice": 140.98,
-      "quantity": "1",
-      "transaction": "buy",
-      "id": 6
-    },
-    {
-      "name": "Ethereum",
-      "price": 140.93,
-      "totalPrice": 140.93,
-      "quantity": "1",
-      "transaction": "buy",
-      "id": 7
-    },
-    {
-      "name": "Bitcoin",
-      "price": 7057.75,
-      "totalPrice": 7057.75,
-      "quantity": -1,
-      "transaction": "sell",
-      "id": 8
-    },
-    {
-      "name": "Stellar",
-      "price": 0.050378,
-      "totalPrice": 0.050378,
-      "quantity": "1",
-      "transaction": "buy",
-      "id": 9
-    },
-    {
-      "name": "Stellar",
-      "price": 0.050378,
-      "totalPrice": 0.050378,
-      "quantity": -1,
-      "transaction": "sell",
-      "id": 10
     }
   ]
 }
