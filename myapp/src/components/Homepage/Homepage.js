@@ -288,7 +288,7 @@ export default class Homepage extends Component {
           title="CURRENCY"
           visible={this.state.visible}
           onCancel={this.handleCancel}
-          width="900px"
+          width="800px"
           footer={null}
         >
           <Tabs defaultActiveKey='1' onTabClick={this.handleTabpane}>

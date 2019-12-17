@@ -4,7 +4,7 @@ export default class Foot extends Component {
     render() {
         return (
             <div className="footer">
-                Power Ranger
+              <div className='wrap'>  Powered By:<a href='https://www.coingecko.com/api/documentations/v3#/' target="_blank">CoinGecko API</a></div>
             </div>
         )
     }

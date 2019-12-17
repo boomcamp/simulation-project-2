@@ -4,7 +4,7 @@ import Homepage from "../Homepage/Homepage";
 import { Collapse, InputNumber, Input, message } from "antd";
 import Transaction from "../Transaction/Transactions";
 import Invest from "../Investment/InvestmentTransactions";
-import { Table, Popover, Button, Icon, Modal, Drawer } from "antd";
+import { Table, Popover, Button, Icon, Modal, Drawer,Popconfirm } from "antd";
 
 const { Panel } = Collapse;
 var commaNumber = require("comma-number");
@@ -97,7 +97,7 @@ export default class Buy extends Component {
           title: "Date Sold/profit/loss",
           dataIndex: "newdate",
           fixed: "right",
-           render: (date,sold) =><span>  <span>{date}</span> <span
+           render: (date,sold) =><span>  <span>{sold.sold!==undefined?date + 'profit/loss':'not yet sold'}</span> <span
            style={{
              color:
              sold.sold < 0
@@ -105,12 +105,12 @@ export default class Buy extends Component {
                  : "green"
            }}
          >
-           {"/  "+sold.sold?sold.sold:'no data'}
+           {"/"+sold.sold?sold.sold:'no data'}
          </span></span>
         }
       ],
 
-      //MODAL
+      //MODAL SELL
       column: [
         {
           title: "Logo",
@@ -263,7 +263,7 @@ export default class Buy extends Component {
     var hours = new Date().getHours(); //Current Hours
     var min = new Date().getMinutes(); //Current Minutes
     var sec = new Date().getSeconds(); //Current Seconds
-
+// if()
     axios
       .patch(`http://localhost:4000/transactions/${event.id}`, {
         // totalAmount: this.state.totalAmount,
@@ -282,16 +282,12 @@ export default class Buy extends Component {
       })
       .then(d => {
         console.log(d);
+        message.info('Sell successfully!')
       });
   };
 
-  // handleMoney = e => {
-  //   // alert('SEMO')
-  //   let name = this.props.name;
-
-  // };
   //modal
-  handleRow = e => {
+  handleBuy = e => {
     console.log(e.id);
     if (this.state.stats != e.stats) {
       axios.get(`http://localhost:4000/transactions?id=${e.id}`).then(trans => {
@@ -362,9 +358,20 @@ export default class Buy extends Component {
                 getContainer={false}
                 style={{ position: "absolute" }}
               >
+                {/* //SELL */}
                 <p>
+                
                   {" "}
+                  <Popconfirm
+              placement="topLeft"
+              title="Are you sure to buy?"
+              onConfirm={this.handleClickBuy}
+              okText={"Yes"}
+              cancelText="No"
+              disabled={this.state.disabled}
+            >
                   <Popover title="CLICK TO SELL" trigger="hover">
+                  
                     <Button type="link" ghost>
                       {" "}
                       <Table
@@ -378,31 +385,18 @@ export default class Buy extends Component {
                         value={this.id}
                       />
                     </Button>
+                   
                   </Popover>
+                  </Popconfirm>
                 </p>
-                {/* <InputNumber
-                  style={{ width: "100%" }}
-                  min={0}
-                  formatter={value =>
-                    `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-                  }
-                  parser={value => value.replace(/\$\s?|(,*)/g, "")}
-                  onChange={this.onChange}
-                  addonBefore={this.props.symbol}
-                />
-                <Input addonBefore="$" value={this.state.totalAmount} />
-                <Button
-                  icon="shopping-cart"
-                  value={this.state.id}
-                  style={{ backgroundColor: "whitesmoke" }}
-                  onClick={e=>this.handleSell(e)}
-                /> */}
+               
               </Drawer>
+              {/* //BUY */}
               <Table
                 // showHeader ={false}
                 scroll={{ x: 1500, y: 300 }}
                 style={{ cursor: "pointer" }}
-                onRowClick={e => this.handleRow(e)}
+                onRowClick={e => this.handleBuy(e)}
                 columns={this.state.columns}
                 dataSource={this.state.data}
                 rowKey="id"
