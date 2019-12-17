@@ -37,3 +37,8 @@
 
 - Viewing of Sold Coin details like GAIN PROFIT and LOSS PROFIT
 
+
+ Coin Wallet:
+
+- Viewing of Coin Balance
+
