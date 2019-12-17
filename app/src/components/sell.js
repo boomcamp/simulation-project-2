@@ -58,10 +58,11 @@ export default class sell extends Component {
               // max={this.props.info.amount}
             ></TextField>
 
-            <TextField style={{margin: 10, textAlign: 'center !important'}}
+            <TextField style={{margin: 10, color: 'red'}}
               id="standard-read-only-input"
               value={this.props.readValue}
               label={this.props.readLabel}
+              error={this.props.readError}
               InputProps={{
                 readOnly: true,
               }}

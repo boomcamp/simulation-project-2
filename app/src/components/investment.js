@@ -17,6 +17,7 @@ export default class Investment extends Component {
       snackbarState: false,
       snackbarMessage: "",
       inputAmount: "",
+      readError: false,
       priceNow: 0,
       readLabel: '',
       readValue: 0,
@@ -263,7 +264,9 @@ export default class Investment extends Component {
       .then(response => {
         this.setState({
           data: response.data,
-          readLabel: ''
+          readLabel: '',
+          readValue:0,
+          readError: false
         });
         console.log(this.state.data.amount);
       });
@@ -337,7 +340,10 @@ export default class Investment extends Component {
           });
         this.setState({
           amount: "",
-          sum: ""
+          sum: "",
+          readLabel: '',
+          readValue:0,
+          readError: false
         });
 
         axios
@@ -380,7 +386,10 @@ export default class Investment extends Component {
           });
         this.setState({
           amount: "",
-          sum: ""
+          sum: "",
+          readLabel: '',
+          readValue:0,
+          readError: false
         });
 
         axios.patch(`http://localhost:4000/wallet/1`, {
@@ -406,14 +415,25 @@ export default class Investment extends Component {
     }
   };
   handleChange = e => {
-    let computeProfit = parseFloat(localStorage.getItem('currentPrice')) * e.target.value;
+
+    if(e.target.value){
+      let computeProfit = parseFloat(localStorage.getItem('currentPrice')) * e.target.value;
     this.setState({
       inputAmount: e.target.value,
       readValue: computeProfit - e.target.value * this.state.info.current,
-      readLabel: this.state.readValue < 0 ? 'Loss' : 'Profit'
+      readLabel: this.state.readValue > 0 ? 'Profit' : 'Loss',
+      readError: this.state.readValue > 0 ? false : true,
     });
-    console.log('compute', computeProfit)
-    console.log(this.state.readValue)
+    }
+    else{
+      this.setState({
+        inputAmount: '',
+        readValue: 0,
+        readLabel: '',
+        readError: false,
+      })
+    }
+    
   };
 
   render() {
@@ -459,6 +479,7 @@ export default class Investment extends Component {
           handleChange={this.handleChange}
           readValue={this.state.readValue}
           readLabel={this.state.readLabel}
+          readError={this.state.readError}
         />
       </React.Fragment>
     );
