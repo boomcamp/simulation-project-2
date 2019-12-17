@@ -13,11 +13,11 @@
       "id": 10
     },
     {
-      "date": "Monday, December 16th, 2019, 5:41:48 PM",
-      "amount": "2",
+      "date": "Tuesday, December 17th, 2019, 10:34:50 AM",
+      "amount": "1",
       "coinBalance": 0,
-      "sum": 14126,
-      "price": 7063,
+      "sum": 6893.38,
+      "price": 6893.38,
       "symbol": "btc",
       "image": "https://assets.coingecko.com/coins/images/1/small/bitcoin.png?1547033579",
       "name": "bitcoin",
@@ -25,15 +25,15 @@
       "id": 11
     },
     {
-      "date": "Monday, December 16th, 2019, 5:50:35 PM",
+      "date": "Tuesday, December 17th, 2019, 10:39:52 AM",
       "amount": "1",
-      "coinBalance": 0,
-      "sum": 7067.72,
-      "price": 7067.72,
-      "symbol": "btc",
-      "image": "https://assets.coingecko.com/coins/images/1/small/bitcoin.png?1547033579",
-      "name": "bitcoin",
-      "status": "Sold",
+      "coinBalance": "1",
+      "sum": 132.45,
+      "price": 132.45,
+      "symbol": "eth",
+      "image": "https://assets.coingecko.com/coins/images/279/small/ethereum.png?1547034048",
+      "name": "ethereum",
+      "status": "Not yet sold",
       "id": 12
     }
   ]

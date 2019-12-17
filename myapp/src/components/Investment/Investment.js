@@ -3,7 +3,7 @@ import axios from "axios";
 import "./investment.css";
 import "react-toastify/dist/ReactToastify.css";
 import CoinWallet from "../CoinWallet/CoinWallet";
-import { Tabs } from "antd";
+import { Tabs, notification } from "antd";
 import {
   MDBBtn,
   MDBModal,
@@ -27,6 +27,7 @@ import Moment from "moment";
 var commaNumber = require("comma-number");
 const { TabPane } = Tabs;
 Moment.locale("en");
+
 export default class Investment extends Component {
   constructor(props) {
     super(props);
@@ -45,58 +46,36 @@ export default class Investment extends Component {
   componentDidMount() {
     axios.get("http://localhost:4000/transactions").then(res => {
       res.data.map(info => {
-        let x =
-          // console.log(info);
-          // console.log(info.sta);
-          this.setState({
-            details: this.state.details.concat({
-              amount: info.amount + ` ${info.symbol}`,
-              sum: (
-                <span style={{ color: "#42a5f5" }}>
-                  $ ${commaNumber(info.sum)}
-                </span>
-              ),
-              price: (
-                <span style={{ color: "#009688" }}>
-                  $ ${commaNumber(info.price)}
-                </span>
-              ),
-              name: info.name,
-              date: info.date,
-              status: info.status,
-              option: (
-                <MDBBtn
-                  color={info.status === "Sold" ? "danger" : "info"}
-                  // onClick={this.toggle}
-                  disabled={info.status === "Sold" ? true : false}
-                  size="sm"
-                  onClick={e => this.handleClick(info)}
-                >
-                  {/* {(info.status = "Sold" ? <span>Sold</span> : <span>Sell</span>)} */}
-                  {info.status === "Sold" ? (
-                    <span>Sold</span>
-                  ) : (
-                    <span>Sell</span>
-                  )}
-                </MDBBtn>
-              )
-              // (
-              //   <Button
-              //     type={info.status === "Sold" ? "danger" : "primary"}
-              //     disabled={info.status === "Sold" ? true : false}
-              //     onClick={e => this.handleClick(e.target.value)}
-              //   >
-              //     {" "}
-              //     {/* {(info.status = "Sold" ? <span>Sold</span> : <span>Sell</span>)} */}
-              //     {info.status == "Sold" ? (
-              //       <span>Sold</span>
-              //     ) : (
-              //       <span>Sell</span>
-              //     )}
-              //   </Button>
-              // )
-            })
-          });
+        this.setState({
+          details: this.state.details.concat({
+            amount: info.amount + ` ${info.symbol}`,
+            sum: (
+              <span style={{ color: "#42a5f5" }}>
+                $ ${commaNumber(info.sum)}
+              </span>
+            ),
+            price: (
+              <span style={{ color: "#009688" }}>
+                $ ${commaNumber(info.price)}
+              </span>
+            ),
+            name: info.name,
+            date: info.date,
+            status: info.status,
+            option: (
+              <MDBBtn
+                color={info.status === "Sold" ? "danger" : "info"}
+                // onClick={this.toggle}
+                disabled={info.status === "Sold" ? true : false}
+                size="sm"
+                onClick={e => this.handleClick(info)}
+              >
+                {/* {(info.status = "Sold" ? <span>Sold</span> : <span>Sell</span>)} */}
+                {info.status === "Sold" ? <span>Sold</span> : <span>Sell</span>}
+              </MDBBtn>
+            )
+          })
+        });
       });
     });
   }
@@ -123,7 +102,7 @@ export default class Investment extends Component {
                 onClick={e => this.handleClick(info)}
               >
                 {/* {(info.status = "Sold" ? <span>Sold</span> : <span>Sell</span>)} */}
-                {info.status == "Sold" ? <span>Sold</span> : <span>Sell</span>}
+                {info.status === "Sold" ? <span>Sold</span> : <span>Sell</span>}
               </MDBBtn>
             )
           })
@@ -154,13 +133,20 @@ export default class Investment extends Component {
       modal: !this.state.modal
     });
   };
-  handleSell = () => {
+  handleSell = type => {
+    notification[type]({
+      style: {
+        backgroundColor: "",
+        color: "white",
+        marginTop: "50px"
+      },
+      message: "Sold Successfully!"
+    });
     // console.log(this.state.datas.id);
     const id = this.state.datas.id;
     const amnt = this.state.datas.amount;
     const bal = this.state.datas.coinBalance;
     const results = amnt - bal;
-    console.log(results);
 
     axios
       .patch(`http://localhost:4000/transactions/${id}`, {
@@ -174,15 +160,10 @@ export default class Investment extends Component {
         status: "Sold"
       })
       .then(res => {
-        // toast.success("Successfully Sold!");
-        // const a = res.data.coinBalance;
-        // const b = res.data.amount;
-        // // const afterBal = a - b;
         this.setState({
           modal: false
         });
         this.loadAgain();
-        // console.log(this.state.updated);
       });
   };
   onClick() {
@@ -191,9 +172,7 @@ export default class Investment extends Component {
       collapse: !this.state.collapse
     });
   }
-
   render() {
-    // console.log(this.state.datas);
     const bgPink = { backgroundColor: "#8dc647" };
     const data = {
       columns: [
@@ -272,6 +251,7 @@ export default class Investment extends Component {
               <CoinWallet />
             </TabPane>
           </Tabs>
+
           <MDBModal isOpen={this.state.modal} toggle={this.toggle} size="lg">
             <MDBModalHeader toggle={this.toggle}>
               <span style={{ textTransform: "uppercase", color: "gray" }}>
@@ -319,7 +299,10 @@ export default class Investment extends Component {
               <MDBBtn onClick={this.toggle} color="info">
                 Close
               </MDBBtn>
-              <MDBBtn color="primary" onClick={() => this.handleSell()}>
+              <MDBBtn
+                color="primary"
+                onClick={() => this.handleSell("success")}
+              >
                 Proceed
               </MDBBtn>
             </MDBModalFooter>
