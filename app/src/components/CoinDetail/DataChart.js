@@ -6,7 +6,8 @@ import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
 import { Loader } from 'rsuite';
-import moment from 'moment'
+import moment from 'moment';
+import { useHistory } from 'react-router-dom'
 
 import TextField from '@material-ui/core/TextField';
 import InputAdornment from '@material-ui/core/InputAdornment';
@@ -300,6 +301,7 @@ class DataChart extends Component {
     }
 
     handlePost = (e) => {
+        let history = useHistory()
         axios({
             method: 'post',
             url: `http://localhost:4000/transactions`,
@@ -314,7 +316,7 @@ class DataChart extends Component {
             }
         })
             .then(
-                this.history.push('/tracking')
+                history.push('/tracking')
             )
             .catch(err => console.log(err))
     }

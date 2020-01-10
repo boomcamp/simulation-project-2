@@ -72,7 +72,6 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-
 export default function Sell() {
     const classes = useStyles();
     const [trans, setTrans] = useState([])
@@ -95,13 +94,6 @@ export default function Sell() {
         })
             .then(data => {
                 setTrans(data.data)
-                setId(data.data.id)
-                setName(data.data.name)
-                setDate(data.data.date)
-                setTime(data.data.time)
-                setAmount(data.data.amount)
-                setValue(data.data.value)
-                setPriceBought(data.data.priceBought)
             })
             .catch(e => console.log(e))
     }, [])
@@ -174,22 +166,14 @@ export default function Sell() {
                             </div>
                         </div>
                     )}
+                    {open ?
+                        <SellDialog
+                            open={handleClickOpen}
+                            close={handleClose}
+                            handleSell={handleSell}
+                        />
+                        : null}
                 </div>
-                {open ?
-                    <SellDialog
-                        open={handleClickOpen}
-                        close={handleClose}
-                        name={name}
-                        id={id}
-                        time={time}
-                        date={date}
-                        amount={amount}
-                        priceBought={priceBought}
-                        value={value}
-                        handleSell={handleSell}
-                    />
-                    :
-                    <React.Fragment></React.Fragment>}
             </div>
         </div >
     );
