@@ -40,6 +40,33 @@
       "buyPrice": 7067.8,
       "timestamp": 1576487020887,
       "id": 3
+    },
+    {
+      "name": "Bitcoin",
+      "coin": "btc",
+      "img": "https://assets.coingecko.com/coins/images/1/small/bitcoin.png?1547033579",
+      "coinId": "bitcoin",
+      "currentPrice": 8833.3,
+      "coinQuantity": 0.0005607344312801577,
+      "totalAmount": 5,
+      "amount": 4.9505,
+      "transaction": "Buy",
+      "timestamp": 1583312334690,
+      "id": 4
+    },
+    {
+      "name": "Bitcoin",
+      "coin": "btc",
+      "img": "https://assets.coingecko.com/coins/images/1/small/bitcoin.png?1547033579",
+      "coinId": "bitcoin",
+      "currentPrice": 8833.3,
+      "coinQuantity": 0.0001,
+      "totalAmount": 0.88333,
+      "transaction": "Sell",
+      "profitOrLoss": 0,
+      "buyPrice": 8833.3,
+      "timestamp": 1583312464359,
+      "id": 5
     }
   ]
 }
