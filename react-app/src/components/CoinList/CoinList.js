@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useReducer } from "react";
 import axios from "axios";
 import MaterialTable from "material-table";
 import { Container, CircularProgress, Box } from "@material-ui/core";
@@ -7,12 +7,38 @@ import "semantic-ui-css/semantic.min.css";
 import { Pagination } from "semantic-ui-react";
 import { NavLink } from "react-router-dom";
 
+function reducer(state, action) {
+  switch (action.type) {
+    case "onChange": {
+      return {
+        ...state,
+        Page: action.pageInfo
+      };
+    }
+    case "setdata": {
+      return {
+        ...state,
+        data: action.response,
+        loader: false
+      };
+    }
+    default:
+      break;
+  }
+}
+
+const initialState = {
+  loader: false,
+  Page: 1,
+  data: []
+};
 export default function MaterialTableDemo() {
+  const [state, dispatch] = useReducer(reducer, initialState);
   const [loader, setLoader] = useState(false);
-  const [data, setData] = React.useState([]);
-  const [Page, setPage] = React.useState(1);
+  const { Page, data } = state;
+
   const onChange = (e, pageInfo) => {
-    setPage(pageInfo.activePage);
+    dispatch({ type: "onChange", pageInfo: pageInfo.activePage });
   };
   const formatter = new Intl.NumberFormat("en-US", {
     style: "currency",
@@ -23,15 +49,19 @@ export default function MaterialTableDemo() {
     return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
   };
   useEffect(() => {
-    setLoader(true);
-    axios
-      .get(
-        `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&per_page=10&page=${Page}`
-      )
-      .then(response => {
-        setLoader(false);
-        setData(response.data);
-      });
+    try {
+      setLoader(true);
+      axios
+        .get(
+          `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&per_page=10&page=${Page}`
+        )
+        .then(response => {
+          setLoader(false);
+          dispatch({ type: "setdata", response: response.data });
+        });
+    } catch (error) {
+      console.log(error);
+    }
   }, [Page]);
   return (
     <div>

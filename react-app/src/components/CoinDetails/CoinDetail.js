@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useReducer } from "react";
 import axios from "axios";
 import "../../App.css";
 import { NavLink, useParams } from "react-router-dom";
@@ -79,66 +79,113 @@ const useStyles = makeStyles(theme => ({
     flexDirection: "column"
   }
 }));
+
+function reducer(state, action) {
+  switch (action.type) {
+    case "setDatas": {
+      return {
+        ...state,
+        data: action.response.data,
+        image: action.response.data.image.large,
+        price: action.response.data.market_data.current_price.usd,
+        ath: action.response.data.market_data.ath.usd,
+        athDate: action.response.data.market_data.ath_date.usd,
+        athChange: action.response.data.market_data.ath_change_percentage.usd,
+        atl: action.response.data.market_data.atl.usd,
+        atlDate: action.response.data.market_data.atl_date.usd,
+        atlChange: action.response.data.market_data.atl_change_percentage.usd,
+        circulate: action.response.data.market_data.circulating_supply,
+        marketCap: action.response.data.market_data.market_cap.usd,
+        priceChange1hr:
+          action.response.data.market_data
+            .price_change_percentage_1h_in_currency.usd,
+        priceChange24hr:
+          action.response.data.market_data.price_change_percentage_24h,
+        priceChange7d:
+          action.response.data.market_data.price_change_percentage_7d,
+        priceChange14d:
+          action.response.data.market_data.price_change_percentage_14d,
+        priceChange30d:
+          action.response.data.market_data.price_change_percentage_30d,
+        priceChange60d:
+          action.response.data.market_data.price_change_percentage_60d,
+        priceChange1yr:
+          action.response.data.market_data.price_change_percentage_1y,
+        marketExchangePercent:
+          action.response.data.market_data.market_cap_change_percentage_24h,
+        marketExchange: action.response.data.market_data.market_cap_change_24h,
+        publicInterest: action.response.data.public_interest_score,
+        lastUpdate: action.response.data.last_updated,
+        description: action.response.data.description.en
+      };
+    }
+    default:
+      break;
+  }
+}
+
+const initialState = {
+  data: [],
+  image: [],
+  price: [],
+  ath: [],
+  athDate: [],
+  athChange: [],
+  atl: [],
+  atlDate: [],
+  atlChange: [],
+  circulate: [],
+  marketCap: [],
+  priceChange1hr: [],
+  priceChange24hr: [],
+  priceChange7d: [],
+  priceChange14d: [],
+  priceChange30d: [],
+  priceChange60d: [],
+  priceChange1yr: [],
+  marketExchange: [],
+  publicInterest: [],
+  lastUpdate: [],
+  marketExchangePercent: [],
+  description: []
+};
+
 export default function CoinDetail() {
+  const [state, dispatch] = useReducer(reducer, initialState);
   const [loader, setLoader] = useState(false);
   const classes = useStyles();
-  const [data, setData] = useState([]);
-  const [image, setImage] = useState([]);
-  const [price, setPrice] = useState([]);
-  const [ath, setAth] = useState([]);
-  const [athDate, setAthDate] = useState([]);
-  const [athChange, setAthChange] = useState([]);
-  const [atl, setAtl] = useState([]);
-  const [atlDate, setAtlDate] = useState([]);
-  const [atlChange, setAtlChange] = useState([]);
-  const [circulate, setCirculate] = useState([]);
-  const [marketCap, setmarketCap] = useState([]);
-  const [priceChange1hr, setPriceChange1hr] = useState([]);
-  const [priceChange24hr, setPriceChange24hr] = useState([]);
-  const [priceChange7d, setPriceChange7d] = useState([]);
-  const [priceChange14d, setPriceChange14d] = useState([]);
-  const [priceChange30d, setPriceChange30d] = useState([]);
-  const [priceChange60d, setPriceChange60d] = useState([]);
-  const [priceChange1yr, setPriceChange1yr] = useState([]);
-  const [marketExchange, setMarketExchange] = useState([]);
-  const [publicInterest, setpublicInterest] = useState([]);
-  const [lastUpdate, setLastUpdate] = useState([]);
-  const [marketExchangePercent, setMarketExchangePercent] = useState([]);
-  const [description, setDescription] = useState([]);
   let { id } = useParams();
+  const {
+    data,
+    image,
+    price,
+    ath,
+    athDate,
+    athChange,
+    atl,
+    atlDate,
+    atlChange,
+    circulate,
+    marketCap,
+    priceChange1hr,
+    priceChange24hr,
+    priceChange7d,
+    priceChange14d,
+    priceChange30d,
+    priceChange60d,
+    priceChange1yr,
+    marketExchange,
+    publicInterest,
+    lastUpdate,
+    marketExchangePercent,
+    description
+  } = state;
 
   useEffect(() => {
     setLoader(true);
     axios.get(`https://api.coingecko.com/api/v3/coins/${id}`).then(response => {
       setLoader(false);
-      setData(response.data);
-      setImage(response.data.image.large);
-      setDescription(response.data.description.en);
-      setPrice(response.data.market_data.current_price.usd);
-      setAth(response.data.market_data.ath.usd);
-      setAthDate(response.data.market_data.ath_date.usd);
-      setAthChange(response.data.market_data.ath_change_percentage.usd);
-      setAtl(response.data.market_data.atl.usd);
-      setAtlDate(response.data.market_data.atl_date.usd);
-      setCirculate(response.data.market_data.circulating_supply);
-      setAtlChange(response.data.market_data.atl_change_percentage.usd);
-      setpublicInterest(response.data.public_interest_score);
-      setLastUpdate(response.data.last_updated);
-      setmarketCap(response.data.market_data.market_cap.usd);
-      setMarketExchange(response.data.market_data.market_cap_change_24h);
-      setPriceChange1hr(
-        response.data.market_data.price_change_percentage_1h_in_currency.usd
-      );
-      setPriceChange24hr(response.data.market_data.price_change_percentage_24h);
-      setPriceChange7d(response.data.market_data.price_change_percentage_7d);
-      setPriceChange14d(response.data.market_data.price_change_percentage_14d);
-      setPriceChange30d(response.data.market_data.price_change_percentage_30d);
-      setPriceChange60d(response.data.market_data.price_change_percentage_60d);
-      setPriceChange1yr(response.data.market_data.price_change_percentage_1y);
-      setMarketExchangePercent(
-        response.data.market_data.market_cap_change_percentage_24h
-      );
-      // console.log(response.data);
+      dispatch({ type: "setDatas", response: response });
     });
   }, [id]);
   const formatter = new Intl.NumberFormat("en-US", {

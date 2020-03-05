@@ -67,6 +67,19 @@
       "buyPrice": 8833.3,
       "timestamp": 1583312464359,
       "id": 5
+    },
+    {
+      "name": "Bitcoin",
+      "coin": "btc",
+      "img": "https://assets.coingecko.com/coins/images/1/small/bitcoin.png?1547033579",
+      "coinId": "bitcoin",
+      "currentPrice": 8918.93,
+      "coinQuantity": 2,
+      "totalAmount": 17837.86,
+      "amount": 17661.265186,
+      "transaction": "Buy",
+      "timestamp": 1583400317119,
+      "id": 6
     }
   ]
 }
