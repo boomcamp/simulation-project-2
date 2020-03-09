@@ -1,39 +1,27 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import axios from "axios";
 import { Button, Paper, Typography } from "@material-ui/core";
 import "semantic-ui-css/semantic.min.css";
-import { useParams } from "react-router-dom";
 import AccountBalanceIcon from "@material-ui/icons/AccountBalance";
 import CreditCardIcon from "@material-ui/icons/CreditCard";
 import Swal from "sweetalert2";
+import { CoinContext, FormatterContext } from "../BuySell/BuySell";
 
 export default function BuySell(props) {
-  const { id } = useParams();
-  const [data, setData] = useState([]);
-  const [price, setPrice] = useState([]);
-  const [symbol, setSymbol] = useState([]);
-  const [coinId, setCoinId] = useState([]);
-  const [image, setImage] = useState([]);
+  const { value, value2, value3, value4, value5 } = React.useContext(
+    CoinContext
+  );
+  const formatter = React.useContext(FormatterContext);
+  const [data] = value;
+  const [price] = value2;
+  const [symbol] = value3;
+  const [coinId] = value5;
+  const [image] = value4;
 
   let coinval = +props.coin - (+props.coin + -props.coin * 0.01) * 0.01;
   let coinfee = (+props.coin + -props.coin * 0.01) * 0.01;
   let totalfee = +coinval + +coinfee;
   let coinQuantity = (props.amount * 10000) / 10000;
-
-  useEffect(() => {
-    axios.get(`https://api.coingecko.com/api/v3/coins/${id}`).then(response => {
-      setData(response.data);
-      setPrice(response.data.market_data.current_price.usd);
-      setSymbol(response.data.symbol);
-      setCoinId(response.data.id);
-      setImage(response.data.image.small);
-    });
-  }, [id]);
-  const formatter = new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: "USD",
-    minimumFractionDigits: 2
-  });
 
   const handleConfirm = val => {
     if (coinQuantity) {
@@ -97,7 +85,12 @@ export default function BuySell(props) {
               paddingTop: 30
             }}
           >
-            <span style={{ letterSpacing: 5, textTransform: "uppercase" }}>
+            <span
+              style={{
+                letterSpacing: 5,
+                textTransform: "uppercase"
+              }}
+            >
               You are Buying{" "}
             </span>
             <span
@@ -110,10 +103,16 @@ export default function BuySell(props) {
               {Math.round(props.amount * 10000) / 10000} {data.symbol}
             </span>
             <span style={{ padding: "10px 0px 10px 0px" }}>
-              @ {formatter.format(price)} per{" "}
+              @ {formatter.format(data.market_data.current_price.usd)} per{" "}
               <span style={{ textTransform: "uppercase" }}>{data.symbol}</span>
             </span>
-            <hr style={{ borderColor: "grey", width: "90%", marginTop: 10 }} />
+            <hr
+              style={{
+                borderColor: "grey",
+                width: "90%",
+                marginTop: 10
+              }}
+            />
           </Typography>
         </Paper>
         <Paper style={{ boxShadow: "none" }}>
@@ -168,7 +167,13 @@ export default function BuySell(props) {
                 </div>
               </div>
 
-              <div style={{ width: "20%", height: "10vh", paddingTop: 20 }}>
+              <div
+                style={{
+                  width: "20%",
+                  height: "10vh",
+                  paddingTop: 20
+                }}
+              >
                 <div
                   style={{
                     display: "flex",
@@ -194,7 +199,13 @@ export default function BuySell(props) {
                 </div>
               </div>
 
-              <div style={{ width: "30%", height: "10vh", paddingTop: 20 }}>
+              <div
+                style={{
+                  width: "30%",
+                  height: "10vh",
+                  paddingTop: 20
+                }}
+              >
                 <div
                   style={{
                     display: "flex",
@@ -237,7 +248,13 @@ export default function BuySell(props) {
                 </div>
               </div>
 
-              <div style={{ width: "20%", height: "10vh", paddingTop: 20 }}>
+              <div
+                style={{
+                  width: "20%",
+                  height: "10vh",
+                  paddingTop: 20
+                }}
+              >
                 <div
                   style={{
                     display: "flex",

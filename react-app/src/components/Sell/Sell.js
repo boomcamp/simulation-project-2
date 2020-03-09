@@ -6,37 +6,28 @@ import { useParams } from "react-router-dom";
 import AccountBalanceIcon from "@material-ui/icons/AccountBalance";
 import CreditCardIcon from "@material-ui/icons/CreditCard";
 import Swal from "sweetalert2";
+import { CoinContext, FormatterContext } from "../BuySell/BuySell";
 
 export default function BuySell(props) {
   const { id } = useParams();
-  const [data, setData] = useState([]);
-  const [price, setPrice] = useState(0);
-  const [symbol, setSymbol] = useState(0);
-  const [image, setImage] = useState(0);
-  const [coinId, setCoinId] = useState(0);
+  const { value, value2, value3, value4, value5 } = React.useContext(
+    CoinContext
+  );
+  const formatter = React.useContext(FormatterContext);
+  const [data] = value;
+  const [price] = value2;
+  const [symbol] = value3;
+  const [coinId] = value5;
+  const [image] = value4;
   const [profitOrLoss, setProfitOrLoss] = useState(0);
   const [buyPrice, setBuyPrice] = useState(0);
 
   let totalfee = +props.sellCoin * +price;
   let coinQuantity = props.sellCoin;
 
-  const formatter = new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: "USD",
-    minimumFractionDigits: 2
-  });
-
   useEffect(() => {
     axios
-      .get(`https://api.coingecko.com/api/v3/coins/${id}`)
-      .then(response => {
-        setData(response.data);
-        setPrice(response.data.market_data.current_price.usd);
-        setSymbol(response.data.symbol);
-        setCoinId(response.data.id);
-        setImage(response.data.image.small);
-        return axios.get(`http://localhost:4000/transactions?coinId=${id}`);
-      })
+      .get(`http://localhost:4000/transactions?coinId=${id}`)
       .then(response => {
         let aCurrentCointPrice = 0;
         let count = 0;

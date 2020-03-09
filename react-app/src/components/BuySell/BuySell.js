@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import axios from "axios";
 import {
   Container,
@@ -110,6 +110,9 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
+export const CoinContext = React.createContext();
+export const FormatterContext = React.createContext();
+
 export default function BuySell(props) {
   const classes = useStyles();
   const { id } = useParams();
@@ -126,6 +129,7 @@ export default function BuySell(props) {
   const [balance, setBalance] = useState();
   const [error, setError] = useState(false);
   const [newBalance, setNewBalance] = useState(false);
+  const [coinId, setCoinId] = useState([]);
 
   useEffect(() => {
     axios.get(`https://api.coingecko.com/api/v3/coins/${id}`).then(response => {
@@ -133,6 +137,7 @@ export default function BuySell(props) {
       setPrice(response.data.market_data.current_price.usd);
       setSymbol(response.data.symbol);
       setImage(response.data.image.small);
+      setCoinId(response.data.id);
     });
   }, [id]);
 
@@ -170,13 +175,25 @@ export default function BuySell(props) {
   let buy;
   if (buyBtn) {
     buy = (
-      <Buy
-        amount={amount}
-        coin={coin}
-        cancel={handleBuy}
-        setAmount={setAmount}
-        setCoin={setCoin}
-      />
+      <CoinContext.Provider
+        value={{
+          value: [data],
+          value2: [price],
+          value3: [symbol],
+          value4: [image],
+          value5: [coinId]
+        }}
+      >
+        <FormatterContext.Provider value={formatter}>
+          <Buy
+            amount={amount}
+            coin={coin}
+            cancel={handleBuy}
+            setAmount={setAmount}
+            setCoin={setCoin}
+          />
+        </FormatterContext.Provider>
+      </CoinContext.Provider>
     );
   }
 
@@ -191,15 +208,27 @@ export default function BuySell(props) {
       });
     } else {
       sell = (
-        <Sell
-          sellAmount={sellAmount}
-          sellCoin={sellCoin}
-          newBalance={newBalance}
-          balance={balance}
-          cancel={handleSell}
-          setSellAmount={setSellAmount}
-          setSellCoin={setSellCoin}
-        />
+        <CoinContext.Provider
+          value={{
+            value: [data],
+            value2: [price],
+            value3: [symbol],
+            value4: [image],
+            value5: [coinId]
+          }}
+        >
+          <FormatterContext.Provider value={formatter}>
+            <Sell
+              sellAmount={sellAmount}
+              sellCoin={sellCoin}
+              newBalance={newBalance}
+              balance={balance}
+              cancel={handleSell}
+              setSellAmount={setSellAmount}
+              setSellCoin={setSellCoin}
+            />
+          </FormatterContext.Provider>
+        </CoinContext.Provider>
       );
     }
   }
@@ -430,8 +459,7 @@ export default function BuySell(props) {
             </Paper>
           </Paper>
         </Container>
-        {buy}
-        {sell}
+        {buy ? buy : sell}
       </Container>
     </div>
   );
